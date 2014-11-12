@@ -1,4 +1,5 @@
 # coding: utf-8
+from datetime import date
 from sqlalchemy import (
     Column, Date, DateTime, Float, ForeignKey, Integer, LargeBinary,
     SmallInteger, String, Table, Text, Boolean
@@ -14,8 +15,15 @@ db_manager = Manager()
 
 
 class SerializableModel(object):
+    def get_serialized(self, name):
+        value = getattr(self, name)
+        if isinstance(value, date):
+            value = value.strftime('%d/%m/%Y')
+        return value
+
     def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        return {c.name: self.get_serialized(c.name) for c in
+                self.__table__.columns}
 
 
 class User(Base):
