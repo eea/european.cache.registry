@@ -6,4 +6,5 @@ MarkupSafe==0.23
 SQLAlchemy==0.9.8
 Werkzeug==0.9.6
 itsdangerous==0.24
+requests==2.4.3
 wsgiref==0.1.2

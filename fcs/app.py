@@ -4,7 +4,9 @@ from fcs.models import db, db_manager
 from fcs.api import api
 from fcs.sync import sync_manager
 
-DEFAULT_CONFIG = {}
+DEFAULT_CONFIG = {
+    'API_URL': 'http://example.com/rest/api'
+}
 
 
 def create_app():

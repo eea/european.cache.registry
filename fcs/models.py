@@ -74,7 +74,7 @@ undertaking_users = db.Table(
 )
 
 
-class FGASUndertaking(Base):
+class Undertaking(Base):
     __tablename__ = 'undertaking'
 
     id = Column(Integer, primary_key=True)
@@ -89,13 +89,13 @@ class FGASUndertaking(Base):
     date_created = Column(Date)
     date_updated = Column(Date)
     status = Column(Integer)
-    address = relationship(Address)
     # Undertaking:
     vat = Column(String)
     types = Column(String)
     represent_id = Column(ForeignKey('represent.id'))
     businessprofile_id = Column(ForeignKey('businessprofile.id'))
 
+    address = relationship(Address)
     represent = relationship(EuLegalRepresentativeCompany)
     businessprofile = relationship(BusinessProfile)
     contact_persons = relationship(
