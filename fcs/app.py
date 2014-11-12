@@ -1,7 +1,7 @@
 import flask
 from flask.ext.script import Manager
 from fcs.models import db, db_manager
-from fcs.api import api
+from fcs.api import api, api_manager
 from fcs.sync import sync_manager
 
 DEFAULT_CONFIG = {
@@ -29,4 +29,5 @@ def create_manager(app):
 
     manager.add_command('db', db_manager)
     manager.add_command('sync', sync_manager)
+    manager.add_command('api', api_manager)
     return manager

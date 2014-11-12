@@ -13,6 +13,11 @@ Base = db.Model
 db_manager = Manager()
 
 
+class SerializableModel(object):
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+
 class User(Base):
     __tablename__ = 'user'
 
@@ -65,7 +70,6 @@ class BusinessProfile(Base):
     highleveluses = Column(String(255))
 
 
-
 undertaking_users = db.Table(
     'undertaking_users',
     db.Column('user_id', db.Integer(),
@@ -74,7 +78,7 @@ undertaking_users = db.Table(
 )
 
 
-class Undertaking(Base):
+class Undertaking(SerializableModel, Base):
     __tablename__ = 'undertaking'
 
     id = Column(Integer, primary_key=True)
