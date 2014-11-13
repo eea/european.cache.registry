@@ -38,7 +38,7 @@ class ListView(ApiView):
         return [u.as_dict() for u in self.get_queryset()]
 
 
-class UndertakingList(ApiView):
+class UndertakingList(ListView):
     model = Undertaking
 
 
