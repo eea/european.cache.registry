@@ -2,7 +2,7 @@ import json
 from flask import Blueprint, Response
 from flask.views import MethodView
 from flask.ext.script import Manager
-from fcs.models import Undertaking, User
+from fcs.models import Undertaking, User, EuLegalRepresentativeCompany
 
 api = Blueprint('api', __name__)
 
@@ -46,7 +46,13 @@ class UserList(ListView):
     model = User
 
 
+class CompaniesList(ListView):
+    model = EuLegalRepresentativeCompany
+
+
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('undertaking-list'))
 api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
+api.add_url_rule('/companies/list',
+                 view_func=CompaniesList.as_view('companies-list'))
