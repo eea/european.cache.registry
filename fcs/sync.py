@@ -5,7 +5,7 @@ from flask.ext.script import Manager
 from flask import current_app
 
 from fcs.models import (
-    Undertaking, db, Address, Country, BusinessProfile,
+    Undertaking, db, Address, Country, BusinessProfile, User,
     EuLegalRepresentativeCompany,
 )
 
@@ -148,6 +148,13 @@ def parse_undertaking(data):
         undertaking.represent.address = addr
     else:
         update_obj(undertaking.represent, represent)
+
+    if not undertaking.contact_persons:
+        for contact_person in contact_persons:
+            # TO DO: check if persons exists
+            cp = User(**contact_person)
+            db.session.add(cp)
+            undertaking.contact_persons.append(cp)
 
     db.session.add(undertaking)
 
