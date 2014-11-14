@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 import requests
 from flask.ext.script import Manager
 from flask import current_app
@@ -42,7 +42,11 @@ def get_latest_undertakings(updated_since=None):
     if response.status_code != 200:
         raise InvalidResponse()
 
-    return response.json()
+    with open('instance/test.json', 'r') as data_file:
+        import json
+        data = json.load(data_file)
+        return data
+    #return response.json()
 
 
 def update_obj(obj, d):
@@ -52,13 +56,13 @@ def update_obj(obj, d):
 
 
 def parse_date(date_value):
-    return date.fromtimestamp(float(str(date_value)[:-3]))
+    return datetime.strptime(date_value, '%d/%m/%Y').date()
 
 
 def parse_country(country):
-    ctr = Country.query.filter_by(name=country).first()
+    ctr = Country.query.filter_by(code=country['code']).first()
     if not ctr:
-        ctr = Country(name=country)
+        ctr = Country(**country)
         db.session.add(ctr)
     return ctr
 
@@ -81,13 +85,18 @@ def parse_undertaking(data):
     represent = data.pop('euLegalRepresentativeCompany') # TODO parse and add
 
     data['types'] = ','.join(data['types'])
-    external_id = data.pop('id')
+    data['external_id'] = data.pop('id')
     data['date_created'] = parse_date(data.pop('dateCreated'))
     data['date_updated'] = parse_date(data.pop('dateUpdated'))
+    data.pop('@type', None)
 
-    undertaking = Undertaking.query.filter_by(external_id=external_id).first()
+    undertaking = (
+        Undertaking.query
+        .filter_by(external_id=data['external_id'])
+        .first()
+    )
+
     if not undertaking:
-        data['external_id'] = external_id
         undertaking = Undertaking(**data)
 
     if not undertaking.address:
@@ -118,4 +127,3 @@ def test():
         parse_undertaking(u)
 
     db.session.commit()
-
