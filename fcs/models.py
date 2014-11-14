@@ -65,7 +65,8 @@ class EuLegalRepresentativeCompany(Base):
     name = Column(String(255))
     address_id = Column(ForeignKey('address.id'))
     vatnumber = Column(String(255))
-    contact_name = Column(String(255))
+    contact_first_name = Column(String(255))
+    contact_last_name = Column(String(255))
     contact_email = Column(String(255))
 
     address = relationship(Address)
