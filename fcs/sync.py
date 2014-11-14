@@ -1,8 +1,13 @@
 from datetime import datetime
 import requests
+
 from flask.ext.script import Manager
 from flask import current_app
-from fcs.models import Undertaking, db, Address, Country, BusinessProfile
+
+from fcs.models import (
+    Undertaking, db, Address, Country, BusinessProfile,
+    EuLegalRepresentativeCompany,
+)
 
 sync_manager = Manager()
 
@@ -78,11 +83,21 @@ def parse_bp(bp):
     return bp
 
 
+def parse_rc(rc):
+    rc['name'] = rc.pop('name')
+    rc['vatnumber'] = rc.pop('vatNumber')
+    rc['contact_first_name'] = rc.pop('contactPersonFirstName')
+    rc['contact_last_name'] = rc.pop('contactPersonLastName')
+    rc['contact_email'] = rc.pop('contactPersonEmailAddress')
+    rc['address'] = parse_address(rc.pop('address'))
+    return rc
+
+
 def parse_undertaking(data):
     address = parse_address(data.pop('address'))
     business_profile = parse_bp(data.pop('businessProfile'))
     contact_persons = data.pop('contactPersons') # TODO: parse and add
-    represent = data.pop('euLegalRepresentativeCompany') # TODO parse and add
+    represent = parse_rc(data.pop('euLegalRepresentativeCompany'))
 
     data['types'] = ','.join(data['types'])
     data['external_id'] = data.pop('id')
@@ -113,6 +128,18 @@ def parse_undertaking(data):
     else:
         update_obj(undertaking.businessprofile, business_profile)
 
+    if not undertaking.represent:
+        address = represent.pop('address')
+        addr = Address(**address)
+        db.session.add(addr)
+        r = EuLegalRepresentativeCompany(**represent)
+        db.session.add(r)
+
+        undertaking.represent = r
+        undertaking.represent.address = addr
+    else:
+        update_obj(undertaking.represent, represent)
+
     db.session.add(undertaking)
 
 
@@ -120,10 +147,9 @@ def parse_undertaking(data):
 def test():
     import pprint
 
-    res = get_latest_undertakings()
-    pprint.pprint(res)
+    undertakings = get_latest_undertakings()
+    pprint.pprint(undertakings)
 
-    for u in res:
-        parse_undertaking(u)
+    [parse_undertaking(u) for u in undertakings]
 
     db.session.commit()
