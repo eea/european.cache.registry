@@ -47,7 +47,7 @@ def get_latest_undertakings(updated_since=None):
     if response.status_code != 200:
         raise InvalidResponse()
 
-    with open('instance/test.json', 'r') as data_file:
+    with open('test.json', 'r') as data_file:
         import json
         data = json.load(data_file)
         return data
