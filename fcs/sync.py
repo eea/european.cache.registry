@@ -74,9 +74,6 @@ def parse_country(country):
 
 def parse_address(address):
     address['zipcode'] = address.pop('zipCode')
-    address['number'] = address.pop('number')
-    address['street'] = address.pop('street')
-    address['city'] = address.pop('city')
     address['country'] = parse_country(address.pop('country'))
 
     return address
@@ -88,7 +85,6 @@ def parse_bp(bp):
 
 
 def parse_rc(rc):
-    rc['name'] = rc.pop('name')
     rc['vatnumber'] = rc.pop('vatNumber')
     rc['contact_first_name'] = rc.pop('contactPersonFirstName')
     rc['contact_last_name'] = rc.pop('contactPersonLastName')
@@ -97,10 +93,19 @@ def parse_rc(rc):
     return rc
 
 
+def parse_cp_list(cp_list):
+    for cp in cp_list:
+        cp['username'] = cp.pop('userName')
+        cp['first_name'] = cp.pop('firstName')
+        cp['last_name'] = cp.pop('lastName')
+        cp['email'] = cp.pop('emailAddress')
+    return cp_list
+
+
 def parse_undertaking(data):
     address = parse_address(data.pop('address'))
     business_profile = parse_bp(data.pop('businessProfile'))
-    contact_persons = data.pop('contactPersons') # TODO: parse and add
+    contact_persons = parse_cp_list(data.pop('contactPersons'))
     represent = parse_rc(data.pop('euLegalRepresentativeCompany'))
 
     data['types'] = ','.join(data['types'])
