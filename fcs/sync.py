@@ -74,7 +74,11 @@ def parse_country(country):
 
 def parse_address(address):
     address['zipcode'] = address.pop('zipCode')
+    address['number'] = address.pop('number')
+    address['street'] = address.pop('street')
+    address['city'] = address.pop('city')
     address['country'] = parse_country(address.pop('country'))
+
     return address
 
 
