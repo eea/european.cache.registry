@@ -33,31 +33,37 @@ class ApiView(MethodView):
 
 
 class ListView(ApiView):
+    @classmethod
+    def serialize(cls, obj):
+        return obj.as_dict()
+
     def get_queryset(self):
         return self.model.query.all()
 
     def get(self):
-        return [u.as_dict() for u in self.get_queryset()]
+        return [self.serialize(u) for u in self.get_queryset()]
 
 
 class UndertakingList(ListView):
     model = Undertaking
 
-    def get(self):
-        undertakings = []
-        for undertaking in self.get_queryset():
-            u = undertaking.as_dict()
-            u['users'] = [cp.as_dict() for cp in undertaking.contact_persons]
-            a_id = u.pop('address_id')
-            u['address'] = Address.query.get(a_id).as_dict()
-            c_id = u['address'].pop('country_id')
-            u['address']['country'] = Country.query.get(c_id).as_dict()
-            undertakings.append(u)
-        return undertakings
+    @classmethod
+    def serialize(cls, obj):
+        data = obj.as_dict()
+        data.update({
+            'address': obj.address.as_dict(),
+            'users': [UserList.serialize(cp) for cp in obj.contact_persons]
+        })
+        data.pop('address_id')
+        return data
 
 
 class UserList(ListView):
     model = User
+
+    @classmethod
+    def serialize(cls, obj):
+        return obj.as_dict()
 
 
 class CompaniesList(ListView):
@@ -70,4 +76,3 @@ api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
 api.add_url_rule('/company/list',
                  view_func=CompaniesList.as_view('companies-list'))
-# api.add_url_rule('company_for_user/<username>')
