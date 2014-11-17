@@ -65,9 +65,9 @@ def get_latest_undertakings(updated_since=None):
 def update_obj(obj, d):
     if not d:
         obj = None
-        return obj
-    for name, value in d.iteritems():
-        setattr(obj, name, value)
+    else:
+        for name, value in d.iteritems():
+            setattr(obj, name, value)
     return obj
 
 
