@@ -36,7 +36,7 @@ class User(SerializableModel, Base):
     email = Column(String(255))
 
 
-class Country(Base):
+class Country(SerializableModel, Base):
     __tablename__ = 'country'
 
     id = Column(Integer, primary_key=True)
@@ -45,7 +45,7 @@ class Country(Base):
     type = Column(Integer)
 
 
-class Address(Base):
+class Address(SerializableModel, Base):
     __tablename__ = 'address'
 
     id = Column(Integer, primary_key=True)
@@ -72,7 +72,7 @@ class EuLegalRepresentativeCompany(SerializableModel, Base):
     address = relationship(Address)
 
 
-class BusinessProfile(Base):
+class BusinessProfile(SerializableModel, Base):
     __tablename__ = 'businessprofile'
 
     id = Column(Integer, primary_key=True)
@@ -115,6 +115,7 @@ class Undertaking(SerializableModel, Base):
         User,
         secondary=undertaking_users,
         backref=db.backref('undertakings', lazy='dynamic'),
+        lazy='dynamic',
     )
 
 
