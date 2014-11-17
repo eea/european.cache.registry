@@ -173,7 +173,7 @@ def parse_undertaking(data):
         user = None
         if existing_persosns:
             user = (
-                existing_persosns
+                undertaking.contact_persons
                 .filter_by(username=contact_person['username'])
                 .first()
             )
@@ -186,9 +186,9 @@ def parse_undertaking(data):
             undertaking.contact_persons.append(cp)
 
     usernames = [cp['username'] for cp in contact_persons]
-    [db.session.delete(cp)
-     for cp in existing_persosns
-     if cp.username not in usernames]
+    for cp in existing_persosns:
+        if cp.username not in usernames:
+            db.session.delete(cp)
 
     db.session.add(undertaking)
 
