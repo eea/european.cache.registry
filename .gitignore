@@ -1,3 +1,4 @@
 /instance
 db.sqlite3
 /sandbox
+*.pyc
