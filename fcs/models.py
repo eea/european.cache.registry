@@ -26,7 +26,7 @@ class SerializableModel(object):
                 self.__table__.columns}
 
 
-class User(Base):
+class User(SerializableModel, Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
@@ -58,7 +58,7 @@ class Address(Base):
     country = relationship(Country)
 
 
-class EuLegalRepresentativeCompany(Base):
+class EuLegalRepresentativeCompany(SerializableModel, Base):
     __tablename__ = 'represent'
 
     id = Column(Integer, primary_key=True)
