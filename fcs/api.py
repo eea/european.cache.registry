@@ -56,3 +56,4 @@ api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
 api.add_url_rule('/companies/list',
                  view_func=CompaniesList.as_view('companies-list'))
+# api.add_url_rule('company_for_user/<username>')

@@ -12,6 +12,14 @@ from fcs.models import (
 sync_manager = Manager()
 
 
+def not_null(func):
+    def inner(rc):
+        if not rc:
+            return None
+        return func(rc)
+    return inner
+
+
 class Unauthorized(Exception):
     pass
 
@@ -55,6 +63,9 @@ def get_latest_undertakings(updated_since=None):
 
 
 def update_obj(obj, d):
+    if not d:
+        obj = None
+        return obj
     for name, value in d.iteritems():
         setattr(obj, name, value)
     return obj
@@ -84,6 +95,7 @@ def parse_bp(bp):
     return bp
 
 
+@not_null
 def parse_rc(rc):
     rc['vatnumber'] = rc.pop('vatNumber')
     rc['contact_first_name'] = rc.pop('contactPersonFirstName')
@@ -137,24 +149,30 @@ def parse_undertaking(data):
     else:
         update_obj(undertaking.businessprofile, business_profile)
 
-    if not undertaking.represent:
-        address = represent.pop('address')
-        addr = Address(**address)
-        db.session.add(addr)
-        r = EuLegalRepresentativeCompany(**represent)
-        db.session.add(r)
-
-        undertaking.represent = r
-        undertaking.represent.address = addr
+    if not represent:
+        old_represent = undertaking.represent
+        undertaking.represent = None
+        if old_represent:
+            db.session.delete(old_represent)
     else:
-        update_obj(undertaking.represent, represent)
+        address = represent.pop('address')
+        if not undertaking.represent:
+            addr = Address(**address)
+            db.session.add(addr)
+            r = EuLegalRepresentativeCompany(**represent)
+            db.session.add(r)
 
-    if not undertaking.contact_persons:
-        for contact_person in contact_persons:
-            # TO DO: check if persons exists
-            cp = User(**contact_person)
-            db.session.add(cp)
-            undertaking.contact_persons.append(cp)
+            undertaking.represent = r
+            undertaking.represent.address = addr
+        else:
+            update_obj(undertaking.represent.address, address)
+            update_obj(undertaking.represent, represent)
+
+    for contact_person in contact_persons:
+        # TO DO: check if persons exists
+        cp = User(**contact_person)
+        db.session.add(cp)
+        undertaking.contact_persons.append()
 
     db.session.add(undertaking)
 

@@ -1,4 +1,4 @@
-[ {
+[{
     "@type" : "FGASUndertaking",
     "id" : 10006,
     "name" : "orgTest",
@@ -22,7 +22,7 @@
         "lastName" : "User 1",
         "emailAddress" : "user1@mock.ec.europa.eu"
     } ],
-    "dateCreated" : "20/10/2014",
+    "dateCreated" : "06/11/2014",
     "dateUpdated" : "06/11/2014",
     "status" : "VALID",
     "euLegalRepresentativeCompany" : {
@@ -45,11 +45,88 @@
     },
     "vat" : null,
     "businessProfile" : {
-        "highLevelUses" : [ "fgas.imports.for.destruction",
-            "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs" ]
+        "highLevelUses" : [ "fgas.imports.for.destruction", "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs" ]
     },
-    "types" : [ "FGAS_EXPORTER_HFCS", "FGAS_PRODUCER_IMPORTER_EXPORTER_NON_HFCS",
-        "FGAS_RECEIVER_EXEMPTED_HFCS", "FGAS_DESTROYER_HFCS",
-        "FGAS_IMPORTER_OF_EQUIPMENT_HFCS", "FGAS_PRODUCER_IMPORTER_HFCS",
-        "FGAS_FEEDSTOCK_USER_HFCS" ]
-} ]
+    "types" : [ "FGAS_PRODUCER_IMPORTER_EXPORTER_NON_HFCS", "FGAS_IMPORTER_OF_EQUIPMENT_HFCS",
+        "FGAS_RECEIVER_EXEMPTED_HFCS", "FGAS_FEEDSTOCK_USER_HFCS", "FGAS_EXPORTER_HFCS",
+        "FGAS_PRODUCER_IMPORTER_HFCS", "FGAS_DESTROYER_HFCS" ]
+},{
+    "@type" : "FGASUndertaking",
+    "id" : 9154,
+    "name" : "General Gas S.r.l","address" : {
+        "street" : "street--72432",
+        "number" : "nrstreet--7243",
+        "zipCode" : "zipcode--72432",
+        "city" : "city--7243",
+        "country" : {
+            "code" : "IT",
+            "name" : "Italy",
+            "type" : "EU_TYPE"
+        }
+    },
+    "website" : "WEBSITE--91542",
+    "phone" : "+3212391542",
+    "domain" : "FGAS",
+    "contactPersons" : [ {
+        "userName" : "test@test.be",
+        "firstName" : "test",
+        "lastName" : "test",
+        "emailAddress" : "test@test.be"
+    }, {
+        "userName" : "user1",
+        "firstName" : "User 1",
+        "lastName" : "User 1",
+        "emailAddress" : "user1@mock.ec.europa.eu"
+    }, {
+        "userName" : "USERNAME9153",
+        "firstName" : "fname--9065",
+        "lastName" : "lname--9065",
+        "emailAddress" : "9065email@climaOds2010.yyy"
+    } ],
+    "dateCreated" : "20/10/2014",
+    "dateUpdated" : "06/11/2014",
+    "status" : "VALID",
+    "euLegalRepresentativeCompany" : null,
+    "vat" : "IT1358910634",
+    "businessProfile" : {
+        "highLevelUses" : [ ]
+    },
+    "types" : [ "FGAS_PRODUCER_IMPORTER_HFCS" ]
+}, {
+    "@type" : "FGASUndertaking",
+    "id" : 9110,
+    "name" : "Bang & Bonsomer Eesti OÃœ",
+    "address" : {
+        "street" : "street--7220",
+        "number" : "nrstreet--7220",
+        "zipCode" : "zipcode--7220",
+        "city" : "city--7220",
+        "country" : {
+            "code" : "EE",
+            "name" : "Estonia",
+            "type" : "EU_TYPE"
+        }
+    },
+    "website" : "WEBSITE--9110",
+    "phone" : "+321239110",
+    "domain" : "FGAS",
+    "contactPersons" : [ {
+        "userName" : "USERNAME9109",
+        "firstName" : "fname--9021",
+        "lastName" : "lname--9021",
+        "emailAddress" : "9021email@climaOds2010.yyy"
+    }, {
+        "userName" : "user1",
+        "firstName" : "User 1",
+        "lastName" : "User 1",
+        "emailAddress" : "user1@mock.ec.europa.eu"
+    } ],
+    "dateCreated" : "20/10/2014",
+    "dateUpdated" : "20/10/2014",
+    "status" : "VALID",
+    "euLegalRepresentativeCompany" : null,"vat" : "EE100076141",
+    "businessProfile" : {
+        "highLevelUses" : [ ]
+    },
+    "types" : [ "FGAS_PRODUCER_IMPORTER_HFCS", "FGAS_DESTROYER_HFCS" ]
+}]
