@@ -23,7 +23,7 @@ class SerializableModel(object):
 
     def as_dict(self):
         return {c.name: self.get_serialized(c.name) for c in
-                self.__table__.columns}
+                self.__table__.columns if c.name != 'id'}
 
 
 class User(SerializableModel, Base):
