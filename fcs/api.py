@@ -94,6 +94,7 @@ class UserList(ListView):
 class CompaniesList(ListView):
     model = EuLegalRepresentativeCompany
 
+    @classmethod
     def serialize(cls, obj):
         data = obj.as_dict()
         data.update({
