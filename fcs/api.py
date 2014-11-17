@@ -94,6 +94,14 @@ class UserList(ListView):
 class CompaniesList(ListView):
     model = EuLegalRepresentativeCompany
 
+    def serialize(cls, obj):
+        data = obj.as_dict()
+        data.update({
+            'address': obj.address.as_dict(),
+        })
+        data.pop('address_id')
+        return data
+
 
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('undertaking-list'))
