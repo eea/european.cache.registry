@@ -7,7 +7,7 @@ from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, Country,
     OldCompanyLink, db,
 )
-from fcs.match import get_all_candidates
+from fcs.match import get_all_candidates, verify_link
 
 api = Blueprint('api', __name__)
 
@@ -171,15 +171,7 @@ class CandidateList(ApiView):
 class CandidateVerify(ApiView):
     # TODO: we should use POST for this action
     def get(self, undertaking_id, oldcompany_id):
-        link = (
-            OldCompanyLink.query
-            .filter_by(undertaking_id=undertaking_id,
-                       oldcompany_id=oldcompany_id).first_or_404()
-        )
-        link.verified = True
-        link.date_verified = datetime.now()
-        link.undertaking.oldcompany = link.oldcompany
-        db.session.commit()
+        verify_link(undertaking_id, oldcompany_id) or abort(404)
         return ApiView.serialize(link)
 
 
