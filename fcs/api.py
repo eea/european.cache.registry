@@ -33,7 +33,7 @@ class ApiView(MethodView):
 
     @classmethod
     def serialize(cls, obj):
-        return obj.as_dict()
+        return obj.as_dict() if obj else None
 
 
 class ListView(ApiView):
@@ -56,12 +56,16 @@ class UndertakingList(ListView):
 
     @classmethod
     def serialize(cls, obj):
-        data = obj.as_dict()
+        data = ApiView.serialize(obj)
         data.update({
-            'address': obj.address.as_dict(),
+            'address': ApiView.serialize(obj.address),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
         })
         data.pop('address_id')
+        data['address'].update({
+            'country': ApiView.serialize(obj.address.country),
+        })
+        data['address'].pop('country_id')
         return data
 
 
@@ -70,25 +74,30 @@ class UndertakingDetail(DetailView):
 
     @classmethod
     def serialize(cls, obj):
-        data = obj.as_dict()
+        data = ApiView.serialize(obj)
         data.update({
-            'address': obj.address.as_dict(),
-            'businessprofile': obj.businessprofile.as_dict(),
-            'represent': obj.represent.as_dict(),
+            'address': ApiView.serialize(obj.address),
+            'businessprofile': ApiView.serialize(obj.businessprofile),
+            'represent': ApiView.serialize(obj.represent),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
         })
         data.pop('address_id')
         data.pop('businessprofile_id')
         data.pop('represent_id')
+        data['address'].update({
+            'country': ApiView.serialize(obj.address.country),
+        })
+        data['address'].pop('country_id')
+        data['represent'].update({
+            'address': ApiView.serialize(obj.represent.address),
+        })
+        data['represent'].pop('address_id')
+
         return data
 
 
 class UserList(ListView):
     model = User
-
-    @classmethod
-    def serialize(cls, obj):
-        return obj.as_dict()
 
 
 class CompaniesList(ListView):
@@ -96,9 +105,9 @@ class CompaniesList(ListView):
 
     @classmethod
     def serialize(cls, obj):
-        data = obj.as_dict()
+        data = ApiView.serialize(obj)
         data.update({
-            'address': obj.address.as_dict(),
+            'address': ApiView.serialize(obj.address),
         })
         data.pop('address_id')
         return data
@@ -111,4 +120,4 @@ api.add_url_rule('/undertaking/detail/<pk>',
 api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
 api.add_url_rule('/company/list',
-                 view_func=CompaniesList.as_view('companies-list'))
+                 view_func=CompaniesList.as_view('company-list'))
