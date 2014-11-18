@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+
 import requests
 
 from sqlalchemy import desc
@@ -41,7 +42,9 @@ def get_latest_undertakings(updated_since=None):
     else:
         params = {}
 
-    response = requests.get(url, params=params, auth=auth)
+    headers = dict(zip(('user', 'password'), auth))
+    response = requests.get(url, params=params, headers=headers)
+
     if response.status_code == 401:
         raise Unauthorized()
 
@@ -173,26 +176,30 @@ def parse_undertaking(data):
     db.session.add(undertaking)
 
 
+@sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
-def test_fgases(updated_since):
+def test_fgases(days=7, updated_since=None):
+    
     if updated_since:
         try:
-            updated_since = datetime.strptime(updated_since, '%d/%m/%Y').date()
+            last_update = datetime.strptime(updated_since, '%d/%m/%Y').date()
         except ValueError:
             return 'Invalid date format. Please use DD/MM/YYYY'
     else:
-        last = (
-            Undertaking.query
-            .order_by(desc(Undertaking.date_updated))
-            .first()
-        )
-        updated_since = last.date_updated - timedelta(days=1) if last else None
-    undertakings = get_latest_undertakings(updated_since=updated_since)
+        days = int(days)
+        if days > 0:
+            last_update = datetime.now() - timedelta(days=days)
+        else:
+            last = (
+                Undertaking.query
+                .order_by(desc(Undertaking.date_updated))
+                .first()
+            )
+            last_update = last.date_updated - timedelta(days=1) if last else None
+            
+    undertakings = get_latest_undertakings(updated_since=last_update)
 
-    import pprint
-    pprint.pprint(undertakings)
-
-    [parse_undertaking(u) for u in undertakings]
+    print len([parse_undertaking(u) for u in undertakings]), "values"
 
     db.session.commit()
