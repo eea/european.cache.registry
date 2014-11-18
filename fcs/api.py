@@ -7,6 +7,7 @@ from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, Country,
     OldCompanyLink, db,
 )
+from fcs.match import get_all_candidates
 
 api = Blueprint('api', __name__)
 
@@ -157,14 +158,13 @@ class CompaniesList(ListView):
 
 class CandidateList(ApiView):
     def get(self):
-        companies = Undertaking.query.filter_by(oldcompany=None)
+        candidates = get_all_candidates()
         data = []
-        for company in companies:
-            if company.links:
-                ls = [ApiView.serialize(l.oldcompany) for l in company.links]
-                data.append(
-                    {'undertaking': ApiView.serialize(company), 'links': ls}
-                )
+        for company, links in candidates:
+            ls = [ApiView.serialize(l.oldcompany) for l in links]
+            data.append(
+                {'undertaking': ApiView.serialize(company), 'links': ls}
+            )
         return data
 
 

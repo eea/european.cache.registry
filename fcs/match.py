@@ -1,18 +1,28 @@
+from fuzzywuzzy import fuzz
 from datetime import datetime
 from flask.ext.script import Manager
 from fcs import models
 
+FUZZ_LIMIT = 80
+
 match_manager = Manager()
 
 
+def get_all_candidates():
+    companies = models.Undertaking.query.filter_by(oldcompany=None)
+    data = [(company, company.links) for company in companies if company.links]
+    return data
+
+
 def has_match(company, old):
+    c_code = company['country_code'].lower()
+    o_code = company['country_code'].lower()
+    if c_code != o_code:
+        return False
+
     c_name = company['name'].lower()
     o_name = old['name'].lower()
-    return (
-        c_name and o_name and (
-            c_name in o_name or o_name in c_name
-        )
-    )
+    return all((c_name, o_name)) and fuzz.ratio(c_name, o_name) >= FUZZ_LIMIT
 
 
 def match_all(companies, oldcompanies):
@@ -30,10 +40,12 @@ def match_all(companies, oldcompanies):
         for old in candidates:
             link = models.OldCompanyLink.query.filter_by(
                 undertaking_id=company['id'],
-                oldcompany_id=old['id']).first()
+                oldcompany_id=old['id']
+            ).first()
             if not link:
                 link = models.OldCompanyLink(
-                    undertaking_id=company['id'], oldcompany_id=old['id'],
+                    undertaking_id=company['id'],
+                    oldcompany_id=old['id'],
                     date_added=datetime.now(),
                 )
                 models.db.session.add(link)
@@ -48,11 +60,10 @@ def test():
     match_all(companies, oldcompanies)
     models.db.session.commit()
 
-    links = [l.as_dict() for l in models.OldCompanyLink.query.all()]
-
-    from pprint import pprint
-
-    pprint(links)
+    for company, links in get_all_candidates():
+        print company.name, ":"
+        for l in links:
+            print " -", l.oldcompany.name, l.verified
 
 
 @match_manager.command

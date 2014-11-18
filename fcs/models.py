@@ -15,6 +15,8 @@ db_manager = Manager()
 
 
 class SerializableModel(object):
+    EXTRA_FIELDS = []
+
     def get_serialized(self, name):
         value = getattr(self, name)
         if isinstance(value, date):
@@ -22,8 +24,11 @@ class SerializableModel(object):
         return value
 
     def as_dict(self):
-        return {c.name: self.get_serialized(c.name) for c in
+        data = {c.name: self.get_serialized(c.name) for c in
                 self.__table__.columns}
+        data.update(
+            {field: self.get_serialized(field) for field in self.EXTRA_FIELDS})
+        return data
 
 
 class User(SerializableModel, Base):
@@ -89,6 +94,7 @@ undertaking_users = db.Table(
 
 class Undertaking(SerializableModel, Base):
     __tablename__ = 'undertaking'
+    EXTRA_FIELDS = ('country_code',)
 
     id = Column(Integer, primary_key=True)
 
