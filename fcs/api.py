@@ -124,6 +124,23 @@ class UserDetail(DetailView):
         return data
 
 
+class UserUndertakings(DetailView):
+    model = User
+
+    def get_object(self, pk):
+        return self.model.query.filter_by(username=pk).first_or_404()
+
+    @classmethod
+    def serialize(cls, obj):
+        def _serialize(company):
+            return {
+                'external_id': company.external_id, 'name': company.name,
+                'domain': company.domain, 'country': company.country_code,
+            }
+
+        return [_serialize(c) for c in obj.undertakings]
+
+
 class CompaniesList(ListView):
     model = EuLegalRepresentativeCompany
 
@@ -169,10 +186,14 @@ api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('undertaking-list'))
 api.add_url_rule('/undertaking/detail/<pk>',
                  view_func=UndertakingDetail.as_view('undertaking-detail'))
+
 api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
 api.add_url_rule('/user/detail/<pk>',
                  view_func=UserDetail.as_view('user-detail'))
+api.add_url_rule('/undertakingsForUser/<pk>/',
+                 view_func=UserUndertakings.as_view('undertakings-user'))
+
 api.add_url_rule('/company/list',
                  view_func=CompaniesList.as_view('company-list'))
 
