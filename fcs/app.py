@@ -5,7 +5,8 @@ from fcs.api import api, api_manager
 from fcs.sync import sync_manager
 
 DEFAULT_CONFIG = {
-    'API_URL': 'http://example.com/rest/api'
+    'API_URL': 'http://example.com/rest/api',
+    'BDR_API_URL': 'http://example.com/api',
 }
 
 

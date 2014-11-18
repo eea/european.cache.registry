@@ -1,15 +1,14 @@
 from datetime import datetime
-import requests
 
-from flask.ext.script import Manager
+import requests
 from flask import current_app
 
 from fcs.models import (
     Undertaking, db, Address, Country, BusinessProfile, User,
     EuLegalRepresentativeCompany,
 )
-
-sync_manager = Manager()
+from fcs.sync import sync_manager, Unauthorized, InvalidResponse
+from fcs.sync.utils import update_obj
 
 
 def not_null(func):
@@ -17,15 +16,8 @@ def not_null(func):
         if not rc:
             return None
         return func(rc)
+
     return inner
-
-
-class Unauthorized(Exception):
-    pass
-
-
-class InvalidResponse(Exception):
-    pass
 
 
 def get_absolute_url(url):
@@ -56,15 +48,6 @@ def get_latest_undertakings(updated_since=None):
         raise InvalidResponse()
 
     return response.json()
-
-
-def update_obj(obj, d):
-    if not d:
-        obj = None
-    else:
-        for name, value in d.iteritems():
-            setattr(obj, name, value)
-    return obj
 
 
 def parse_date(date_value):
@@ -190,7 +173,7 @@ def parse_undertaking(data):
 
 
 @sync_manager.command
-def test():
+def test_fgases():
     import pprint
 
     undertakings = get_latest_undertakings()
