@@ -127,6 +127,12 @@ class Undertaking(SerializableModel, Base):
         lazy='dynamic',
     )
 
+    @property
+    def country_code(self):
+        return (
+            self.address and self.address.country and self.address.country.code
+        )
+
 
 class OldCompany(SerializableModel, Base):
     __tablename__ = 'old_company'

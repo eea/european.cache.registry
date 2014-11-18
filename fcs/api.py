@@ -47,8 +47,11 @@ class ListView(ApiView):
 
 
 class DetailView(ApiView):
+    def get_object(self, pk):
+        return self.model.query.get_or_404(pk)
+
     def get(self, pk):
-        return self.serialize(self.model.query.get(pk))
+        return self.serialize(self.get_object(pk))
 
 
 class UndertakingList(ListView):
@@ -100,6 +103,27 @@ class UserList(ListView):
     model = User
 
 
+class UserDetail(DetailView):
+    model = User
+
+    def get_object(self, pk):
+        return self.model.query.filter_by(username=pk).first_or_404()
+
+    @classmethod
+    def serialize(cls, obj):
+        data = ApiView.serialize(obj)
+
+        def _serialize(company):
+            return {
+                'id': company.id, 'external_id': company.external_id,
+                'name': company.name, 'country': company.country_code,
+                'vat': company.vat
+            }
+
+        data['companies'] = [_serialize(c) for c in obj.undertakings]
+        return data
+
+
 class CompaniesList(ListView):
     model = EuLegalRepresentativeCompany
 
@@ -141,13 +165,14 @@ class CandidateVerify(ApiView):
         return ApiView.serialize(link)
 
 
-
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('undertaking-list'))
 api.add_url_rule('/undertaking/detail/<pk>',
                  view_func=UndertakingDetail.as_view('undertaking-detail'))
 api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
+api.add_url_rule('/user/detail/<pk>',
+                 view_func=UserDetail.as_view('user-detail'))
 api.add_url_rule('/company/list',
                  view_func=CompaniesList.as_view('company-list'))
 
