@@ -120,7 +120,7 @@ class Undertaking(SerializableModel, Base):
         backref=db.backref('undertakings', lazy='dynamic'),
         lazy='dynamic',
     )
-    oldcompany = relationship('OldCompany')
+    oldcompany = relationship('OldCompany', backref=db.backref('undertaking'))
     candidates = relationship(
         'OldCompany',
         secondary='old_company_link',

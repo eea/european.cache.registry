@@ -3,6 +3,7 @@ from flask.ext.script import Manager
 from fcs.models import db, db_manager
 from fcs.api import api, api_manager
 from fcs.sync import sync_manager
+from fcs.match import match_manager
 
 DEFAULT_CONFIG = {
     'API_URL': 'http://example.com/rest/api',
@@ -31,4 +32,5 @@ def create_manager(app):
     manager.add_command('db', db_manager)
     manager.add_command('sync', sync_manager)
     manager.add_command('api', api_manager)
+    manager.add_command('match', match_manager)
     return manager
