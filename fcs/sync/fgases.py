@@ -183,7 +183,7 @@ def test_fgases(days=7, updated_since=None):
     
     if updated_since:
         try:
-            last_update = datetime.strptime(updated_since, '%d/%m/%Y').date()
+            last_update = datetime.strptime(updated_since, '%d/%m/%Y')
         except ValueError:
             return 'Invalid date format. Please use DD/MM/YYYY'
     else:
@@ -197,7 +197,8 @@ def test_fgases(days=7, updated_since=None):
                 .first()
             )
             last_update = last.date_updated - timedelta(days=1) if last else None
-            
+
+    print "Using last_update {}".format(last_update)
     undertakings = get_latest_undertakings(updated_since=last_update)
 
     print len([parse_undertaking(u) for u in undertakings]), "values"
