@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd `basename $0`/..
+cd `dirname $0`/..
+pwd
 source sandbox/bin/activate
 
 ./manage.py sync test_fgases # update from last one

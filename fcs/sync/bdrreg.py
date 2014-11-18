@@ -58,5 +58,5 @@ def parse_company(company):
 def test_bdr():
     companies = get_old_companies()
 
-    print [parse_company(c) for c in companies]
+    print len([parse_company(c) for c in companies]), "values"
     db.session.commit()
