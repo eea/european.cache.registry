@@ -1,9 +1,11 @@
 import json
+from datetime import datetime
 from flask import Blueprint, Response
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, Country,
+    OldCompanyLink, db,
 )
 
 api = Blueprint('api', __name__)
@@ -37,7 +39,6 @@ class ApiView(MethodView):
 
 
 class ListView(ApiView):
-
     def get_queryset(self):
         return self.model.query.all()
 
@@ -46,7 +47,6 @@ class ListView(ApiView):
 
 
 class DetailView(ApiView):
-
     def get(self, pk):
         return self.serialize(self.model.query.get(pk))
 
@@ -113,6 +113,35 @@ class CompaniesList(ListView):
         return data
 
 
+class CandidateList(ApiView):
+    def get(self):
+        companies = Undertaking.query.filter_by(oldcompany=None)
+        data = []
+        for company in companies:
+            if company.links:
+                ls = [ApiView.serialize(l.oldcompany) for l in company.links]
+                data.append(
+                    {'undertaking': ApiView.serialize(company), 'links': ls}
+                )
+        return data
+
+
+class CandidateVerify(ApiView):
+    # TODO: we should use POST for this action
+    def get(self, undertaking_id, oldcompany_id):
+        link = (
+            OldCompanyLink.query
+            .filter_by(undertaking_id=undertaking_id,
+                       oldcompany_id=oldcompany_id).first_or_404()
+        )
+        link.verified = True
+        link.date_verified = datetime.now()
+        link.undertaking.oldcompany = link.oldcompany
+        db.session.commit()
+        return ApiView.serialize(link)
+
+
+
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('undertaking-list'))
 api.add_url_rule('/undertaking/detail/<pk>',
@@ -121,3 +150,8 @@ api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
 api.add_url_rule('/company/list',
                  view_func=CompaniesList.as_view('company-list'))
+
+api.add_url_rule('/candidate/list',
+                 view_func=CandidateList.as_view('candidate-list'))
+api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
+                 view_func=CandidateVerify.as_view('candidate-verify'))

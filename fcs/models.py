@@ -151,6 +151,9 @@ class OldCompanyLink(SerializableModel, Base):
     date_added = Column(DateTime)
     date_verified = Column(DateTime)
 
+    oldcompany = relationship('OldCompany')
+    undertaking = relationship('Undertaking', backref=db.backref('links'))
+
 
 @db_manager.command
 def init():
