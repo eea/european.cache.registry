@@ -1,6 +1,7 @@
-from datetime import datetime
-
+from datetime import datetime, timedelta
 import requests
+
+from sqlalchemy import desc
 from flask import current_app
 
 from fcs.models import (
@@ -172,11 +173,24 @@ def parse_undertaking(data):
     db.session.add(undertaking)
 
 
-@sync_manager.command
-def test_fgases():
-    import pprint
+@sync_manager.option('-u', '--updated', dest='updated_since',
+                     help="Date in DD/MM/YYYY format")
+def test_fgases(updated_since):
+    if updated_since:
+        try:
+            updated_since = datetime.strptime(updated_since, '%d/%m/%Y').date()
+        except ValueError:
+            return 'Invalid date format. Please use DD/MM/YYYY'
+    else:
+        last = (
+            Undertaking.query
+            .order_by(desc(Undertaking.date_updated))
+            .first()
+        )
+        updated_since = last.date_updated - timedelta(days=1) if last else None
+    undertakings = get_latest_undertakings(updated_since=updated_since)
 
-    undertakings = get_latest_undertakings()
+    import pprint
     pprint.pprint(undertakings)
 
     [parse_undertaking(u) for u in undertakings]
