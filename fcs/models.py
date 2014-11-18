@@ -107,6 +107,9 @@ class Undertaking(SerializableModel, Base):
     types = Column(String)
     represent_id = Column(ForeignKey('represent.id'))
     businessprofile_id = Column(ForeignKey('businessprofile.id'))
+    # Link
+    oldcompany_id = Column(ForeignKey('old_company.id'), nullable=True,
+                           default=None)
 
     address = relationship(Address)
     represent = relationship(EuLegalRepresentativeCompany)
@@ -117,6 +120,36 @@ class Undertaking(SerializableModel, Base):
         backref=db.backref('undertakings', lazy='dynamic'),
         lazy='dynamic',
     )
+    oldcompany = relationship('OldCompany')
+    candidates = relationship(
+        'OldCompany',
+        secondary='old_company_link',
+        lazy='dynamic',
+    )
+
+
+class OldCompany(SerializableModel, Base):
+    __tablename__ = 'old_company'
+
+    id = Column(Integer, primary_key=True)
+    external_id = Column(Integer)
+    name = Column(String(255))
+    country_code = Column(String(4))
+    vat_number = Column(String(32))
+    eori = Column(String(32))
+    active = Column(Boolean)
+    website = Column(String(255))
+    date_registered = Column(DateTime)
+
+
+class OldCompanyLink(SerializableModel, Base):
+    __tablename__ = 'old_company_link'
+
+    oldcompany_id = Column(ForeignKey('old_company.id'), primary_key=True)
+    undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
+    verified = Column(Boolean, default=False)
+    date_added = Column(DateTime)
+    date_verified = Column(DateTime)
 
 
 @db_manager.command
