@@ -133,6 +133,10 @@ class Undertaking(SerializableModel, Base):
             self.address and self.address.country and self.address.country.code
         )
 
+    @property
+    def old_account(self):
+        return self.oldcompany and self.oldcompany.account
+
 
 class OldCompany(SerializableModel, Base):
     __tablename__ = 'old_company'
@@ -140,7 +144,8 @@ class OldCompany(SerializableModel, Base):
     id = Column(Integer, primary_key=True)
     external_id = Column(Integer)
     name = Column(String(255))
-    country_code = Column(String(4))
+    country_code = Column(String(10))
+    account = Column(String(255))
     vat_number = Column(String(32))
     eori = Column(String(32))
     active = Column(Boolean)

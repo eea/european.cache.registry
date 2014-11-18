@@ -117,7 +117,8 @@ class UserDetail(DetailView):
             return {
                 'id': company.id, 'external_id': company.external_id,
                 'name': company.name, 'country': company.country_code,
-                'vat': company.vat
+                'vat': company.vat, 'account': company.old_account,
+                'oldcompany_id': company.oldcompany_id,
             }
 
         data['companies'] = [_serialize(c) for c in obj.undertakings]
