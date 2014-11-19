@@ -76,6 +76,9 @@ class UndertakingList(ListView):
 class UndertakingDetail(DetailView):
     model = Undertaking
 
+    def get_object(self, pk):
+        return self.model.query.filter_by(external_id=pk).first()
+
     @classmethod
     def serialize(cls, obj):
         data = ApiView.serialize(obj)
