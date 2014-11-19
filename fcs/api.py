@@ -88,14 +88,16 @@ class UndertakingDetail(DetailView):
         data.pop('address_id')
         data.pop('businessprofile_id')
         data.pop('represent_id')
-        data['address'].update({
-            'country': ApiView.serialize(obj.address.country),
-        })
-        data['address'].pop('country_id')
-        data['represent'].update({
-            'address': ApiView.serialize(obj.represent.address),
-        })
-        data['represent'].pop('address_id')
+        if data['address']:
+            data['address'].update({
+                'country': ApiView.serialize(obj.address.country),
+            })
+            data['address'].pop('country_id')
+        if data['represent']:
+            data['represent'].update({
+                'address': ApiView.serialize(obj.represent.address),
+            })
+            data['represent'].pop('address_id')
 
         return data
 
