@@ -112,32 +112,12 @@ class UserDetail(DetailView):
 
     @classmethod
     def serialize(cls, obj):
-        data = ApiView.serialize(obj)
-
-        def _serialize(company):
-            return {
-                'id': company.id, 'external_id': company.external_id,
-                'name': company.name, 'country': company.country_code,
-                'vat': company.vat, 'account': company.old_account,
-                'oldcompany_id': company.oldcompany_id,
-            }
-
-        data['companies'] = [_serialize(c) for c in obj.undertakings]
-        return data
-
-
-class UserUndertakings(DetailView):
-    model = User
-
-    def get_object(self, pk):
-        return self.model.query.filter_by(username=pk).first_or_404()
-
-    @classmethod
-    def serialize(cls, obj):
         def _serialize(company):
             return {
                 'external_id': company.external_id, 'name': company.name,
                 'domain': company.domain, 'country': company.country_code,
+                'id': company.id, 'account': company.old_account,
+                'oldcompany_id': company.oldcompany_id,
             }
 
         return [_serialize(c) for c in obj.undertakings]
@@ -184,8 +164,6 @@ api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
 api.add_url_rule('/user/detail/<pk>',
                  view_func=UserDetail.as_view('user-detail'))
-api.add_url_rule('/undertakingsForUser/<pk>/',
-                 view_func=UserUndertakings.as_view('undertakings-user'))
 
 api.add_url_rule('/company/list',
                  view_func=CompaniesList.as_view('company-list'))
