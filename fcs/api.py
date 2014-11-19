@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from flask import Blueprint, Response
+from flask import Blueprint, Response, abort
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
@@ -156,7 +156,7 @@ class CandidateList(ApiView):
 class CandidateVerify(ApiView):
     # TODO: we should use POST for this action
     def get(self, undertaking_id, oldcompany_id):
-        verify_link(undertaking_id, oldcompany_id) or abort(404)
+        link = verify_link(undertaking_id, oldcompany_id) or abort(404)
         return ApiView.serialize(link)
 
 
