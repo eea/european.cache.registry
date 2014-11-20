@@ -8,7 +8,8 @@ from fcs.models import (
     OldCompanyLink, db, OldCompany
 )
 from fcs.match import (
-    get_all_candidates, get_all_non_candidates, verify_link, unverify_link
+    get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
+    get_candidates,
 )
 
 api = Blueprint('api', __name__)
@@ -83,12 +84,14 @@ class UndertakingDetail(DetailView):
 
     @classmethod
     def serialize(cls, obj):
+        candidates = get_candidates(obj.external_id)
         data = ApiView.serialize(obj)
         data.update({
             'address': ApiView.serialize(obj.address),
             'businessprofile': ApiView.serialize(obj.businessprofile),
             'represent': ApiView.serialize(obj.represent),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+            'candidates': [ApiView.serialize(c) for c in candidates],
         })
         data.pop('address_id')
         data.pop('businessprofile_id')
@@ -175,12 +178,6 @@ class CandidateUnverify(ApiView):
         return ApiView.serialize(link)
 
 
-class OldCompanyDetail(DetailView):
-    model = OldCompany
-
-    def get_object(self, pk):
-        return self.model.query.filter_by(external_id=pk).first()
-
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('undertaking-list'))
 api.add_url_rule('/undertaking/detail/<pk>',
@@ -204,6 +201,3 @@ api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
                  view_func=CandidateVerify.as_view('candidate-verify'))
 api.add_url_rule('/candidate/unverify/<undertaking_id>/<oldcompany_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
-
-api.add_url_rule('/oldcompany/detail/<pk>',
-                 view_func=OldCompanyDetail.as_view('oldcompany-detail'))
