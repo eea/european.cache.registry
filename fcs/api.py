@@ -7,7 +7,9 @@ from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, Country,
     OldCompanyLink, db, OldCompany
 )
-from fcs.match import get_all_candidates, verify_link, unverify_link
+from fcs.match import (
+    get_all_candidates, get_all_non_candidates, verify_link, unverify_link
+)
 
 api = Blueprint('api', __name__)
 
@@ -153,6 +155,12 @@ class CandidateList(ApiView):
         return data
 
 
+class NonCandidateList(ApiView):
+    def get(self):
+        noncandidates = get_all_non_candidates()
+        return [ApiView.serialize(c) for c in noncandidates]
+
+
 class CandidateVerify(ApiView):
     # TODO: we should use POST for this action
     def get(self, undertaking_id, oldcompany_id):
@@ -188,6 +196,10 @@ api.add_url_rule('/company/list',
 
 api.add_url_rule('/candidate/list',
                  view_func=CandidateList.as_view('candidate-list'))
+
+api.add_url_rule('/noncandidate/list',
+                 view_func=NonCandidateList.as_view('noncandidate-list'))
+
 api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
                  view_func=CandidateVerify.as_view('candidate-verify'))
 api.add_url_rule('/candidate/unverify/<undertaking_id>/<oldcompany_id>/',
