@@ -5,7 +5,7 @@ from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, Country,
-    OldCompanyLink, db,
+    OldCompanyLink, db, OldCompany
 )
 from fcs.match import get_all_candidates, verify_link
 
@@ -160,6 +160,12 @@ class CandidateVerify(ApiView):
         return ApiView.serialize(link)
 
 
+class OldCompanyDetail(DetailView):
+    model = OldCompany
+
+    def get_object(self, pk):
+        return self.model.query.filter_by(external_id=pk).first()
+
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('undertaking-list'))
 api.add_url_rule('/undertaking/detail/<pk>',
@@ -177,3 +183,6 @@ api.add_url_rule('/candidate/list',
                  view_func=CandidateList.as_view('candidate-list'))
 api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
                  view_func=CandidateVerify.as_view('candidate-verify'))
+
+api.add_url_rule('/oldcompany/detail/<pk>',
+                 view_func=OldCompanyDetail.as_view('oldcompany-detail'))
