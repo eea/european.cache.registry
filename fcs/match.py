@@ -28,6 +28,20 @@ def verify_link(undertaking_id, oldcompany_id):
     return link
 
 
+def unverify_link(undertaking_id, oldcompany_id):
+    link = (
+        models.OldCompanyLink.query
+        .filter_by(undertaking_id=undertaking_id,
+                   oldcompany_id=oldcompany_id).first()
+    )
+    if link:
+        link.verified = False
+        link.date_verified = None
+        link.undertaking.oldcompany = None
+        models.db.session.commit()
+    return link
+
+
 def has_match(company, old):
     c_code = company['country_code'].lower()
     o_code = company['country_code'].lower()

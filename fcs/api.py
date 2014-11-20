@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+
 from flask import Blueprint, Response, abort
 from flask.views import MethodView
 from flask.ext.script import Manager
@@ -7,7 +7,7 @@ from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, Country,
     OldCompanyLink, db, OldCompany
 )
-from fcs.match import get_all_candidates, verify_link
+from fcs.match import get_all_candidates, verify_link, unverify_link
 
 api = Blueprint('api', __name__)
 
@@ -160,6 +160,13 @@ class CandidateVerify(ApiView):
         return ApiView.serialize(link)
 
 
+class CandidateUnverify(ApiView):
+    # TODO: we should use POST for this action
+    def get(self, undertaking_id, oldcompany_id):
+        link = unverify_link(undertaking_id, oldcompany_id) or abort(404)
+        return ApiView.serialize(link)
+
+
 class OldCompanyDetail(DetailView):
     model = OldCompany
 
@@ -183,6 +190,8 @@ api.add_url_rule('/candidate/list',
                  view_func=CandidateList.as_view('candidate-list'))
 api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
                  view_func=CandidateVerify.as_view('candidate-verify'))
+api.add_url_rule('/candidate/unverify/<undertaking_id>/<oldcompany_id>/',
+                 view_func=CandidateUnverify.as_view('candidate-unverify'))
 
 api.add_url_rule('/oldcompany/detail/<pk>',
                  view_func=OldCompanyDetail.as_view('oldcompany-detail'))
