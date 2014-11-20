@@ -91,7 +91,7 @@ class UndertakingDetail(DetailView):
             'businessprofile': ApiView.serialize(obj.businessprofile),
             'represent': ApiView.serialize(obj.represent),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
-            'candidates': [ApiView.serialize(c) for c in candidates],
+            'candidates': [ApiView.serialize(c.oldcompany) for c in candidates],
         })
         data.pop('address_id')
         data.pop('businessprofile_id')
@@ -123,11 +123,13 @@ class UserDetail(DetailView):
     @classmethod
     def serialize(cls, obj):
         def _serialize(company):
+            old_company = company.oldcompany
+            collection_id = old_company.account if old_company else None
             return {
                 'external_id': company.external_id, 'name': company.name,
                 'domain': company.domain, 'country': company.country_code,
                 'id': company.id, 'account': company.old_account,
-                'oldcompany_id': company.oldcompany_id,
+                'collection_id': collection_id,
             }
 
         return [_serialize(c) for c in obj.undertakings]
