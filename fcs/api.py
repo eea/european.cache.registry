@@ -68,7 +68,6 @@ class UndertakingList(ListView):
             'address': ApiView.serialize(obj.address),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
         })
-        data['company_id'] = data.pop('external_id')
         data.pop('address_id')
         data['address'].update({
             'country': ApiView.serialize(obj.address.country),
@@ -97,7 +96,6 @@ class UndertakingDetail(DetailView):
         data.pop('address_id')
         data.pop('businessprofile_id')
         data.pop('represent_id')
-        data['company_id'] = data.pop('external_id')
         if data['address']:
             data['address'].update({
                 'country': ApiView.serialize(obj.address.country),

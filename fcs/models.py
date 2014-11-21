@@ -26,6 +26,8 @@ class SerializableModel(object):
     def as_dict(self):
         data = {c.name: self.get_serialized(c.name) for c in
                 self.__table__.columns}
+        if 'external_id' in data:
+            data['company_id'] = data.pop('external_id')
         data.update(
             {field: self.get_serialized(field) for field in self.EXTRA_FIELDS})
         return data
