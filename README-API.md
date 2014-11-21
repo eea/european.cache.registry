@@ -11,42 +11,48 @@ authentication.
 -----------------
 
 Returns a list of all undertakings in the system, as fetched from FGR.
-
+    
     [
-        {
-        "id": 1,
-        "external_id": 10006,
-        "name": "orgTest",
-        "website": null,
-        "status": "VALID",
-        "date_created": "06/11/2014",
-        "date_updated": "06/11/2014",
-        "domain": "FGAS",
-        "phone": "+3234343",
-        "vat": null,
+      {
+        "website": "WEBSITE--10085", 
+        "status": "VALID", 
+        "name": "FGAS-NMORGANIZATION--10085", 
+        "undertaking_type": "FGASUndertaking", 
+        "date_updated": "10/10/2014", 
+        "represent_id": 1, 
         "address": {
-            "city": "asdfsafsaf",
-            "country": {
-                "code": "CN",
-                "type": "NONEU_TYPE",
-                "id": 1,
-                "name": "China (excluding Hong Kong and Macao)"
-            },
-            "zipcode": "1234", "number": null, "street": "street", "id": 1
-        },
-        "types": "FGAS_PRODUCER_IMPORTER_EXPORTER_NON_HFCS,",
+          "city": "city--7953", 
+          "country": {
+            "code": "CN", 
+            "type": "NONEU_TYPE", 
+            "id": 1, 
+            "name": "China (excluding Hong Kong and Macao)"
+          }, 
+          "zipcode": "zipcode--7953", 
+          "number": "nrstreet--7953", 
+          "street": "street--7953", 
+          "id": 1
+        }, 
+        "domain": "FGAS", 
+        "company_id": 10085, 
+        "phone": "+3212310085", 
+        "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
+        "country_code": "CN", 
+        "oldcompany_id": null, 
+        "date_created": "10/10/2014", 
         "users": [
-            {
-            "username": "user1",
-            "first_name": "User 1",
-            "last_name": "User 1",
-            "id": 1,
-            "email": "user1@mock.ec.europa.eu"
-            }
-        ],
+          {
+            "username": "nzhouray", 
+            "first_name": "fname--9367", 
+            "last_name": "lname--9367", 
+            "id": 1, 
+            "email": "9367email@climaOds2010.yyy"
+          }
+        ], 
+        "id": 1, 
+        "vat": null, 
         "businessprofile_id": 1
-        "oldcompany_id": null,
-        }
+      }
     ]
 
 
@@ -54,62 +60,50 @@ Returns a list of all undertakings in the system, as fetched from FGR.
 ------------------------
 
 Returns a an undertakings details from the system, as fetched from FGR.
-
+    
     {
-      "website": "WEBSITE--91542",
-      "status": "VALID",
-      "name": "General Gas S.r.l",
-      "represent": null,
-      "date_updated": "06/11/2014",
+      "website": "WEBSITE--9478", 
+      "status": "VALID", 
+      "represent": null, 
+      "date_updated": "10/10/2014", 
+      "oldcompany_id": null, 
+      "domain": "FGAS", 
+      "phone": "+321239478", 
+      "country_code": "UK", 
       "address": {
-        "city": "city--7243",
+        "city": "city--7544", 
         "country": {
-          "code": "IT",
-          "type": "EU_TYPE",
-          "id": 3,
-          "name": "Italy"
-        },
-        "zipcode": "zipcode--72432",
-        "number": "nrstreet--7243",
-        "street": "street--72432",
-        "id": 3
-      },
-      "domain": "FGAS",
-      "phone": "+3212391542",
-      "businessprofile": {
-        "highleveluses": "",
-        "id": 2
-      },
-      "types": "FGAS_PRODUCER_IMPORTER_HFCS",
-      "country_code": "IT",
-      "oldcompany_id": null,
-      "date_created": "20/10/2014",
+          "code": "UK", 
+          "type": "EU_TYPE", 
+          "id": 7, 
+          "name": "United Kingdom"
+        }, 
+        "zipcode": "zipcode--7544", 
+        "number": "nrstreet--7544", 
+        "street": "street--7544", 
+        "id": 211
+      }, 
+      "id": 185, 
+      "types": "FGAS_PRODUCER_IMPORTER_HFCS,FGAS_EXPORTER_HFCS", 
       "users": [
         {
-          "username": "test@test.be",
-          "first_name": "test",
-          "last_name": "test",
-          "id": 2,
-          "email": "test@test.be"
-        },
-        {
-          "username": "user1",
-          "first_name": "User 1",
-          "last_name": "User 1",
-          "id": 3,
-          "email": "user1@mock.ec.europa.eu"
-        },
-        {
-          "username": "USERNAME9153",
-          "first_name": "fname--9065",
-          "last_name": "lname--9065",
-          "id": 4,
-          "email": "9065email@climaOds2010.yyy"
+          "username": "nextonhu", 
+          "first_name": "fname--2904", 
+          "last_name": "lname--2904", 
+          "id": 208, 
+          "email": "2904email@climaOds2010.yyy"
         }
-      ],
-      "external_id": 9154,
-      "id": 2,
-      "vat": "IT1358910634"
+      ], 
+      "undertaking_type": "FGASUndertaking", 
+      "name": "FGAS-NMORGANIZATION--9478", 
+      "company_id": 9478, 
+      "businessprofile": {
+        "highleveluses": "", 
+        "id": 185
+      }, 
+      "candidates": [], 
+      "date_created": "10/10/2014", 
+      "vat": "VAT9478"
     }
 
 /user/list
@@ -148,12 +142,12 @@ Returns the list of undertakings for a user given by its unique username.
 
     [
       {
-        "account": null,
-        "name": "orgTest",
-        "country": "CN",
-        "domain": "FGAS",
-        "oldcompany_id": null,
-        "external_id": 10006,
+        "domain": "FGAS", 
+        "name": "FGAS-NMORGANIZATION--10085", 
+        "country": "CN", 
+        "account": null, 
+        "company_id": 10085, 
+        "collection_id": null, 
         "id": 1
       }
     ]
@@ -161,7 +155,8 @@ Returns the list of undertakings for a user given by its unique username.
 /company/list
 -------------
 
-Returns a list of all companies in the system, as fetched from FGR.
+Returns a list of all EuLegalRepresentativeCompanies in the system, as fetched 
+from FGR.
 
     [
       {
@@ -187,8 +182,54 @@ Returns a list of all companies in the system, as fetched from FGR.
 
 Lists all possible Company candidates for matching with existing Undertakings.
 
+    [
+      {
+        "undertaking": {
+          "website": null, 
+          "status": "VALID", 
+          "address_id": 30, 
+          "name": "Savi Technologie sp. z o.o.", 
+          "undertaking_type": "FGASUndertaking", 
+          "date_updated": "10/10/2014", 
+          "represent_id": null, 
+          "domain": "FGAS", 
+          "phone": "+00000", 
+          "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
+          "country_code": "PL", 
+          "oldcompany_id": null, 
+          "date_created": "10/10/2014", 
+          "external_id": 9989, 
+          "id": 23, 
+          "vat": "PL8942815717", 
+          "businessprofile_id": 23
+        }, 
+        "links": [
+          {
+            "website": null, 
+            "account": "fgas24913", 
+            "name": "Savi Technologie Sp. z o.o.", 
+            "date_registered": "07/12/2012", 
+            "country_code": "pl", 
+            "active": true, 
+            "vat_number": "", 
+            "eori": null, 
+            "external_id": 100, 
+            "id": 100
+          }
+        ]
+      }
+    ]
+
 /candidate/verify/<undertaking_id>/<oldcompany_id>/
 ---------------------------------------------------
 
 Verifies a link between an Undertaking (from FGR) and a Company (from BDR
  Registry).
+
+    {
+      "oldcompany_id": 249, 
+      "verified": true, 
+      "undertaking_id": 73, 
+      "date_verified": "21/11/2014", 
+      "date_added": "18/11/2014"
+    }
