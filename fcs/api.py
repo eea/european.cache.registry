@@ -134,7 +134,7 @@ class UndertakingFullDetail(DetailView):
         data.pop('types')
         data['Former_Company_no_2007-2010'] = data.pop('oldcompany_id')
         data['@type'] = data.pop('undertaking_type')
-        data['id'] = data.pop('external_id')
+        data['id'] = data.pop('company_id')
         data['contactPersons'] = data.pop('users')
         for cp in data['contactPersons']:
             cp['userName'] = cp.pop('username')
