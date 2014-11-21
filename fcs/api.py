@@ -33,7 +33,7 @@ class ApiView(MethodView):
         resp = super(ApiView, self).dispatch_request(**kwargs)
 
         if isinstance(resp, (dict, list, tuple)):
-            return Response(json.dumps(resp), mimetype='application/json')
+            return Response(json.dumps(resp, indent=2), mimetype='application/json')
 
         return resp
 
@@ -110,6 +110,47 @@ class UndertakingDetail(DetailView):
         return data
 
 
+class UndertakingFullDetail(DetailView):
+    model = Undertaking
+
+    def get_object(self, pk):
+        return self.model.query.filter_by(external_id=pk).first()
+
+    @classmethod
+    def serialize(cls, obj):
+        data = ApiView.serialize(obj)
+        data.update({
+            'address': AddressDetail.serialize(obj.address),
+            'euLegalRepresentativeCompany':
+            EuLegalRepresentativeCompanyDetail.serialize(obj.represent),
+            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+        })
+        data.pop('country_code')
+        data.pop('date_created')
+        data.pop('date_updated')
+        data.pop('address_id')
+        data.pop('businessprofile_id')
+        data.pop('represent_id')
+        data.pop('types')
+        data['Former_Company_no_2007-2010'] = data.pop('oldcompany_id')
+        data['@type'] = data.pop('undertaking_type')
+        data['id'] = data.pop('external_id')
+        data['contactPersons'] = data.pop('users')
+        for cp in data['contactPersons']:
+            cp['userName'] = cp.pop('username')
+            cp['firstName'] = cp.pop('first_name')
+            cp['lastName'] = cp.pop('last_name')
+            cp['emailAddress'] = cp.pop('email')
+            cp.pop('id')
+        data['address']['country'].pop('id')
+        data['address'].pop('id')
+        data['euLegalRepresentativeCompany'].pop('id')
+        data['euLegalRepresentativeCompany']['address'].pop('id')
+        data['euLegalRepresentativeCompany']['address']['country'].pop('id')
+
+        return data
+
+
 class UserList(ListView):
     model = User
 
@@ -133,6 +174,43 @@ class UserDetail(DetailView):
             }
 
         return [_serialize(c) for c in obj.undertakings]
+
+
+class CountryDetail(DetailView):
+    model = Country
+
+    @classmethod
+    def serialize(cls, obj):
+        return ApiView.serialize(obj)
+
+
+class AddressDetail(DetailView):
+    model = Address
+
+    @classmethod
+    def serialize(cls, obj):
+        addr = ApiView.serialize(obj)
+        addr['country'] = ApiView.serialize(obj.country)
+        addr['zipCode'] = addr.pop('zipcode')
+        addr.pop('country_id')
+        return addr
+
+
+class EuLegalRepresentativeCompanyDetail(DetailView):
+    model = EuLegalRepresentativeCompany
+
+    @classmethod
+    def serialize(cls, obj):
+        rep = ApiView.serialize(obj)
+        rep.update({
+            'address': AddressDetail.serialize(obj.address),
+        })
+        rep.pop('address_id')
+        rep['vatNumber'] = rep.pop('vatnumber')
+        rep['contactPersonFirstName'] = rep.pop('contact_first_name')
+        rep['contactPersonLastName'] = rep.pop('contact_last_name')
+        rep['contactPersonEmailAddress'] = rep.pop('contact_email')
+        return rep
 
 
 class CompaniesList(ListView):
@@ -184,6 +262,9 @@ api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('undertaking-list'))
 api.add_url_rule('/undertaking/detail/<pk>',
                  view_func=UndertakingDetail.as_view('undertaking-detail'))
+api.add_url_rule('/undertaking/full-detail/<pk>',
+                 view_func=UndertakingFullDetail
+                 .as_view('undertaking-full-detail'))
 
 api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
