@@ -46,8 +46,8 @@ class Country(SerializableModel, Base):
 
     id = Column(Integer, primary_key=True)
     code = Column(String(10))
-    name = Column(String(64))
-    type = Column(Integer)
+    name = Column(String(255))
+    type = Column(String(64))
 
 
 class Address(SerializableModel, Base):
@@ -55,7 +55,7 @@ class Address(SerializableModel, Base):
 
     id = Column(Integer, primary_key=True)
     street = Column(String(255))
-    number = Column(String(10))
+    number = Column(String(64))
     zipcode = Column(String(16))
     city = Column(String(255))
     country_id = Column(ForeignKey('country.id'))
@@ -107,10 +107,11 @@ class Undertaking(SerializableModel, Base):
     domain = Column(String(32), default="FGAS")
     date_created = Column(Date)
     date_updated = Column(Date)
-    status = Column(Integer)
+    status = Column(String(64))
     # Undertaking:
-    vat = Column(String)
-    types = Column(String)
+    undertaking_type = Column(String(32), default='FGASUndertaking')
+    vat = Column(String(255))
+    types = Column(String(255))
     represent_id = Column(ForeignKey('represent.id'))
     businessprofile_id = Column(ForeignKey('businessprofile.id'))
     # Link
