@@ -107,7 +107,7 @@ def parse_undertaking(data):
     data['external_id'] = data.pop('id')
     data['date_created'] = parse_date(data.pop('dateCreated'))
     data['date_updated'] = parse_date(data.pop('dateUpdated'))
-    data.pop('@type', None)
+    data['undertaking_type'] = data.pop('@type', None)
 
     undertaking = (
         Undertaking.query
@@ -117,6 +117,8 @@ def parse_undertaking(data):
 
     if not undertaking:
         undertaking = Undertaking(**data)
+    else:
+        update_obj(undertaking, data)
 
     if not undertaking.address:
         addr = Address(**address)
