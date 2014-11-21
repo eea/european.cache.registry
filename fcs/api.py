@@ -121,9 +121,9 @@ class UndertakingFullDetail(DetailView):
         data = ApiView.serialize(obj)
         data.update({
             'address': AddressDetail.serialize(obj.address),
+            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
             'euLegalRepresentativeCompany':
             EuLegalRepresentativeCompanyDetail.serialize(obj.represent),
-            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
         })
         data.pop('country_code')
         data.pop('date_created')
@@ -144,9 +144,11 @@ class UndertakingFullDetail(DetailView):
             cp.pop('id')
         data['address']['country'].pop('id')
         data['address'].pop('id')
-        data['euLegalRepresentativeCompany'].pop('id')
-        data['euLegalRepresentativeCompany']['address'].pop('id')
-        data['euLegalRepresentativeCompany']['address']['country'].pop('id')
+        if obj.represent:
+            r = 'euLegalRepresentativeCompany'
+            data[r].pop('id')
+            data[r]['address'].pop('id')
+            data[r]['address']['country'].pop('id')
 
         return data
 
@@ -190,6 +192,8 @@ class AddressDetail(DetailView):
     @classmethod
     def serialize(cls, obj):
         addr = ApiView.serialize(obj)
+        if not addr:
+            return []
         addr['country'] = ApiView.serialize(obj.country)
         addr['zipCode'] = addr.pop('zipcode')
         addr.pop('country_id')
@@ -202,6 +206,8 @@ class EuLegalRepresentativeCompanyDetail(DetailView):
     @classmethod
     def serialize(cls, obj):
         rep = ApiView.serialize(obj)
+        if not rep:
+            return []
         rep.update({
             'address': AddressDetail.serialize(obj.address),
         })
