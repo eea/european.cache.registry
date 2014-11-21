@@ -193,7 +193,7 @@ class AddressDetail(DetailView):
     def serialize(cls, obj):
         addr = ApiView.serialize(obj)
         if not addr:
-            return []
+            return None
         addr['country'] = ApiView.serialize(obj.country)
         addr['zipCode'] = addr.pop('zipcode')
         addr.pop('country_id')
@@ -207,7 +207,7 @@ class EuLegalRepresentativeCompanyDetail(DetailView):
     def serialize(cls, obj):
         rep = ApiView.serialize(obj)
         if not rep:
-            return []
+            return None
         rep.update({
             'address': AddressDetail.serialize(obj.address),
         })
