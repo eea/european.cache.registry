@@ -16,30 +16,7 @@ Returns a list of all undertakings in the system, as fetched from FGR.
       {
         "website": "WEBSITE--10085", 
         "status": "VALID", 
-        "name": "FGAS-NMORGANIZATION--10085", 
-        "undertaking_type": "FGASUndertaking", 
-        "date_updated": "10/10/2014", 
-        "represent_id": 1, 
-        "address": {
-          "city": "city--7953", 
-          "country": {
-            "code": "CN", 
-            "type": "NONEU_TYPE", 
-            "id": 1, 
-            "name": "China (excluding Hong Kong and Macao)"
-          }, 
-          "zipcode": "zipcode--7953", 
-          "number": "nrstreet--7953", 
-          "street": "street--7953", 
-          "id": 1
-        }, 
         "domain": "FGAS", 
-        "company_id": 10085, 
-        "phone": "+3212310085", 
-        "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
-        "country_code": "CN", 
-        "oldcompany_id": null, 
-        "date_created": "10/10/2014", 
         "users": [
           {
             "username": "nzhouray", 
@@ -49,61 +26,89 @@ Returns a list of all undertakings in the system, as fetched from FGR.
             "email": "9367email@climaOds2010.yyy"
           }
         ], 
-        "id": 1, 
-        "vat": null, 
-        "businessprofile_id": 1
-      }
+        "date_updated": "10/10/2014", 
+        "phone": "+3212310085", 
+        "country_code": "CN", 
+        "address": {
+          "city": "city--7953", 
+          "country": {
+            "code": "CN", 
+            "type": "NONEU_TYPE", 
+            "name": "China (excluding Hong Kong and Macao)"
+          }, 
+          "zipcode": "zipcode--7953", 
+          "number": "nrstreet--7953", 
+          "street": "street--7953"
+        }, 
+        "collection_id": null, 
+        "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
+        "undertaking_type": "FGASUndertaking", 
+        "name": "FGAS-NMORGANIZATION--10085", 
+        "company_id": 10085, 
+        "date_created": "10/10/2014", 
+        "vat": null
+      },
     ]
 
 
-/undertaking/detail/<pk>
-------------------------
+/undertaking/[company_id]/details
+-------------------------
 
-Returns a an undertakings details from the system, as fetched from FGR.
+Returns an undertakings details from the system, as fetched from FGR.
     
     {
-      "website": "WEBSITE--9478", 
-      "status": "VALID", 
-      "represent": null, 
-      "date_updated": "10/10/2014", 
+      "company_id": 10085, 
+      "collection_id": null,      
       "oldcompany_id": null, 
+      "@type": "FGASUndertaking", 
+      "website": "WEBSITE--10085", 
+      "status": "VALID", 
       "domain": "FGAS", 
-      "phone": "+321239478", 
-      "country_code": "UK", 
-      "address": {
-        "city": "city--7544", 
-        "country": {
-          "code": "UK", 
-          "type": "EU_TYPE", 
-          "id": 7, 
-          "name": "United Kingdom"
-        }, 
-        "zipcode": "zipcode--7544", 
-        "number": "nrstreet--7544", 
-        "street": "street--7544", 
-        "id": 211
-      }, 
-      "id": 185, 
-      "types": "FGAS_PRODUCER_IMPORTER_HFCS,FGAS_EXPORTER_HFCS", 
-      "users": [
-        {
-          "username": "nextonhu", 
-          "first_name": "fname--2904", 
-          "last_name": "lname--2904", 
-          "id": 208, 
-          "email": "2904email@climaOds2010.yyy"
-        }
-      ], 
-      "undertaking_type": "FGASUndertaking", 
-      "name": "FGAS-NMORGANIZATION--9478", 
-      "company_id": 9478, 
+      "name": "FGAS-NMORGANIZATION--10085", 
+      "phone": "+3212310085", 
       "businessprofile": {
         "highleveluses": "", 
-        "id": 185
+        "id": 1
       }, 
       "candidates": [], 
-      "date_created": "10/10/2014", 
-      "vat": "VAT9478"
+      "representative": {
+        "name": "EULEGALNAME44", 
+        "contact_last_name": "lname--9853", 
+        "vatnumber": "EUVAT44", 
+        "contact_email": "9853email@climaOds2010.yyy", 
+        "contact_first_name": "fname--9853", 
+        "address": {
+          "city": "city--7954", 
+          "country": {
+            "code": "IE", 
+            "type": "EU_TYPE", 
+            "name": "Ireland"
+          }, 
+          "zipcode": "zipcode--7954", 
+          "number": "nrstreet--7954", 
+          "street": "street--7954"
+        }
+      }, 
+      "address": {
+        "city": "city--7953", 
+        "country": {
+          "code": "CN", 
+          "type": "NONEU_TYPE", 
+          "name": "China (excluding Hong Kong and Macao)"
+        }, 
+        "zipcode": "zipcode--7953", 
+        "number": "nrstreet--7953", 
+        "street": "street--7953"
+      }, 
+      "vat": null, 
+      "users": [
+        {
+          "username": "nzhouray", 
+          "first_name": "fname--9367", 
+          "last_name": "lname--9367", 
+          "email": "9367email@climaOds2010.yyy"
+        }
+      ]
     }
 
 /user/list
@@ -116,64 +121,22 @@ Returns a list of all undertakings in the system, as fetched from FGR.
         "username": "user1",
         "first_name": "User 1",
         "last_name": "User 1",
-        "id": 1,
         "email": "user1@mock.ec.europa.eu"
       },
-      {
-        "username": "test@test.be",
-        "first_name": "test",
-        "last_name": "test",
-        "id": 2,
-        "email": "test@test.be"
-      },
-      {
-        "username": "USERNAME9153",
-        "first_name": "fname--9065",
-        "last_name": "lname--9065",
-        "id": 4,
-        "email": "9065email@climaOds2010.yyy"
-      }
     ]
 
-/user/detail/<pk>
------------------
+/user/[username]/companies
+--------------------------
 
 Returns the list of undertakings for a user given by its unique username.
 
     [
       {
-        "domain": "FGAS", 
-        "name": "FGAS-NMORGANIZATION--10085", 
-        "country": "CN", 
-        "account": null, 
-        "company_id": 10085, 
         "collection_id": null, 
-        "id": 1
-      }
-    ]
-
-/company/list
--------------
-
-Returns a list of all EuLegalRepresentativeCompanies in the system, as fetched 
-from FGR.
-
-    [
-      {
-        "name": "eulegalrep org",
-        "contact_last_name": "lname--9270",
-        "vatnumber": "VAT23424",
-        "contact_email": "email@email.com",
-        "contact_first_name": "fname--9270",
-        "address": {
-          "city": "asdfafd",
-          "country_id": 2,
-          "zipcode": "1233",
-          "number": null,
-          "street": "street",
-          "id": 2
-        },
-        "id": 1
+        "domain": "FGAS", 
+        "country": "CN", 
+        "company_id": 10085, 
+        "name": "FGAS-NMORGANIZATION--10085"
       }
     ]
 
@@ -185,51 +148,78 @@ Lists all possible Company candidates for matching with existing Undertakings.
     [
       {
         "undertaking": {
-          "website": null, 
+          "website": "WEBSITE--10085", 
           "status": "VALID", 
-          "address_id": 30, 
-          "name": "Savi Technologie sp. z o.o.", 
+          "name": "FGAS-NMORGANIZATION--10085", 
           "undertaking_type": "FGASUndertaking", 
           "date_updated": "10/10/2014", 
-          "represent_id": null, 
           "domain": "FGAS", 
-          "phone": "+00000", 
+          "company_id": 10085, 
+          "phone": "+3212310085", 
           "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
-          "country_code": "PL", 
-          "oldcompany_id": null, 
+          "country_code": "CN", 
           "date_created": "10/10/2014", 
-          "external_id": 9989, 
-          "id": 23, 
-          "vat": "PL8942815717", 
-          "businessprofile_id": 23
+          "vat": null, 
         }, 
         "links": [
           {
             "website": null, 
-            "account": "fgas24913", 
-            "name": "Savi Technologie Sp. z o.o.", 
+            "account": "fgas22331", 
+            "name": "Airconditioning Group Ltd", 
+            "company_id": 4, 
             "date_registered": "07/12/2012", 
-            "country_code": "pl", 
+            "country_code": "gb", 
             "active": true, 
+            "vat_number": "634456631", 
+            "eori": null
+          }, 
+          {
+            "website": "", 
+            "account": "fgas21484", 
+            "name": "Alcan International Network Ltd", 
+            "company_id": 5, 
+            "date_registered": "07/12/2012", 
+            "country_code": "gb", 
+            "active": false, 
             "vat_number": "", 
-            "eori": null, 
-            "external_id": 100, 
-            "id": 100
-          }
-        ]
-      }
+            "eori": ""
+          }, 
+      },
     ]
 
-/candidate/verify/<undertaking_id>/<oldcompany_id>/
+/candidate/verify/[company_id]/[collection_id]/
 ---------------------------------------------------
 
 Verifies a link between an Undertaking (from FGR) and a Company (from BDR
  Registry).
 
     {
-      "oldcompany_id": 249, 
       "verified": true, 
-      "undertaking_id": 73, 
-      "date_verified": "21/11/2014", 
-      "date_added": "18/11/2014"
+      "company_id": 10085, 
+      "collection_id": 4, 
+      "date_verified": "24/11/2014", 
+      "date_added": "24/11/2014",
+    }
+    
+    
+/candidate/unverify/[company_id]/
+---------------------------------------------------
+
+Removes any link between an Undertaking (from FGR) and a Company.
+
+    {
+        TODO
+    }
+    
+/candidate/verify-none/[company_id]/
+------------------------------------
+
+Verifies a company is unlinked with any old companies.
+
+    {
+      "verified": true, 
+      "company_id": 10085, 
+      "collection_id": null, 
+      "date_verified": "24/11/2014", 
+      "date_added": "24/11/2014",
     }
