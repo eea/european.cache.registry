@@ -21,8 +21,9 @@ def get_candidates(external_id):
 
 
 def get_all_non_candidates():
-    companies = models.Undertaking.query.filter_by(oldcompany=None)
-    data = [company for company in companies if not company.links]
+    companies = (models.Undertaking.query
+                 .filter(models.Undertaking.oldcompany is not None))
+    data = companies.all()
     return data
 
 
