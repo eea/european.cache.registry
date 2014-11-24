@@ -33,7 +33,8 @@ class ApiView(MethodView):
         resp = super(ApiView, self).dispatch_request(**kwargs)
 
         if isinstance(resp, (dict, list, tuple)):
-            return Response(json.dumps(resp, indent=2), mimetype='application/json')
+            return Response(json.dumps(resp, indent=2),
+                            mimetype='application/json')
 
         return resp
 
@@ -91,7 +92,8 @@ class UndertakingDetail(DetailView):
             'businessprofile': ApiView.serialize(obj.businessprofile),
             'represent': ApiView.serialize(obj.represent),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
-            'candidates': [ApiView.serialize(c.oldcompany) for c in candidates],
+            'candidates': [ApiView.serialize(c.oldcompany) for c in
+                           candidates],
         })
         data.pop('address_id')
         data.pop('businessprofile_id')
@@ -119,23 +121,21 @@ class UndertakingFullDetail(DetailView):
     @classmethod
     def serialize(cls, obj):
         data = ApiView.serialize(obj)
+        _strip_fields = ('country_code', 'date_created', 'date_updated',
+                         'address_id', 'businessprofile_id', 'represent_id',
+                         'types')
+        for field in _strip_fields:
+            data.pop(field)
         data.update({
             'address': AddressDetail.serialize(obj.address),
-            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+            'contactPersons': [
+                UserList.serialize(cp) for cp in obj.contact_persons],
             'euLegalRepresentativeCompany':
-            EuLegalRepresentativeCompanyDetail.serialize(obj.represent),
+                EuLegalRepresentativeCompanyDetail.serialize(obj.represent),
         })
-        data.pop('country_code')
-        data.pop('date_created')
-        data.pop('date_updated')
-        data.pop('address_id')
-        data.pop('businessprofile_id')
-        data.pop('represent_id')
-        data.pop('types')
         data['Former_Company_no_2007-2010'] = data.pop('oldcompany_id')
         data['@type'] = data.pop('undertaking_type')
         data['id'] = data.pop('company_id')
-        data['contactPersons'] = data.pop('users')
         for cp in data['contactPersons']:
             cp['userName'] = cp.pop('username')
             cp['firstName'] = cp.pop('first_name')
