@@ -4,8 +4,7 @@ from flask import Blueprint, Response, abort
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
-    Undertaking, User, EuLegalRepresentativeCompany, Address, Country,
-    OldCompanyLink, db, OldCompany
+    Undertaking, User, EuLegalRepresentativeCompany, Address,
 )
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
@@ -13,7 +12,6 @@ from fcs.match import (
 )
 
 api = Blueprint('api', __name__)
-
 api_manager = Manager()
 
 
@@ -39,8 +37,13 @@ class ApiView(MethodView):
         return resp
 
     @classmethod
-    def serialize(cls, obj):
-        return obj.as_dict() if obj else None
+    def serialize(cls, obj, pop_id=True):
+        if not obj:
+            return None
+        data = obj.as_dict()
+        if pop_id:
+            data.pop('id')
+        return data
 
 
 class ListView(ApiView):
@@ -65,15 +68,18 @@ class UndertakingList(ListView):
     @classmethod
     def serialize(cls, obj):
         data = ApiView.serialize(obj)
+        _strip_fields = (
+            'businessprofile_id', 'address_id', 'oldcompany_id',
+            'represent_id',
+        )
+        for field in _strip_fields:
+            data.pop(field)
         data.update({
-            'address': ApiView.serialize(obj.address),
+            'address': AddressDetail.serialize(obj.address),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
         })
-        data.pop('address_id')
-        data['address'].update({
-            'country': ApiView.serialize(obj.address.country),
-        })
-        data['address'].pop('country_id')
+        data['company_id'] = obj.external_id
+        data['collection_id'] = obj.old_account
         return data
 
 
@@ -81,75 +87,29 @@ class UndertakingDetail(DetailView):
     model = Undertaking
 
     def get_object(self, pk):
-        return self.model.query.filter_by(external_id=pk).first()
+        return self.model.query.filter_by(external_id=pk).first_or_404()
 
     @classmethod
     def serialize(cls, obj):
         candidates = get_candidates(obj.external_id)
         data = ApiView.serialize(obj)
-        data.update({
-            'address': ApiView.serialize(obj.address),
-            'businessprofile': ApiView.serialize(obj.businessprofile),
-            'represent': ApiView.serialize(obj.represent),
-            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
-            'candidates': [ApiView.serialize(c.oldcompany) for c in
-                           candidates],
-        })
-        data.pop('address_id')
-        data.pop('businessprofile_id')
-        data.pop('represent_id')
-        if data['address']:
-            data['address'].update({
-                'country': ApiView.serialize(obj.address.country),
-            })
-            data['address'].pop('country_id')
-        if data['represent']:
-            data['represent'].update({
-                'address': ApiView.serialize(obj.represent.address),
-            })
-            data['represent'].pop('address_id')
-
-        return data
-
-
-class UndertakingFullDetail(DetailView):
-    model = Undertaking
-
-    def get_object(self, pk):
-        return self.model.query.filter_by(external_id=pk).first()
-
-    @classmethod
-    def serialize(cls, obj):
-        data = ApiView.serialize(obj)
-        _strip_fields = ('country_code', 'date_created', 'date_updated',
-                         'address_id', 'businessprofile_id', 'represent_id',
-                         'types')
+        _strip_fields = (
+            'country_code', 'date_created', 'date_updated', 'address_id',
+            'businessprofile_id', 'represent_id', 'types',
+        )
         for field in _strip_fields:
             data.pop(field)
         data.update({
             'address': AddressDetail.serialize(obj.address),
-            'contactPersons': [
-                UserList.serialize(cp) for cp in obj.contact_persons],
-            'euLegalRepresentativeCompany':
-                EuLegalRepresentativeCompanyDetail.serialize(obj.represent),
+            'businessprofile': ApiView.serialize(obj.businessprofile),
+            'representative': EuLegalRepresentativeCompanyDetail.serialize(obj.represent),
+            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+            'candidates': [ApiView.serialize(c.oldcompany) for c in
+                           candidates],
         })
-        data['Former_Company_no_2007-2010'] = data.pop('oldcompany_id')
+        data['company_id'] = obj.external_id
+        data['collection_id'] = obj.old_account
         data['@type'] = data.pop('undertaking_type')
-        data['id'] = data.pop('company_id')
-        for cp in data['contactPersons']:
-            cp['userName'] = cp.pop('username')
-            cp['firstName'] = cp.pop('first_name')
-            cp['lastName'] = cp.pop('last_name')
-            cp['emailAddress'] = cp.pop('email')
-            cp.pop('id')
-        data['address']['country'].pop('id')
-        data['address'].pop('id')
-        if obj.represent:
-            r = 'euLegalRepresentativeCompany'
-            data[r].pop('id')
-            data[r]['address'].pop('id')
-            data[r]['address']['country'].pop('id')
-
         return data
 
 
@@ -157,7 +117,7 @@ class UserList(ListView):
     model = User
 
 
-class UserDetail(DetailView):
+class UserCompanies(DetailView):
     model = User
 
     def get_object(self, pk):
@@ -166,24 +126,15 @@ class UserDetail(DetailView):
     @classmethod
     def serialize(cls, obj):
         def _serialize(company):
-            old_company = company.oldcompany
-            collection_id = old_company.account if old_company else None
             return {
-                'company_id': company.external_id, 'name': company.name,
-                'domain': company.domain, 'country': company.country_code,
-                'id': company.id, 'account': company.old_account,
-                'collection_id': collection_id,
+                'company_id': company.external_id,
+                'collection_id': company.old_account,
+                'name': company.name,
+                'domain': company.domain,
+                'country': company.country_code,
             }
 
-        return [_serialize(c) for c in obj.undertakings]
-
-
-class CountryDetail(DetailView):
-    model = Country
-
-    @classmethod
-    def serialize(cls, obj):
-        return ApiView.serialize(obj)
+        return [_serialize(c) for c in obj.undertakings if not c.old_account]
 
 
 class AddressDetail(DetailView):
@@ -195,7 +146,6 @@ class AddressDetail(DetailView):
         if not addr:
             return None
         addr['country'] = ApiView.serialize(obj.country)
-        addr['zipCode'] = addr.pop('zipcode')
         addr.pop('country_id')
         return addr
 
@@ -208,28 +158,9 @@ class EuLegalRepresentativeCompanyDetail(DetailView):
         rep = ApiView.serialize(obj)
         if not rep:
             return None
-        rep.update({
-            'address': AddressDetail.serialize(obj.address),
-        })
+        rep['address'] = AddressDetail.serialize(obj.address)
         rep.pop('address_id')
-        rep['vatNumber'] = rep.pop('vatnumber')
-        rep['contactPersonFirstName'] = rep.pop('contact_first_name')
-        rep['contactPersonLastName'] = rep.pop('contact_last_name')
-        rep['contactPersonEmailAddress'] = rep.pop('contact_email')
         return rep
-
-
-class CompaniesList(ListView):
-    model = EuLegalRepresentativeCompany
-
-    @classmethod
-    def serialize(cls, obj):
-        data = ApiView.serialize(obj)
-        data.update({
-            'address': ApiView.serialize(obj.address),
-        })
-        data.pop('address_id')
-        return data
 
 
 class CandidateList(ApiView):
@@ -238,8 +169,10 @@ class CandidateList(ApiView):
         data = []
         for company, links in candidates:
             ls = [ApiView.serialize(l.oldcompany) for l in links]
+            company_data = ApiView.serialize(company)
+            company_data['company_id'] = company.external_id
             data.append(
-                {'undertaking': ApiView.serialize(company), 'links': ls}
+                {'undertaking': company_data, 'links': ls}
             )
         return data
 
@@ -252,33 +185,37 @@ class NonCandidateList(ApiView):
 
 class CandidateVerify(ApiView):
     # TODO: we should use POST for this action
-    def get(self, undertaking_id, oldcompany_id):
+    @classmethod
+    def serialize(cls, obj, pop_id=True):
+        data = ApiView.serialize(obj, pop_id=pop_id)
+        if data:
+            data.pop('undertaking_id')
+            data.pop('oldcompany_id')
+            data['company_id'] = obj.undertaking.external_id
+            data['collection_id'] = obj.oldcompany and obj.oldcompany.external_id
+        return data
+
+    def get(self, undertaking_id, oldcompany_id=None):
         link = verify_link(undertaking_id, oldcompany_id) or abort(404)
-        return ApiView.serialize(link)
+        return self.serialize(link, pop_id=False)
 
 
 class CandidateUnverify(ApiView):
     # TODO: we should use POST for this action
-    def get(self, undertaking_id, oldcompany_id):
-        link = unverify_link(undertaking_id, oldcompany_id) or abort(404)
+    def get(self, undertaking_id):
+        link = unverify_link(undertaking_id) or abort(404)
         return ApiView.serialize(link)
 
 
 api.add_url_rule('/undertaking/list',
-                 view_func=UndertakingList.as_view('undertaking-list'))
-api.add_url_rule('/undertaking/detail/<pk>',
-                 view_func=UndertakingDetail.as_view('undertaking-detail'))
-api.add_url_rule('/undertaking/full-detail/<pk>',
-                 view_func=UndertakingFullDetail
-                 .as_view('undertaking-full-detail'))
+                 view_func=UndertakingList.as_view('company-list'))
+api.add_url_rule('/undertaking/<pk>/details',
+                 view_func=UndertakingDetail.as_view('company-detail'))
 
 api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
-api.add_url_rule('/user/detail/<pk>',
-                 view_func=UserDetail.as_view('user-detail'))
-
-api.add_url_rule('/company/list',
-                 view_func=CompaniesList.as_view('company-list'))
+api.add_url_rule('/user/<pk>/companies',
+                 view_func=UserCompanies.as_view('user-companies'))
 
 api.add_url_rule('/candidate/list',
                  view_func=CandidateList.as_view('candidate-list'))
@@ -288,5 +225,7 @@ api.add_url_rule('/noncandidate/list',
 
 api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
                  view_func=CandidateVerify.as_view('candidate-verify'))
-api.add_url_rule('/candidate/unverify/<undertaking_id>/<oldcompany_id>/',
+api.add_url_rule('/candidate/verify-none/<undertaking_id>/',
+                 view_func=CandidateVerify.as_view('candidate-verify-none'))
+api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
