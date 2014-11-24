@@ -28,10 +28,11 @@ def get_all_non_candidates():
 
 
 def verify_link(undertaking_id, oldcompany_id):
+    undertaking = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
+    oldcompany = models.OldCompany.query.filter_by(external_id=oldcompany_id).first()
     link = (
         models.OldCompanyLink.query
-        .filter_by(undertaking_id=undertaking_id,
-                   oldcompany_id=oldcompany_id).first()
+        .filter_by(undertaking=undertaking, oldcompany=oldcompany).first()
     )
     if link:
         link.verified = True
@@ -42,7 +43,7 @@ def verify_link(undertaking_id, oldcompany_id):
 
 
 def unverify_link(undertaking_id):
-    u = models.Undertaking.query.get(undertaking_id)
+    u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
     if u.oldcompany:
         link = (
             models.OldCompanyLink.query
@@ -55,6 +56,7 @@ def unverify_link(undertaking_id):
 
         u.oldcompany = None
         models.db.session.commit()
+    return u
 
 
 def has_match(company, old):
