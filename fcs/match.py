@@ -1,5 +1,6 @@
 from fuzzywuzzy import fuzz
 from datetime import datetime
+from sqlalchemy import or_
 from flask.ext.script import Manager
 from fcs import models
 
@@ -9,27 +10,31 @@ match_manager = Manager()
 
 
 def get_all_candidates():
-    companies = models.Undertaking.query.filter_by(oldcompany=None)
+    companies = (
+        models.Undertaking.query
+        .filter(or_(models.Undertaking.oldcompany_verified == None,
+                    models.Undertaking.oldcompany_verified == False))
+    )
     data = [(company, company.links) for company in companies if company.links]
     return data
 
 
 def get_candidates(external_id):
-    companies = models.Undertaking.query.filter_by(external_id=external_id)
-    data = companies.first().links if companies else []
-    return data
+    company = (
+        models.Undertaking.query.filter_by(external_id=external_id).first()
+    )
+    return company and company.links
 
 
 def get_all_non_candidates():
-    companies = (models.Undertaking.query
-                 .filter(models.Undertaking.oldcompany is not None))
-    data = companies.all()
-    return data
+    return models.Undertaking.query.filter_by(oldcompany_verified=True).all()
 
 
 def verify_link(undertaking_id, oldcompany_id):
-    undertaking = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
-    oldcompany = models.OldCompany.query.filter_by(external_id=oldcompany_id).first()
+    undertaking = models.Undertaking.query.filter_by(
+        external_id=undertaking_id).first()
+    oldcompany = models.OldCompany.query.filter_by(
+        external_id=oldcompany_id).first()
     link = (
         models.OldCompanyLink.query
         .filter_by(undertaking=undertaking, oldcompany=oldcompany).first()
@@ -38,13 +43,16 @@ def verify_link(undertaking_id, oldcompany_id):
         link.verified = True
         link.date_verified = datetime.now()
         link.undertaking.oldcompany = link.oldcompany
+        link.undertaking.oldcompany_account = link.oldcompany.account
+        link.undertaking.oldcompany_verified = True
+        link.undertaking.oldcompany_extid = link.oldcompany.external_id
         models.db.session.commit()
     return link
 
 
 def unverify_link(undertaking_id):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
-    if u.oldcompany:
+    if u and u.oldcompany:
         link = (
             models.OldCompanyLink.query
             .filter_by(undertaking_id=undertaking_id,
@@ -55,6 +63,20 @@ def unverify_link(undertaking_id):
             link.date_verified = None
 
         u.oldcompany = None
+        u.oldcompany_verified = False
+        u.oldcompany_account = None
+        u.oldcompany_extid = None
+        models.db.session.commit()
+    return u
+
+
+def verify_none(undertaking_id):
+    u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
+    if u:
+        u.oldcompany = None
+        u.oldcompany_verified = True
+        u.oldcompany_account = None
+        u.oldcompany_extid = None
         models.db.session.commit()
     return u
 

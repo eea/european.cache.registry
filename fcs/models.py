@@ -43,6 +43,10 @@ class User(SerializableModel, Base):
     last_name = Column(String(255))
     email = Column(String(255))
 
+    @property
+    def verified_undertakings(self):
+        return self.undertakings.filter_by(oldcompany_verified=True)
+
 
 class Country(SerializableModel, Base):
     __tablename__ = 'country'
@@ -145,10 +149,6 @@ class Undertaking(SerializableModel, Base):
         return (
             self.address and self.address.country and self.address.country.code
         )
-
-    @property
-    def old_account(self):
-        return self.oldcompany and self.oldcompany.account
 
 
 class OldCompany(SerializableModel, Base):

@@ -208,7 +208,25 @@ Verifies a link between an Undertaking (from FGR) and a Company (from BDR
 Removes any link between an Undertaking (from FGR) and a Company.
 
     {
-        TODO
+      "website": "WEBSITE--10085",
+      "status": "VALID",
+      "address_id": 1,
+      "name": "FGAS-NMORGANIZATION--10085",
+      "undertaking_type": "FGASUndertaking",
+      "date_updated": "10/10/2014",
+      "represent_id": 1,
+      "domain": "FGAS",
+      "oldcompany_extid": null,
+      "phone": "+3212310085",
+      "oldcompany_verified": false,
+      "company_id": 10085,
+      "types": "FGAS_PRODUCER_IMPORTER_HFCS",
+      "country_code": "CN",
+      "oldcompany_id": null,
+      "date_created": "10/10/2014",
+      "oldcompany_account": null,
+      "vat": null,
+      "businessprofile_id": 1
     }
     
 /candidate/verify-none/[company_id]/
@@ -223,3 +241,33 @@ Verifies a company is unlinked with any old companies.
       "date_verified": "24/11/2014", 
       "date_added": "24/11/2014",
     }
+
+
+/candidate/list/verified
+------------------------
+
+Lists the already verified undertakings.
+
+    [
+      {
+        "website": "WEBSITE--10085",
+        "status": "VALID",
+        "address_id": 1,
+        "name": "FGAS-NMORGANIZATION--10085",
+        "undertaking_type": "FGASUndertaking",
+        "date_updated": "10/10/2014",
+        "represent_id": 1,
+        "domain": "FGAS",
+        "oldcompany_extid": null,
+        "phone": "+3212310085",
+        "oldcompany_verified": true,
+        "company_id": 10085,
+        "types": "FGAS_PRODUCER_IMPORTER_HFCS",
+        "country_code": "CN",
+        "oldcompany_id": null,
+        "date_created": "10/10/2014",
+        "oldcompany_account": null,
+        "vat": null,
+        "businessprofile_id": 1
+      }
+    ]

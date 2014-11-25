@@ -1,3 +1,4 @@
+# coding=utf-8
 import json
 
 from flask import Blueprint, Response, abort
@@ -8,7 +9,7 @@ from fcs.models import (
 )
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
-    get_candidates,
+    get_candidates, verify_none,
 )
 
 api = Blueprint('api', __name__)
@@ -79,7 +80,7 @@ class UndertakingList(ListView):
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
         })
         data['company_id'] = obj.external_id
-        data['collection_id'] = obj.old_account
+        data['collection_id'] = obj.oldcompany_account
         return data
 
 
@@ -102,13 +103,14 @@ class UndertakingDetail(DetailView):
         data.update({
             'address': AddressDetail.serialize(obj.address),
             'businessprofile': ApiView.serialize(obj.businessprofile),
-            'representative': EuLegalRepresentativeCompanyDetail.serialize(obj.represent),
+            'representative': EuLegalRepresentativeCompanyDetail.serialize(
+                obj.represent),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
             'candidates': [ApiView.serialize(c.oldcompany) for c in
                            candidates],
         })
         data['company_id'] = obj.external_id
-        data['collection_id'] = obj.old_account
+        data['collection_id'] = obj.oldcompany_account
         data['@type'] = data.pop('undertaking_type')
         return data
 
@@ -128,13 +130,13 @@ class UserCompanies(DetailView):
         def _serialize(company):
             return {
                 'company_id': company.external_id,
-                'collection_id': company.old_account,
+                'collection_id': company.oldcompany_account,
                 'name': company.name,
                 'domain': company.domain,
                 'country': company.country_code,
             }
 
-        return [_serialize(c) for c in obj.undertakings if not c.old_account]
+        return [_serialize(c) for c in obj.verified_undertakings]
 
 
 class AddressDetail(DetailView):
@@ -184,7 +186,6 @@ class NonCandidateList(ApiView):
 
 
 class CandidateVerify(ApiView):
-    # TODO: we should use POST for this action
     @classmethod
     def serialize(cls, obj, pop_id=True):
         data = ApiView.serialize(obj, pop_id=pop_id)
@@ -192,12 +193,20 @@ class CandidateVerify(ApiView):
             data.pop('undertaking_id')
             data.pop('oldcompany_id')
             data['company_id'] = obj.undertaking.external_id
-            data['collection_id'] = obj.oldcompany and obj.oldcompany.external_id
+            data[
+                'collection_id'] = obj.oldcompany and obj.oldcompany.external_id
         return data
 
-    def get(self, undertaking_id, oldcompany_id=None):
+    # TODO: we should use POST for this action
+    def get(self, undertaking_id, oldcompany_id):
         link = verify_link(undertaking_id, oldcompany_id) or abort(404)
         return self.serialize(link, pop_id=False)
+
+
+class CandidateVerifyNone(CandidateVerify):
+    def get(self, undertaking_id):
+        link = verify_none(undertaking_id) or abort(404)
+        return ApiView.serialize(link)
 
 
 class CandidateUnverify(ApiView):
@@ -220,12 +229,13 @@ api.add_url_rule('/user/<pk>/companies',
 api.add_url_rule('/candidate/list',
                  view_func=CandidateList.as_view('candidate-list'))
 
-api.add_url_rule('/noncandidate/list',
+api.add_url_rule('/candidate/list/verified',
                  view_func=NonCandidateList.as_view('noncandidate-list'))
 
 api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
                  view_func=CandidateVerify.as_view('candidate-verify'))
 api.add_url_rule('/candidate/verify-none/<undertaking_id>/',
-                 view_func=CandidateVerify.as_view('candidate-verify-none'))
+                 view_func=CandidateVerifyNone.as_view(
+                     'candidate-verify-none'))
 api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
