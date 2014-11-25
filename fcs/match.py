@@ -83,7 +83,7 @@ def verify_none(undertaking_id):
 
 def has_match(company, old):
     c_code = company['country_code'].lower()
-    o_code = company['country_code'].lower()
+    o_code = old['country_code'].lower()
     if c_code != o_code:
         return False
 
@@ -128,10 +128,13 @@ def test():
     models.db.session.commit()
 
     for company, links in get_all_candidates():
-        print u"[{}] {}:".format(company.id, company.name)
+        print u"[{}] {} - {}:".format(company.id, company.name,
+                                      company.country_code)
         for l in links:
-            print u" - [{}] {} {}".format(l.oldcompany_id, l.oldcompany.name,
-                                          l.verified)
+            print u" - [{}] {} {} - {}".format(l.oldcompany_id,
+                                               l.oldcompany.name,
+                                               l.verified,
+                                               l.oldcompany.country_code)
 
 
 @match_manager.command
