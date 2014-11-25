@@ -1,4 +1,5 @@
 -r requirements.txt
+Flask-WebTest==0.0.7
 py==1.4.26
 pytest==2.6.4
 
