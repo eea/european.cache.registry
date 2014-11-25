@@ -1,4 +1,5 @@
 # coding: utf-8
+import argparse
 from datetime import date
 from sqlalchemy import (
     Column, Date, DateTime, Float, ForeignKey, Integer, LargeBinary,
@@ -117,6 +118,9 @@ class Undertaking(SerializableModel, Base):
     represent_id = Column(ForeignKey('represent.id'))
     businessprofile_id = Column(ForeignKey('businessprofile.id'))
     # Link
+    oldcompany_verified = Column(Boolean, default=False)
+    oldcompany_account = Column(String(255), nullable=True, default=None)
+    oldcompany_extid = Column(Integer, nullable=True, default=None)
     oldcompany_id = Column(ForeignKey('old_company.id'), nullable=True,
                            default=None)
 
@@ -179,3 +183,26 @@ class OldCompanyLink(SerializableModel, Base):
 def init():
     return db.create_all()
 
+
+@db_manager.option('alembic_args', nargs=argparse.REMAINDER)
+def alembic(alembic_args):
+    from alembic.config import CommandLine
+
+    CommandLine().main(argv=alembic_args)
+
+
+@db_manager.command
+def revision(message=None):
+    if message is None:
+        message = raw_input('revision name: ')
+    return alembic(['revision', '--autogenerate', '-m', message])
+
+
+@db_manager.command
+def upgrade(revision='head'):
+    return alembic(['upgrade', revision])
+
+
+@db_manager.command
+def downgrade(revision):
+    return alembic(['downgrade', revision])
