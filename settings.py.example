@@ -1,0 +1,11 @@
+DEBUG = True
+
+SQLALCHEMY_DATABASE_URI = ('sqlite:///../db.sqlite3')
+
+API_URL = ''
+API_USER = ''
+API_PASSWORD = ''
+
+BDR_API_URL = 'https://bdr-test.eionet.europa.eu/registry/api'
+BDR_API_KEY = ''
+
