@@ -165,6 +165,12 @@ class OldCompany(SerializableModel, Base):
     website = Column(String(255))
     date_registered = Column(DateTime)
 
+    @property
+    def country(self):
+        country_obj = Country.query.filter_by(
+            code=self.country_code.upper()).first()
+        return country_obj and country_obj.name
+
 
 class OldCompanyLink(SerializableModel, Base):
     __tablename__ = 'old_company_link'

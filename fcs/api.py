@@ -5,7 +5,7 @@ from flask import Blueprint, Response, abort
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
-    Undertaking, User, EuLegalRepresentativeCompany, Address,
+    Undertaking, User, EuLegalRepresentativeCompany, Address, OldCompany,
 )
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
@@ -106,7 +106,7 @@ class UndertakingDetail(DetailView):
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
-            'candidates': [ApiView.serialize(c.oldcompany) for c in
+            'candidates': [OldCompanyDetail.serialize(c.oldcompany) for c in
                            candidates],
         })
         data['company_id'] = obj.external_id
@@ -162,6 +162,18 @@ class EuLegalRepresentativeCompanyDetail(DetailView):
             return None
         rep['address'] = AddressDetail.serialize(obj.address)
         rep.pop('address_id')
+        return rep
+
+
+class OldCompanyDetail(DetailView):
+    model = OldCompany
+
+    @classmethod
+    def serialize(cls, obj):
+        rep = ApiView.serialize(obj)
+        if not rep:
+            return None
+        rep['country'] = obj.country
         return rep
 
 
