@@ -11,10 +11,13 @@ DEFAULT_CONFIG = {
 }
 
 
-def create_app():
+def create_app(config={}):
     app = flask.Flask(__name__, instance_relative_config=True)
     app.config.update(DEFAULT_CONFIG)
-    app.config.from_pyfile('settings.py', silent=True)
+    if not config:
+        app.config.from_pyfile('settings.py', silent=True)
+    else:
+        app.config.update(config)
     db.init_app(app)
     app.register_blueprint(api)
 
