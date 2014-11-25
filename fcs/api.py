@@ -197,21 +197,19 @@ class CandidateVerify(ApiView):
                 'collection_id'] = obj.oldcompany and obj.oldcompany.external_id
         return data
 
-    # TODO: we should use POST for this action
-    def get(self, undertaking_id, oldcompany_id):
+    def post(self, undertaking_id, oldcompany_id):
         link = verify_link(undertaking_id, oldcompany_id) or abort(404)
         return self.serialize(link, pop_id=False)
 
 
 class CandidateVerifyNone(CandidateVerify):
-    def get(self, undertaking_id):
+    def post(self, undertaking_id):
         link = verify_none(undertaking_id) or abort(404)
         return ApiView.serialize(link)
 
 
 class CandidateUnverify(ApiView):
-    # TODO: we should use POST for this action
-    def get(self, undertaking_id):
+    def post(self, undertaking_id):
         link = unverify_link(undertaking_id) or abort(404)
         return ApiView.serialize(link)
 
