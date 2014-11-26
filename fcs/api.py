@@ -87,6 +87,12 @@ class UndertakingList(ListView):
         return data
 
 
+class UndertakingListAll(UndertakingList):
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+
 class UndertakingDetail(DetailView):
     model = Undertaking
 
@@ -231,6 +237,8 @@ class CandidateUnverify(ApiView):
 
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('company-list'))
+api.add_url_rule('/undertaking/list/all',
+                 view_func=UndertakingListAll.as_view('company-list-all'))
 api.add_url_rule('/undertaking/<pk>/details',
                  view_func=UndertakingDetail.as_view('company-detail'))
 
