@@ -178,6 +178,35 @@ def parse_undertaking(data):
     db.session.add(undertaking)
 
 
+def eea_double_check(data):
+    identifier = """
+        Organisation ID: {}
+        Organisation status: {}
+        Organisation highLevelUses: {}
+        Organisation types: {}
+    """.format(data['id'], data['status'],
+               data['businessProfile']['highLevelUses'], data['types'])
+    ok = True
+
+    if not all(('status' in data, data['status'] == 'VALID')):
+        message = 'Organisation status differs from VALID.'
+        current_app.logger.warning(message + identifier)
+        ok = False
+
+    if not all([l.startswith('FGAS_') for l in data['types']]):
+        message = "Organisation types elements don't start with 'FGAS_'"
+        current_app.logger.warning(message + identifier)
+        ok = False
+
+    if not all([l.startswith('fgas.')
+                for l in data['businessProfile']['highLevelUses']]):
+        message = "Organisation highLevelUses elements don't start with 'fgas.'"
+        current_app.logger.warning(message + identifier)
+        ok = False
+
+    return ok
+
+
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
@@ -202,7 +231,8 @@ def test_fgases(days=7, updated_since=None):
 
     print "Using last_update {}".format(last_update)
     undertakings = get_latest_undertakings(updated_since=last_update)
-
-    print len([parse_undertaking(u) for u in undertakings]), "values"
+    print len([parse_undertaking(u)
+               for u in undertakings
+               if eea_double_check(u)]), "values"
 
     db.session.commit()
