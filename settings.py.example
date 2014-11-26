@@ -1,3 +1,4 @@
+# Turn this off on production
 DEBUG = True
 
 SQLALCHEMY_DATABASE_URI = ('sqlite:///../db.sqlite3')
@@ -9,3 +10,12 @@ API_PASSWORD = ''
 BDR_API_URL = 'https://bdr-test.eionet.europa.eu/registry/api'
 BDR_API_KEY = ''
 
+# email server
+MAIL_SERVER = 'smtp.googlemail.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = ''
+MAIL_PASSWORD = ''
+
+NOTIFY_EMAILS = ['mihai.zamfir@eaudeweb.ro']
