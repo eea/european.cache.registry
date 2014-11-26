@@ -1,9 +1,8 @@
 # coding: utf-8
 import argparse
-from datetime import date
+from datetime import date, datetime
 from sqlalchemy import (
-    Column, Date, DateTime, Float, ForeignKey, Integer, LargeBinary,
-    SmallInteger, String, Table, Text, Boolean
+    Column, Date, DateTime, ForeignKey, Integer, String, Boolean
 )
 from sqlalchemy.orm import relationship
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -20,8 +19,11 @@ class SerializableModel(object):
 
     def get_serialized(self, name):
         value = getattr(self, name)
-        if isinstance(value, date):
+        if isinstance(value, datetime):
+            value = value.strftime('%d/%m/%Y %H:%M')
+        elif isinstance(value, date):
             value = value.strftime('%d/%m/%Y')
+
         return value
 
     def as_dict(self):
@@ -183,6 +185,14 @@ class OldCompanyLink(SerializableModel, Base):
 
     oldcompany = relationship('OldCompany')
     undertaking = relationship('Undertaking', backref=db.backref('links'))
+
+
+class OrganizationLog(SerializableModel, db.Model):
+    __tablename__ = 'organization_log'
+
+    id = Column(Integer, primary_key=True)
+    update_time = Column(DateTime, default=datetime.utcnow)
+    organizations = Column(Integer)
 
 
 @db_manager.command

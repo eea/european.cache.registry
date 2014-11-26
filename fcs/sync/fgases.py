@@ -7,7 +7,7 @@ from flask import current_app
 
 from fcs.models import (
     Undertaking, db, Address, Country, BusinessProfile, User,
-    EuLegalRepresentativeCompany,
+    EuLegalRepresentativeCompany, OrganizationLog,
 )
 from fcs.sync import sync_manager, Unauthorized, InvalidResponse
 from fcs.sync.utils import update_obj
@@ -203,6 +203,9 @@ def test_fgases(days=7, updated_since=None):
     print "Using last_update {}".format(last_update)
     undertakings = get_latest_undertakings(updated_since=last_update)
 
-    print len([parse_undertaking(u) for u in undertakings]), "values"
+    undertakings_count = len([parse_undertaking(u) for u in undertakings])
+    log = OrganizationLog(organizations=undertakings_count)
+    db.session.add(log)
+    print undertakings_count, "values"
 
     db.session.commit()

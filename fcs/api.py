@@ -6,6 +6,7 @@ from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, OldCompany,
+    OrganizationLog,
 )
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
@@ -235,6 +236,10 @@ class CandidateUnverify(ApiView):
         return ApiView.serialize(link)
 
 
+class OrganizationsLog(ListView):
+    model = OrganizationLog
+
+
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('company-list'))
 api.add_url_rule('/undertaking/list/all',
@@ -260,3 +265,6 @@ api.add_url_rule('/candidate/verify-none/<undertaking_id>/',
                      'candidate-verify-none'))
 api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
+
+api.add_url_rule('/log',
+                 view_func=OrganizationsLog.as_view('organizations-log'))
