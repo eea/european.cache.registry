@@ -66,6 +66,9 @@ class DetailView(ApiView):
 class UndertakingList(ListView):
     model = Undertaking
 
+    def get_queryset(self):
+        return get_all_non_candidates()
+
     @classmethod
     def serialize(cls, obj):
         data = ApiView.serialize(obj)
