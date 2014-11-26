@@ -90,7 +90,7 @@ class UndertakingList(ListView):
 class UndertakingListAll(UndertakingList):
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.query.all()
 
 
 class UndertakingDetail(DetailView):
