@@ -191,7 +191,8 @@ class OrganizationLog(SerializableModel, db.Model):
     __tablename__ = 'organization_log'
 
     id = Column(Integer, primary_key=True)
-    update_time = Column(DateTime, default=datetime.utcnow)
+    execution_time = Column(DateTime, default=datetime.utcnow)
+    using_last_update = Column(Date)
     organizations = Column(Integer)
 
 

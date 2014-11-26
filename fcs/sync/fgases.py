@@ -204,7 +204,9 @@ def test_fgases(days=7, updated_since=None):
     undertakings = get_latest_undertakings(updated_since=last_update)
 
     undertakings_count = len([parse_undertaking(u) for u in undertakings])
-    log = OrganizationLog(organizations=undertakings_count)
+    log = OrganizationLog(
+        organizations=undertakings_count,
+        using_last_update=last_update)
     db.session.add(log)
     print undertakings_count, "values"
 
