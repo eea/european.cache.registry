@@ -52,8 +52,8 @@ class ListView(ApiView):
     def get_queryset(self):
         return self.model.query.all()
 
-    def get(self):
-        return [self.serialize(u) for u in self.get_queryset()]
+    def get(self, **kwargs):
+        return [self.serialize(u) for u in self.get_queryset(**kwargs)]
 
 
 class DetailView(ApiView):
@@ -85,6 +85,28 @@ class UndertakingList(ListView):
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account
+        return data
+
+
+class UndertakingListByVat(ListView):
+    model = Undertaking
+
+    def get_queryset(self, vat):
+        return get_all_non_candidates(vat=vat)
+
+    @classmethod
+    def serialize(cls, obj):
+        data = ApiView.serialize(obj)
+        _strip_fields = (
+            'businessprofile_id', 'address_id', 'oldcompany_id',
+            'represent_id', 'phone', 'country_code', 'date_created',
+            'oldcompany_account', 'types', 'oldcompany_extid', 'domain',
+            'website', 'status', 'undertaking_type', 'date_updated',
+            'oldcompany_verified', 'vat'
+        )
+        for field in _strip_fields:
+            data.pop(field)
+        data['company_id'] = obj.external_id
         return data
 
 
@@ -244,6 +266,8 @@ api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('company-list'))
 api.add_url_rule('/undertaking/list/all',
                  view_func=UndertakingListAll.as_view('company-list-all'))
+api.add_url_rule('/undertaking/list_by_vat/<vat>',
+                 view_func=UndertakingListByVat.as_view('company-list-by-vat'))
 api.add_url_rule('/undertaking/<pk>/details',
                  view_func=UndertakingDetail.as_view('company-detail'))
 

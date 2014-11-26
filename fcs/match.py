@@ -26,8 +26,11 @@ def get_candidates(external_id):
     return company and company.links
 
 
-def get_all_non_candidates():
-    return models.Undertaking.query.filter_by(oldcompany_verified=True).all()
+def get_all_non_candidates(vat=None):
+    queryset = models.Undertaking.query.filter_by(oldcompany_verified=True)
+    if vat:
+        queryset = queryset.filter_by(vat=vat)
+    return queryset.all()
 
 
 def verify_link(undertaking_id, oldcompany_id):
