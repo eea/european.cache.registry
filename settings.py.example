@@ -10,6 +10,8 @@ API_PASSWORD = ''
 BDR_API_URL = 'https://bdr-test.eionet.europa.eu/registry/api'
 BDR_API_KEY = ''
 
+LOG_FILE = 'instance/EEA_double_check.log'
+
 # email server
 MAIL_SERVER = 'smtp.googlemail.com'
 MAIL_PORT = 465

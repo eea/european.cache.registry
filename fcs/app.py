@@ -33,7 +33,7 @@ def create_app(config={}):
 
 
 def create_logger(app):
-    log_file = app.config.get('LOG_FILE', ('log_file.log', ))[0]
+    log_file = app.config.get('LOG_FILE', 'log_file.log')
     file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(logging.WARNING)
     app.logger.addHandler(file_handler)
