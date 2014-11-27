@@ -1,3 +1,5 @@
+import logging
+
 import flask
 from flask.ext.script import Manager
 from fcs.models import db, db_manager
@@ -20,6 +22,7 @@ def create_app(config={}):
         app.config.update(config)
     db.init_app(app)
     app.register_blueprint(api)
+    create_logger(app)
 
     if app.config.get('SENTRY_DSN'):
         from raven.contrib.flask import Sentry
@@ -27,6 +30,17 @@ def create_app(config={}):
         Sentry(app)
 
     return app
+
+
+def create_logger(app):
+    log_file = app.config.get('LOG_FILE', 'log_file.log')
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(logging.WARNING)
+    app.logger.addHandler(file_handler)
+    file_handler.setFormatter(logging.Formatter('''
+    Message:
+    %(message)s
+    '''))
 
 
 def create_manager(app):

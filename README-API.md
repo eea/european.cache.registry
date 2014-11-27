@@ -10,7 +10,7 @@ authentication.
 /undertaking/list
 -----------------
 
-Returns a list of all undertakings in the system, as fetched from FGR.
+Returns the list of all verified undertakings in the system, as fetched from FGR.
     
     [
       {
@@ -26,6 +26,23 @@ Returns a list of all undertakings in the system, as fetched from FGR.
             "email": "9367email@climaOds2010.yyy"
           }
         ], 
+        "representative": {
+          "name": "EULEGALNAME44", 
+          "contact_last_name": "lname--9853", 
+          "vatnumber": "EUVAT44", 
+          "contact_email": "9853email@climaOds2010.yyy", 
+          "contact_first_name": "fname--9853", 
+          "address": {
+            "city": "city--7954", 
+            "country": {
+              "code": "IE", 
+              "type": "EU_TYPE", 
+              "name": "Ireland"
+            }, 
+            "zipcode": "zipcode--7954", 
+            "number": "nrstreet--7954", 
+            "street": "street--7954"
+        },
         "date_updated": "10/10/2014", 
         "phone": "+3212310085", 
         "country_code": "CN", 
@@ -50,6 +67,66 @@ Returns a list of all undertakings in the system, as fetched from FGR.
       },
     ]
 
+/undertaking/list/all
+---------------------
+
+Returns a list of all undertakings in the system (verified or not), as fetched 
+from FGR.
+    
+    [
+      {
+        "website": "WEBSITE--10085", 
+        "status": "VALID", 
+        "domain": "FGAS", 
+        "users": [
+          {
+            "username": "nzhouray", 
+            "first_name": "fname--9367", 
+            "last_name": "lname--9367", 
+            "id": 1, 
+            "email": "9367email@climaOds2010.yyy"
+          }
+        ],
+        "representative": {
+          "name": "EULEGALNAME44", 
+          "contact_last_name": "lname--9853", 
+          "vatnumber": "EUVAT44", 
+          "contact_email": "9853email@climaOds2010.yyy", 
+          "contact_first_name": "fname--9853", 
+          "address": {
+            "city": "city--7954", 
+            "country": {
+              "code": "IE", 
+              "type": "EU_TYPE", 
+              "name": "Ireland"
+            }, 
+            "zipcode": "zipcode--7954", 
+            "number": "nrstreet--7954", 
+            "street": "street--7954"
+        },
+        "date_updated": "10/10/2014", 
+        "phone": "+3212310085", 
+        "country_code": "CN", 
+        "address": {
+          "city": "city--7953", 
+          "country": {
+            "code": "CN", 
+            "type": "NONEU_TYPE", 
+            "name": "China (excluding Hong Kong and Macao)"
+          }, 
+          "zipcode": "zipcode--7953", 
+          "number": "nrstreet--7953", 
+          "street": "street--7953"
+        }, 
+        "collection_id": null, 
+        "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
+        "undertaking_type": "FGASUndertaking", 
+        "name": "FGAS-NMORGANIZATION--10085", 
+        "company_id": 10085, 
+        "date_created": "10/10/2014", 
+        "vat": null
+      },
+    ]
 
 /undertaking/[company_id]/details
 -------------------------
