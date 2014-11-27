@@ -82,6 +82,8 @@ class UndertakingList(ListView):
         data.update({
             'address': AddressDetail.serialize(obj.address),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+            'representative': EuLegalRepresentativeCompanyDetail.serialize(
+                obj.represent),
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account
