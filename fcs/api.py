@@ -49,7 +49,7 @@ class ApiView(MethodView):
 
 
 class ListView(ApiView):
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         return self.model.query.all()
 
     def get(self, **kwargs):
