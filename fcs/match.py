@@ -1,12 +1,42 @@
+import requests
+
 from fuzzywuzzy import fuzz
 from datetime import datetime
 from sqlalchemy import or_
+
 from flask.ext.script import Manager
+from flask import current_app
+
 from fcs import models
 
 FUZZ_LIMIT = 80
 
 match_manager = Manager()
+
+
+def get_auth():
+    return (
+        current_app.config.get('BDR_ENPOINT_USER', 'user'),
+        current_app.config.get('BDR_ENPOINT_PASSWORD', 'pass'),
+    )
+
+
+def get_absolute_url(url):
+    return current_app.config['BDR_ENPOINT_URL'] + url
+
+
+def do_bdr_request(params):
+    url = get_absolute_url('/ReportekEngine/update_company_collection')
+    auth = get_auth()
+    response = requests.get(url, params=params, auth=auth)
+    print response.url
+    return response
+
+
+def get_eu_country_code(undertaking):
+    if undertaking.address.country.type == 'EU_TYPE':
+        return undertaking.country_code
+    return undertaking.represent.address.country.code
 
 
 def get_all_candidates():
@@ -50,6 +80,14 @@ def verify_link(undertaking_id, oldcompany_id):
         link.undertaking.oldcompany_verified = True
         link.undertaking.oldcompany_extid = link.oldcompany.external_id
         models.db.session.commit()
+        params = {
+            'company_id': undertaking_id,
+            'domain': undertaking.domain,
+            'country': get_eu_country_code(undertaking),
+            'name': undertaking.name,
+            'old_collection_id': undertaking.oldcompany_account,
+        }
+        response = do_bdr_request(params)
     return link
 
 
@@ -81,6 +119,13 @@ def verify_none(undertaking_id):
         u.oldcompany_account = None
         u.oldcompany_extid = None
         models.db.session.commit()
+        params = {
+            'company_id': undertaking_id,
+            'domain': u.domain,
+            'country': get_eu_country_code(u),
+            'name': u.name,
+        }
+        response = do_bdr_request(params)
     return u
 
 

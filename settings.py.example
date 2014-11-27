@@ -9,3 +9,6 @@ API_PASSWORD = ''
 BDR_API_URL = 'https://bdr-test.eionet.europa.eu/registry/api'
 BDR_API_KEY = ''
 
+BDR_ENPOINT_URL = 'https://bdr-test.eionet.europa.eu'
+BDR_ENPOINT_USER = ''
+BDR_ENPOINT_PASSWORD = ''
