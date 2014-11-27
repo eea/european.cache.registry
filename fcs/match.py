@@ -27,8 +27,8 @@ def log_match(company_id, oldcompany_id, verified, user):
 
 def get_auth():
     return (
-        current_app.config.get('BDR_ENPOINT_USER', 'user'),
-        current_app.config.get('BDR_ENPOINT_PASSWORD', 'pass'),
+        current_app.config.get('BDR_ENDPOINT_USER', 'user'),
+        current_app.config.get('BDR_ENDPOINT_PASSWORD', 'pass'),
     )
 
 

@@ -263,11 +263,11 @@ class CandidateUnverify(ApiView):
         return ApiView.serialize(link)
 
 
-class OrganizationsLog(ListView):
+class DataSyncLog(ListView):
     model = OrganizationLog
 
 
-class MatchingLog(ListView):
+class MatchingsLog(ListView):
     model = MatchingLog
 
 
@@ -299,7 +299,7 @@ api.add_url_rule('/candidate/verify-none/<undertaking_id>/',
 api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
 
-api.add_url_rule('/log',
-                 view_func=OrganizationsLog.as_view('organizations-log'))
+api.add_url_rule('/data_sync_log',
+                 view_func=DataSyncLog.as_view('data-sync--log'))
 api.add_url_rule('/matching_log',
-                 view_func=MatchingLog.as_view('matching-log'))
+                 view_func=MatchingsLog.as_view('matching-log'))
