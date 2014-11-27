@@ -14,6 +14,17 @@ FUZZ_LIMIT = 80
 match_manager = Manager()
 
 
+def log_match(company_id, oldcompany_id, verified, user):
+    matching_log = models.MatchingLog(
+        company_id=company_id,
+        oldcompany_id=oldcompany_id,
+        verified=verified,
+        user=user,
+    )
+    models.db.session.add(matching_log)
+    models.db.session.commit()
+
+
 def get_auth():
     return (
         current_app.config.get('BDR_ENPOINT_USER', 'user'),
@@ -22,14 +33,13 @@ def get_auth():
 
 
 def get_absolute_url(url):
-    return current_app.config['BDR_ENPOINT_URL'] + url
+    return current_app.config['BDR_ENDPOINT_URL'] + url
 
 
 def do_bdr_request(params):
     url = get_absolute_url('/ReportekEngine/update_company_collection')
     auth = get_auth()
     response = requests.get(url, params=params, auth=auth)
-    print response.url
     return response
 
 
@@ -63,7 +73,7 @@ def get_all_non_candidates(vat=None):
     return queryset.all()
 
 
-def verify_link(undertaking_id, oldcompany_id):
+def verify_link(undertaking_id, oldcompany_id, user):
     undertaking = models.Undertaking.query.filter_by(
         external_id=undertaking_id).first()
     oldcompany = models.OldCompany.query.filter_by(
@@ -88,10 +98,11 @@ def verify_link(undertaking_id, oldcompany_id):
             'old_collection_id': undertaking.oldcompany_account,
         }
         response = do_bdr_request(params)
+        log_match(undertaking_id, oldcompany_id, True, user)
     return link
 
 
-def unverify_link(undertaking_id):
+def unverify_link(undertaking_id, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
     if u and u.oldcompany:
         link = (
@@ -108,10 +119,11 @@ def unverify_link(undertaking_id):
         u.oldcompany_account = None
         u.oldcompany_extid = None
         models.db.session.commit()
+        log_match(undertaking_id, None, False, user)
     return u
 
 
-def verify_none(undertaking_id):
+def verify_none(undertaking_id, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
     if u:
         u.oldcompany = None
@@ -126,6 +138,7 @@ def verify_none(undertaking_id):
             'name': u.name,
         }
         response = do_bdr_request(params)
+        log_match(undertaking_id, None, True, user)
     return u
 
 
@@ -187,7 +200,7 @@ def test():
 
 @match_manager.command
 def verify(undertaking_id, oldcompany_id):
-    result = verify_link(undertaking_id, oldcompany_id)
+    result = verify_link(undertaking_id, oldcompany_id, "None - Mgmt Command")
     if result:
         print result.verified
     else:

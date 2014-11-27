@@ -196,6 +196,17 @@ class OrganizationLog(SerializableModel, db.Model):
     organizations = Column(Integer)
 
 
+class MatchingLog(SerializableModel, db.Model):
+    __tablename__ = 'matching_log'
+
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    user = Column(String(255))
+    company_id = Column(Integer)
+    oldcompany_id = Column(Integer, nullable=True)
+    verified = Column(Boolean)
+
+
 @db_manager.command
 def init():
     return db.create_all()

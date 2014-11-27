@@ -1,12 +1,12 @@
 # coding=utf-8
 import json
 
-from flask import Blueprint, Response, abort
+from flask import Blueprint, Response, abort, request
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, OldCompany,
-    OrganizationLog,
+    OrganizationLog, MatchingLog,
 )
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
@@ -244,24 +244,31 @@ class CandidateVerify(ApiView):
         return data
 
     def post(self, undertaking_id, oldcompany_id):
-        link = verify_link(undertaking_id, oldcompany_id) or abort(404)
+        user = request.form['user']
+        link = verify_link(undertaking_id, oldcompany_id, user) or abort(404)
         return self.serialize(link, pop_id=False)
 
 
 class CandidateVerifyNone(CandidateVerify):
     def post(self, undertaking_id):
-        link = verify_none(undertaking_id) or abort(404)
+        user = request.form['user']
+        link = verify_none(undertaking_id, user) or abort(404)
         return ApiView.serialize(link)
 
 
 class CandidateUnverify(ApiView):
     def post(self, undertaking_id):
-        link = unverify_link(undertaking_id) or abort(404)
+        user = request.form['user']
+        link = unverify_link(undertaking_id, user) or abort(404)
         return ApiView.serialize(link)
 
 
 class OrganizationsLog(ListView):
     model = OrganizationLog
+
+
+class MatchingLog(ListView):
+    model = MatchingLog
 
 
 api.add_url_rule('/undertaking/list',
@@ -294,3 +301,5 @@ api.add_url_rule('/candidate/unverify/<undertaking_id>/',
 
 api.add_url_rule('/log',
                  view_func=OrganizationsLog.as_view('organizations-log'))
+api.add_url_rule('/matching_log',
+                 view_func=MatchingLog.as_view('matching-log'))
