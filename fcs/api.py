@@ -300,6 +300,6 @@ api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
 
 api.add_url_rule('/data_sync_log',
-                 view_func=DataSyncLog.as_view('data-sync--log'))
+                 view_func=DataSyncLog.as_view('data-sync-log'))
 api.add_url_rule('/matching_log',
                  view_func=MatchingsLog.as_view('matching-log'))

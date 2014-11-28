@@ -348,3 +348,33 @@ Lists the already verified undertakings.
         "businessprofile_id": 1
       }
     ]
+
+
+/matching_log
+-------------
+
+Lists a matching log for 2 companies and the user who made it at which time.
+
+    [
+      {
+        "verified": true, 
+        "timestamp": "27/11/2014 15:56", 
+        "company_id": 10051, 
+        "user": "vitalie", 
+        "oldcompany_id": 4
+      }
+    ]
+
+
+/data_sync_log
+--------------
+
+Lists a data sync log which shows when the sync was ran
+
+    [
+      {
+        "execution_time": "26/11/2014 16:42", 
+        "organizations": 413, 
+        "using_last_update": "10/10/2014"
+      }
+    ]
