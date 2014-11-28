@@ -55,7 +55,7 @@ def get_all_candidates():
         .filter(or_(models.Undertaking.oldcompany_verified == None,
                     models.Undertaking.oldcompany_verified == False))
     )
-    data = [(company, company.links) for company in companies if company.links]
+    data = [(company, company.links) for company in companies]
     return data
 
 
