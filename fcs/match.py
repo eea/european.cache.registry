@@ -104,7 +104,7 @@ def verify_link(undertaking_id, oldcompany_id, user):
 
 def unverify_link(undertaking_id, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
-    if u and u.oldcompany:
+    if u and u.oldcompany_verified:
         link = (
             models.OldCompanyLink.query
             .filter_by(undertaking_id=undertaking_id,
@@ -114,10 +114,10 @@ def unverify_link(undertaking_id, user):
             link.verified = False
             link.date_verified = None
 
-        u.oldcompany = None
         u.oldcompany_verified = False
         u.oldcompany_account = None
         u.oldcompany_extid = None
+        u.oldcompany = None
         models.db.session.commit()
         log_match(undertaking_id, None, False, user)
     return u
