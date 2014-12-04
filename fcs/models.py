@@ -148,9 +148,12 @@ class Undertaking(SerializableModel, Base):
 
     @property
     def country_code(self):
-        return (
-            self.address and self.address.country and self.address.country.code
-        )
+        if self.address and self.address.country and self.address.country.type == 'EU_TYPE':
+            return self.address.country.code
+        elif self.represent and self.represent.address and self.represent.address.country:
+            return self.represent.address.country.code
+        else:
+            return None
 
 
 class OldCompany(SerializableModel, Base):

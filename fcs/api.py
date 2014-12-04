@@ -156,8 +156,8 @@ class UserList(ListView):
 class UserCompanies(DetailView):
     model = User
 
-    def get_object(self, pk):
-        return self.model.query.filter_by(username=pk).first_or_404()
+    def get_object(self, username):
+        return self.model.query.filter_by(username=username).first_or_404()
 
     @classmethod
     def serialize(cls, obj):
@@ -282,7 +282,7 @@ api.add_url_rule('/undertaking/<pk>/details',
 
 api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
-api.add_url_rule('/user/<pk>/companies',
+api.add_url_rule('/user/<username>/companies',
                  view_func=UserCompanies.as_view('user-companies'))
 
 api.add_url_rule('/candidate/list',
