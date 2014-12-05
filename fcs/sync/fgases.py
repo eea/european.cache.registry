@@ -153,10 +153,10 @@ def parse_undertaking(data):
             update_obj(undertaking.represent.address, address)
             update_obj(undertaking.represent, represent)
 
-    existing_persosns = undertaking.contact_persons.all()
+    existing_persons = undertaking.contact_persons.all()
     for contact_person in contact_persons:
         user = None
-        if existing_persosns:
+        if existing_persons:
             user = (
                 undertaking.contact_persons
                 .filter_by(username=contact_person['username'])
@@ -169,9 +169,13 @@ def parse_undertaking(data):
             cp = User(**contact_person)
             db.session.add(cp)
             undertaking.contact_persons.append(cp)
+    current_emails = [p.get('email') for p in contact_persons]
+    for person in undertaking.contact_persons:
+        if person.email not in current_emails:
+            undertaking.contact_persons.remove(person)
 
     usernames = [cp['username'] for cp in contact_persons]
-    for cp in existing_persosns:
+    for cp in existing_persons:
         if cp.username not in usernames:
             db.session.delete(cp)
 
