@@ -207,6 +207,7 @@ class MatchingLog(SerializableModel, db.Model):
     user = Column(String(255))
     company_id = Column(Integer)
     oldcompany_id = Column(Integer, nullable=True)
+    oldcompany_account = Column(String(255), nullable=True)
     verified = Column(Boolean)
 
 

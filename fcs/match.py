@@ -14,10 +14,12 @@ FUZZ_LIMIT = 80
 match_manager = Manager()
 
 
-def log_match(company_id, oldcompany_id, verified, user):
+def log_match(company_id, oldcompany_id, verified, user,
+              oldcompany_account=None):
     matching_log = models.MatchingLog(
         company_id=company_id,
         oldcompany_id=oldcompany_id,
+        oldcompany_account=oldcompany_account,
         verified=verified,
         user=user,
     )
@@ -98,7 +100,8 @@ def verify_link(undertaking_id, oldcompany_id, user):
             'old_collection_id': undertaking.oldcompany_account,
         }
         response = do_bdr_request(params)
-        log_match(undertaking_id, oldcompany_id, True, user)
+        log_match(undertaking_id, oldcompany_id, True, user,
+                  oldcompany_account=undertaking.oldcompany_account)
     return link
 
 
