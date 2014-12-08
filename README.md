@@ -17,7 +17,7 @@ Initialize database:
 
 Fetch the latest data from a test server (cron):
 
-    ./manage.py sync test_fgases
+    ./manage.py sync test_fgases [-d 30]
     ./manage.py sync test_bdr
 
 Get data from the local server (client):
