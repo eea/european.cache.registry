@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+from openpyxl import Workbook
 
 from flask import Blueprint, Response, abort, request
 from flask.views import MethodView
@@ -12,9 +13,13 @@ from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
     get_candidates, verify_none,
 )
+from openpyxl.writer.excel import save_virtual_workbook
 
 api = Blueprint('api', __name__)
 api_manager = Manager()
+
+
+MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
 
 @api_manager.command
@@ -116,6 +121,39 @@ class UndertakingListAll(UndertakingList):
 
     def get_queryset(self):
         return self.model.query.all()
+
+
+@api.route('/undertaking/list/export', methods=['GET'])
+def undertakingListExport():
+    def _parse_column(qs, name):
+        if name.startswith('address'):
+            for sub_column in name.split('_'):
+                qs = qs[sub_column]
+            return qs
+        return qs[name]
+
+    columns = ['company_id', 'name', 'domain', 'status', 'undertaking_type',
+               'website', 'date_updated', 'phone', 'oldcompany_extid',
+               'address_city', 'address_country_code', 'address_country_type',
+               'address_country_name', 'address_zipcode', 'address_number',
+               'address_street', 'country_code', 'vat', 'users',
+               'representative', 'users', 'types', 'collection_id',
+               'date_created', 'oldcompany_account', 'oldcompany_verified']
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'Companies List'
+    queryset = UndertakingList().get_queryset()
+    ws.append(columns)
+    for qs in queryset:
+        qs = UndertakingList.serialize(qs)
+        qs['users'] = ', '.join([user['username'] for user in qs['users']])
+        values = [_parse_column(qs, column) for column in columns]
+        ws.append(values)
+    response = Response(save_virtual_workbook(wb), mimetype=MIMETYPE)
+    response.headers.add('Content-Disposition',
+                         'attachment; filename=companies_list.xlsx')
+    return response
 
 
 class UndertakingDetail(DetailView):
