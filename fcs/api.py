@@ -123,37 +123,38 @@ class UndertakingListAll(UndertakingList):
         return self.model.query.all()
 
 
-@api.route('/undertaking/list/export', methods=['GET'])
-def undertakingListExport():
-    def _parse_column(qs, name):
+class UndertakingListExport(UndertakingList):
+
+    def parse_column(self, qs, name):
         if name.startswith('address'):
             for sub_column in name.split('_'):
                 qs = qs[sub_column]
             return qs
         return qs[name]
 
-    columns = ['company_id', 'name', 'domain', 'status', 'undertaking_type',
-               'website', 'date_updated', 'phone', 'oldcompany_extid',
-               'address_city', 'address_country_code', 'address_country_type',
-               'address_country_name', 'address_zipcode', 'address_number',
-               'address_street', 'country_code', 'vat', 'users',
-               'representative', 'users', 'types', 'collection_id',
-               'date_created', 'oldcompany_account', 'oldcompany_verified']
+    def get(self, **kwargs):
+        queryset = super(UndertakingListExport, self).get(**kwargs)
 
-    wb = Workbook()
-    ws = wb.active
-    ws.title = 'Companies List'
-    queryset = UndertakingList().get_queryset()
-    ws.append(columns)
-    for qs in queryset:
-        qs = UndertakingList.serialize(qs)
-        qs['users'] = ', '.join([user['username'] for user in qs['users']])
-        values = [_parse_column(qs, column) for column in columns]
-        ws.append(values)
-    response = Response(save_virtual_workbook(wb), mimetype=MIMETYPE)
-    response.headers.add('Content-Disposition',
-                         'attachment; filename=companies_list.xlsx')
-    return response
+        columns = ['company_id', 'name', 'domain', 'status', 'undertaking_type',
+                   'website', 'date_updated', 'phone', 'oldcompany_extid',
+                   'address_city', 'address_country_code', 'address_country_type',
+                   'address_country_name', 'address_zipcode', 'address_number',
+                   'address_street', 'country_code', 'vat', 'users',
+                   'representative', 'users', 'types', 'collection_id',
+                   'date_created', 'oldcompany_account', 'oldcompany_verified']
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Companies List'
+        ws.append(columns)
+        for qs in queryset:
+            qs['users'] = ', '.join([user['username'] for user in qs['users']])
+            values = [self.parse_column(qs, column) for column in columns]
+            ws.append(values)
+        response = Response(save_virtual_workbook(wb), mimetype=MIMETYPE)
+        response.headers.add('Content-Disposition',
+                             'attachment; filename=companies_list.xlsx')
+        return response
 
 
 class UndertakingDetail(DetailView):
@@ -317,6 +318,8 @@ api.add_url_rule('/undertaking/list_by_vat/<vat>',
                  view_func=UndertakingListByVat.as_view('company-list-by-vat'))
 api.add_url_rule('/undertaking/<pk>/details',
                  view_func=UndertakingDetail.as_view('company-detail'))
+api.add_url_rule('/undertaking/list/export',
+                 view_func=UndertakingListExport.as_view('company-list-export'))
 
 api.add_url_rule('/user/list',
                  view_func=UserList.as_view('user-list'))
