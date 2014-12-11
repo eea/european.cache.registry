@@ -213,11 +213,18 @@ def eea_double_check(data):
     return ok
 
 
+def save_undertakings(updated_since=None, username=None):
+    undertakings = get_latest_undertakings(updated_since=updated_since,
+                                           username=username)
+    [parse_undertaking(u) for u in undertakings if eea_double_check(u)]
+
+    return undertakings
+
+
 @sync_manager.command
-@sync_manager.option('-n', '--username', dest='name',
-                     help="email address or alphanumeric")
-def test_fgases(days=7, updated_since=None, name=None):
-    username = name
+@sync_manager.option('-u', '--updated', dest='updated_since',
+                     help="Date in DD/MM/YYYY format")
+def test_fgases(days=7, updated_since=None):
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
@@ -238,17 +245,35 @@ def test_fgases(days=7, updated_since=None, name=None):
             )
 
     print "Using last_update {}".format(last_update)
-    undertakings = get_latest_undertakings(updated_since=last_update,
-                                           username=username)
 
-    undertakings_count = len([parse_undertaking(u)
-                              for u in undertakings
-                              if eea_double_check(u)])
+    undertakings = save_undertakings(updated_since=last_update)
+    undertakings_count = len(undertakings)
+
     log = OrganizationLog(
         organizations=undertakings_count,
         using_last_update=last_update,
-        for_username=username is not None,
+        for_username=False,
     )
     db.session.add(log)
     db.session.commit()
     print undertakings_count, "values"
+
+
+@sync_manager.command
+@sync_manager.option('-u', '--username', dest='username',
+                     help="email address or alphanumeric")
+def get_all_companies_for_user(username=None):
+    if not username:
+        return 'Please specify a username'
+    undertakings = save_undertakings(username=username)
+    undertakings_count = len(undertakings)
+
+    log = OrganizationLog(
+        organizations=undertakings_count,
+        using_last_update=None,
+        for_username=False,
+    )
+    db.session.add(log)
+    db.session.commit()
+    print undertakings_count, "values"
+

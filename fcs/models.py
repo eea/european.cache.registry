@@ -104,8 +104,7 @@ class BusinessProfile(SerializableModel, Base):
 
 undertaking_users = db.Table(
     'undertaking_users',
-    db.Column('user_id', db.Integer(),
-              db.ForeignKey('user.id')),
+    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
     db.Column('undertaking_id', db.Integer(), db.ForeignKey('undertaking.id')),
 )
 

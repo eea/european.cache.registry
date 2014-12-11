@@ -12,6 +12,8 @@ from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
     get_candidates, verify_none,
 )
+from fcs.sync.fgases import save_undertakings
+from openpyxl.writer.excel import save_virtual_workbook
 
 api = Blueprint('api', __name__)
 api_manager = Manager()
@@ -147,7 +149,17 @@ class UserCompanies(DetailView):
             key = 'email'
         else:
             key = 'username'
-        return self.model.query.filter_by(**{key: pk}).first_or_404()
+        user = self.model.query.filter_by(**{key: pk}).first_or_404()
+        existing_companies = [c.external_id for c in user.undertakings]
+        companies = save_undertakings(username=user.username)
+        for company in companies:
+            if company['external_id'] not in existing_companies:
+                company = Undertaking.query.filter_by(
+                    external_id=company['external_id']
+                ).first_or_404()
+                user.undertakings.append(company)
+        db.session.commit()
+        return user
 
     @classmethod
     def serialize(cls, obj):
