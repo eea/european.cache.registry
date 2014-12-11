@@ -209,6 +209,7 @@ class OrganizationLog(SerializableModel, db.Model):
     execution_time = Column(DateTime, default=datetime.utcnow)
     using_last_update = Column(Date)
     organizations = Column(Integer)
+    for_username = Column(Boolean)
 
 
 class MatchingLog(SerializableModel, db.Model):

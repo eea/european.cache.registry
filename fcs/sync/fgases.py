@@ -33,14 +33,15 @@ def get_auth():
     )
 
 
-def get_latest_undertakings(updated_since=None):
+def get_latest_undertakings(updated_since=None, username=None):
     auth = get_auth()
     url = get_absolute_url('/latest/fgasundertakings/')
+    params = {}
     if updated_since:
         updated_since = updated_since.strftime('%d/%m/%Y')
-        params = {'updatedSince': updated_since}
-    else:
-        params = {}
+        params.update({'updatedSince': updated_since})
+    if username:
+        params.update({'userName': username})
 
     headers = dict(zip(('user', 'password'), auth))
     ssl_verify = current_app.config['HTTPS_VERIFY']
@@ -213,9 +214,10 @@ def eea_double_check(data):
 
 
 @sync_manager.command
-@sync_manager.option('-u', '--updated', dest='updated_since',
-                     help="Date in DD/MM/YYYY format")
-def fgases(days=7, updated_since=None):
+@sync_manager.option('-n', '--username', dest='name',
+                     help="email address or alphanumeric")
+def test_fgases(days=7, updated_since=None, name=None):
+    username = name
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
@@ -231,19 +233,22 @@ def fgases(days=7, updated_since=None):
                 .order_by(desc(Undertaking.date_updated))
                 .first()
             )
-            last_update = last.date_updated - timedelta(
-                days=1) if last else None
+            last_update = (
+                last.date_updated - timedelta(days=1) if last else None
+            )
 
     print "Using last_update {}".format(last_update)
-    undertakings = get_latest_undertakings(updated_since=last_update)
+    undertakings = get_latest_undertakings(updated_since=last_update,
+                                           username=username)
 
     undertakings_count = len([parse_undertaking(u)
                               for u in undertakings
                               if eea_double_check(u)])
     log = OrganizationLog(
         organizations=undertakings_count,
-        using_last_update=last_update)
+        using_last_update=last_update,
+        for_username=username is not None,
+    )
     db.session.add(log)
-    print undertakings_count, "values"
-
     db.session.commit()
+    print undertakings_count, "values"
