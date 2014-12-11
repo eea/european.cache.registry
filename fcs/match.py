@@ -151,6 +151,11 @@ def has_match(company, old):
     if c_code != o_code:
         return False
 
+    c_vat = company['vat'] or ''
+    o_vat = old['vat_number'] or ''
+    if all((c_vat, o_vat)) and c_vat == o_vat:
+        return True
+
     c_name = company['name'].lower()
     o_name = old['name'].lower()
     return all((c_name, o_name)) and fuzz.ratio(c_name, o_name) >= FUZZ_LIMIT
