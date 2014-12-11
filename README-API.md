@@ -7,6 +7,30 @@ from various sources (FGas Registry, BDR Registry).
 The API uses HTTP for transport, JSON as data format and does not require
 authentication.
 
+Overview
+--------
+
+Listing calls:
+
+* `/undertaking/list` - all verified undertakings
+* `/undertaking/list/all` - all undertakings, including unverified
+* `/undertaking/[company_id]/details` - details about an undertaking
+* `/user/list` - all users
+* `/user/[username_or_email]/companies` - all verified companies and user has access to
+
+Matching calls:
+
+* `/candidate/list` -  all matching candidates
+* `/candidate/verify/[company_id]/[collection_id]/` - link two objects
+* `/candidate/unverify/[company_id]/` - unlink
+* `/candidate/verify-none/[company_id]/` - mark an undertaking as linked, without a matching company
+* `/candidate/list/verified` - list verified undertakings
+
+Misc:
+
+* `/matching_log` - matching logs
+* `/data_sync_log` - data sync logs
+
 Listing calls
 =============
 
