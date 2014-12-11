@@ -134,8 +134,8 @@ class UndertakingListExport(UndertakingList):
         'oldcompany_account', 'oldcompany_verified', 'representative_name',
         'representative_contact_first_name', 'representative_contact_last_name',
         'representative_vatnumber', 'representative_contact_email',
-        'representative_zipcode', 'representative_number',
-        'representative_street', 'representative_address_city',
+        'representative_address_zipcode', 'representative_address_number',
+        'representative_address_street', 'representative_address_city',
         'representative_address_country_code',
         'representative_address_country_type',
         'representative_address_country_name'
