@@ -7,6 +7,9 @@ from various sources (FGas Registry, BDR Registry).
 The API uses HTTP for transport, JSON as data format and does not require
 authentication.
 
+Listing calls
+=============
+
 /undertaking/list
 -----------------
 
@@ -202,10 +205,14 @@ Returns a list of all undertakings in the system, as fetched from FGR.
       },
     ]
 
-/user/[username]/companies
+/user/[username_or_email]/companies
 --------------------------
 
+The _username_or_email_ parameter can be either an username (ex: "user1") or an email
+(ex: "user1@mock.ec.europa.eu").
+
 Returns the list of undertakings for a user given by its unique username.
+
 
     [
       {
@@ -216,6 +223,16 @@ Returns the list of undertakings for a user given by its unique username.
         "name": "FGAS-NMORGANIZATION--10085"
       }
     ]
+
+Matching calls
+==============
+
+These calls are related to the matching algorithm between Undertakings and
+Old Companies. An automated process creates the links between these objects,
+then manual user intervention is required for validating these links.
+
+The methods available via HTTP POST should also encapsulate the username, for
+logging purposes.
 
 /candidate/list
 ---------------
@@ -349,6 +366,9 @@ Lists the already verified undertakings.
       }
     ]
 
+
+Misc calls
+==========
 
 /matching_log
 -------------
