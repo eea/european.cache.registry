@@ -4,6 +4,7 @@ import flask
 from flask.ext.script import Manager
 from fcs.models import db, db_manager
 from fcs.api import api, api_manager
+from fcs.misc import misc
 from fcs.sync import sync_manager
 from fcs.match import match_manager
 from fcs.admin import admin
@@ -23,6 +24,7 @@ def create_app(config={}):
         app.config.update(config)
     db.init_app(app)
     app.register_blueprint(api)
+    app.register_blueprint(misc)
     admin.init_app(app)
     create_logger(app)
 
