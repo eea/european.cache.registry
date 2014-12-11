@@ -125,31 +125,50 @@ class UndertakingListAll(UndertakingList):
 
 class UndertakingListExport(UndertakingList):
 
-    def parse_column(self, qs, name):
-        if name.startswith('address'):
-            for sub_column in name.split('_'):
+    columns = [
+        'company_id', 'name', 'domain', 'status', 'undertaking_type', 'website',
+        'date_updated', 'phone', 'oldcompany_extid', 'address_city',
+        'address_country_code', 'address_country_name', 'address_country_type',
+        'address_zipcode', 'address_number', 'address_street', 'country_code',
+        'vat', 'users', 'users',  'types', 'collection_id', 'date_created',
+        'oldcompany_account', 'oldcompany_verified', 'representative_name',
+        'representative_contact_first_name', 'representative_contact_last_name',
+        'representative_vatnumber', 'representative_contact_email',
+        'representative_zipcode', 'representative_number',
+        'representative_street', 'representative_address_city',
+        'representative_address_country_code',
+        'representative_address_country_type',
+        'representative_address_country_name'
+    ]
+
+    def parse_column(self, qs, column):
+        def _parse_address(qs, column):
+            for sub_column in column.split('_'):
                 qs = qs[sub_column]
             return qs
-        return qs[name]
+
+        if column.startswith('address'):
+            return _parse_address(qs, column)
+        elif column.startswith('representative'):
+            repr_info = column.split('_', 1)[1]
+            qs = qs['representative']
+            if not qs:
+                return None
+            if repr_info.startswith('address'):
+                return _parse_address(qs, repr_info)
+            return qs[repr_info]
+        return qs[column]
 
     def get(self, **kwargs):
         queryset = super(UndertakingListExport, self).get(**kwargs)
 
-        columns = ['company_id', 'name', 'domain', 'status', 'undertaking_type',
-                   'website', 'date_updated', 'phone', 'oldcompany_extid',
-                   'address_city', 'address_country_code', 'address_country_type',
-                   'address_country_name', 'address_zipcode', 'address_number',
-                   'address_street', 'country_code', 'vat', 'users',
-                   'representative', 'users', 'types', 'collection_id',
-                   'date_created', 'oldcompany_account', 'oldcompany_verified']
-
         wb = Workbook()
         ws = wb.active
         ws.title = 'Companies List'
-        ws.append(columns)
+        ws.append(self.columns)
         for qs in queryset:
             qs['users'] = ', '.join([user['username'] for user in qs['users']])
-            values = [self.parse_column(qs, column) for column in columns]
+            values = [self.parse_column(qs, column) for column in self.columns]
             ws.append(values)
         response = Response(save_virtual_workbook(wb), mimetype=MIMETYPE)
         response.headers.add('Content-Disposition',
