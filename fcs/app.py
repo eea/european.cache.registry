@@ -6,6 +6,7 @@ from fcs.models import db, db_manager
 from fcs.api import api, api_manager
 from fcs.sync import sync_manager
 from fcs.match import match_manager
+from fcs.admin import admin
 
 DEFAULT_CONFIG = {
     'API_URL': 'http://example.com/rest/api',
@@ -22,6 +23,7 @@ def create_app(config={}):
         app.config.update(config)
     db.init_app(app)
     app.register_blueprint(api)
+    admin.init_app(app)
     create_logger(app)
 
     if app.config.get('SENTRY_DSN'):

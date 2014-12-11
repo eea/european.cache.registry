@@ -71,6 +71,9 @@ class Address(SerializableModel, Base):
 
     country = relationship(Country)
 
+    def __unicode__(self):
+        return self.zipcode
+
 
 class EuLegalRepresentativeCompany(SerializableModel, Base):
     __tablename__ = 'represent'
@@ -85,6 +88,9 @@ class EuLegalRepresentativeCompany(SerializableModel, Base):
 
     address = relationship(Address)
 
+    def __unicode__(self):
+        return self.name
+
 
 class BusinessProfile(SerializableModel, Base):
     __tablename__ = 'businessprofile'
@@ -92,6 +98,8 @@ class BusinessProfile(SerializableModel, Base):
     id = Column(Integer, primary_key=True)
     highleveluses = Column(String(255))
 
+    def __unicode__(self):
+        return self.highleveluses
 
 undertaking_users = db.Table(
     'undertaking_users',
