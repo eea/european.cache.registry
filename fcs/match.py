@@ -190,7 +190,7 @@ def match_all(companies, oldcompanies):
 
 
 @match_manager.command
-def test():
+def run():
     companies = models.Undertaking.query.filter_by(oldcompany=None)
     oldcompanies = models.OldCompany.query.filter_by(undertaking=None)
 
