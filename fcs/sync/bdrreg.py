@@ -18,8 +18,9 @@ def get_old_companies():
     auth = get_auth()
     url = get_absolute_url('/company/obligation/fgases/')
     params = {'apikey': auth}
+    ssl_verify = current_app.config['HTTPS_VERIFY']
 
-    response = requests.get(url, params=params)
+    response = requests.get(url, params=params, verify=ssl_verify)
     if response.status_code in (401, 403):
         raise Unauthorized()
 

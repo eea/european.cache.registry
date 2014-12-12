@@ -41,7 +41,8 @@ def get_absolute_url(url):
 def do_bdr_request(params):
     url = get_absolute_url('/ReportekEngine/update_company_collection')
     auth = get_auth()
-    response = requests.get(url, params=params, auth=auth, verify=False)
+    ssl_verify = current_app.config['HTTPS_VERIFY']
+    response = requests.get(url, params=params, auth=auth, verify=ssl_verify)
     return response
 
 

@@ -43,7 +43,9 @@ def get_latest_undertakings(updated_since=None):
         params = {}
 
     headers = dict(zip(('user', 'password'), auth))
-    response = requests.get(url, params=params, headers=headers)
+    ssl_verify = current_app.config['HTTPS_VERIFY']
+    response = requests.get(url, params=params, headers=headers,
+                            verify=ssl_verify)
 
     if response.status_code == 401:
         raise Unauthorized()
@@ -215,7 +217,6 @@ def eea_double_check(data):
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def test_fgases(days=7, updated_since=None):
-    
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
@@ -231,7 +232,8 @@ def test_fgases(days=7, updated_since=None):
                 .order_by(desc(Undertaking.date_updated))
                 .first()
             )
-            last_update = last.date_updated - timedelta(days=1) if last else None
+            last_update = last.date_updated - timedelta(
+                days=1) if last else None
 
     print "Using last_update {}".format(last_update)
     undertakings = get_latest_undertakings(updated_since=last_update)

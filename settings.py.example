@@ -25,3 +25,5 @@ MAIL_USERNAME = ''
 MAIL_PASSWORD = ''
 
 NOTIFY_EMAILS = ['mihai.zamfir@eaudeweb.ro']
+
+HTTPS_VERIFY = None # set it to False to disable
