@@ -155,6 +155,19 @@ from FGR.
       },
     ]
 
+/undertaking/list_by_vat/<vat>
+------------------------------
+
+Returns a list of all verified undertakings in the system given by their VAT, 
+as fetched  from FGR.
+    
+    [
+      {
+        "name": "FGAS-NMORGANIZATION--10078", 
+        "company_id": 10078
+      }
+    ]
+
 /undertaking/[company_id]/details
 -------------------------
 
@@ -420,5 +433,13 @@ Lists a data sync log which shows when the sync was ran
         "execution_time": "26/11/2014 16:42", 
         "organizations": 413, 
         "using_last_update": "10/10/2014"
+        "for_user": False,
       }
     ]
+
+
+/misc/undertaking/export
+------------------------
+
+This URL is used to export the list of undertakings from ``/undertakings/list``
+as an Excel file.
