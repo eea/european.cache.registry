@@ -443,7 +443,18 @@ List all the old invalid companies.
         "vat_number": null, 
         "eori": null
       }
-    ]
+
+
+/oldcompanies/<pk>/valid/
+-------------------------
+
+On POST method, sets the valid flag of an old company to True.
+
+
+/oldcompanies/<pk>/invalid/
+---------------------------
+
+On POST method, sets the valid flag of an old company to False.
 
 
 Misc calls
