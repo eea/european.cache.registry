@@ -6,7 +6,7 @@ from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address, OldCompany,
-    OrganizationLog, MatchingLog,
+    OrganizationLog, MatchingLog, db,
 )
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
@@ -257,18 +257,36 @@ class CandidateVerifyNone(CandidateVerify):
         return ApiView.serialize(link)
 
 
-class OldCompanyListValid(ListView):
+class OldCompanyListByStatus(ListView):
     model = OldCompany
 
     def get_queryset(self, **kwargs):
-        return self.model.query.filter_by(valid=True).all()
+        return self.model.query.filter_by(valid=self.valid).all()
 
 
-class OldCompanyListInvalid(ListView):
+class OldCompanyListValid(OldCompanyListByStatus):
+    valid = True
+
+
+class OldCompanyListInvalid(OldCompanyListByStatus):
+    valid = False
+
+
+class OldCompanySetStatus(DetailView):
     model = OldCompany
 
-    def get_queryset(self, **kwargs):
-        return self.model.query.filter_by(valid=False).all()
+    def post(self, pk):
+        self.get_object(pk).valid = self.valid
+        db.session.commit()
+        return json.dumps(True)
+
+
+class OldCompanySetValid(OldCompanySetStatus):
+    valid = True
+
+
+class OldCompanySetInvalid(OldCompanySetStatus):
+    valid = False
 
 
 class CandidateUnverify(ApiView):
@@ -319,6 +337,12 @@ api.add_url_rule('/oldcompanies/list/valid/',
 api.add_url_rule('/oldcompanies/list/invalid/',
                  view_func=OldCompanyListInvalid.as_view(
                      'oldcompany-list-invalid'))
+api.add_url_rule('/oldcompanies/<pk>/valid/',
+                 view_func=OldCompanySetValid.as_view(
+                     'oldcompany-set-valid'))
+api.add_url_rule('/oldcompanies/<pk>/invalid/',
+                 view_func=OldCompanySetInvalid.as_view(
+                     'oldcompany-set-invalid'))
 
 api.add_url_rule('/data_sync_log',
                  view_func=DataSyncLog.as_view('data-sync-log'))
