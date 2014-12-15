@@ -257,6 +257,20 @@ class CandidateVerifyNone(CandidateVerify):
         return ApiView.serialize(link)
 
 
+class OldCompanyListValid(ListView):
+    model = OldCompany
+
+    def get_queryset(self, **kwargs):
+        return self.model.query.filter_by(valid=True).all()
+
+
+class OldCompanyListInvalid(ListView):
+    model = OldCompany
+
+    def get_queryset(self, **kwargs):
+        return self.model.query.filter_by(valid=False).all()
+
+
 class CandidateUnverify(ApiView):
     def post(self, undertaking_id):
         user = request.form['user']
@@ -299,6 +313,12 @@ api.add_url_rule('/candidate/verify-none/<undertaking_id>/',
                      'candidate-verify-none'))
 api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
+
+api.add_url_rule('/oldcompanies/list/valid/',
+                 view_func=OldCompanyListValid.as_view('oldcompany-list-valid'))
+api.add_url_rule('/oldcompanies/list/invalid/',
+                 view_func=OldCompanyListInvalid.as_view(
+                     'oldcompany-list-invalid'))
 
 api.add_url_rule('/data_sync_log',
                  view_func=DataSyncLog.as_view('data-sync-log'))
