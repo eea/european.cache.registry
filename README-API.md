@@ -404,6 +404,48 @@ Lists the already verified undertakings.
     ]
 
 
+/oldcompanies/list/valid/
+-------------------------
+
+List all the old valid companies.
+    
+    [
+      {
+        "website": "", 
+        "account": "fgas23460", 
+        "name": "3M Belgium N.V.", 
+        "company_id": 1, 
+        "date_registered": "07/12/2012 13:01", 
+        "valid": true, 
+        "country_code": "be", 
+        "active": true, 
+        "vat_number": "", 
+        "eori": ""
+      }
+    ]
+
+
+/oldcompanies/list/invalid/
+---------------------------
+
+List all the old invalid companies.
+    
+    [
+      {
+        "website": null, 
+        "account": "fgas22700", 
+        "name": "AIR PRODUCTS S.A", 
+        "company_id": 3, 
+        "date_registered": "07/12/2012 13:01", 
+        "valid": false, 
+        "country_code": "be", 
+        "active": true, 
+        "vat_number": null, 
+        "eori": null
+      }
+    ]
+
+
 Misc calls
 ==========
 
