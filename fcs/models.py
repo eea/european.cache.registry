@@ -101,6 +101,7 @@ class BusinessProfile(SerializableModel, Base):
     def __unicode__(self):
         return self.highleveluses
 
+
 undertaking_users = db.Table(
     'undertaking_users',
     db.Column('user_id', db.Integer(),
@@ -156,9 +157,11 @@ class Undertaking(SerializableModel, Base):
 
     @property
     def country_code(self):
-        if self.address and self.address.country and self.address.country.type == 'EU_TYPE':
+        if (self.address and self.address.country and
+                self.address.country.type == 'EU_TYPE'):
             return self.address.country.code
-        elif self.represent and self.represent.address and self.represent.address.country:
+        elif (self.represent and self.represent.address and
+                self.represent.address.country):
             return self.represent.address.country.code
         else:
             return None
@@ -177,6 +180,7 @@ class OldCompany(SerializableModel, Base):
     active = Column(Boolean)
     website = Column(String(255))
     date_registered = Column(DateTime)
+    valid = Column(Boolean, default=True)
 
     @property
     def country(self):
