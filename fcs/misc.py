@@ -4,6 +4,7 @@ from openpyxl.writer.excel import save_virtual_workbook
 from flask import Blueprint, Response
 from flask.views import MethodView
 from fcs.match import get_all_non_candidates
+from fcs.api import UndertakingList
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -29,8 +30,8 @@ class UndertakingListExport(MethodView):
         'representative_address_country_name'
     ]
 
-    def get_queryset(self):
-        return get_all_non_candidates()
+    def get_data(self):
+        return [UndertakingList.serialize(c) for c in get_all_non_candidates()]
 
     def parse_column(self, qs, column):
         def _parse_address(qs, column):
@@ -51,7 +52,7 @@ class UndertakingListExport(MethodView):
         return qs[column]
 
     def get(self, **kwargs):
-        queryset = self.get_queryset()
+        queryset = self.get_data()
 
         wb = Workbook()
         ws = wb.active
