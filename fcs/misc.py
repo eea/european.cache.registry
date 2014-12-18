@@ -5,6 +5,7 @@ from flask import Blueprint, Response
 from flask.views import MethodView
 from fcs.match import get_all_non_candidates
 from fcs.api import UndertakingList
+from fcs.models import User
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -68,6 +69,35 @@ class UndertakingListExport(MethodView):
         return response
 
 
+class UserListExport(MethodView):
+    COLUMNS = [
+        'username', 'companyname', 'country', 'contact_firstname',
+        'contact_lastname',
+    ]
+
+    def get(self, **kwargs):
+        users = User.query.all()
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Users List'
+        ws.append(self.COLUMNS)
+        for user in users:
+            for company in user.verified_undertakings:
+                for cp in company.contact_persons:
+                    values = [user.username, company.name,
+                              company.address.country.name, cp.first_name,
+                              cp.last_name, cp.email]
+                    ws.append(values)
+        response = Response(save_virtual_workbook(wb), mimetype=MIMETYPE)
+        response.headers.add('Content-Disposition',
+                             'attachment; filename=users_list.xlsx')
+        return response
+
+
 misc.add_url_rule('/misc/undertaking/export',
                   view_func=UndertakingListExport.as_view(
                       'company-list-export'))
+misc.add_url_rule('/misc/user/export',
+                  view_func=UserListExport.as_view(
+                      'user-list-export'))
