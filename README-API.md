@@ -496,3 +496,10 @@ Lists a data sync log which shows when the sync was ran
 
 This URL is used to export the list of undertakings from ``/undertakings/list``
 as an Excel file.
+
+
+/misc/user/export
+-----------------
+
+This URL is used to export the list of users with their companies and the 
+companies' contact persons as an Excel file.

@@ -72,7 +72,7 @@ class UndertakingListExport(MethodView):
 class UserListExport(MethodView):
     COLUMNS = [
         'username', 'companyname', 'country', 'contact_firstname',
-        'contact_lastname',
+        'contact_lastname', 'contact_email',
     ]
 
     def get(self, **kwargs):
