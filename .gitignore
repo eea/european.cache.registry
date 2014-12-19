@@ -1,4 +1,8 @@
 /instance
 db.sqlite3
-/sandbox
+/sandbox*
 *.pyc
+deploy
+supervisord.conf
+db.*
+log_file.log
