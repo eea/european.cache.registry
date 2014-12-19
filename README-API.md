@@ -155,19 +155,6 @@ from FGR.
       },
     ]
 
-/undertaking/list_by_vat/<vat>
-------------------------------
-
-Returns a list of all verified undertakings in the system given by their VAT, 
-as fetched  from FGR.
-    
-    [
-      {
-        "name": "FGAS-NMORGANIZATION--10078", 
-        "company_id": 10078
-      }
-    ]
-
 /undertaking/[company_id]/details
 -------------------------
 
@@ -226,6 +213,66 @@ Returns an undertakings details from the system, as fetched from FGR.
           "email": "9367email@climaOds2010.yyy"
         }
       ]
+    }
+
+/undertaking/details_by_vat/[vat]
+---------------------------------
+
+Returns company details from the system, as fetched from FGR. The Company is 
+given by its VAT.
+
+    {
+      "website": "WEBSITE--10078", 
+      "status": "VALID", 
+      "domain": "FGAS", 
+      "users": [
+        {
+          "username": "USERNAME10077", 
+          "first_name": "fname--9839", 
+          "last_name": "lname--9839", 
+          "email": "9839email@climaOds2010.yyy"
+        }
+      ], 
+      "oldcompany_id": null, 
+      "oldcompany_extid": null, 
+      "phone": "+3212310078", 
+      "representative": null, 
+      "address": {
+        "city": "city--7940", 
+        "country": {
+          "code": "PT", 
+          "type": "EU_TYPE", 
+          "name": "Portugal"
+        }, 
+        "zipcode": "zipcode--7940", 
+        "number": "nrstreet--7940", 
+        "street": "street--7940"
+      }, 
+      "collection_id": null, 
+      "name": "FGAS-NMORGANIZATION--10078", 
+      "oldcompany_verified": true, 
+      "company_id": 10078, 
+      "businessprofile": {
+        "highleveluses": ""
+      }, 
+      "candidates": [
+        {
+          "website": null, 
+          "account": "fgas22331", 
+          "name": "Airconditioning Group Ltd", 
+          "country": null, 
+          "company_id": 4, 
+          "date_registered": "07/12/2012 13:01", 
+          "valid": false, 
+          "country_code": "gb", 
+          "active": true, 
+          "vat_number": "634456631", 
+          "eori": null
+        }
+       ], 
+      "oldcompany_account": null, 
+      "@type": "FGASUndertaking", 
+      "vat": "VAT10078"
     }
 
 /user/list
