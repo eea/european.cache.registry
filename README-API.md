@@ -243,7 +243,7 @@ Returns a list of all undertakings in the system, as fetched from FGR.
     ]
 
 /user/[username_or_email]/companies
---------------------------
+-----------------------------------
 
 The _username_or_email_ parameter can be either an username (ex: "user1") or an email
 (ex: "user1@mock.ec.europa.eu").

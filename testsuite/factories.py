@@ -58,7 +58,8 @@ class OldCompanyFactory(SQLAlchemyModelFactory):
         model = models.OldCompany
         sqlalchemy_session = models.db.session
 
-    external_id = '100'
+    id = 1
+    external_id = 10
     name = 'old_company_name'
     country_code = 'RO'
     account = 'account'
@@ -76,6 +77,8 @@ class UndertakingFactory(SQLAlchemyModelFactory):
         model = models.Undertaking
         sqlalchemy_session = models.db.session
 
+    id = 1
+    external_id = 10
     name = 'n'
     website = 'w'
     phone = 'p'
@@ -114,5 +117,13 @@ class OldCompanyLinkFactory(SQLAlchemyModelFactory):
     date_added = date(2015, 1, 1)
     date_verified = date(2015, 1, 1)
 
-    undertaking = SubFactory(UndertakingFactory)
-    oldcompany = SubFactory(OldCompanyFactory)
+
+class UserFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.User
+        sqlalchemy_session = models.db.session
+
+    username = 'username'
+    first_name = 'first'
+    last_name = 'last'
+    email = 'email@example.com'
