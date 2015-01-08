@@ -319,7 +319,7 @@ Lists all possible Company candidates for matching with existing Undertakings.
     ]
 
 /candidate/verify/[company_id]/[collection_id]/ - POST
----------------------------------------------------
+------------------------------------------------------
 
 Verifies a link between an Undertaking (from FGR) and a Company (from BDR
  Registry).
@@ -334,7 +334,7 @@ Verifies a link between an Undertaking (from FGR) and a Company (from BDR
     
     
 /candidate/unverify/[company_id]/ - POST
----------------------------------------------------
+----------------------------------------
 
 Removes any link between an Undertaking (from FGR) and a Company.
 
@@ -361,7 +361,7 @@ Removes any link between an Undertaking (from FGR) and a Company.
     }
     
 /candidate/verify-none/[company_id]/ - POST
-------------------------------------
+-------------------------------------------
 
 Verifies a company is unlinked with any old companies.
 
