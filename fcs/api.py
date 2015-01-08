@@ -17,17 +17,6 @@ api = Blueprint('api', __name__)
 api_manager = Manager()
 
 
-@api_manager.command
-def test():
-    """ Return a list of all undertakings """
-    import pprint
-
-    undertakings = Undertaking.query.all()
-
-    res = [u.as_dict() for u in undertakings]
-    pprint.pprint(res)
-
-
 class ApiView(MethodView):
     def dispatch_request(self, **kwargs):
         resp = super(ApiView, self).dispatch_request(**kwargs)
@@ -207,8 +196,6 @@ class OldCompanyDetail(DetailView):
     @classmethod
     def serialize(cls, obj):
         rep = ApiView.serialize(obj)
-        if not rep:
-            return None
         rep['country'] = obj.country
         return rep
 
@@ -277,7 +264,8 @@ class OldCompanySetStatus(DetailView):
     model = OldCompany
 
     def post(self, pk):
-        self.get_object(pk).valid = self.valid
+        company = self.model.query.filter_by(external_id=pk).first_or_404()
+        company.valid = self.valid
         db.session.commit()
         return json.dumps(True)
 
