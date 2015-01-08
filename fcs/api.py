@@ -84,6 +84,7 @@ class UndertakingList(ListView):
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
+            'businessprofile': ApiView.serialize(obj.businessprofile)
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account
