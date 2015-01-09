@@ -117,7 +117,7 @@ class UndertakingDetail(DetailView):
         data = ApiView.serialize(obj)
         _strip_fields = (
             'country_code', 'date_created', 'date_updated', 'address_id',
-            'businessprofile_id', 'represent_id', 'types',
+            'businessprofile_id', 'represent_id',
         )
         for field in _strip_fields:
             data.pop(field)
@@ -132,7 +132,6 @@ class UndertakingDetail(DetailView):
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account
-        data['@type'] = data.pop('undertaking_type')
         return data
 
 

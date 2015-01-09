@@ -169,7 +169,7 @@ as fetched  from FGR.
     ]
 
 /undertaking/[company_id]/details
--------------------------
+---------------------------------
 
 Returns an undertakings details from the system, as fetched from FGR.
     
@@ -177,15 +177,14 @@ Returns an undertakings details from the system, as fetched from FGR.
       "company_id": 10085, 
       "collection_id": null,      
       "oldcompany_id": null, 
-      "@type": "FGASUndertaking", 
+      "undertaking_type": "FGASUndertaking", 
       "website": "WEBSITE--10085", 
       "status": "VALID", 
       "domain": "FGAS", 
       "name": "FGAS-NMORGANIZATION--10085", 
       "phone": "+3212310085", 
       "businessprofile": {
-        "highleveluses": "", 
-        "id": 1
+        "highleveluses": ""
       }, 
       "candidates": [], 
       "representative": {
