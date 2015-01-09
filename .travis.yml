@@ -3,3 +3,4 @@ python:
   - "2.7"
 install: pip install -r requirements-dev.txt --use-mirrors
 script:  py.test testsuite
+after_success: coveralls
