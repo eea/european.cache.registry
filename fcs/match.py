@@ -47,7 +47,7 @@ def do_bdr_request(params):
 
     error_message = ''
     if (response.status_code == 200 and
-       response.headers['content_type'] == 'application/json'):
+       response.headers.get('content_type') == 'application/json'):
         json_data = json.loads(response.contents)
         if json_data.get('status') != 'success':
             error_message = json_data.get('message')
