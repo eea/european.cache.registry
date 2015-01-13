@@ -44,7 +44,21 @@ def do_bdr_request(params):
     auth = get_auth()
     ssl_verify = current_app.config['HTTPS_VERIFY']
     response = requests.get(url, params=params, auth=auth, verify=ssl_verify)
-    return response
+
+    error_message = ''
+    if (response.status_code == 200 and
+       response.headers['content_type'] == 'application/json'):
+        json_data = json.loads(response.contents)
+        if json_data.get('status') != 'success':
+            error_message = json_data['message']
+    else:
+        error_message = 'Invalid response'
+        json_data = None
+
+    if error_message:
+        current_app.logger.warning(error_message)
+
+    return json_data
 
 
 def get_eu_country_code(undertaking):
@@ -102,17 +116,6 @@ def verify_link(undertaking_id, oldcompany_id, user):
             'old_collection_id': undertaking.oldcompany_account,
         }
         response = do_bdr_request(params)
-
-        error_message = ''
-        if response.headers['content_type'] == 'application/json':
-            json_data = json.loads(response.contents)
-            if json_data.get('status') != 'success':
-                error_message = json_data['message']
-        else:
-            error_message = 'Invalid response'
-        if error_message:
-            current_app.logger.warning(error_message)
-
         log_match(undertaking_id, oldcompany_id, True, user,
                   oldcompany_account=undertaking.oldcompany_account)
     return link
