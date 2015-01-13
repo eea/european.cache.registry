@@ -375,10 +375,7 @@ Verifies a company is unlinked with any old companies.
 
     {
       "verified": true, 
-      "company_id": 10085, 
-      "collection_id": null, 
-      "date_verified": "24/11/2014", 
-      "date_added": "24/11/2014",
+      "company_id": 10085
     }
 
 
