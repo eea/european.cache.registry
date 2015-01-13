@@ -1,7 +1,7 @@
 # coding=utf-8
 import json
 
-from flask import Blueprint, Response, abort, request
+from flask import Blueprint, Response, abort, request, current_app
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
@@ -292,6 +292,12 @@ class MatchingsLog(ListView):
     model = MatchingLog
 
 
+class OrgMatching(MethodView):
+    def get(self, **kwargs):
+        auto_config = current_app.config.get('AUTO_VERIFY_NEW_COMPANIES', False)
+        return json.dumps(auto_config)
+
+
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('company-list'))
 api.add_url_rule('/undertaking/list/all',
@@ -336,3 +342,5 @@ api.add_url_rule('/data_sync_log',
                  view_func=DataSyncLog.as_view('data-sync-log'))
 api.add_url_rule('/matching_log',
                  view_func=MatchingsLog.as_view('matching-log'))
+api.add_url_rule('/organisation_matching',
+                 view_func=OrgMatching.as_view('organisation-matching'))

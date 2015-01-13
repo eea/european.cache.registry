@@ -511,3 +511,12 @@ as an Excel file.
 
 This URL is used to export the list of users with their companies and the 
 companies' contact persons as an Excel file.
+
+
+/organisation_matching
+----------------------
+
+Display the value of the configured switch which tells if new companies are
+auto verified as having no old company
+
+    true

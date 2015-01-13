@@ -179,6 +179,7 @@ def has_match(company, old):
 
 def match_all(companies, oldcompanies):
     links = []
+    new_companies = []
 
     companies = [c.as_dict() for c in companies]
     oldcompanies = [o.as_dict() for o in oldcompanies]
@@ -187,6 +188,8 @@ def match_all(companies, oldcompanies):
         candidates = [o for o in oldcompanies if has_match(c, o)]
         if candidates:
             links.append((c, candidates))
+        else:
+            new_companies.append(c)
 
     for company, candidates in links:
         for old in candidates:
@@ -201,7 +204,12 @@ def match_all(companies, oldcompanies):
                     date_added=datetime.now(),
                 )
                 models.db.session.add(link)
-    return links
+    return links, new_companies
+
+
+def verify_new_companies(companies):
+    for c in companies:
+        verify_none(c['company_id'], '_SERVER')
 
 
 @match_manager.command
@@ -209,7 +217,9 @@ def run():
     companies = models.Undertaking.query.filter_by(oldcompany=None)
     oldcompanies = models.OldCompany.query.filter_by(undertaking=None)
 
-    match_all(companies, oldcompanies)
+    links, new_companies = match_all(companies, oldcompanies)
+    if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
+        verify_new_companies(new_companies)
     models.db.session.commit()
 
     for company, links in get_all_candidates():

@@ -10,6 +10,7 @@ TEST_CONFIG = {
     'BDR_ENDPOINT_URL': 'http://10.0.0.164',
     'BDR_ENDPOINT_USER': 'user',
     'BDR_ENDPOINT_PASSWORD': 'password',
+    'AUTO_VERIFY_NEW_COMPANIES': True,
 }
 
 

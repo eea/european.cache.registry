@@ -4,6 +4,8 @@ import requests
 from flask import url_for
 from . import factories
 
+from fcs.match import run
+
 
 def mockreturn(url, **kwargs):
     res = requests.Response()
@@ -53,3 +55,15 @@ def test_verify_none(client, monkeypatch):
     assert data['user'] == 'test_user'
     assert data['oldcompany_id'] is None
     assert data['company_id'] == 10
+
+
+def test_auto_verify_companies(client):
+    undertaking = factories.UndertakingFactory(oldcompany=None,
+                                               oldcompany_verified=False)
+    oldcompany = factories.OldCompanyFactory(id=2)
+    run()
+
+    assert undertaking.oldcompany_verified is True
+    assert undertaking.oldcompany_id is None
+    assert undertaking.oldcompany_account is None
+    assert undertaking.oldcompany_extid is None
