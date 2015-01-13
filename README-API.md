@@ -84,6 +84,9 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
           "number": "nrstreet--7953", 
           "street": "street--7953"
         }, 
+        "oldcompany_id": true,
+        "oldcompany_account": "fgas22331",
+        "oldcompany_extid": 4,
         "collection_id": null, 
         "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
         "undertaking_type": "FGASUndertaking", 
@@ -146,6 +149,9 @@ from FGR.
           "street": "street--7953"
         }, 
         "collection_id": null, 
+        "oldcompany_id": true,
+        "oldcompany_account": "fgas22331",
+        "oldcompany_extid": 4,
         "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
         "undertaking_type": "FGASUndertaking", 
         "name": "FGAS-NMORGANIZATION--10085", 
@@ -183,6 +189,9 @@ Returns an undertakings details from the system, as fetched from FGR.
       "domain": "FGAS", 
       "name": "FGAS-NMORGANIZATION--10085", 
       "phone": "+3212310085", 
+      "oldcompany_id": true,
+      "oldcompany_account": "fgas22331",
+      "oldcompany_extid": 4,
       "businessprofile": {
         "highleveluses": ""
       }, 
