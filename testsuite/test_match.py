@@ -57,7 +57,8 @@ def test_verify_none(client, monkeypatch):
     assert data['company_id'] == 10
 
 
-def test_auto_verify_companies(client):
+def test_auto_verify_companies(client, monkeypatch):
+    monkeypatch.setattr(requests, 'get', mockreturn)
     undertaking = factories.UndertakingFactory(oldcompany=None,
                                                oldcompany_verified=False)
     oldcompany = factories.OldCompanyFactory(id=2)
