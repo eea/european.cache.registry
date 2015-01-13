@@ -7,6 +7,7 @@ from fcs.api import api, api_manager
 from fcs.misc import misc
 from fcs.sync import sync_manager
 from fcs.match import match_manager
+from fcs.manager import utils_manager
 from fcs.admin import admin
 
 DEFAULT_CONFIG = {
@@ -55,4 +56,5 @@ def create_manager(app):
     manager.add_command('sync', sync_manager)
     manager.add_command('api', api_manager)
     manager.add_command('match', match_manager)
+    manager.add_command('utils', utils_manager)
     return manager
