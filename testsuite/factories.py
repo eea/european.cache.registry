@@ -127,3 +127,9 @@ class UserFactory(SQLAlchemyModelFactory):
     first_name = 'first'
     last_name = 'last'
     email = 'email@example.com'
+
+
+class MatchingLog(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.MatchingLog
+        sqlalchemy_session = models.db.session

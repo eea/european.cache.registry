@@ -50,7 +50,7 @@ def do_bdr_request(params):
        response.headers['content_type'] == 'application/json'):
         json_data = json.loads(response.contents)
         if json_data.get('status') != 'success':
-            error_message = json_data['message']
+            error_message = json_data.get('message')
     else:
         error_message = 'Invalid response'
         json_data = None
