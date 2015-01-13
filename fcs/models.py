@@ -225,7 +225,8 @@ class MatchingLog(SerializableModel, db.Model):
 
 @db_manager.command
 def init():
-    return db.create_all()
+    db.create_all()
+    alembic(['stamp', 'head'])
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
