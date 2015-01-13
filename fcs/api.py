@@ -240,8 +240,12 @@ class CandidateVerify(ApiView):
 class CandidateVerifyNone(CandidateVerify):
     def post(self, undertaking_id):
         user = request.form['user']
-        link = verify_none(undertaking_id, user) or abort(404)
-        return ApiView.serialize(link)
+        undertaking = verify_none(undertaking_id, user) or abort(404)
+        data = ApiView.serialize(undertaking)
+        return {
+            'verified': data['oldcompany_verified'],
+            'company_id': data['company_id'],
+        }
 
 
 class OldCompanyListByStatus(ListView):
