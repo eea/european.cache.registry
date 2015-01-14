@@ -213,7 +213,7 @@ def eea_double_check(data):
     return ok
 
 
-def save_undertakings(updated_since=None, username=None):
+def update_undertakings(updated_since=None, username=None):
     undertakings = get_latest_undertakings(updated_since=updated_since,
                                            username=username)
     for u in undertakings:
@@ -248,7 +248,7 @@ def test_fgases(days=7, updated_since=None):
 
     print "Using last_update {}".format(last_update)
 
-    undertakings = save_undertakings(updated_since=last_update)
+    undertakings = update_undertakings(updated_since=last_update)
     undertakings_count = len(undertakings)
 
     log = OrganizationLog(
@@ -267,13 +267,13 @@ def test_fgases(days=7, updated_since=None):
 def get_all_companies_for_user(username=None):
     if not username:
         return 'Please specify a username'
-    undertakings = save_undertakings(username=username)
+    undertakings = update_undertakings(username=username)
     undertakings_count = len(undertakings)
 
     log = OrganizationLog(
         organizations=undertakings_count,
         using_last_update=None,
-        for_username=False,
+        for_username=True,
     )
     db.session.add(log)
     db.session.commit()
