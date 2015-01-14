@@ -226,7 +226,7 @@ def update_undertakings(updated_since=None, username=None):
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
-def test_fgases(days=7, updated_since=None):
+def fgases(days=7, updated_since=None):
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
