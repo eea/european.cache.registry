@@ -53,12 +53,11 @@ def do_bdr_request(params):
             error_message = json_data.get('message')
     else:
         error_message = 'Invalid response'
-        json_data = None
 
     if error_message:
         current_app.logger.warning(error_message)
 
-    return json_data
+    return not error_message
 
 
 def get_eu_country_code(undertaking):
@@ -107,7 +106,6 @@ def verify_link(undertaking_id, oldcompany_id, user):
         link.undertaking.oldcompany_account = link.oldcompany.account
         link.undertaking.oldcompany_verified = True
         link.undertaking.oldcompany_extid = link.oldcompany.external_id
-        models.db.session.commit()
         params = {
             'company_id': undertaking_id,
             'domain': undertaking.domain,
@@ -115,9 +113,10 @@ def verify_link(undertaking_id, oldcompany_id, user):
             'name': undertaking.name,
             'old_collection_id': undertaking.oldcompany_account,
         }
-        response = do_bdr_request(params)
-        log_match(undertaking_id, oldcompany_id, True, user,
-                  oldcompany_account=undertaking.oldcompany_account)
+        if do_bdr_request(params):
+            models.db.session.commit()
+            log_match(undertaking_id, oldcompany_id, True, user,
+                      oldcompany_account=undertaking.oldcompany_account)
     return link
 
 
@@ -149,15 +148,15 @@ def verify_none(undertaking_id, user):
         u.oldcompany_verified = True
         u.oldcompany_account = None
         u.oldcompany_extid = None
-        models.db.session.commit()
         params = {
             'company_id': undertaking_id,
             'domain': u.domain,
             'country': get_eu_country_code(u),
             'name': u.name,
         }
-        response = do_bdr_request(params)
-        log_match(undertaking_id, None, True, user)
+        if do_bdr_request(params):
+            models.db.session.commit()
+            log_match(undertaking_id, None, True, user)
     return u
 
 
@@ -204,12 +203,9 @@ def match_all(companies, oldcompanies):
                     date_added=datetime.now(),
                 )
                 models.db.session.add(link)
+
+    models.db.session.commit()
     return links, new_companies
-
-
-def verify_new_companies(companies):
-    for c in companies:
-        verify_none(c['company_id'], '_SERVER')
 
 
 @match_manager.command
@@ -219,8 +215,8 @@ def run():
 
     links, new_companies = match_all(companies, oldcompanies)
     if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
-        verify_new_companies(new_companies)
-    models.db.session.commit()
+        for c in new_companies:
+            verify_none(c['company_id'], '_SERVER_AUTO_ENABLED')
 
     for company, links in get_all_candidates():
         print u"[{}] {} - {}:".format(company.id, company.name,
