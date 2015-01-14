@@ -206,6 +206,8 @@ def verify(undertaking_id, oldcompany_id):
 
 @match_manager.command
 def flush():
+    """ Remove all previously created links in the match database.
+    """
     for link in models.OldCompanyLink.query.all():
         models.db.session.delete(link)
 
