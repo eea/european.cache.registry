@@ -104,8 +104,7 @@ class BusinessProfile(SerializableModel, Base):
 
 undertaking_users = db.Table(
     'undertaking_users',
-    db.Column('user_id', db.Integer(),
-              db.ForeignKey('user.id')),
+    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
     db.Column('undertaking_id', db.Integer(), db.ForeignKey('undertaking.id')),
 )
 
@@ -209,6 +208,7 @@ class OrganizationLog(SerializableModel, db.Model):
     execution_time = Column(DateTime, default=datetime.utcnow)
     using_last_update = Column(Date)
     organizations = Column(Integer)
+    for_username = Column(Boolean)
 
 
 class MatchingLog(SerializableModel, db.Model):

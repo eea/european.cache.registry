@@ -14,6 +14,7 @@ DEFAULT_CONFIG = {
     'API_URL': 'http://example.com/rest/api',
     'BDR_API_URL': 'http://example.com/api',
     'HTTPS_VERIFY': None,
+    'SYNC_BY_USER': False,
 }
 
 

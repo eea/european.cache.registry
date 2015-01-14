@@ -12,6 +12,7 @@ from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
     get_candidates, verify_none,
 )
+from fcs.sync.fgases import update_undertakings
 
 api = Blueprint('api', __name__)
 api_manager = Manager()
@@ -147,7 +148,11 @@ class UserCompanies(DetailView):
             key = 'email'
         else:
             key = 'username'
-        return self.model.query.filter_by(**{key: pk}).first_or_404()
+        user = self.model.query.filter_by(**{key: pk}).first_or_404()
+        if current_app.config['SYNC_BY_USER']:
+            update_undertakings(username=user.username)
+            db.session.commit()
+        return user
 
     @classmethod
     def serialize(cls, obj):

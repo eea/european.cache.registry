@@ -33,14 +33,15 @@ def get_auth():
     )
 
 
-def get_latest_undertakings(updated_since=None):
+def get_latest_undertakings(updated_since=None, username=None):
     auth = get_auth()
     url = get_absolute_url('/latest/fgasundertakings/')
+    params = {}
     if updated_since:
         updated_since = updated_since.strftime('%d/%m/%Y')
-        params = {'updatedSince': updated_since}
-    else:
-        params = {}
+        params.update({'updatedSince': updated_since})
+    if username:
+        params.update({'userName': username})
 
     headers = dict(zip(('user', 'password'), auth))
     ssl_verify = current_app.config['HTTPS_VERIFY']
@@ -212,6 +213,16 @@ def eea_double_check(data):
     return ok
 
 
+def update_undertakings(updated_since=None, username=None):
+    undertakings = get_latest_undertakings(updated_since=updated_since,
+                                           username=username)
+    for u in undertakings:
+        if eea_double_check(u):
+            parse_undertaking(u)
+
+    return undertakings
+
+
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
@@ -231,19 +242,40 @@ def fgases(days=7, updated_since=None):
                 .order_by(desc(Undertaking.date_updated))
                 .first()
             )
-            last_update = last.date_updated - timedelta(
-                days=1) if last else None
+            last_update = (
+                last.date_updated - timedelta(days=1) if last else None
+            )
 
     print "Using last_update {}".format(last_update)
-    undertakings = get_latest_undertakings(updated_since=last_update)
 
-    undertakings_count = len([parse_undertaking(u)
-                              for u in undertakings
-                              if eea_double_check(u)])
+    undertakings = update_undertakings(updated_since=last_update)
+    undertakings_count = len(undertakings)
+
     log = OrganizationLog(
         organizations=undertakings_count,
-        using_last_update=last_update)
+        using_last_update=last_update,
+        for_username=False,
+    )
     db.session.add(log)
+    db.session.commit()
     print undertakings_count, "values"
 
+
+@sync_manager.command
+@sync_manager.option('-u', '--username', dest='username',
+                     help="email address or alphanumeric")
+def get_all_companies_for_user(username=None):
+    if not username:
+        return 'Please specify a username'
+    undertakings = update_undertakings(username=username)
+    undertakings_count = len(undertakings)
+
+    log = OrganizationLog(
+        organizations=undertakings_count,
+        using_last_update=None,
+        for_username=True,
+    )
+    db.session.add(log)
     db.session.commit()
+    print undertakings_count, "values"
+
