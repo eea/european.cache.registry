@@ -216,7 +216,9 @@ def eea_double_check(data):
 def save_undertakings(updated_since=None, username=None):
     undertakings = get_latest_undertakings(updated_since=updated_since,
                                            username=username)
-    [parse_undertaking(u) for u in undertakings if eea_double_check(u)]
+    for u in undertakings:
+        if eea_double_check(u):
+            parse_undertaking(u)
 
     return undertakings
 

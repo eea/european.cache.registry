@@ -13,7 +13,6 @@ from fcs.match import (
     get_candidates, verify_none,
 )
 from fcs.sync.fgases import save_undertakings
-from openpyxl.writer.excel import save_virtual_workbook
 
 api = Blueprint('api', __name__)
 api_manager = Manager()
