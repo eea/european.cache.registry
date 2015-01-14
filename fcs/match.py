@@ -1,14 +1,16 @@
-import requests
-import json
+# coding=utf-8
+from datetime import datetime
 
 from fuzzywuzzy import fuzz
-from datetime import datetime
-from sqlalchemy import or_
 
+from sqlalchemy import or_
 from flask.ext.script import Manager
 from flask import current_app
 
 from fcs import models
+
+from fcs.sync.bdr import call_bdr
+
 
 FUZZ_LIMIT = 80
 
@@ -25,54 +27,35 @@ def log_match(company_id, oldcompany_id, verified, user,
         user=user,
     )
     models.db.session.add(matching_log)
-    models.db.session.commit()
 
 
-def get_auth():
-    return (
-        current_app.config.get('BDR_ENDPOINT_USER', 'user'),
-        current_app.config.get('BDR_ENDPOINT_PASSWORD', 'pass'),
+def add_link(company_id, oldcompany_id):
+    link = models.OldCompanyLink.query.filter_by(
+        undertaking_id=company_id,
+        oldcompany_id=oldcompany_id
+    ).first() or models.OldCompanyLink(
+        undertaking_id=company_id,
+        oldcompany_id=oldcompany_id,
+        date_added=datetime.now(),
     )
+    models.db.session.add(link)
+    return link
 
 
-def get_absolute_url(url):
-    return current_app.config['BDR_ENDPOINT_URL'] + url
-
-
-def do_bdr_request(params):
-    url = get_absolute_url('/ReportekEngine/update_company_collection')
-    auth = get_auth()
-    ssl_verify = current_app.config['HTTPS_VERIFY']
-    response = requests.get(url, params=params, auth=auth, verify=ssl_verify)
-
-    error_message = ''
-    if (response.status_code == 200 and
-       response.headers.get('content_type') == 'application/json'):
-        json_data = json.loads(response.contents)
-        if json_data.get('status') != 'success':
-            error_message = json_data.get('message')
-    else:
-        error_message = 'Invalid response'
-        json_data = None
-
-    if error_message:
-        current_app.logger.warning(error_message)
-
-    return json_data
-
-
-def get_eu_country_code(undertaking):
-    if undertaking.address.country.type == 'EU_TYPE':
-        return undertaking.country_code
-    return undertaking.represent.address.country.code
-
-
-def get_all_candidates():
-    companies = (
+def get_unverified_companies():
+    return (
         models.Undertaking.query
         .filter(or_(models.Undertaking.oldcompany_verified == None,
                     models.Undertaking.oldcompany_verified == False))
     )
+
+
+def get_oldcompanies_for_matching():
+    return models.OldCompany.query.filter_by(undertaking=None, valid=True)
+
+
+def get_all_candidates():
+    companies = get_unverified_companies()
     data = [(company, company.links) for company in companies]
     return data
 
@@ -100,64 +83,59 @@ def verify_link(undertaking_id, oldcompany_id, user):
         models.OldCompanyLink.query
         .filter_by(undertaking=undertaking, oldcompany=oldcompany).first()
     )
-    if link:
-        link.verified = True
-        link.date_verified = datetime.now()
-        link.undertaking.oldcompany = link.oldcompany
-        link.undertaking.oldcompany_account = link.oldcompany.account
-        link.undertaking.oldcompany_verified = True
-        link.undertaking.oldcompany_extid = link.oldcompany.external_id
-        models.db.session.commit()
-        params = {
-            'company_id': undertaking_id,
-            'domain': undertaking.domain,
-            'country': get_eu_country_code(undertaking),
-            'name': undertaking.name,
-            'old_collection_id': undertaking.oldcompany_account,
-        }
-        response = do_bdr_request(params)
+    if not link:
+        return None
+
+    link.verified = True
+    link.date_verified = datetime.now()
+    link.undertaking.oldcompany = link.oldcompany
+    link.undertaking.oldcompany_account = link.oldcompany.account
+    link.undertaking.oldcompany_verified = True
+    link.undertaking.oldcompany_extid = link.oldcompany.external_id
+    if call_bdr(undertaking, old_collection=True):
         log_match(undertaking_id, oldcompany_id, True, user,
                   oldcompany_account=undertaking.oldcompany_account)
+        models.db.session.commit()
+    else:
+        models.db.session.rollback()
     return link
 
 
 def unverify_link(undertaking_id, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
-    if u and u.oldcompany_verified:
-        link = (
-            models.OldCompanyLink.query
-            .filter_by(undertaking_id=undertaking_id,
-                       oldcompany_id=u.oldcompany_id).first()
-        )
-        if link:
-            link.verified = False
-            link.date_verified = None
+    if not u or not u.oldcompany_verified:
+        return None
+    link = (
+        models.OldCompanyLink.query
+        .filter_by(undertaking_id=undertaking_id,
+                   oldcompany_id=u.oldcompany_id).first()
+    )
+    if link:
+        link.verified = False
+        link.date_verified = None
 
-        u.oldcompany_verified = False
-        u.oldcompany_account = None
-        u.oldcompany_extid = None
-        u.oldcompany = None
-        models.db.session.commit()
-        log_match(undertaking_id, None, False, user)
+    u.oldcompany_verified = False
+    u.oldcompany_account = None
+    u.oldcompany_extid = None
+    u.oldcompany = None
+    log_match(undertaking_id, None, False, user)
+    models.db.session.commit()
     return u
 
 
 def verify_none(undertaking_id, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
-    if u:
-        u.oldcompany = None
-        u.oldcompany_verified = True
-        u.oldcompany_account = None
-        u.oldcompany_extid = None
-        models.db.session.commit()
-        params = {
-            'company_id': undertaking_id,
-            'domain': u.domain,
-            'country': get_eu_country_code(u),
-            'name': u.name,
-        }
-        response = do_bdr_request(params)
+    if not u:
+        return None
+    u.oldcompany = None
+    u.oldcompany_verified = True
+    u.oldcompany_account = None
+    u.oldcompany_extid = None
+    if call_bdr(u):
         log_match(undertaking_id, None, True, user)
+        models.db.session.commit()
+    else:
+        models.db.session.rollback()
     return u
 
 
@@ -193,34 +171,21 @@ def match_all(companies, oldcompanies):
 
     for company, candidates in links:
         for old in candidates:
-            link = models.OldCompanyLink.query.filter_by(
-                undertaking_id=company['id'],
-                oldcompany_id=old['id']
-            ).first()
-            if not link:
-                link = models.OldCompanyLink(
-                    undertaking_id=company['id'],
-                    oldcompany_id=old['id'],
-                    date_added=datetime.now(),
-                )
-                models.db.session.add(link)
+            add_link(company['id'], old['id'])
+
+    models.db.session.commit()
     return links, new_companies
-
-
-def verify_new_companies(companies):
-    for c in companies:
-        verify_none(c['company_id'], '_SERVER')
 
 
 @match_manager.command
 def run():
-    companies = models.Undertaking.query.filter_by(oldcompany=None)
-    oldcompanies = models.OldCompany.query.filter_by(undertaking=None)
+    companies = get_unverified_companies()
+    oldcompanies = get_oldcompanies_for_matching()
 
     links, new_companies = match_all(companies, oldcompanies)
     if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
-        verify_new_companies(new_companies)
-    models.db.session.commit()
+        for c in new_companies:
+            verify_none(c['company_id'], '_SERVER_AUTO_ENABLED')
 
     for company, links in get_all_candidates():
         print u"[{}] {} - {}:".format(company.id, company.name,
@@ -243,6 +208,8 @@ def verify(undertaking_id, oldcompany_id):
 
 @match_manager.command
 def flush():
+    """ Remove all previously created links in the match database.
+    """
     for link in models.OldCompanyLink.query.all():
         models.db.session.delete(link)
 

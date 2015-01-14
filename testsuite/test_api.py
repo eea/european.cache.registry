@@ -178,7 +178,7 @@ def test_oldcompany_set_invalid(client):
 
 
 def test_unverify_link(client):
-    undertaking = factories.UndertakingFactory(oldcompany_verified=False)
+    undertaking = factories.UndertakingFactory(oldcompany_verified=True)
     link = factories.OldCompanyLinkFactory(oldcompany=undertaking.oldcompany,
                                            undertaking=undertaking)
     resp = client.post(url_for('api.candidate-unverify',
