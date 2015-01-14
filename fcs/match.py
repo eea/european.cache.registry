@@ -1,14 +1,13 @@
-import requests
-import json
+from datetime import datetime
 
 from fuzzywuzzy import fuzz
-from datetime import datetime
 from sqlalchemy import or_
-
 from flask.ext.script import Manager
 from flask import current_app
 
 from fcs import models
+from fcs.sync.bdr import do_bdr_request
+
 
 FUZZ_LIMIT = 80
 
@@ -26,38 +25,6 @@ def log_match(company_id, oldcompany_id, verified, user,
     )
     models.db.session.add(matching_log)
     models.db.session.commit()
-
-
-def get_auth():
-    return (
-        current_app.config.get('BDR_ENDPOINT_USER', 'user'),
-        current_app.config.get('BDR_ENDPOINT_PASSWORD', 'pass'),
-    )
-
-
-def get_absolute_url(url):
-    return current_app.config['BDR_ENDPOINT_URL'] + url
-
-
-def do_bdr_request(params):
-    url = get_absolute_url('/ReportekEngine/update_company_collection')
-    auth = get_auth()
-    ssl_verify = current_app.config['HTTPS_VERIFY']
-    response = requests.get(url, params=params, auth=auth, verify=ssl_verify)
-
-    error_message = ''
-    if (response.status_code == 200 and
-       response.headers.get('content_type') == 'application/json'):
-        json_data = json.loads(response.contents)
-        if json_data.get('status') != 'success':
-            error_message = json_data.get('message')
-    else:
-        error_message = 'Invalid response'
-
-    if error_message:
-        current_app.logger.warning(error_message)
-
-    return not error_message
 
 
 def get_eu_country_code(undertaking):
