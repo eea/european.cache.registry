@@ -20,6 +20,9 @@ Fetch the latest data from a test server (cron):
     ./manage.py sync fgases [-d 30]
     ./manage.py sync bdr
 
+For syncing bdr without SSL verification, set the following switch in settings:
+
+    HTTPS_VERIFY = False
 
 ### Matching
 
@@ -34,3 +37,8 @@ Flush existing matches:
 Verify a match:
 
     ./manage.py verify [undertaking_id] [oldcompany_id]
+
+Set a switch in settings if you want companies with no candidates to be
+automatically be set as haveing no matching
+
+    AUTO_VERIFY_NEW_COMPANIES = True
