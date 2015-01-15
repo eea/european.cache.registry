@@ -8,7 +8,7 @@ import sqlalchemy as sa
 def upgrade():
     op.add_column('undertaking',
                   sa.Column('country_code', sa.String(length=10),
-                            nullable=True))
+                            nullable=True, default=""))
 
 
 def downgrade():

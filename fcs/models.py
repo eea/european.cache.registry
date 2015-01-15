@@ -15,8 +15,6 @@ db_manager = Manager()
 
 
 class SerializableModel(object):
-    EXTRA_FIELDS = []
-
     def get_serialized(self, name):
         value = getattr(self, name)
         if isinstance(value, datetime):
@@ -31,8 +29,6 @@ class SerializableModel(object):
                 self.__table__.columns}
         if 'external_id' in data:
             data['company_id'] = data.pop('external_id')
-        data.update(
-            {field: self.get_serialized(field) for field in self.EXTRA_FIELDS})
         return data
 
 
@@ -125,7 +121,7 @@ class Undertaking(SerializableModel, Base):
     date_created = Column(Date)
     date_updated = Column(Date)
     status = Column(String(64))
-    country_code = Column(String(10))
+    country_code = Column(String(10), default="")
     # Undertaking:
     undertaking_type = Column(String(32), default='FGASUndertaking')
     vat = Column(String(255))

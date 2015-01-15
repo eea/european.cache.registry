@@ -100,6 +100,31 @@ class UndertakingListByVat(UndertakingList):
         return data
 
 
+class UndertakingFilterCount(ApiView):
+    FILTERS = ('id', 'vat', 'name', 'countrycode', 'OR_vat', 'OR_name')
+
+    def get(self):
+        qs = Undertaking.query
+        if any([a for a in request.args if a.startswith('OR_')]):
+            qs = Undertaking.query.join(EuLegalRepresentativeCompany)
+
+        for k, v in request.args.iteritems():
+            if k not in self.FILTERS:
+                abort(400)
+            if k == 'name':
+                qs = qs.filter(Undertaking.name.contains(v))
+            elif k == 'OR_vat':
+                qs = qs.filter(EuLegalRepresentativeCompany.vatnumber == v)
+            elif k == 'OR_name':
+                qs = qs.filter(EuLegalRepresentativeCompany.name.contains(v))
+            elif k == 'countrycode':
+                qs = qs.filter(Undertaking.country_code == v)
+            else:
+                qs = qs.filter(getattr(Undertaking, k) == v)
+        count = qs.count()
+        return {'exists': count > 0, 'count': count}
+
+
 class UndertakingListAll(UndertakingList):
     def get_queryset(self):
         return self.model.query.all()
@@ -227,8 +252,9 @@ class CandidateVerify(ApiView):
             data.pop('undertaking_id')
             data.pop('oldcompany_id')
             data['company_id'] = obj.undertaking.external_id
-            data[
-                'collection_id'] = obj.oldcompany and obj.oldcompany.external_id
+            data['collection_id'] = (
+                obj.oldcompany and obj.oldcompany.external_id
+            )
         return data
 
     def post(self, undertaking_id, oldcompany_id):
@@ -298,7 +324,8 @@ class MatchingsLog(ListView):
 
 class OrgMatching(MethodView):
     def get(self, **kwargs):
-        auto_config = current_app.config.get('AUTO_VERIFY_NEW_COMPANIES', False)
+        auto_config = current_app.config.get('AUTO_VERIFY_NEW_COMPANIES',
+                                             False)
         return json.dumps(auto_config)
 
 
@@ -308,6 +335,8 @@ api.add_url_rule('/undertaking/list/all',
                  view_func=UndertakingListAll.as_view('company-list-all'))
 api.add_url_rule('/undertaking/list_by_vat/<vat>',
                  view_func=UndertakingListByVat.as_view('company-list-by-vat'))
+api.add_url_rule('/undertaking/filter/',
+                 view_func=UndertakingFilterCount.as_view('company-filter'))
 api.add_url_rule('/undertaking/<pk>/details',
                  view_func=UndertakingDetail.as_view('company-detail'))
 
@@ -331,7 +360,8 @@ api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
 
 api.add_url_rule('/oldcompanies/list/valid/',
-                 view_func=OldCompanyListValid.as_view('oldcompany-list-valid'))
+                 view_func=OldCompanyListValid.as_view(
+                     'oldcompany-list-valid'))
 api.add_url_rule('/oldcompanies/list/invalid/',
                  view_func=OldCompanyListInvalid.as_view(
                      'oldcompany-list-invalid'))

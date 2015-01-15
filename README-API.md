@@ -14,6 +14,8 @@ Listing calls:
 
 * `/undertaking/list` - all verified undertakings
 * `/undertaking/list/all` - all undertakings, including unverified
+* `/undertaking/list_by_vat/[vat]` - filter by vat
+* `/undertaking/filter` - count of undertakings, given field filters
 * `/undertaking/[company_id]/details` - details about an undertaking
 * `/user/list` - all users
 * `/user/[username_or_email]/companies` - all verified companies and user has access to
@@ -171,6 +173,22 @@ as fetched  from FGR.
       {
         "name": "FGAS-NMORGANIZATION--10078", 
         "company_id": 10078
+      }
+    ]
+
+/undertaking/filter?[name|id|vat|countrycode|OR_vat|OR_name]
+------------------------------
+
+Return true or false if companies matching the filter exists.
+
+The *OR_name* and *OR_vat* filters refer to EuLegalRepresentative.
+
+The *name* and *OR_name* filters use LIKE queries.
+
+    [
+      {
+        "exists": true,
+        "count": 1
       }
     ]
 
