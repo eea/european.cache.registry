@@ -112,7 +112,6 @@ undertaking_users = db.Table(
 
 class Undertaking(SerializableModel, Base):
     __tablename__ = 'undertaking'
-    EXTRA_FIELDS = ('country_code',)
 
     id = Column(Integer, primary_key=True)
 
@@ -126,6 +125,7 @@ class Undertaking(SerializableModel, Base):
     date_created = Column(Date)
     date_updated = Column(Date)
     status = Column(String(64))
+    country_code = Column(String(10))
     # Undertaking:
     undertaking_type = Column(String(32), default='FGASUndertaking')
     vat = Column(String(255))
@@ -155,8 +155,7 @@ class Undertaking(SerializableModel, Base):
         lazy='dynamic',
     )
 
-    @property
-    def country_code(self):
+    def get_country_code(self):
         if (self.address and self.address.country and
                 self.address.country.type == 'EU_TYPE'):
             return self.address.country.code

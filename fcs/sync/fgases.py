@@ -180,6 +180,7 @@ def parse_undertaking(data):
         if cp.username not in usernames:
             db.session.delete(cp)
 
+    undertaking.country_code = undertaking.get_country_code()
     db.session.add(undertaking)
 
 
