@@ -102,6 +102,11 @@ class UndertakingListByVat(UndertakingList):
 
 class UndertakingFilterCount(ApiView):
     FILTERS = ('id', 'vat', 'name', 'countrycode', 'OR_vat', 'OR_name')
+    FILTER_MAP = {
+        'id': 'external_id',
+        'countrycode': 'country_code',
+        'vat': 'vat',
+    }
 
     def get(self):
         qs = Undertaking.query
@@ -117,10 +122,8 @@ class UndertakingFilterCount(ApiView):
                 qs = qs.filter(EuLegalRepresentativeCompany.vatnumber == v)
             elif k == 'OR_name':
                 qs = qs.filter(EuLegalRepresentativeCompany.name.contains(v))
-            elif k == 'countrycode':
-                qs = qs.filter(Undertaking.country_code == v)
             else:
-                qs = qs.filter(getattr(Undertaking, k) == v)
+                qs = qs.filter(getattr(Undertaking, self.FILTER_MAP[k]) == v)
         count = qs.count()
         return {'exists': count > 0, 'count': count}
 
