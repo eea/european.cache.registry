@@ -6,3 +6,4 @@ deploy
 supervisord.conf
 db.*
 log_file.log
+.coverage
