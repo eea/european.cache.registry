@@ -16,12 +16,6 @@ def get_absolute_url(url):
     return current_app.config['BDR_ENDPOINT_URL'] + url
 
 
-def get_eu_country_code(undertaking):
-    if undertaking.address.country.type == 'EU_TYPE':
-        return undertaking.country_code
-    return undertaking.represent and undertaking.represent.address.country.code
-
-
 def do_bdr_request(params):
     url = get_absolute_url('/ReportekEngine/update_company_collection')
     auth = get_auth()
@@ -54,7 +48,7 @@ def call_bdr(undertaking, old_collection=False):
     params = {
         'company_id': undertaking.external_id,
         'domain': undertaking.domain,
-        'country': get_eu_country_code(undertaking),
+        'country': undertaking.country_code,
         'name': undertaking.name,
     }
     if old_collection:
