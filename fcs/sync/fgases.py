@@ -213,6 +213,15 @@ def eea_double_check(data):
     return ok
 
 
+def cleanup_unused_users():
+    """ Remove users that do not have a company attached """
+    unused_users = User.query.filter_by(undertakings=None)
+
+    print "Removing", unused_users.count(), "unused users"
+    for u in unused_users:
+        db.session.delete(u)
+
+
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
@@ -241,6 +250,7 @@ def fgases(days=7, updated_since=None):
     undertakings_count = len([parse_undertaking(u)
                               for u in undertakings
                               if eea_double_check(u)])
+    cleanup_unused_users()
     log = OrganizationLog(
         organizations=undertakings_count,
         using_last_update=last_update)
