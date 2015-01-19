@@ -11,7 +11,7 @@ from fcs.models import (
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
     get_candidates, verify_none,
-)
+    str_matches)
 
 api = Blueprint('api', __name__)
 api_manager = Manager()
@@ -112,19 +112,24 @@ class UndertakingFilterCount(ApiView):
         qs = Undertaking.query
         if any([a for a in request.args if a.startswith('OR_')]):
             qs = Undertaking.query.join(EuLegalRepresentativeCompany)
+        qs = qs.filter(Undertaking.oldcompany_verified==True)
 
         for k, v in request.args.iteritems():
             if k not in self.FILTERS:
                 abort(400)
-            if k == 'name':
-                qs = qs.filter(Undertaking.name.contains(v))
-            elif k == 'OR_vat':
+            if k == 'OR_vat':
                 qs = qs.filter(EuLegalRepresentativeCompany.vatnumber == v)
-            elif k == 'OR_name':
-                qs = qs.filter(EuLegalRepresentativeCompany.name.contains(v))
-            else:
+            elif k != 'name' and k != 'OR_name':
                 qs = qs.filter(getattr(Undertaking, self.FILTER_MAP[k]) == v)
-        count = qs.count()
+        if 'name' in request.args:
+            qs = [u for u in qs if str_matches(u.name, request.args['name'])]
+            count = len(qs)
+        elif 'OR_name' in request.args:
+            qs = [u for u in qs if
+                  str_matches(u.represent.name, request.args['OR_name'])]
+            count = len(qs)
+        else:
+            count = qs.count()
         return {'exists': count > 0, 'count': count}
 
 

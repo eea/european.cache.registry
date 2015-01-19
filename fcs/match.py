@@ -152,7 +152,11 @@ def has_match(company, old):
 
     c_name = company['name'].lower()
     o_name = old['name'].lower()
-    return all((c_name, o_name)) and fuzz.ratio(c_name, o_name) >= FUZZ_LIMIT
+    return str_matches(c_name, o_name)
+
+
+def str_matches(new, old):
+    return new and old and fuzz.ratio(new, old) >= FUZZ_LIMIT
 
 
 def match_all(companies, oldcompanies):

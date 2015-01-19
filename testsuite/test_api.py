@@ -15,8 +15,10 @@ def test_undertaking_list(client):
     assert data['website'] == undertaking.website
     assert data['phone'] == undertaking.phone
     assert data['domain'] == undertaking.domain
-    assert data['date_created'] == undertaking.date_created.strftime('%d/%m/%Y')
-    assert data['date_updated'] == undertaking.date_updated.strftime('%d/%m/%Y')
+    assert data['date_created'] == undertaking.date_created.strftime(
+        '%d/%m/%Y')
+    assert data['date_updated'] == undertaking.date_updated.strftime(
+        '%d/%m/%Y')
     assert data['status'] == undertaking.status
     assert data['undertaking_type'] == undertaking.undertaking_type
     assert data['vat'] == undertaking.vat
@@ -50,7 +52,8 @@ def test_undertaking_details(client):
     oldcompany = factories.OldCompanyFactory(id=2)
     link = factories.OldCompanyLinkFactory(oldcompany=oldcompany,
                                            undertaking=undertaking)
-    resp = client.get(url_for('api.company-detail', pk=undertaking.external_id))
+    resp = client.get(
+        url_for('api.company-detail', pk=undertaking.external_id))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
     assert data['name'] == undertaking.name
@@ -70,7 +73,8 @@ def test_undertaking_details(client):
 def test_undertaking_details_without_address(client):
     undertaking = factories.UndertakingFactory()
     undertaking.address = None
-    resp = client.get(url_for('api.company-detail', pk=undertaking.external_id))
+    resp = client.get(
+        url_for('api.company-detail', pk=undertaking.external_id))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
     assert data['address'] is None
@@ -79,7 +83,8 @@ def test_undertaking_details_without_address(client):
 def test_undertaking_details_without_representative(client):
     undertaking = factories.UndertakingFactory()
     undertaking.represent = None
-    resp = client.get(url_for('api.company-detail', pk=undertaking.external_id))
+    resp = client.get(
+        url_for('api.company-detail', pk=undertaking.external_id))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
     assert data['representative'] is None
@@ -186,3 +191,29 @@ def test_unverify_link(client):
                        dict(user='test_user'))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
+
+
+def test_filter_undertaking(client):
+    represent = factories.RepresentativeFactory(name='Le Representant',
+                                                vatnumber=1234)
+    undertaking = factories.UndertakingFactory(oldcompany_verified=True,
+                                               vat='21890',
+                                               represent=represent,
+                                               external_id=42,
+                                               name='A Good Company Name')
+
+    def _test_params(count, **params):
+        resp = client.get(url_for('api.company-filter'), params)
+        data = resp.json
+        assert data['count'] == count
+
+    _test_params(0, id=43)
+    _test_params(1, id=42)
+    _test_params(1, vat=21890)
+    _test_params(0, vat=21891)
+    _test_params(1, name='Good Companyy Name')
+    _test_params(1, name='A Good Companyy N')
+    _test_params(0, name='Bad Company')
+    _test_params(1, OR_vat=1234)
+    _test_params(1, OR_name='Le repreesenta')
+    _test_params(0, OR_name='Orice')
