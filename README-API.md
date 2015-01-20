@@ -177,7 +177,7 @@ as fetched  from FGR.
     ]
 
 /undertaking/filter?[name|id|vat|countrycode|OR_vat|OR_name]
-------------------------------
+------------------------------------------------------------
 
 Return true or false if companies matching the filter exists.
 
@@ -268,11 +268,10 @@ Returns a list of all undertakings in the system, as fetched from FGR.
       },
     ]
 
-/user/[username_or_email]/companies
------------------------------------
+/user/[username]/companies
+--------------------------
 
-The _username_or_email_ parameter can be either an username (ex: "user1") or an email
-(ex: "user1@mock.ec.europa.eu").
+The _username_ should be a username (ex: "user1")
 
 Returns the list of undertakings for a user given by its unique username.
 
