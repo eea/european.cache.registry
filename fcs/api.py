@@ -177,10 +177,8 @@ class UserCompanies(DetailView):
 
     def get_object(self, pk):
         if '@' in pk:
-            key = 'email'
-        else:
-            key = 'username'
-        return self.model.query.filter_by(**{key: pk}).first_or_404()
+            abort(400)
+        return self.model.query.filter_by(username=pk).first_or_404()
 
     @classmethod
     def serialize(cls, obj):
