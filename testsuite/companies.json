@@ -146,7 +146,7 @@
                 "userName" : "user2",
                 "firstName" : "new first name",
                 "lastName" : "new last name",
-                "emailAddress" : "new_email@mock.ec.europa.eu"
+                "emailAddress" : "user2@mock.ec.europa.eu"
             }
         ],
         "dateCreated" : "20/10/2014",
