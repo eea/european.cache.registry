@@ -18,4 +18,12 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        if app.config['DEBUG'] or not app.config.get('SENTRY_DSN'):
+            raise
+        else:
+            if not (isinstance(e, SystemExit) and e.code == 0):
+                sentry = app.extensions['sentry']
+                sentry.captureException()
