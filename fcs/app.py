@@ -44,7 +44,7 @@ def create_logger(app):
     file_handler.setLevel(logging.WARNING)
     app.logger.addHandler(file_handler)
     file_handler.setFormatter(logging.Formatter('''
-    Message:
+    Message [%(asctime)s]:
     %(message)s
     '''))
 

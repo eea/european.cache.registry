@@ -36,10 +36,10 @@ class User(SerializableModel, Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(255))
+    username = Column(String(255), unique=True)
     first_name = Column(String(255))
     last_name = Column(String(255))
-    email = Column(String(255))
+    email = Column(String(255), unique=True)
 
     @property
     def verified_undertakings(self):

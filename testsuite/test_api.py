@@ -114,11 +114,9 @@ def test_user_companies_by_email(client):
     undertaking = factories.UndertakingFactory()
     user = factories.UserFactory()
     undertaking.contact_persons.append(user)
-    resp = client.get(url_for('api.user-companies', pk=user.email))
-    data = resp.json
-    assert len(data) == 1
-    data = data[0]
-    assert data['company_id'] == undertaking.external_id
+    resp = client.get(url_for('api.user-companies', pk=user.email),
+                      expect_errors=True)
+    assert resp.status_code == 400
 
 
 def test_candidates_list(client):

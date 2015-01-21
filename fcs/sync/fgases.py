@@ -159,7 +159,7 @@ def parse_undertaking(data):
     for contact_person in contact_persons:
         user = (
             User.query
-            .filter_by(username=contact_person['username'])
+            .filter_by(email=contact_person['email'])
             .first()
         )
         # add or update
@@ -170,6 +170,7 @@ def parse_undertaking(data):
             db.session.add(user)
         if user not in existing_persons:
             undertaking.contact_persons.append(user)
+
     current_emails = [p.get('email') for p in contact_persons]
     for person in undertaking.contact_persons:
         if person.email not in current_emails:
@@ -220,6 +221,8 @@ def cleanup_unused_users():
     print "Removing", unused_users.count(), "unused users"
     for u in unused_users:
         db.session.delete(u)
+        current_app.logger.info('User {} with email {} has been deleted'.format(
+            u.username, u.email))
 
 
 @sync_manager.command
