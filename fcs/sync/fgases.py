@@ -176,11 +176,6 @@ def parse_undertaking(data):
         if person.email not in current_emails:
             undertaking.contact_persons.remove(person)
 
-    usernames = [cp['username'] for cp in contact_persons]
-    for cp in existing_persons:
-        if cp.username not in usernames:
-            db.session.delete(cp)
-
     undertaking.country_code = undertaking.get_country_code()
     db.session.add(undertaking)
 
