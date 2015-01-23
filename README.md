@@ -38,7 +38,14 @@ Verify a match:
 
     ./manage.py verify [undertaking_id] [oldcompany_id]
 
-Set a switch in settings if you want companies with no candidates to be
+Remove an unwanted link:
+
+    ./manage.py unverify [undertaking_id]
+
+it returns None if no company was found, False if the company is now
+unverified.
+
+Set a switch in `settings.py` if you want companies with no candidates to be
 automatically be set as haveing no matching
 
     AUTO_VERIFY_NEW_COMPANIES = True

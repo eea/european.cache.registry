@@ -10,7 +10,7 @@ API_PASSWORD = ''
 BDR_API_URL = 'https://bdr-test.eionet.europa.eu/registry/api'
 BDR_API_KEY = ''
 
-BDR_ENDPOINT_URL = 'https://bdr-test.eionet.europa.eu'
+BDR_ENDPOINT_URL = ''
 BDR_ENDPOINT_USER = ''
 BDR_ENDPOINT_PASSWORD = ''
 
@@ -27,3 +27,5 @@ MAIL_PASSWORD = ''
 NOTIFY_EMAILS = ['mihai.zamfir@eaudeweb.ro']
 
 HTTPS_VERIFY = None # set it to False to disable
+
+AUTO_VERIFY_NEW_COMPANIES = False
