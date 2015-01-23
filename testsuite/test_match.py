@@ -10,8 +10,8 @@ from fcs.match import run
 def mockreturn(url, **kwargs):
     res = requests.Response()
     res.status_code = 200
-    res.headers['content_type'] = 'application/json'
-    res.contents = '{"message": "mess", "status": "success"}'
+    res.headers['content-type'] = 'application/json'
+    res._content = '{"message": "mess", "status": "success"}'
     return res
 
 
