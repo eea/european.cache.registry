@@ -218,3 +218,7 @@ def flush():
         models.db.session.delete(link)
 
     models.db.session.commit()
+
+@match_manager.command
+def unverify(undertaking_external_id):
+    """ Remove a link from """

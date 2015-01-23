@@ -29,7 +29,8 @@ def do_bdr_request(params):
     except requests.ConnectionError:
         error_message = 'BDR was unreachable - {}'.format(datetime.now())
 
-    if response and response.headers.get('content-type') == 'application/json':
+    if response is not None and response.headers.get(
+            'content-type') == 'application/json':
         json_data = json.loads(response.content)
         if json_data.get('status') != 'success':
             error_message = json_data.get('message')
