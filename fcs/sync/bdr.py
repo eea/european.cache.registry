@@ -48,6 +48,9 @@ def do_bdr_request(params):
 
 
 def call_bdr(undertaking, old_collection=False):
+    if not current_app.config.get('BDR_ENDPOINT_URL'):
+        current_app.logger.warning('No bdr endpoint. No bdr call.')
+        return True
     params = {
         'company_id': undertaking.external_id,
         'domain': undertaking.domain,
