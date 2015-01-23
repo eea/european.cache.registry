@@ -192,12 +192,17 @@ def test_unverify_link(client):
 
 
 def test_filter_undertaking(client):
+    country_ro = factories.CountryFactory(code='ro')
+    address_cn = factories.AddressFactory(country=country_ro)
     represent = factories.RepresentativeFactory(name='Le Representant',
-                                                vatnumber=1234)
+                                                vatnumber=1234,
+                                                address=address_cn)
     undertaking = factories.UndertakingFactory(oldcompany_verified=True,
                                                vat='21890',
                                                represent=represent,
                                                external_id=42,
+                                               country_code='ro',
+                                               country_code_orig='cn',
                                                name='A Good Company Name')
 
     def _test_params(count, **params):
@@ -215,3 +220,6 @@ def test_filter_undertaking(client):
     _test_params(1, OR_vat=1234)
     _test_params(1, OR_name='Le repreesenta')
     _test_params(0, OR_name='Orice')
+    _test_params(0, countrycode='bg')
+    _test_params(0, countrycode='ro')
+    _test_params(1, countrycode='cn')

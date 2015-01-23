@@ -122,6 +122,7 @@ class Undertaking(SerializableModel, Base):
     date_updated = Column(Date)
     status = Column(String(64))
     country_code = Column(String(10), default="")
+    country_code_orig = Column(String(10), default="")
     # Undertaking:
     undertaking_type = Column(String(32), default='FGASUndertaking')
     vat = Column(String(255))
@@ -160,6 +161,11 @@ class Undertaking(SerializableModel, Base):
             return self.represent.address.country.code
         else:
             return None
+
+    def get_country_code_orig(self):
+        return (
+            self.address and self.address.country and self.address.country.code
+        )
 
 
 class OldCompany(SerializableModel, Base):

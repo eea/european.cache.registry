@@ -105,7 +105,7 @@ class UndertakingFilterCount(ApiView):
     FILTERS = ('id', 'vat', 'name', 'countrycode', 'OR_vat', 'OR_name')
     FILTER_MAP = {
         'id': 'external_id',
-        'countrycode': 'country_code',
+        'countrycode': 'country_code_orig',
         'vat': 'vat',
     }
 
