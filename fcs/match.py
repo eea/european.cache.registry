@@ -221,4 +221,6 @@ def flush():
 
 @match_manager.command
 def unverify(undertaking_external_id):
-    """ Remove a link from """
+    """ Remove a link from the matching database """
+    u = unverify_link(undertaking_external_id, '_SERVER_ADMIN')
+    print u and u.oldcompany_verified
