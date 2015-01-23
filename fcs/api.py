@@ -325,7 +325,9 @@ class DataSyncLog(ListView):
     model = OrganizationLog
 
     def get_queryset(self, **kwargs):
-        return self.model.query.order_by(desc(self.model.execution_time))
+        return (self.model.query
+                .order_by(desc(self.model.execution_time))
+                .limit(100))
 
 
 class MatchingsLog(ListView):
