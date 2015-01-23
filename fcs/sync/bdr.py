@@ -22,24 +22,34 @@ def do_bdr_request(params):
     ssl_verify = current_app.config['HTTPS_VERIFY']
 
     error_message = ''
+    response = None
     try:
         response = requests.get(url, params=params, auth=auth,
                                 verify=ssl_verify)
-        if (response.status_code == 200 and
-                    response.headers.get('content_type') == 'application/json'):
-            json_data = json.loads(response.contents)
-            if json_data.get('status') != 'success':
-                error_message = json_data.get('message')
-        else:
-            error_message = 'Invalid response'
-
     except requests.ConnectionError:
         error_message = 'BDR was unreachable - {}'.format(datetime.now())
+
+    if (response.status_code == 200 and
+                response.headers.get('content-type') == 'application/json'):
+        json_data = json.loads(response.content)
+        if json_data.get('status') != 'success':
+            error_message = json_data.get('message')
+    else:
+        error_message = 'Invalid response'
 
     if error_message:
         current_app.logger.warning(error_message)
         if 'sentry' in current_app.extensions:
-            current_app.extensions['sentry'].captureMessage(error_message)
+            if response:
+                data = {
+                    'status_code': response.status_code,
+                    'contents': response.content,
+                    'content_type': response.headers.get('content_type'),
+                }
+            else:
+                data = None
+            current_app.extensions['sentry'].captureMessage(error_message,
+                                                            data=data)
 
     return not error_message
 
