@@ -29,27 +29,19 @@ def do_bdr_request(params):
     except requests.ConnectionError:
         error_message = 'BDR was unreachable - {}'.format(datetime.now())
 
-    if (response.status_code == 200 and
-                response.headers.get('content-type') == 'application/json'):
+    if response and response.headers.get('content-type') == 'application/json':
         json_data = json.loads(response.content)
         if json_data.get('status') != 'success':
             error_message = json_data.get('message')
+        elif response.status_code != 200:
+            error_message = 'Invalid status code: ' + response.status_code
     else:
-        error_message = 'Invalid response'
+        error_message = 'Invalid response: ' + str(response)
 
     if error_message:
         current_app.logger.warning(error_message)
         if 'sentry' in current_app.extensions:
-            if response is not None:
-                data = {
-                    'status_code': response.status_code,
-                    'contents': response.content,
-                    'content-type': response.headers.get('content-type'),
-                }
-            else:
-                data = None
-            current_app.extensions['sentry'].captureMessage(error_message,
-                                                            data=data)
+            current_app.extensions['sentry'].captureMessage(error_message)
 
     return not error_message
 
