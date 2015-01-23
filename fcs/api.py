@@ -1,6 +1,7 @@
 # coding=utf-8
 import json
 
+from sqlalchemy import desc
 from flask import Blueprint, Response, abort, request, current_app
 from flask.views import MethodView
 from flask.ext.script import Manager
@@ -323,9 +324,15 @@ class CandidateUnverify(ApiView):
 class DataSyncLog(ListView):
     model = OrganizationLog
 
+    def get_queryset(self, **kwargs):
+        return self.model.query.order_by(desc(self.model.execution_time))
+
 
 class MatchingsLog(ListView):
     model = MatchingLog
+
+    def get_queryset(self, **kwargs):
+        return self.model.query.order_by(desc(self.model.timestamp))
 
 
 class OrgMatching(MethodView):

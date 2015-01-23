@@ -32,6 +32,7 @@ Misc:
 
 * `/matching_log` - matching logs
 * `/data_sync_log` - data sync logs
+* `/organisation_matching` - switcher value for automatching
 
 Listing calls
 =============
@@ -485,7 +486,8 @@ Misc calls
 /matching_log
 -------------
 
-Lists a matching log for 2 companies and the user who made it at which time.
+Lists a matching log list for 2 companies and the user who made it at which 
+time, sorted in decrease order by timestamp.
 
     [
       {
@@ -501,7 +503,8 @@ Lists a matching log for 2 companies and the user who made it at which time.
 /data_sync_log
 --------------
 
-Lists a data sync log which shows when the sync was ran
+Lists a data sync log which shows when the sync was ran, sorted in decrease 
+order by execution_time
 
     [
       {
