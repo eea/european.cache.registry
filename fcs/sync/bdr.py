@@ -40,11 +40,11 @@ def do_bdr_request(params):
     if error_message:
         current_app.logger.warning(error_message)
         if 'sentry' in current_app.extensions:
-            if response:
+            if response is not None:
                 data = {
                     'status_code': response.status_code,
                     'contents': response.content,
-                    'content_type': response.headers.get('content_type'),
+                    'content-type': response.headers.get('content-type'),
                 }
             else:
                 data = None
