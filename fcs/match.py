@@ -189,7 +189,7 @@ def run():
     links, new_companies = match_all(companies, oldcompanies)
     if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
         for c in new_companies:
-            verify_none(c['company_id'], '_SERVER_AUTO_ENABLED')
+            verify_none(c['company_id'], 'SYSTEM')
 
     for company, links in get_all_candidates():
         print u"[{}] {} - {}:".format(company.id, company.name,
@@ -222,5 +222,5 @@ def flush():
 @match_manager.command
 def unverify(undertaking_external_id):
     """ Remove a link from the matching database """
-    u = unverify_link(undertaking_external_id, '_SERVER_ADMIN')
+    u = unverify_link(undertaking_external_id, 'SYSTEM')
     print u and u.oldcompany_verified
