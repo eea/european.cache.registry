@@ -250,6 +250,8 @@ def fgases(days=7, updated_since=None):
                               for u in undertakings
                               if eea_double_check(u)])
     cleanup_unused_users()
+    if isinstance(last_update, datetime):
+        last_update = last_update.date()
     log = OrganizationLog(
         organizations=undertakings_count,
         using_last_update=last_update)
