@@ -187,18 +187,20 @@ def run():
     oldcompanies = get_oldcompanies_for_matching()
 
     links, new_companies = match_all(companies, oldcompanies)
+    print len(links), "matching links"
     if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
+        print "Autoverifying companies without candidates"
         for c in new_companies:
             verify_none(c['company_id'], 'SYSTEM')
 
-    for company, links in get_all_candidates():
-        print u"[{}] {} - {}:".format(company.id, company.name,
-                                      company.country_code)
-        for l in links:
-            print u" - [{}] {} {} - {}".format(l.oldcompany_id,
-                                               l.oldcompany.name,
-                                               l.verified,
-                                               l.oldcompany.country_code)
+    # for company, links in get_all_candidates():
+    #     print u"[{}] {} - {}:".format(company.id, company.name,
+    #                                   company.country_code)
+    #     for l in links:
+    #         print u" - [{}] {} {} - {}".format(l.oldcompany_id,
+    #                                            l.oldcompany.name,
+    #                                            l.verified,
+    #                                            l.oldcompany.country_code)
 
 
 @match_manager.command
@@ -218,6 +220,7 @@ def flush():
         models.db.session.delete(link)
 
     models.db.session.commit()
+
 
 @match_manager.command
 def unverify(undertaking_external_id):
