@@ -6,6 +6,9 @@ from fcs.sync.utils import update_obj
 from fcs.models import db, OldCompany
 
 
+INTERESTING_OBLIGATIONS = ['fgases', 'mercury', 'vans', 'cars', 'ods']
+
+
 def get_absolute_url(url):
     return current_app.config['BDR_API_URL'] + url
 
@@ -14,9 +17,9 @@ def get_auth():
     return current_app.config.get('BDR_API_KEY', '')
 
 
-def get_old_companies():
+def get_old_companies(obligation):
     auth = get_auth()
-    url = get_absolute_url('/company/obligation/fgases/')
+    url = get_absolute_url('/company/obligation/{0}/'.format(obligation))
     params = {'apikey': auth}
     ssl_verify = current_app.config['HTTPS_VERIFY']
 
@@ -57,7 +60,10 @@ def parse_company(company):
 
 @sync_manager.command
 def bdr():
-    companies = get_old_companies()
+    companies = []
+    for obl in INTERESTING_OBLIGATIONS:
+        print "Getting obligation: ", obl
+        companies += get_old_companies(obl)
 
     print len([parse_company(c) for c in companies]), "values"
     db.session.commit()
