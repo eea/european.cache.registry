@@ -139,9 +139,18 @@ def verify_none(undertaking_id, user):
     return u
 
 
+def get_country(country_code):
+    cc = country_code.lower()
+    if cc == 'gb':
+        cc = 'uk'
+    elif cc == 'el':
+        cc = 'gr'
+    return cc
+
+
 def has_match(company, old):
-    c_code = company['country_code'].lower()
-    o_code = old['country_code'].lower()
+    c_code = get_country(company['country_code'])
+    o_code = get_country(old['country_code'])
     if c_code != o_code:
         return False
 
@@ -193,14 +202,14 @@ def run():
         for c in new_companies:
             verify_none(c['company_id'], 'SYSTEM')
 
-    # for company, links in get_all_candidates():
-    #     print u"[{}] {} - {}:".format(company.id, company.name,
-    #                                   company.country_code)
-    #     for l in links:
-    #         print u" - [{}] {} {} - {}".format(l.oldcompany_id,
-    #                                            l.oldcompany.name,
-    #                                            l.verified,
-    #                                            l.oldcompany.country_code)
+            # for company, links in get_all_candidates():
+            #     print u"[{}] {} - {}:".format(company.id, company.name,
+            #                                   company.country_code)
+            #     for l in links:
+            #         print u" - [{}] {} {} - {}".format(l.oldcompany_id,
+            #                                            l.oldcompany.name,
+            #                                            l.verified,
+            #                                            l.oldcompany.country_code)
 
 
 @match_manager.command
