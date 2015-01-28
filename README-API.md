@@ -328,7 +328,8 @@ Lists all possible Company candidates for matching with existing Undertakings.
             "country_code": "gb", 
             "active": true, 
             "vat_number": "634456631", 
-            "eori": null
+            "eori": null,
+            "obligation": "fgases"
           }, 
           {
             "website": "", 
@@ -339,7 +340,8 @@ Lists all possible Company candidates for matching with existing Undertakings.
             "country_code": "gb", 
             "active": false, 
             "vat_number": "", 
-            "eori": ""
+            "eori": "",
+            "obligation": "fgases"
           }, 
       },
     ]

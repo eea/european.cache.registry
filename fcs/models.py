@@ -182,6 +182,7 @@ class OldCompany(SerializableModel, Base):
     website = Column(String(255))
     date_registered = Column(DateTime)
     valid = Column(Boolean, default=True)
+    obligation = Column(String(32))
 
     @property
     def country(self):

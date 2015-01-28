@@ -39,13 +39,14 @@ def parse_date(datestr):
     return datetime.strptime(datestr, DATE_FORMAT)
 
 
-def parse_company(company):
+def parse_company(company, obligation):
     country = company.pop('country')
     for f in ('addr_street', 'addr_place1', 'addr_place2', 'addr_postalcode'):
         company.pop(f)
     company['country_code'] = country['code']
     company['external_id'] = company.pop('pk')
     company['date_registered'] = parse_date(company['date_registered'])
+    company['obligation'] = obligation
 
     oldcompany = (
         OldCompany.query.filter_by(external_id=company['external_id']).first()
@@ -63,7 +64,6 @@ def bdr():
     companies = []
     for obl in INTERESTING_OBLIGATIONS:
         print "Getting obligation: ", obl
-        companies += get_old_companies(obl)
-
-    print len([parse_company(c) for c in companies]), "values"
+        companies = get_old_companies(obl)
+        print len([parse_company(c, obl) for c in companies]), "values"
     db.session.commit()
