@@ -29,3 +29,4 @@ NOTIFY_EMAILS = ['mihai.zamfir@eaudeweb.ro']
 HTTPS_VERIFY = None # set it to False to disable
 
 AUTO_VERIFY_NEW_COMPANIES = False
+GET_ALL_INTERESTING_OBLIGATIONS = False

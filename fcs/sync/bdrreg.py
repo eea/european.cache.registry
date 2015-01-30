@@ -6,7 +6,10 @@ from fcs.sync.utils import update_obj
 from fcs.models import db, OldCompany
 
 
-INTERESTING_OBLIGATIONS = ['fgases', 'mercury', 'vans', 'cars', 'ods']
+def get_obligations():
+    if current_app.config.get('GET_ALL_INTERESTING_OBLIGATIONS', '') is True:
+        return ['fgases', 'mercury', 'vans', 'cars', 'ods']
+    return ['fgases']
 
 
 def get_absolute_url(url):
@@ -62,7 +65,7 @@ def parse_company(company, obligation):
 @sync_manager.command
 def bdr():
     companies = []
-    for obl in INTERESTING_OBLIGATIONS:
+    for obl in get_obligations():
         print "Getting obligation: ", obl
         companies = get_old_companies(obl)
         print len([parse_company(c, obl) for c in companies]), "values"
