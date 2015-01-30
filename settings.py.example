@@ -24,8 +24,9 @@ MAIL_USE_SSL = True
 MAIL_USERNAME = ''
 MAIL_PASSWORD = ''
 
-NOTIFY_EMAILS = ['mihai.zamfir@eaudeweb.ro']
 
 HTTPS_VERIFY = None # set it to False to disable
 
 AUTO_VERIFY_NEW_COMPANIES = False
+
+SEND_MATCHING_MAILS = True

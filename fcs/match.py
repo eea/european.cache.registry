@@ -8,6 +8,7 @@ from flask.ext.script import Manager
 from flask import current_app
 
 from fcs import models
+from fcs.mails import send_match_mail
 
 from fcs.sync.bdr import call_bdr
 
@@ -96,6 +97,10 @@ def verify_link(undertaking_id, oldcompany_id, user):
         log_match(undertaking_id, oldcompany_id, True, user,
                   oldcompany_account=undertaking.oldcompany_account)
         models.db.session.commit()
+        send_match_mail(match=True, user=user,
+                        company_name=undertaking.name,
+                        company_id=undertaking.external_id,
+                        oldcompany_name=oldcompany.name)
     else:
         models.db.session.rollback()
     return link
@@ -134,6 +139,8 @@ def verify_none(undertaking_id, user):
     if call_bdr(u):
         log_match(undertaking_id, None, True, user)
         models.db.session.commit()
+        send_match_mail(match=False, user=user, company_name=u.name,
+                        company_id=u.external_id)
     else:
         models.db.session.rollback()
     return u
