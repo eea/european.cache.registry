@@ -4,8 +4,8 @@ from openpyxl.writer.excel import save_virtual_workbook
 from flask import Blueprint, Response
 from flask.views import MethodView
 from fcs.match import get_all_non_candidates
-from fcs.api import UndertakingList
-from fcs.models import User
+from fcs.api import UndertakingList, ListView
+from fcs.models import User, MailAddress
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -95,9 +95,17 @@ class UserListExport(MethodView):
         return response
 
 
+class MailsList(ListView):
+    model = MailAddress
+
+
 misc.add_url_rule('/misc/undertaking/export',
                   view_func=UndertakingListExport.as_view(
                       'company-list-export'))
 misc.add_url_rule('/misc/user/export',
                   view_func=UserListExport.as_view(
                       'user-list-export'))
+misc.add_url_rule('/misc/mail/list',
+                  view_func=MailsList.as_view(
+                      'mails-list'
+                  ))
