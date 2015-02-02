@@ -106,7 +106,9 @@ class MailsAdd(ApiView):
     def post(self):
         if MailAddress.query.filter_by(mail=request.form['mail']).all():
             return json.dumps(False)
-        contact = MailAddress(**request.form)
+        contact = MailAddress(mail=request.form['mail'],
+                              first_name=request.form['first_name'],
+                              last_name=request.form['last_name'])
         db.session.add(contact)
         db.session.commit()
         return json.dumps(True)

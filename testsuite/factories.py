@@ -133,3 +133,13 @@ class MatchingLog(SQLAlchemyModelFactory):
     class Meta:
         model = models.MatchingLog
         sqlalchemy_session = models.db.session
+
+
+class MailAddress(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.MailAddress
+        sqlalchemy_session = models.db.session
+
+    mail = 'test@test.com'
+    first_name = 'first_name'
+    last_name = 'last_name'

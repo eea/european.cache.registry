@@ -3,7 +3,8 @@ import os
 from flask import url_for
 from openpyxl import load_workbook
 
-from . import factories
+from testsuite import factories
+from fcs.models import MailAddress
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -34,3 +35,84 @@ def test_export_companies(client):
     assert rows[0][5].value == 'website'
     assert rows[1][5].value == undertaking.website
     os.remove(fn)
+
+
+def test_mail_address_list(client):
+    ma = factories.MailAddress()
+    resp = client.get(url_for('misc.mails-list'))
+    assert resp.status_code == 200
+    data = resp.json
+    assert len(data) == 1
+    assert data[0]['mail'] == ma.mail
+    assert data[0]['first_name'] == ma.first_name
+    assert data[0]['last_name'] == ma.last_name
+
+
+def test_mail_address_add_new(client):
+    resp = client.post(url_for('misc.mails-add'), dict(
+        mail='a@ya.com', first_name='a', last_name='b'))
+    assert resp.status_code == 200
+    assert resp.body == 'true'
+    assert len(MailAddress.query.all()) == 1
+    ma = MailAddress.query.all()[0]
+    assert ma.mail == 'a@ya.com'
+    assert ma.first_name == 'a'
+    assert ma.last_name == 'b'
+
+
+def test_mail_address_add_existing(client):
+    ma = factories.MailAddress()
+    resp = client.post(url_for('misc.mails-add'), dict(
+        mail=ma.mail, first_name='a', last_name='b'))
+    assert resp.status_code == 200
+    assert resp.body == 'false'
+    assert len(MailAddress.query.all()) == 1
+
+
+def test_mail_address_edit_existing_with_existing(client):
+    ma = factories.MailAddress()
+    ma2 = factories.MailAddress(mail='old@old.com')
+    resp = client.post(url_for('misc.mails-edit'), dict(
+        old_mail=ma2.mail, mail=ma.mail, first_name='a', last_name='b'))
+    assert resp.status_code == 200
+    assert resp.body == 'false'
+    assert MailAddress.query.all()[1].mail == ma2.mail
+
+
+def test_mail_address_edit_nonexisting(client):
+    ma = factories.MailAddress()
+    resp = client.post(url_for('misc.mails-edit'), dict(
+        old_mail='non@existing.com', mail='m', first_name='a', last_name='b'))
+    assert resp.status_code == 200
+    assert resp.body == 'false'
+    assert len(MailAddress.query.all()) == 1
+    assert MailAddress.query.all()[0].mail == ma.mail
+
+
+def test_mail_address_edit_with_new(client):
+    ma = factories.MailAddress()
+    resp = client.post(url_for('misc.mails-edit'), dict(
+        old_mail=ma.mail, mail='new@new.com', first_name='x', last_name='y'))
+    assert resp.status_code == 200
+    assert resp.body == 'true'
+    assert len(MailAddress.query.all()) == 1
+    assert MailAddress.query.all()[0].mail == 'new@new.com'
+    assert MailAddress.query.all()[0].first_name == 'x'
+    assert MailAddress.query.all()[0].last_name == 'y'
+
+
+def test_mail_address_delete_existing(client):
+    ma = factories.MailAddress()
+    resp = client.post(url_for('misc.mails-delete'), dict(mail=ma.mail))
+    assert resp.status_code == 200
+    assert resp.body == 'true'
+    assert len(MailAddress.query.all()) == 0
+
+
+def test_mail_address_delete_nonexisting(client):
+    factories.MailAddress()
+    resp = client.post(url_for('misc.mails-delete'),
+                       dict(mail='non@existing.com'))
+    assert resp.status_code == 200
+    assert resp.body == 'false'
+    assert len(MailAddress.query.all()) == 1
