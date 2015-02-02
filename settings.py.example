@@ -7,8 +7,8 @@ API_URL = ''
 API_USER = ''
 API_PASSWORD = ''
 
-BDR_HOST = ''
-BDR_API_URL = 'https://bdr-test.eionet.europa.eu/registry/api'
+BDR_HOST = 'foo'
+BDR_API_URL = BDR_HOST + '/registry/api'
 BDR_API_KEY = ''
 
 BDR_ENDPOINT_URL = ''

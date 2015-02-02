@@ -25,6 +25,11 @@ def send_match_mail(match, **kwargs):
         return
     host = app.config.get('BDR_HOST')
     if not host:
+        message = 'No BDR_HOST was set in order to send notification emails. ' \
+                  'Please set this value or disable mails sending.'
+        app.logger.warning(message)
+        if 'sentry' in app.extensions:
+            app.extensions['sentry'].captureMessage(message)
         return
     if match:
         template = 'mails/match_notification.html'
