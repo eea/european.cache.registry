@@ -32,7 +32,10 @@ Misc:
 
 * `/matching_log` - matching logs
 * `/data_sync_log` - data sync logs
-* `/organisation_matching` - switcher value for automatching
+* `/misc/mail/list` - list the mails
+* `/misc/mail/add` - add a mail to the list
+* `/misc/mail/edit` - update a mail in the list
+* `/misc/mail/delete` - delete a mail from the list
 
 Listing calls
 =============
@@ -539,3 +542,53 @@ Display the value of the configured switch which tells if new companies are
 auto verified as having no old company
 
     true
+
+
+/misc/mail/list
+---------------
+
+Display the list of all mails to be notified about companies matching
+
+
+/misc/mail/add - POST
+---------------------
+
+Add a new contact to be notified on matchings. The POST should contain the 
+following data:
+
+    {
+      'mail': 'new@mail.com',
+      'first_name': 'first_name',
+      'last_name': 'first_name'
+    }
+
+Returns ``true`` on success and ``false`` on failure
+
+
+/misc/mail/edit - POST
+----------------------
+
+Edit contact to be notified on matchings. The POST should contain the 
+following data:
+
+    {
+      'old_mail': 'old@mail.com',     # the email entry to be updated
+      'mail': 'new@mail.com',
+      'first_name': 'first_name',
+      'last_name': 'first_name'
+    }
+
+Returns ``true`` on success and ``false`` on failure
+
+
+/misc/mail/delete - POST
+------------------------
+
+Delete a contact from the mailing list. The POST should contain the 
+following data:
+
+    {
+      'mail': 'mail_to_be_deleted@example.com',
+    }
+
+Returns ``true`` on success and ``false`` on failure
