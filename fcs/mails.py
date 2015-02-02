@@ -7,7 +7,7 @@ from fcs.models import MailAddress
 
 
 def send_mail(subject, html, recipients):
-    sender = 'BDR Help Desk'
+    sender = app.config.get('MAILS_SENDER_NAME', 'BDR Help Desk')
     message = Message(subject=subject, recipients=recipients, html=html,
                       sender=sender)
     mail = Mail(app)
@@ -23,6 +23,9 @@ def send_mail(subject, html, recipients):
 def send_match_mail(match, **kwargs):
     if not app.config.get('SEND_MATCHING_MAILS'):
         return
+    host = app.config.get('BDR_HOST')
+    if not host:
+        return
     if match:
         template = 'mails/match_notification.html'
         subject = "BDR - New Company matched"
@@ -35,6 +38,6 @@ def send_match_mail(match, **kwargs):
             'first_name': contact.first_name,
             'last_name': contact.last_name,
         })
-        html = render_template(template, **kwargs)
+        html = render_template(template, host=host, **kwargs)
         recipients = [contact.mail]
         send_mail(subject, html, recipients)

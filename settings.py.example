@@ -7,6 +7,7 @@ API_URL = ''
 API_USER = ''
 API_PASSWORD = ''
 
+BDR_HOST = ''
 BDR_API_URL = 'https://bdr-test.eionet.europa.eu/registry/api'
 BDR_API_KEY = ''
 
@@ -27,6 +28,12 @@ MAIL_PASSWORD = ''
 
 HTTPS_VERIFY = None # set it to False to disable
 
+# this switch tells if companies with no matching candidates are automatically
+# verified as being so by the system or not
 AUTO_VERIFY_NEW_COMPANIES = False
 
-SEND_MATCHING_MAILS = True
+# specify if notifications mails are sent
+SEND_MATCHING_MAILS = False
+
+# the name of sender of notification emails
+MAILS_SENDER_NAME = 'Help Desk'
