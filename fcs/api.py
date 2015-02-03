@@ -85,7 +85,7 @@ class UndertakingListSmall(ListView):
     model = Undertaking
 
     def get_queryset(self):
-        return self.model.query.all()
+        return get_all_non_candidates()
 
     @classmethod
     def serialize(cls, obj):
