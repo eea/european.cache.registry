@@ -130,7 +130,7 @@ def test_candidates_list(client):
     data = data[0]
     assert data['undertaking']['company_id'] == undertaking.external_id
     assert len(data['links']) == 1
-    assert data['links'][0]['company_id'] == oldcompany.external_id
+    assert data['links'][0]['name'] == oldcompany.name
 
 
 def test_noncandidates_list(client):

@@ -236,11 +236,13 @@ class CandidateList(ApiView):
         candidates = get_all_candidates()
         data = []
         for company, links in candidates:
-            ls = [ApiView.serialize(l.oldcompany) for l in links]
-            company_data = ApiView.serialize(company)
-            company_data['company_id'] = company.external_id
+            links_data = [{'name': l.oldcompany.name} for l in links]
+            company_data = {
+                'company_id': company.external_id,
+                'name': company.name,
+            }
             data.append(
-                {'undertaking': company_data, 'links': ls}
+                {'undertaking': company_data, 'links': links_data}
             )
         return data
 
