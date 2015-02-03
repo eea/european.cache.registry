@@ -342,7 +342,7 @@ class MatchingsLog(ListView):
         u = Undertaking.query.filter_by(external_id=data['company_id']).first()
         if u:
             data['domain'] = u.domain
-            data['country_code'] = u.country_code_orig
+            data['country_code'] = u.country_code
         return data
 
 
