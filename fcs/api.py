@@ -336,6 +336,15 @@ class MatchingsLog(ListView):
     def get_queryset(self, **kwargs):
         return self.model.query.order_by(desc(self.model.timestamp))
 
+    @classmethod
+    def serialize(cls, obj, pop_id=True):
+        data = ApiView.serialize(obj, pop_id)
+        u = Undertaking.query.filter_by(external_id=data['company_id']).first()
+        if u:
+            data['domain'] = u.domain
+            data['country_code'] = u.country_code_orig
+        return data
+
 
 class OrgMatching(MethodView):
     def get(self, **kwargs):
