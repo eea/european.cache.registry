@@ -13,6 +13,7 @@ Overview
 Listing calls:
 
 * `/undertaking/list` - all verified undertakings
+* `/undertaking/list-small` - all verified undertakings but with fewer details
 * `/undertaking/list/all` - all undertakings, including unverified
 * `/undertaking/list_by_vat/[vat]` - filter by vat
 * `/undertaking/filter` - count of undertakings, given field filters
@@ -86,7 +87,10 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
           "zipcode": "zipcode--7953", 
           "number": "nrstreet--7953", 
           "street": "street--7953"
-        }, 
+        },
+        "businessprofile": {
+          "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
+        },
         "oldcompany_id": true,
         "oldcompany_account": "fgas22331",
         "oldcompany_extid": 4,
@@ -98,6 +102,39 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
         "date_created": "10/10/2014", 
         "vat": null
       },
+    ]
+
+
+/undertaking/list-small
+-----------------------
+
+    [
+      {
+        "domain": "FGAS", 
+        "name": "NMORGANIZATION--11973", 
+        "company_id": 11973, 
+        "address": {
+          "city": "city--9452", 
+          "country": {
+            "code": "PT", 
+            "type": "EU_TYPE", 
+            "name": "Portugal"
+          }, 
+          "zipcode": "zipcode--9452", 
+          "number": "nrstreet--9452", 
+          "street": "street--9452"
+        }, 
+        "date_created": "11/12/2014", 
+        "vat": "VAT11973", 
+        "users": [
+          {
+            "username": "nsecomic", 
+            "first_name": "fname--11749", 
+            "last_name": "lname--11749", 
+            "email": "11749email@climaOds2010.yyy"
+          }
+        ]
+      }
     ]
 
 /undertaking/list/all
@@ -151,6 +188,9 @@ from FGR.
           "number": "nrstreet--7953", 
           "street": "street--7953"
         }, 
+        "businessprofile": {
+          "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
+        },
         "collection_id": null, 
         "oldcompany_id": true,
         "oldcompany_account": "fgas22331",
