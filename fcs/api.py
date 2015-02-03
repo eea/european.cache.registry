@@ -81,6 +81,27 @@ class UndertakingList(ListView):
         return data
 
 
+class UndertakingListSmall(ListView):
+    model = Undertaking
+
+    def get_queryset(self):
+        return self.model.query.all()
+
+    @classmethod
+    def serialize(cls, obj):
+        if not obj:
+            return None
+        return {
+            'company_id': obj.external_id,
+            'name': obj.name,
+            'domain': obj.domain,
+            'vat': obj.vat,
+            'date_created': obj.date_created.strftime('%d/%m/%Y'),
+            'address': AddressDetail.serialize(obj.address),
+            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+        }
+
+
 class UndertakingListByVat(UndertakingList):
     def get_queryset(self, vat):
         return get_all_non_candidates(vat=vat)
@@ -357,6 +378,8 @@ class OrgMatching(MethodView):
 
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('company-list'))
+api.add_url_rule('/undertaking/list-small',
+                 view_func=UndertakingListSmall.as_view('company-list-small'))
 api.add_url_rule('/undertaking/list/all',
                  view_func=UndertakingListAll.as_view('company-list-all'))
 api.add_url_rule('/undertaking/list_by_vat/<vat>',
