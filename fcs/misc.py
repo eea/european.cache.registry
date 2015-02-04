@@ -1,8 +1,10 @@
 # coding=utf-8
+import json
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
-from flask import Blueprint, Response
+from flask import Blueprint, Response, current_app
 from flask.views import MethodView
+
 from fcs.match import get_all_non_candidates
 from fcs.api import UndertakingList
 from fcs.models import User
@@ -95,9 +97,22 @@ class UserListExport(MethodView):
         return response
 
 
+class SettingsOverview(MethodView):
+    def get(self, **kwargs):
+        resp = {
+            'API_URL': current_app.config.get('API_URL', 'undefined'),
+            'AUTO_VERIFY_COMPANIES': current_app.config.get(
+                'AUTO_VERIFY_NEW_COMPANIES', False)
+        }
+        return Response(json.dumps(resp, indent=2), mimetype='application/json')
+
+
 misc.add_url_rule('/misc/undertaking/export',
                   view_func=UndertakingListExport.as_view(
                       'company-list-export'))
 misc.add_url_rule('/misc/user/export',
                   view_func=UserListExport.as_view(
                       'user-list-export'))
+misc.add_url_rule('/misc/settings',
+                  view_func=SettingsOverview.as_view(
+                      'settings-overview'))
