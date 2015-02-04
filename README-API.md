@@ -580,6 +580,6 @@ companies' contact persons as an Excel file.
 Display the value of the configured middleware settings
 
     {
-      "API_URL": "http://example.com", 
+      "BASE_URL": "http://example.com", 
       "AUTO_VERIFY_COMPANIES": false
     }

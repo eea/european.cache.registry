@@ -100,7 +100,7 @@ class UserListExport(MethodView):
 class SettingsOverview(MethodView):
     def get(self, **kwargs):
         resp = {
-            'API_URL': current_app.config.get('API_URL', 'undefined'),
+            'BASE_URL': current_app.config.get('BASE_URL', 'undefined'),
             'AUTO_VERIFY_COMPANIES': current_app.config.get(
                 'AUTO_VERIFY_NEW_COMPANIES', False)
         }
