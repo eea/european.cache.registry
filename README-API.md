@@ -33,7 +33,9 @@ Misc:
 
 * `/matching_log` - matching logs
 * `/data_sync_log` - data sync logs
-* `/organisation_matching` - switcher value for automatching
+* `/misc/user/export` - export users list as CSV
+* `/misc/undertaking/export` - export companies list as CSV
+* `/misc/settings` - overview of the middleware settings
 
 Listing calls
 =============
@@ -572,10 +574,12 @@ This URL is used to export the list of users with their companies and the
 companies' contact persons as an Excel file.
 
 
-/organisation_matching
-----------------------
+/misc/settings
+--------------
 
-Display the value of the configured switch which tells if new companies are
-auto verified as having no old company
+Display the value of the configured middleware settings
 
-    true
+    {
+      "API_URL": "http://example.com", 
+      "AUTO_VERIFY_COMPANIES": false
+    }
