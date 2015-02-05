@@ -549,6 +549,14 @@ auto verified as having no old company
 
 Display the list of all mails to be notified about companies matching
 
+    [
+      {
+        'mail': 'new@mail.com',
+        'first_name': 'first_name',
+        'last_name': 'last_name'
+      }
+    ]
+
 
 /misc/mail/add - POST
 ---------------------
@@ -559,7 +567,7 @@ following data:
     {
       'mail': 'new@mail.com',
       'first_name': 'first_name',
-      'last_name': 'first_name'
+      'last_name': 'last_name'
     }
 
 Returns ``true`` on success and ``false`` on failure
@@ -575,7 +583,7 @@ following data:
       'old_mail': 'old@mail.com',     # the email entry to be updated
       'mail': 'new@mail.com',
       'first_name': 'first_name',
-      'last_name': 'first_name'
+      'last_name': 'last_name'
     }
 
 Returns ``true`` on success and ``false`` on failure

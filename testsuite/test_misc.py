@@ -69,38 +69,6 @@ def test_mail_address_add_existing(client):
     assert len(MailAddress.query.all()) == 1
 
 
-def test_mail_address_edit_existing_with_existing(client):
-    ma = factories.MailAddress()
-    ma2 = factories.MailAddress(mail='old@old.com')
-    resp = client.post(url_for('misc.mails-edit'), dict(
-        old_mail=ma2.mail, mail=ma.mail, first_name='a', last_name='b'))
-    assert resp.status_code == 200
-    assert resp.body == 'false'
-    assert MailAddress.query.all()[1].mail == ma2.mail
-
-
-def test_mail_address_edit_nonexisting(client):
-    ma = factories.MailAddress()
-    resp = client.post(url_for('misc.mails-edit'), dict(
-        old_mail='non@existing.com', mail='m', first_name='a', last_name='b'))
-    assert resp.status_code == 200
-    assert resp.body == 'false'
-    assert len(MailAddress.query.all()) == 1
-    assert MailAddress.query.all()[0].mail == ma.mail
-
-
-def test_mail_address_edit_with_new(client):
-    ma = factories.MailAddress()
-    resp = client.post(url_for('misc.mails-edit'), dict(
-        old_mail=ma.mail, mail='new@new.com', first_name='x', last_name='y'))
-    assert resp.status_code == 200
-    assert resp.body == 'true'
-    assert len(MailAddress.query.all()) == 1
-    assert MailAddress.query.all()[0].mail == 'new@new.com'
-    assert MailAddress.query.all()[0].first_name == 'x'
-    assert MailAddress.query.all()[0].last_name == 'y'
-
-
 def test_mail_address_delete_existing(client):
     ma = factories.MailAddress()
     resp = client.post(url_for('misc.mails-delete'), dict(mail=ma.mail))

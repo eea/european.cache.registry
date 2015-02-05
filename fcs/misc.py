@@ -104,28 +104,13 @@ class MailsList(ListView):
 
 class MailsAdd(ApiView):
     def post(self):
-        if MailAddress.query.filter_by(mail=request.form['mail']).all():
+        mail = request.form['mail']
+        if MailAddress.query.filter_by(mail=mail).all():
             return json.dumps(False)
-        contact = MailAddress(mail=request.form['mail'],
+        contact = MailAddress(mail=mail,
                               first_name=request.form['first_name'],
                               last_name=request.form['last_name'])
         db.session.add(contact)
-        db.session.commit()
-        return json.dumps(True)
-
-
-class MailsEdit(ApiView):
-    def post(self):
-        old_mail = request.form['old_mail']
-        new_mail = request.form['mail']
-        contact = MailAddress.query.filter_by(mail=old_mail)
-        if any((MailAddress.query.filter_by(mail=new_mail).all(),
-                not contact.all())):
-            return json.dumps(False)
-        contact = contact[0]
-        contact.mail = request.form['mail']
-        contact.first_name = request.form['first_name']
-        contact.last_name = request.form['last_name']
         db.session.commit()
         return json.dumps(True)
 
@@ -154,10 +139,6 @@ misc.add_url_rule('/misc/mail/list',
 misc.add_url_rule('/misc/mail/add',
                   view_func=MailsAdd.as_view(
                       'mails-add'
-                  ))
-misc.add_url_rule('/misc/mail/edit',
-                  view_func=MailsEdit.as_view(
-                      'mails-edit'
                   ))
 misc.add_url_rule('/misc/mail/delete',
                   view_func=MailsDelete.as_view(
