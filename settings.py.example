@@ -16,6 +16,8 @@ BDR_ENDPOINT_URL = ''
 BDR_ENDPOINT_USER = ''
 BDR_ENDPOINT_PASSWORD = ''
 
+BDR_HELP_DESK_MAIL = ''
+
 LOG_FILE = 'instance/EEA_double_check.log'
 
 # email server

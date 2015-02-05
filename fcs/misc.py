@@ -10,6 +10,7 @@ from flask.views import MethodView
 from fcs.match import get_all_non_candidates
 from fcs.api import UndertakingList, ListView, ApiView
 from fcs.models import User, MailAddress, db
+from fcs.mails import send_wrong_match_mail
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -137,6 +138,12 @@ class MailsDelete(ApiView):
         return json.dumps(True)
 
 
+class AlertWrongMatch(ApiView):
+    def post(self):
+        send_wrong_match_mail(request.form['user'], request.form['company_id'])
+        return json.dumps(True)
+
+
 misc.add_url_rule('/misc/undertaking/export',
                   view_func=UndertakingListExport.as_view(
                       'company-list-export'))
@@ -157,4 +164,8 @@ misc.add_url_rule('/misc/mail/add',
 misc.add_url_rule('/misc/mail/delete',
                   view_func=MailsDelete.as_view(
                       'mails-delete'
+                  ))
+misc.add_url_rule('/misc/alert_wrong_match',
+                  view_func=AlertWrongMatch.as_view(
+                      'alert-wrong-match'
                   ))

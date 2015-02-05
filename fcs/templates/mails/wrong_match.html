@@ -1,0 +1,17 @@
+{% extends 'mails/_layout.html' %}
+
+{% block content %}
+  Dear {{ first_name }} {{ last_name }},
+
+  <p>
+    User <b>{{ user }}</b> has locked down the match between <b>{{ company_name }}</b> company (registered in the FGAS portal)
+    and the old record <b>{{ oldcompany_name }}</b> (taken from BDR-Registry) due to suspicions that it was incorrect.
+
+    <br>
+
+    You can no longer modify the company collection until this situation is clarified by the <a href="mailto:{{ bdr_help_desk_email }}">BDR Help Desk</a>
+  </p>
+  <br>
+  Best regards,<br>
+  BDR Help Desk
+{% endblock %}

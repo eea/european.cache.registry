@@ -3,7 +3,7 @@ import smtplib
 from flask.ext.mail import Mail, Message
 from flask import current_app as app, render_template
 
-from fcs.models import MailAddress
+from fcs.models import OldCompanyLink, MailAddress
 
 
 def send_mail(subject, html, recipients):
@@ -44,5 +44,33 @@ def send_match_mail(match, **kwargs):
             'last_name': contact.last_name,
         })
         html = render_template(template, host=host, **kwargs)
-        recipients = [contact.mail]
-        send_mail(subject, html, recipients)
+        send_mail(subject, html, [contact.mail])
+
+
+def send_wrong_match_mail(user, company_id):
+    template = 'mails/wrong_match.html'
+    subject = 'BDR - Wrong match alert'
+    message = ''
+    hd = app.config.get('BDR_HELP_DESK_MAIL')
+    if not hd:
+        message = 'No BDR_HELP_DESK_MAIL was set in order to send the wrong '\
+                  'match email alert. Please set this value and try again.'
+    link = OldCompanyLink.query.filter_by(undertaking_id=company_id).first()
+    if not link:
+        message = 'There is no linked company having the given ID.'
+    if message:
+        app.logger.warning(message)
+        if 'sentry' in app.extensions:
+            app.extensions['sentry'].captureMessage(message)
+        return
+
+    kwargs = {
+        'user': user, 'bdr_help_desk_email': hd,
+        'company_name': link.undertaking.name,
+        'oldcompany_name': link.oldcompany.name
+    }
+    for contact in MailAddress.query.all():
+        kwargs.update({'first_name': contact.first_name,
+                       'last_name': contact.last_name})
+        html = render_template(template, **kwargs)
+        send_mail(subject, html, [contact.mail])
