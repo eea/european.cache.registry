@@ -33,16 +33,15 @@ Misc:
 
 * `/matching_log` - matching logs
 * `/data_sync_log` - data sync logs
-<<<<<<< HEAD
+
 * `/misc/user/export` - export users list as CSV
 * `/misc/undertaking/export` - export companies list as CSV
 * `/misc/settings` - overview of the middleware settings
-=======
 * `/misc/mail/list` - list the mails
 * `/misc/mail/add` - add a mail to the list
-* `/misc/mail/edit` - update a mail in the list
 * `/misc/mail/delete` - delete a mail from the list
->>>>>>> matching_email_notifications
+* `/misc/alert_wrong_match` - alert on wrong matching of a company
+
 
 Listing calls
 =============
@@ -632,3 +631,9 @@ following data:
     }
 
 Returns ``true`` on success and ``false`` on failure
+
+/misc/alert_wrong_match - POST
+------------------------------
+
+Send an alert email when a company matching was done wrong
+The exepected input POST data should consist of an ``user`` and a ``company_id``
