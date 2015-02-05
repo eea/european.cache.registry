@@ -2,12 +2,14 @@
 import json
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
-from flask import Blueprint, Response, current_app
+from flask import current_app
+
+from flask import Blueprint, Response, request
 from flask.views import MethodView
 
 from fcs.match import get_all_non_candidates
-from fcs.api import UndertakingList
-from fcs.models import User
+from fcs.api import UndertakingList, ListView, ApiView
+from fcs.models import User, MailAddress, db
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -107,6 +109,34 @@ class SettingsOverview(MethodView):
         return Response(json.dumps(resp, indent=2), mimetype='application/json')
 
 
+class MailsList(ListView):
+    model = MailAddress
+
+
+class MailsAdd(ApiView):
+    def post(self):
+        mail = request.form['mail']
+        if MailAddress.query.filter_by(mail=mail).all():
+            return json.dumps(False)
+        contact = MailAddress(mail=mail,
+                              first_name=request.form['first_name'],
+                              last_name=request.form['last_name'])
+        db.session.add(contact)
+        db.session.commit()
+        return json.dumps(True)
+
+
+class MailsDelete(ApiView):
+    def post(self):
+        mail = request.form['mail']
+        contact = MailAddress.query.filter_by(mail=mail).all()
+        if not contact:
+            return json.dumps(False)
+        db.session.delete(contact[0])
+        db.session.commit()
+        return json.dumps(True)
+
+
 misc.add_url_rule('/misc/undertaking/export',
                   view_func=UndertakingListExport.as_view(
                       'company-list-export'))
@@ -116,3 +146,15 @@ misc.add_url_rule('/misc/user/export',
 misc.add_url_rule('/misc/settings',
                   view_func=SettingsOverview.as_view(
                       'settings-overview'))
+misc.add_url_rule('/misc/mail/list',
+                  view_func=MailsList.as_view(
+                      'mails-list'
+                  ))
+misc.add_url_rule('/misc/mail/add',
+                  view_func=MailsAdd.as_view(
+                      'mails-add'
+                  ))
+misc.add_url_rule('/misc/mail/delete',
+                  view_func=MailsDelete.as_view(
+                      'mails-delete'
+                  ))

@@ -225,6 +225,16 @@ class MatchingLog(SerializableModel, db.Model):
     verified = Column(Boolean)
 
 
+class MailAddress(SerializableModel, db.Model):
+    __tablename__ = 'mail_address'
+
+    id = Column(Integer, primary_key=True)
+    mail = Column(String(255), unique=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    first_name = Column(String(255))
+    last_name = Column(String(255))
+
+
 @db_manager.command
 def init():
     db.create_all()

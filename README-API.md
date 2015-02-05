@@ -33,9 +33,16 @@ Misc:
 
 * `/matching_log` - matching logs
 * `/data_sync_log` - data sync logs
+<<<<<<< HEAD
 * `/misc/user/export` - export users list as CSV
 * `/misc/undertaking/export` - export companies list as CSV
 * `/misc/settings` - overview of the middleware settings
+=======
+* `/misc/mail/list` - list the mails
+* `/misc/mail/add` - add a mail to the list
+* `/misc/mail/edit` - update a mail in the list
+* `/misc/mail/delete` - delete a mail from the list
+>>>>>>> matching_email_notifications
 
 Listing calls
 =============
@@ -583,3 +590,45 @@ Display the value of the configured middleware settings
       "BASE_URL": "http://example.com", 
       "AUTO_VERIFY_COMPANIES": false
     }
+
+
+/misc/mail/list
+---------------
+
+Display the list of all mails to be notified about companies matching
+
+    [
+      {
+        'mail': 'new@mail.com',
+        'first_name': 'first_name',
+        'last_name': 'last_name'
+      }
+    ]
+
+
+/misc/mail/add - POST
+---------------------
+
+Add a new contact to be notified on matchings. The POST should contain the 
+following data:
+
+    {
+      'mail': 'new@mail.com',
+      'first_name': 'first_name',
+      'last_name': 'last_name'
+    }
+
+Returns ``true`` on success and ``false`` on failure
+
+
+/misc/mail/delete - POST
+------------------------
+
+Delete a contact from the mailing list. The POST should contain the 
+following data:
+
+    {
+      'mail': 'mail_to_be_deleted@example.com',
+    }
+
+Returns ``true`` on success and ``false`` on failure

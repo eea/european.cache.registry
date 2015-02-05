@@ -8,7 +8,8 @@ API_URL = BASE_URL + '/rest/api'
 API_USER = ''
 API_PASSWORD = ''
 
-BDR_API_URL = 'https://bdr-test.eionet.europa.eu/registry/api'
+BDR_HOST = 'foo'
+BDR_API_URL = BDR_HOST + '/registry/api'
 BDR_API_KEY = ''
 
 BDR_ENDPOINT_URL = ''
@@ -25,9 +26,17 @@ MAIL_USE_SSL = True
 MAIL_USERNAME = ''
 MAIL_PASSWORD = ''
 
-NOTIFY_EMAILS = ['mihai.zamfir@eaudeweb.ro']
-
 HTTPS_VERIFY = None # set it to False to disable
 
+# this switch tells if companies with no matching candidates are automatically
+# verified as being so by the system or not
 AUTO_VERIFY_NEW_COMPANIES = False
+
+# if set to False, only retrieve organisations with 'fgases' obligation
 GET_ALL_INTERESTING_OBLIGATIONS = False
+
+# specify if notifications mails are sent
+SEND_MATCHING_MAILS = False
+
+# the name of sender of notification emails
+MAILS_SENDER_NAME = 'Help Desk'

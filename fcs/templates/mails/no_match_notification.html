@@ -1,0 +1,20 @@
+{% extends 'mails/_layout.html' %}
+
+{% block content %}
+  Dear {{ first_name }} {{ last_name }},
+
+  <p>
+    User <b>{{ user }}</b> has added <b>{{ company_name }}</b> company (registered in the FGAS portal).
+    It had not match with any of the old records.
+
+    <br>
+
+    You can see the company details here:
+    <a href="{{ host }}/fgases_registry/organisation_details?id={{ company_id }}">
+      {{ host }}/organisation_details?id={{ company_id }}
+    </a>
+  </p>
+  <br>
+  Best regards,<br>
+  BDR Help Desk
+{% endblock %}
