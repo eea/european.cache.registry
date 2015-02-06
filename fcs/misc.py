@@ -118,13 +118,18 @@ class MailsAdd(ApiView):
     def post(self):
         mail = request.form['mail']
         if MailAddress.query.filter_by(mail=mail).all():
-            return json.dumps(False)
+            return json.dumps({
+                'success': False,
+                'message': 'This email address already exists'
+            })
         contact = MailAddress(mail=mail,
                               first_name=request.form['first_name'],
                               last_name=request.form['last_name'])
         db.session.add(contact)
         db.session.commit()
-        return json.dumps(True)
+        return json.dumps({
+            'success': True
+        })
 
 
 class MailsDelete(ApiView):
@@ -132,10 +137,15 @@ class MailsDelete(ApiView):
         mail = request.form['mail']
         contact = MailAddress.query.filter_by(mail=mail).all()
         if not contact:
-            return json.dumps(False)
+            return json.dumps({
+                'success': False,
+                'message': 'This email address does not exists'
+            })
         db.session.delete(contact[0])
         db.session.commit()
-        return json.dumps(True)
+        return json.dumps({
+            'success': True,
+        })
 
 
 class AlertWrongMatch(ApiView):
