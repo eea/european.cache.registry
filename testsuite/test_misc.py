@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask import url_for
 from openpyxl import load_workbook
@@ -52,7 +53,8 @@ def test_mail_address_add_new(client):
     resp = client.post(url_for('misc.mails-add'), dict(
         mail='a@ya.com', first_name='a', last_name='b'))
     assert resp.status_code == 200
-    assert resp.body == 'true'
+    resp = json.loads(resp.body)
+    assert resp['success'] is True
     assert len(MailAddress.query.all()) == 1
     ma = MailAddress.query.all()[0]
     assert ma.mail == 'a@ya.com'
@@ -65,7 +67,8 @@ def test_mail_address_add_existing(client):
     resp = client.post(url_for('misc.mails-add'), dict(
         mail=ma.mail, first_name='a', last_name='b'))
     assert resp.status_code == 200
-    assert resp.body == 'false'
+    resp = json.loads(resp.body)
+    assert resp['success'] is False
     assert len(MailAddress.query.all()) == 1
 
 
@@ -73,7 +76,8 @@ def test_mail_address_delete_existing(client):
     ma = factories.MailAddress()
     resp = client.post(url_for('misc.mails-delete'), dict(mail=ma.mail))
     assert resp.status_code == 200
-    assert resp.body == 'true'
+    resp = json.loads(resp.body)
+    assert resp['success'] is True
     assert len(MailAddress.query.all()) == 0
 
 
@@ -82,5 +86,6 @@ def test_mail_address_delete_nonexisting(client):
     resp = client.post(url_for('misc.mails-delete'),
                        dict(mail='non@existing.com'))
     assert resp.status_code == 200
-    assert resp.body == 'false'
+    resp = json.loads(resp.body)
+    assert resp['success'] is False
     assert len(MailAddress.query.all()) == 1
