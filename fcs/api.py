@@ -171,8 +171,8 @@ class UndertakingDetail(DetailView):
         candidates = get_candidates(obj.external_id)
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'country_code', 'date_created', 'date_updated', 'address_id',
-            'businessprofile_id', 'represent_id',
+            'date_created', 'date_updated', 'address_id', 'businessprofile_id',
+            'represent_id',
         )
         for field in _strip_fields:
             data.pop(field)
