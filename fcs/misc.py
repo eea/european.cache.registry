@@ -10,7 +10,8 @@ from flask.views import MethodView
 from fcs.match import get_all_non_candidates
 from fcs.api import UndertakingList, ListView, ApiView
 from fcs.models import User, MailAddress, db
-from fcs.mails import send_wrong_match_mail
+from fcs.mails import (send_wrong_match_mail, send_wrong_lockdown_mail,
+                       send_unmatch_mail)
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
@@ -150,8 +151,25 @@ class MailsDelete(ApiView):
 
 class AlertWrongMatch(ApiView):
     def post(self):
-        send_wrong_match_mail(request.form['user'], request.form['company_id'])
-        return json.dumps(True)
+        resp = send_wrong_match_mail(request.form['user'],
+                                     request.form['company_id'])
+        return json.dumps(resp)
+
+
+class AlertWrongLockdown(ApiView):
+    def post(self):
+        resp = send_wrong_lockdown_mail(request.form['user'],
+                                        request.form['company_id'])
+        return json.dumps(resp)
+
+
+class AlertUnmatch(ApiView):
+    def post(self):
+        resp = send_unmatch_mail(request.form['user'],
+                                 request.form['company_id'],
+                                 request.form['oldcompany_id'],
+                                 request.form['oldcollection_path'])
+        return json.dumps(resp)
 
 
 misc.add_url_rule('/misc/undertaking/export',
@@ -175,7 +193,15 @@ misc.add_url_rule('/misc/mail/delete',
                   view_func=MailsDelete.as_view(
                       'mails-delete'
                   ))
-misc.add_url_rule('/misc/alert_wrong_match',
+misc.add_url_rule('/misc/alert_lockdown/wrong_match',
                   view_func=AlertWrongMatch.as_view(
                       'alert-wrong-match'
+                  ))
+misc.add_url_rule('/misc/alert_lockdown/wrong_lockdown',
+                  view_func=AlertWrongLockdown.as_view(
+                      'alert-wrong-lockdown'
+                  ))
+misc.add_url_rule('/misc/alert_lockdown/unmatch',
+                  view_func=AlertUnmatch.as_view(
+                      'alert-unmatch'
                   ))

@@ -1,0 +1,20 @@
+{% extends 'mails/_layout.html' %}
+
+{% block content %}
+  Dear {{ first_name }} {{ last_name }},
+
+  <p>
+    User <b>{{ user }}</b> has canceled the match between <b>{{ company_name }}</b> company (registered in the FGAS portal)
+    and the old record <b>{{ oldcompany_name }}</b> (taken from BDR-Registry) because is was incorrect.
+    <br>
+    As soon as <b>{{ company_name }}</b> will be re matched to another old record from BDR-Registry reporting for it will be possible.
+    <br>
+
+    In the mean time, the old record <b>{{ oldcompany_name }}</b>, taken from BDR-Registry,
+    that was wrongly attributed to <b>{{ company_name }}</b> is not bound to any company no more and is also available as match candidate
+    and its collection path is unlocked ({{ oldcollection_path }})
+  </p>
+  <br>
+  Best regards,<br>
+  BDR Help Desk
+{% endblock %}

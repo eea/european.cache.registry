@@ -1,0 +1,17 @@
+{% extends 'mails/_layout.html' %}
+
+{% block content %}
+  Dear {{ first_name }} {{ last_name }},
+
+  <p>
+    User <b>{{ user }}</b> has unlocked the match between <b>{{ company_name }}</b> company (registered in the FGAS portal)
+    and the old record <b>{{ oldcompany_name }}</b> (taken from BDR-Registry) because the match was actually correct.
+
+    <br>
+
+    You can now modify the company collection
+  </p>
+  <br>
+  Best regards,<br>
+  BDR Help Desk
+{% endblock %}

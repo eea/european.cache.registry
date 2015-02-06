@@ -40,7 +40,9 @@ Misc:
 * `/misc/mail/list` - list the mails
 * `/misc/mail/add` - add a mail to the list
 * `/misc/mail/delete` - delete a mail from the list
-* `/misc/alert_wrong_match` - alert on wrong matching of a company
+* `/misc/alert_lockdown/wrong_match` - alert on wrong matching of a company
+* `/misc/alert_lockdown/wrong_lockdown` - alert on wrong lockdown
+* `/misc/alert_lockdown/unmatch` - alert at unmatch
 
 
 Listing calls
@@ -99,7 +101,7 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
         "businessprofile": {
           "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
         },
-        "oldcompany_id": true,
+        "oldcompany_verified": true,
         "oldcompany_account": "fgas22331",
         "oldcompany_extid": 4,
         "collection_id": null, 
@@ -653,8 +655,23 @@ On failure returns:
         'message': 'This email address does not exists'
     }
 
-/misc/alert_wrong_match - POST
-------------------------------
+/misc/alert_lockdown/wrong_match - POST
+---------------------------------------
 
 Send an alert email when a company matching was done wrong
+The exepected input POST data should consist of an ``user`` and a ``company_id``
+
+
+/misc/alert_lockdown/wrong_lockdown - POST
+------------------------------------------
+
+In case the lockdown is over and no matching should be changed, the interested 
+parties will be alerted with an email
+The exepected input POST data should consist of an ``user`` and a ``company_id``
+
+
+/misc/alert_lockdown/unmatch - POST
+-----------------------------------
+
+This mail should be sent when an unmatching call has been made 
 The exepected input POST data should consist of an ``user`` and a ``company_id``

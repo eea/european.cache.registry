@@ -3,7 +3,7 @@ import smtplib
 from flask.ext.mail import Mail, Message
 from flask import current_app as app, render_template
 
-from fcs.models import OldCompanyLink, MailAddress
+from fcs.models import MailAddress, Undertaking, OldCompany, OldCompanyLink
 
 
 def send_mail(subject, html, recipients):
@@ -47,30 +47,62 @@ def send_match_mail(match, **kwargs):
         send_mail(subject, html, [contact.mail])
 
 
-def send_wrong_match_mail(user, company_id):
-    template = 'mails/wrong_match.html'
-    subject = 'BDR - Wrong match alert'
-    message = ''
-    hd = app.config.get('BDR_HELP_DESK_MAIL')
-    if not hd:
-        message = 'No BDR_HELP_DESK_MAIL was set in order to send the wrong '\
-                  'match email alert. Please set this value and try again.'
-    link = OldCompanyLink.query.filter_by(undertaking_id=company_id).first()
-    if not link:
-        message = 'There is no linked company having the given ID.'
-    if message:
-        app.logger.warning(message)
-        if 'sentry' in app.extensions:
-            app.extensions['sentry'].captureMessage(message)
-        return
-
-    kwargs = {
-        'user': user, 'bdr_help_desk_email': hd,
-        'company_name': link.undertaking.name,
-        'oldcompany_name': link.oldcompany.name
-    }
+def send_mail_to_list(template, subject, kwargs):
     for contact in MailAddress.query.all():
         kwargs.update({'first_name': contact.first_name,
                        'last_name': contact.last_name})
         html = render_template(template, **kwargs)
         send_mail(subject, html, [contact.mail])
+
+
+def send_wrong_match_mail(user, company_id):
+    template = 'mails/wrong_match.html'
+    subject = 'BDR - Wrong match alert'
+    hd = app.config.get('BDR_HELP_DESK_MAIL')
+    if not hd:
+        message = 'No BDR_HELP_DESK_MAIL was set in order to send the wrong '\
+                  'match email alert. Please set this value and try again.'
+        app.logger.warning(message)
+        if 'sentry' in app.extensions:
+            app.extensions['sentry'].captureMessage(message)
+        return False
+
+    company = Undertaking.query.filter_by(external_id=company_id).first()
+    link = OldCompanyLink.query.filter_by(undertaking=company).first()
+    kwargs = {
+        'user': user,
+        'bdr_help_desk_email': hd,
+        'company_name': company.name,
+        'oldcompany_name': link.oldcompany.name
+    }
+    send_mail_to_list(template, subject, kwargs)
+    return True
+
+
+def send_wrong_lockdown_mail(user, company_id):
+    template = 'mails/wrong_lockdown.html'
+    subject = 'BDR - Wrong lockdown alert'
+    company = Undertaking.query.filter_by(external_id=company_id).first()
+    link = OldCompanyLink.query.filter_by(undertaking=company).first()
+    kwargs = {
+        'user': user,
+        'company_name': company.name,
+        'oldcompany_name': link.oldcompany.name
+    }
+    send_mail_to_list(template, subject, kwargs)
+    return True
+
+
+def send_unmatch_mail(user, company_id, oldcompany_id, oldcollection_path):
+    template = 'mails/unmatch.html'
+    subject = 'BDR - Unmatch alert'
+    company = Undertaking.query.filter_by(external_id=company_id).first()
+    oldcompany = OldCompany.query.filter_by(external_id=oldcompany_id).first()
+    kwargs = {
+        'user': user,
+        'company_name': company.name,
+        'oldcompany_name': oldcompany.name,
+        'oldcollection_path': oldcollection_path,
+    }
+    send_mail_to_list(template, subject, kwargs)
+    return True
