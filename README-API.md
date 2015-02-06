@@ -617,8 +617,18 @@ following data:
       'last_name': 'last_name'
     }
 
-Returns ``true`` on success and ``false`` on failure
+On success returns:
 
+    {
+        'success': True
+    }
+
+On failure returns:
+
+    {
+        'success': False,
+        'message': 'This email address already exists'
+    }
 
 /misc/mail/delete - POST
 ------------------------
@@ -630,7 +640,18 @@ following data:
       'mail': 'mail_to_be_deleted@example.com',
     }
 
-Returns ``true`` on success and ``false`` on failure
+On success returns:
+
+    {
+        'success': True
+    }
+
+On failure returns:
+
+    {
+        'success': False,
+        'message': 'This email address does not exists'
+    }
 
 /misc/alert_wrong_match - POST
 ------------------------------
