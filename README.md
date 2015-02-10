@@ -49,3 +49,8 @@ Set a switch in `settings.py` if you want companies with no candidates to be
 automatically be set as haveing no matching
 
     AUTO_VERIFY_NEW_COMPANIES = True
+
+Set a switch in `settings.py` if you want to match companies within all
+obligations from BDR Registry:
+
+    GET_ALL_INTERESTING_OBLIGATIONS = False
