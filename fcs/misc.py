@@ -106,7 +106,8 @@ class SettingsOverview(MethodView):
         resp = {
             'BASE_URL': current_app.config.get('BASE_URL', 'undefined'),
             'AUTO_VERIFY_COMPANIES': current_app.config.get(
-                'AUTO_VERIFY_NEW_COMPANIES', False)
+                'AUTO_VERIFY_NEW_COMPANIES', False),
+            'BDR_REGISTRY_URL': current_app.config['BDR_API_URL'],
         }
         return Response(json.dumps(resp, indent=2), mimetype='application/json')
 
