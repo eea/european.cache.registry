@@ -52,7 +52,10 @@ def get_unverified_companies():
 
 
 def get_oldcompanies_for_matching():
-    return models.OldCompany.query.filter_by(undertaking=None, valid=True)
+    qs = models.OldCompany.query.filter_by(undertaking=None, valid=True)
+    if not current_app.config.get('GET_ALL_INTERESTING_OBLIGATIONS', ''):
+        qs = qs.filter_by(obligation='fgases')
+    return qs
 
 
 def get_all_candidates():

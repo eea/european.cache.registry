@@ -64,7 +64,6 @@ def parse_company(company, obligation):
 
 @sync_manager.command
 def bdr():
-    companies = []
     for obl in get_obligations():
         print "Getting obligation: ", obl
         companies = get_old_companies(obl)
