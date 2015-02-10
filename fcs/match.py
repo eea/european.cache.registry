@@ -13,8 +13,6 @@ from fcs.mails import send_match_mail
 from fcs.sync.bdr import call_bdr
 
 
-FUZZ_LIMIT = 80
-
 match_manager = Manager()
 
 
@@ -174,8 +172,12 @@ def has_match(company, old):
     return str_matches(c_name, o_name)
 
 
+def get_fuzz_limit():
+    return current_app.config.get('FUZZ_LIMIT', 75)
+
+
 def str_matches(new, old):
-    return new and old and fuzz.ratio(new, old) >= FUZZ_LIMIT
+    return new and old and fuzz.ratio(new, old) >= get_fuzz_limit()
 
 
 def match_all(companies, oldcompanies):
@@ -246,3 +248,12 @@ def unverify(undertaking_external_id):
     """ Remove a link from the matching database """
     u = unverify_link(undertaking_external_id, 'SYSTEM')
     print u and u.oldcompany_verified
+
+
+@match_manager.command
+def test(new, old):
+    """ Show fuzzy match for two words
+    """
+    print "'{}' and '{}' match by {} (LIMIT: {})".format(new, old,
+                                                         fuzz.ratio(new, old),
+                                                         get_fuzz_limit())

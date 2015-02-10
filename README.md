@@ -54,3 +54,8 @@ Set a switch in `settings.py` if you want to match companies within all
 obligations from BDR Registry:
 
     GET_ALL_INTERESTING_OBLIGATIONS = False
+
+Modify the fuzzy matching algorithm percent value (how much should old and new
+be alike):
+
+    FUZZ_LIMIT = 75
