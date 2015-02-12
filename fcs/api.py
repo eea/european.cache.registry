@@ -2,7 +2,7 @@
 import json
 
 from sqlalchemy import desc
-from flask import Blueprint, Response, abort, request
+from flask import Blueprint, Response, abort, request, current_app
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
@@ -200,7 +200,11 @@ class UserCompanies(DetailView):
     def get_object(self, pk):
         if '@' in pk:
             abort(400)
-        return self.model.query.filter_by(username=pk).first_or_404()
+        user = self.model.query.filter_by(username=pk).first()
+        if not user:
+            current_app.logger.warning('Unknown user: {}'.format(pk))
+            abort(404)
+        return user
 
     @classmethod
     def serialize(cls, obj):
