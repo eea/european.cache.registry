@@ -56,6 +56,17 @@ def get_latest_undertakings(updated_since=None):
     return response.json()
 
 
+def patch_users(external_id, users):
+    """ Patch the list of contact persons
+    """
+    external_id = str(external_id)
+    patch = current_app.config.get('PATCH_USERS', {})
+    if external_id in patch:
+        print("Patching company: {}".format(external_id))
+        users.extend(patch[external_id])
+    return users
+
+
 def parse_date(date_value):
     return datetime.strptime(date_value, '%d/%m/%Y').date()
 
@@ -105,6 +116,7 @@ def parse_undertaking(data):
     contact_persons = parse_cp_list(data.pop('contactPersons'))
     represent = parse_rc(data.pop('euLegalRepresentativeCompany'))
 
+    contact_persons = patch_users(data['id'], contact_persons)
     data['types'] = ','.join(data['types'])
     data['external_id'] = data.pop('id')
     data['date_created'] = parse_date(data.pop('dateCreated'))
@@ -217,8 +229,9 @@ def cleanup_unused_users():
     print "Removing", unused_users.count(), "unused users"
     for u in unused_users:
         db.session.delete(u)
-        current_app.logger.info('User {} with email {} has been deleted'.format(
-            u.username, u.email))
+        current_app.logger.info(
+            'User {} with email {} has been deleted'.format(
+                u.username, u.email))
 
 
 @sync_manager.command
