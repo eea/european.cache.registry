@@ -19,7 +19,7 @@ Listing calls:
 * `/undertaking/filter` - count of undertakings, given field filters
 * `/undertaking/[company_id]/details` - details about an undertaking
 * `/user/list` - all users
-* `/user/[username_or_email]/companies` - all verified companies and user has access to
+* `/user/[username]/companies` - all verified companies and user has access to
 
 Matching calls:
 
