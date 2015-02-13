@@ -130,15 +130,20 @@ def unverify_link(undertaking_id, user):
 
 
 def verify_none(undertaking_id, user):
+    return verify_manual(undertaking_id, None, user)
+
+
+def verify_manual(undertaking_id, oldcompany_account, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
     if not u:
         return None
     u.oldcompany = None
     u.oldcompany_verified = True
-    u.oldcompany_account = None
+    u.oldcompany_account = oldcompany_account
     u.oldcompany_extid = None
     if call_bdr(u):
-        log_match(undertaking_id, None, True, user)
+        log_match(undertaking_id, None, True, user,
+                  oldcompany_account=oldcompany_account)
         models.db.session.commit()
         send_match_mail(match=False, user=user, company_name=u.name,
                         company_id=u.external_id)
@@ -257,3 +262,10 @@ def test(new, old):
     print "'{}' and '{}' match by {} (LIMIT: {})".format(new, old,
                                                          fuzz.ratio(new, old),
                                                          get_fuzz_limit())
+
+
+@match_manager.command
+def manual(undertaking_id, oldcompany_account):
+    print "Verifying company: {} with old company account: {}".format(
+        undertaking_id, oldcompany_account)
+    print verify_manual(undertaking_id, oldcompany_account, 'SYSTEM')

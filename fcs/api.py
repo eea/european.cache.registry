@@ -11,8 +11,8 @@ from fcs.models import (
 )
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
-    get_candidates, verify_none,
-    str_matches)
+    get_candidates, verify_none, str_matches,
+)
 
 api = Blueprint('api', __name__)
 api_manager = Manager()

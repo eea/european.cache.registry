@@ -36,11 +36,15 @@ Flush existing matches:
 
 Verify a match:
 
-    ./manage.py verify [undertaking_id] [oldcompany_id]
+    ./manage.py match verify [undertaking_id] [oldcompany_id]
+
+Verify a manual match:
+
+    ./manage.py match manual [undertaking_id] [oldcompany_account]
 
 Remove an unwanted link:
 
-    ./manage.py unverify [undertaking_id]
+    ./manage.py match unverify [undertaking_id]
 
 it returns None if no company was found, False if the company is now
 unverified.
