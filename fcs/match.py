@@ -141,7 +141,7 @@ def verify_manual(undertaking_id, oldcompany_account, user):
     u.oldcompany_verified = True
     u.oldcompany_account = oldcompany_account
     u.oldcompany_extid = None
-    if call_bdr(u):
+    if call_bdr(u, old_collection=oldcompany_account):
         log_match(undertaking_id, None, True, user,
                   oldcompany_account=oldcompany_account)
         models.db.session.commit()
