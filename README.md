@@ -24,6 +24,12 @@ For syncing bdr without SSL verification, set the following switch in settings:
 
     HTTPS_VERIFY = False
 
+For patching the company data, set `PATCH_COMPANIES` to a dictionary
+containing values to be updated. Use the company external id as a key.
+
+For patching user access, set `PATCH_USERS` to a list of users to be added to
+a company. Use the company external id as a key.
+
 ### Matching
 
 Match fgases data with data from bdr registry:

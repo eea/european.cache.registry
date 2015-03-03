@@ -67,6 +67,15 @@ def patch_users(external_id, users):
     return users
 
 
+def patch_undertaking(external_id, data):
+    external_id = str(external_id)
+    patch = current_app.config.get('PATCH_COMPANIES', {})
+    if external_id in patch:
+        print("Patching undertaking: {}".format(external_id))
+        data.update(patch[external_id])
+    return data
+
+
 def parse_date(date_value):
     return datetime.strptime(date_value, '%d/%m/%Y').date()
 
@@ -111,6 +120,7 @@ def parse_cp_list(cp_list):
 
 
 def parse_undertaking(data):
+    data = patch_undertaking(data['id'], data)
     address = parse_address(data.pop('address'))
     business_profile = parse_bp(data.pop('businessProfile'))
     contact_persons = parse_cp_list(data.pop('contactPersons'))
