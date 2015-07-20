@@ -183,6 +183,10 @@ def parse_undertaking(data):
             User.query
             .filter_by(email=contact_person['email'])
             .first()
+        ) or (
+            User.query
+            .filter_by(username=contact_person['username'])
+            .first()
         )
         # add or update
         if user:
