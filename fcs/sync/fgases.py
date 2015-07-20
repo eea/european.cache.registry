@@ -179,11 +179,13 @@ def parse_undertaking(data):
 
     existing_persons = undertaking.contact_persons.all()
     for contact_person in contact_persons:
-        # Username already exists flag
-        exists = False
         user = (
             User.query
             .filter_by(email=contact_person['email'])
+            .first()
+        ) or (
+            User.query
+            .filter_by(username=contact_person['username'])
             .first()
         )
         # add or update
@@ -191,12 +193,8 @@ def parse_undertaking(data):
             update_obj(user, contact_person)
         else:
             user = User(**contact_person)
-            # Check if the username is not already in our db
-            if not User.query.filter_by(username=contact_person['username']).first():
-                db.session.add(user)
-            else:
-                exists = True
-        if user not in existing_persons and not exists:
+            db.session.add(user)
+        if user not in existing_persons:
             undertaking.contact_persons.append(user)
 
     current_emails = [p.get('email') for p in contact_persons]
