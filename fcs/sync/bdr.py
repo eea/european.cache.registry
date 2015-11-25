@@ -56,6 +56,7 @@ def call_bdr(undertaking, old_collection=False):
         'domain': undertaking.domain,
         'country': undertaking.country_code,
         'name': undertaking.name,
+        'date_created': undertaking.date_created
     }
     if old_collection:
         params['old_collection_id'] = undertaking.oldcompany_account
