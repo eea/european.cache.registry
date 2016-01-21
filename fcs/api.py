@@ -144,7 +144,7 @@ class UndertakingFilterCount(ApiView):
             elif k != 'name' and k != 'OR_name':
                 qs = qs.filter(getattr(Undertaking, self.FILTER_MAP[k]) == v)
         if 'name' in request.args:
-            qs = [u for u in qs if str_matches(u.name, request.args['name'])]
+            qs = [u for u in qs if str_matches(u.name.lower(), request.args['name'].lower())]
             count = len(qs)
         elif 'OR_name' in request.args:
             qs = [u for u in qs if
