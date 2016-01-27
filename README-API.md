@@ -36,6 +36,7 @@ Misc:
 
 * `/misc/user/export` - export users list as CSV
 * `/misc/undertaking/export` - export companies list as CSV
+* `/misc/undertaking/[company_id]/statusupdate` - change the status of a company
 * `/misc/settings` - overview of the middleware settings
 * `/misc/mail/list` - list the mails
 * `/misc/mail/add` - add a mail to the list
@@ -573,6 +574,11 @@ order by execution_time
 
 This URL is used to export the list of undertakings from ``/undertakings/list``
 as an Excel file.
+
+/misc/undertaking/[company_id]/statusupdate - POST
+--------------------------------------------------
+
+This url is used to update the status of a company by POST method with the new status
 
 
 /misc/user/export

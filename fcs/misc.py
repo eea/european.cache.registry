@@ -9,7 +9,7 @@ from flask.views import MethodView
 
 from fcs.match import get_all_non_candidates
 from fcs.api import UndertakingList, ListView, ApiView
-from fcs.models import User, MailAddress, db
+from fcs.models import User, MailAddress, db, Undertaking
 from fcs.mails import (send_wrong_match_mail, send_wrong_lockdown_mail,
                        send_unmatch_mail)
 
@@ -173,9 +173,25 @@ class AlertUnmatch(ApiView):
         return json.dumps(resp)
 
 
+class UndertakingStatusUpdate(ApiView):
+    model = Undertaking
+
+    def post(self, pk):
+        status = request.form['status']
+        if status:
+            company = self.model.query.filter_by(external_id=pk).first_or_404()
+            company.status = status
+            db.session.commit()
+            return json.dumps(True)
+
+
 misc.add_url_rule('/misc/undertaking/export',
                   view_func=UndertakingListExport.as_view(
                       'company-list-export'))
+
+misc.add_url_rule('/misc/undertaking/<pk>/statusupdate',
+                  view_func=UndertakingStatusUpdate.as_view('statusupdate'))
+
 misc.add_url_rule('/misc/user/export',
                   view_func=UserListExport.as_view(
                       'user-list-export'))
