@@ -16,8 +16,8 @@ def get_absolute_url(url):
     return current_app.config['BDR_ENDPOINT_URL'] + url
 
 
-def do_bdr_request(params):
-    url = get_absolute_url('/ReportekEngine/update_company_collection')
+def do_bdr_request(params, relative_url):
+    url = get_absolute_url(relative_url)
     auth = get_auth()
     ssl_verify = current_app.config['HTTPS_VERIFY']
 
@@ -59,4 +59,7 @@ def call_bdr(undertaking, old_collection=False):
     }
     if old_collection:
         params['old_collection_id'] = undertaking.oldcompany_account
-    return do_bdr_request(params)
+
+    relative_url = '/ReportekEngine/update_company_collection'
+
+    return do_bdr_request(params, relative_url)

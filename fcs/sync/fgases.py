@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+import ast
 import requests
 
 from sqlalchemy import desc
@@ -10,6 +11,7 @@ from fcs.models import (
     EuLegalRepresentativeCompany, OrganizationLog,
 )
 from fcs.sync import sync_manager, Unauthorized, InvalidResponse
+from fcs.sync.bdr import get_auth as get_bdr_auth
 from fcs.sync.utils import update_obj
 
 
@@ -74,6 +76,61 @@ def patch_undertaking(external_id, data):
         print("Patching undertaking: {}".format(external_id))
         data.update(patch[external_id])
     return data
+
+
+def update_bdr_col_name(undertaking):
+    """ Update the BDR collection name with the new name
+        For the moment, use the API script in the BDR's api/
+        folder in order to change the name. This should be changed
+        in the future to use a unified API for registries
+    """
+    DOMAIN_TO_ZOPE_FOLDER = {
+        'FGAS': 'fgases'
+    }
+    if not current_app.config.get('BDR_ENDPOINT_URL'):
+        current_app.logger.warning('No bdr endpoint. No bdr call.')
+        return True
+
+    params = {
+        'country_code': undertaking.country_code.lower(),
+        'obligation_folder_name': DOMAIN_TO_ZOPE_FOLDER.get(undertaking.domain),
+        'account_uid': str(undertaking.external_id),
+        'organisation_name': undertaking.name
+    }
+
+    endpoint = current_app.config['BDR_ENDPOINT_URL']
+    url = endpoint + '/api/update_organisation_name'
+    auth = get_bdr_auth()
+    ssl_verify = current_app.config['HTTPS_VERIFY']
+
+    error_message = ''
+    response = None
+    try:
+        response = requests.get(url, params=params, auth=auth,
+                                verify=ssl_verify)
+    except requests.ConnectionError:
+        error_message = 'BDR was unreachable - {}'.format(datetime.now())
+
+    if response is not None:
+        try:
+            res = ast.literal_eval(response.content)
+        except:
+            res = {}
+        if not res.get('updated') is True:
+            error_message = 'Collection for id: {0} not updated'\
+                            .format(undertaking.external_id)
+        elif response.status_code != 200:
+            error_message = 'Invalid status code: ' + response.status_code
+    else:
+        error_message = 'Invalid response: ' + str(response)
+
+    if error_message:
+        current_app.logger.warning(error_message)
+        print error_message
+        if 'sentry' in current_app.extensions:
+            current_app.extensions['sentry'].captureMessage(error_message)
+
+    return not error_message
 
 
 def parse_date(date_value):
@@ -142,7 +199,12 @@ def parse_undertaking(data):
     if not undertaking:
         undertaking = Undertaking(**data)
     else:
+        u_name = undertaking.name
         update_obj(undertaking, data)
+        if undertaking.name != u_name:
+            if update_bdr_col_name(undertaking):
+                print "Updated collection title for: {0}"\
+                      .format(undertaking.external_id)
 
     if not undertaking.address:
         addr = Address(**address)
