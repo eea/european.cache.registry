@@ -20,6 +20,10 @@ Fetch the latest data from a test server (cron):
     ./manage.py sync fgases [-d 30]
     ./manage.py sync bdr
 
+In order to sync BDR collections title with the cache server's corresponding undertakings name:
+
+    ./manage.py sync sync_collections_title
+
 For syncing bdr without SSL verification, set the following switch in settings:
 
     HTTPS_VERIFY = False
