@@ -78,6 +78,32 @@ def patch_undertaking(external_id, data):
     return data
 
 
+def bdr_request(url, params=None):
+    auth = get_bdr_auth()
+    ssl_verify = current_app.config['HTTPS_VERIFY']
+
+    response = None
+    try:
+        response = requests.get(url, params=params, auth=auth,
+                                verify=ssl_verify)
+    except requests.ConnectionError:
+        error_message = 'BDR was unreachable - {}'.format(datetime.now())
+        current_app.logger.warning(error_message)
+        print error_message
+        if 'sentry' in current_app.extensions:
+            current_app.extensions['sentry'].captureMessage(error_message)
+
+    return response
+
+
+def get_bdr_collections():
+    endpoint = current_app.config['BDR_ENDPOINT_URL']
+    url = endpoint + '/api/collections_json'
+    response = bdr_request(url)
+    if response and response.status_code == 200:
+        return response.json()
+
+
 def update_bdr_col_name(undertaking):
     """ Update the BDR collection name with the new name
         For the moment, use the API script in the BDR's api/
@@ -87,7 +113,8 @@ def update_bdr_col_name(undertaking):
     DOMAIN_TO_ZOPE_FOLDER = {
         'FGAS': 'fgases'
     }
-    if not current_app.config.get('BDR_ENDPOINT_URL'):
+    endpoint = current_app.config['BDR_ENDPOINT_URL']
+    if not endpoint:
         current_app.logger.warning('No bdr endpoint. No bdr call.')
         return True
 
@@ -95,22 +122,13 @@ def update_bdr_col_name(undertaking):
         'country_code': undertaking.country_code.lower(),
         'obligation_folder_name': DOMAIN_TO_ZOPE_FOLDER.get(undertaking.domain),
         'account_uid': str(undertaking.external_id),
-        'organisation_name': undertaking.name
+        'organisation_name': undertaking.name,
+        'oldcompany_account': undertaking.oldcompany_account
     }
 
-    endpoint = current_app.config['BDR_ENDPOINT_URL']
     url = endpoint + '/api/update_organisation_name'
-    auth = get_bdr_auth()
-    ssl_verify = current_app.config['HTTPS_VERIFY']
-
+    response = bdr_request(url, params)
     error_message = ''
-    response = None
-    try:
-        response = requests.get(url, params=params, auth=auth,
-                                verify=ssl_verify)
-    except requests.ConnectionError:
-        error_message = 'BDR was unreachable - {}'.format(datetime.now())
-
     if response is not None:
         try:
             res = ast.literal_eval(response.content)
@@ -361,3 +379,28 @@ def fgases(days=7, updated_since=None):
     print undertakings_count, "values"
 
     db.session.commit()
+
+
+@sync_manager.command
+def sync_collections_title():
+    collections = get_bdr_collections()
+    if collections:
+        colls = {}
+        for collection in collections:
+            c_id = collection.get('company_id')
+            if c_id:
+                if not colls.get(c_id):
+                    colls[c_id] = collection
+                else:
+                    print 'Duplicate collection for company_id: {0} have {1}'\
+                          ' and found {2}'.format(c_id, colls[c_id], collection)
+        undertakings = Undertaking.query.all()
+        for undertaking in undertakings:
+            ext_id = str(undertaking.external_id)
+            title = undertaking.name
+            coll = colls.get(ext_id)
+            if coll and coll.get('title') != title:
+                if update_bdr_col_name(undertaking):
+                    print "Updated collection title for: {0}"\
+                          .format(ext_id)
+
