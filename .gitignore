@@ -7,3 +7,5 @@ supervisord.conf
 db.*
 log_file.log
 .coverage
+.idea/
+/settings.py
