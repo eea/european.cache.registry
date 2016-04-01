@@ -91,10 +91,11 @@ class UserListExport(MethodView):
         for user in users:
             for company in user.verified_undertakings:
                 for cp in company.contact_persons:
-                    values = [user.username, company.name,
-                              company.address.country.name, cp.first_name,
-                              cp.last_name, cp.email]
-                    ws.append(values)
+                    if cp.username == user.username:
+                        values = [user.username, company.name,
+                                  company.address.country.name, cp.first_name,
+                                  cp.last_name, cp.email]
+                        ws.append(values)
         response = Response(save_virtual_workbook(wb), mimetype=MIMETYPE)
         response.headers.add('Content-Disposition',
                              'attachment; filename=users_list.xlsx')
