@@ -39,7 +39,7 @@ class User(SerializableModel, Base):
     username = Column(String(255), unique=True)
     first_name = Column(String(255))
     last_name = Column(String(255))
-    email = Column(String(255), unique=True)
+    email = Column(String(255))
 
     @property
     def verified_undertakings(self):

@@ -4,6 +4,8 @@ import ast
 import requests
 
 from sqlalchemy import desc
+from sqlalchemy.orm.exc import MultipleResultsFound
+from sqlalchemy.orm.exc import NoResultFound
 from flask import current_app
 
 from fcs.models import (
@@ -257,20 +259,32 @@ def parse_undertaking(data):
             update_obj(undertaking.represent.address, address)
             update_obj(undertaking.represent, represent)
 
+    unique_emails = set([cp.get('email') for cp in contact_persons])
     existing_persons = undertaking.contact_persons.all()
     for contact_person in contact_persons:
-        user = (
-            User.query
-            .filter_by(email=contact_person['email'])
-            .first()
-        ) or (
-            User.query
-            .filter_by(username=contact_person['username'])
-            .first()
-        )
-        # add or update
+        user = None
+        username = contact_person['username']
+        # Check if we have a user with that username
+        by_username = User.query.filter_by(username=username).first()
+        if not by_username:
+            email = contact_person['email']
+            # Check if we have a user with that email
+            by_email = User.query.filter_by(email=email).first()
+            # If we have an email as username, check for duplicate emails
+            if '@' in username:
+                if len(unique_emails) != len(contact_persons):
+                    # If we have duplicate emails, don't match any
+                    by_email = None
+
+        user = by_username or by_email
+
         if user:
-            update_obj(user, contact_person)
+            do_update = False
+            for key, value in contact_person.items():
+                if value != getattr(user, key):
+                    do_update = True
+            if do_update:
+                update_obj(user, contact_person)
         else:
             user = User(**contact_person)
             db.session.add(user)
@@ -278,8 +292,10 @@ def parse_undertaking(data):
             undertaking.contact_persons.append(user)
 
     current_emails = [p.get('email') for p in contact_persons]
+    current_usernames = [p.get('username') for p in contact_persons]
     for person in undertaking.contact_persons:
-        if person.email not in current_emails:
+        if person.email not in current_emails or \
+           person.username not in current_usernames:
             undertaking.contact_persons.remove(person)
 
     undertaking.country_code = undertaking.get_country_code()
