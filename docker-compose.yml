@@ -1,0 +1,17 @@
+fgas:
+  image: fgas
+  links:
+  - mysql:mysql
+  volumes:
+  - /etc/localtime:/etc/localtime:ro
+
+mysql:
+  image: mysql
+  environment:
+  - MYSQL_DATABASE=fcs
+  - MYSQL_USER=edw
+  - MYSQL_PASSWORD=edw
+  - MYSQL_ROOT_PASSWORD=edw
+  volumes:
+  - /etc/localtime:/etc/localtime:ro
+  - fcs-mysql-data:/var/lib/mysql

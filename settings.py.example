@@ -1,7 +1,7 @@
 # Turn this off on production
 DEBUG = True
 
-SQLALCHEMY_DATABASE_URI = ('sqlite:///../db.sqlite3')
+SQLALCHEMY_DATABASE_URI = 'mysql://edw:edw@mysql/fcs'
 
 BASE_URL = ''
 API_URL = BASE_URL + '/rest/api'
@@ -21,7 +21,7 @@ BDR_HELP_DESK_MAIL = ''
 LOG_FILE = 'instance/EEA_double_check.log'
 
 # email server
-MAIL_SERVER = 'smtp.googlemail.com'
+MAIL_SERVER = 'postfix'
 MAIL_PORT = 465
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True

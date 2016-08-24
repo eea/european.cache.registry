@@ -1,0 +1,5 @@
+.git*
+.travis*
+Dockerfile
+docker-compose.yml
+supervisord.conf.example
