@@ -1,9 +1,12 @@
 fgas:
-  image: fgas
+  image: eeacms/fgas-cache-server
+  ports:
+  - "80:5000"
   links:
   - mysql:mysql
   volumes:
   - /etc/localtime:/etc/localtime:ro
+  - ./settings.py:/var/local/fgas-cache-server/settings.py:ro
 
 mysql:
   image: mysql
