@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+import os
 
 from sqlalchemy import desc
 from flask import Blueprint, Response, abort, request, current_app
@@ -20,6 +21,16 @@ api_manager = Manager()
 
 class ApiView(MethodView):
     def dispatch_request(self, **kwargs):
+        if not self.authenticate():
+            resp = {
+                'status': 'Unauthorized',
+                'message': 'You need to be authenticated '
+                           'in order to access this resource.',
+            }
+            status_code = 401
+            return Response(json.dumps(resp, indent=2),
+                            mimetype='application/json'), status_code
+
         resp = super(ApiView, self).dispatch_request(**kwargs)
 
         if isinstance(resp, (dict, list, tuple)):
@@ -27,6 +38,13 @@ class ApiView(MethodView):
                             mimetype='application/json')
 
         return resp
+
+    def authenticate(self):
+        token = os.environ.get('API_TOKEN')
+        authorization = request.headers.get('Authorization')
+        if authorization == token:
+            return True
+        return False
 
     @classmethod
     def serialize(cls, obj, pop_id=True):
@@ -134,7 +152,7 @@ class UndertakingFilterCount(ApiView):
         qs = Undertaking.query
         if any([a for a in request.args if a.startswith('OR_')]):
             qs = Undertaking.query.join(EuLegalRepresentativeCompany)
-        qs = qs.filter(Undertaking.oldcompany_verified==True)
+        qs = qs.filter(Undertaking.oldcompany_verified == True)
 
         for k, v in request.args.iteritems():
             if k not in self.FILTERS:
@@ -144,7 +162,8 @@ class UndertakingFilterCount(ApiView):
             elif k != 'name' and k != 'OR_name':
                 qs = qs.filter(getattr(Undertaking, self.FILTER_MAP[k]) == v)
         if 'name' in request.args:
-            qs = [u for u in qs if str_matches(u.name.lower(), request.args['name'].lower())]
+            qs = [u for u in qs
+                  if str_matches(u.name.lower(), request.args['name'].lower())]
             count = len(qs)
         elif 'OR_name' in request.args:
             qs = [u for u in qs if

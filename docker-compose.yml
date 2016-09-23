@@ -4,6 +4,8 @@ fgas:
   - "80:5000"
   links:
   - mysql:mysql
+  environment:
+  - API_TOKEN=token
   volumes:
   - /etc/localtime:/etc/localtime:ro
   - ./settings.py:/var/local/fgas-cache-server/settings.py:ro
