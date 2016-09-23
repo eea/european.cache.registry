@@ -1,6 +1,9 @@
 # coding=utf-8
+import contextlib
 import json
 import os
+import sys
+import StringIO
 
 from sqlalchemy import desc
 from flask import Blueprint, Response, abort, request, current_app
@@ -14,9 +17,19 @@ from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
     get_candidates, verify_none, str_matches,
 )
+from fcs.sync.fgases import fgases, sync_collections_title
 
 api = Blueprint('api', __name__)
 api_manager = Manager()
+
+
+@contextlib.contextmanager
+def stdout_redirect(where):
+    sys.stdout = where
+    try:
+        yield where
+    finally:
+        sys.stdout = sys.__stdout__
 
 
 class ApiView(MethodView):
@@ -392,6 +405,31 @@ class MatchingsLog(ListView):
         return data
 
 
+class MgmtCommand(ApiView):
+    def get(self):
+        with stdout_redirect(StringIO.StringIO()) as output:
+            try:
+                result = self.command_func(**request.args.to_dict())
+                message = ''
+            except Exception as ex:
+                result = False
+                message = ex.message
+
+        output.seek(0)
+        message = output.read() + message
+        status = 'OK' if result else 'Error'
+
+        return {'status': status, 'message': message}
+
+
+class SyncFgases(MgmtCommand):
+    command_func = staticmethod(fgases)
+
+
+class SyncCollectionsTitle(MgmtCommand):
+    command_func = staticmethod(sync_collections_title)
+
+
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('company-list'))
 api.add_url_rule('/undertaking/list-small',
@@ -441,3 +479,8 @@ api.add_url_rule('/data_sync_log',
                  view_func=DataSyncLog.as_view('data-sync-log'))
 api.add_url_rule('/matching_log',
                  view_func=MatchingsLog.as_view('matching-log'))
+
+api.add_url_rule('/sync_fgases',
+                 view_func=SyncFgases.as_view('sync-fgases'))
+api.add_url_rule('/sync_collections_title',
+                 view_func=SyncCollectionsTitle.as_view('sync-collections'))

@@ -4,8 +4,6 @@ import ast
 import requests
 
 from sqlalchemy import desc
-from sqlalchemy.orm.exc import MultipleResultsFound
-from sqlalchemy.orm.exc import NoResultFound
 from flask import current_app
 
 from fcs.models import (
@@ -365,7 +363,8 @@ def fgases(days=7, updated_since=None):
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
         except ValueError:
-            return 'Invalid date format. Please use DD/MM/YYYY'
+            print 'Invalid date format. Please use DD/MM/YYYY'
+            return False
     else:
         days = int(days)
         if days > 0:
@@ -395,6 +394,7 @@ def fgases(days=7, updated_since=None):
     print undertakings_count, "values"
 
     db.session.commit()
+    return True
 
 
 @sync_manager.command
@@ -419,4 +419,4 @@ def sync_collections_title():
                 if update_bdr_col_name(undertaking):
                     print "Updated collection title for: {0}"\
                           .format(ext_id)
-
+    return True
