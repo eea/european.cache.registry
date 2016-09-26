@@ -408,10 +408,11 @@ class MatchingsLog(ListView):
 
 
 class MgmtCommand(ApiView):
-    def get(self):
+    def get(self, **kwargs):
+        kwargs = kwargs or request.args.to_dict()
         with stdout_redirect(StringIO.StringIO()) as output:
             try:
-                result = self.command_func(**request.args.to_dict())
+                result = self.command_func(**kwargs)
                 message = ''
             except Exception as ex:
                 result = False
@@ -510,14 +511,17 @@ api.add_url_rule('/data_sync_log',
 api.add_url_rule('/matching_log',
                  view_func=MatchingsLog.as_view('matching-log'))
 
-api.add_url_rule('/sync_collections_title',
+api.add_url_rule('/sync/collections_title',
                  view_func=SyncCollectionsTitle.as_view('sync-collections'))
-api.add_url_rule('/sync_fgases', view_func=SyncFgases.as_view('sync-fgases'))
-api.add_url_rule('/sync_bdr', view_func=SyncBdr.as_view('sync-bdr'))
-api.add_url_rule('/match_run', view_func=MatchRun.as_view('match-run'))
-api.add_url_rule('/match_flush', view_func=MatchFlush.as_view('match-flush'))
-api.add_url_rule('/match_verify', view_func=MatchVerify.as_view('match-verify'))
-api.add_url_rule('/match_unverify',
+api.add_url_rule('/sync/fgases', view_func=SyncFgases.as_view('sync-fgases'))
+api.add_url_rule('/sync/bdr', view_func=SyncBdr.as_view('sync-bdr'))
+api.add_url_rule('/match/run', view_func=MatchRun.as_view('match-run'))
+api.add_url_rule('/match/flush', view_func=MatchFlush.as_view('match-flush'))
+api.add_url_rule('/match/verify/<int:undertaking_id>/<int:oldcompany_id>',
+                 view_func=MatchVerify.as_view('match-verify'))
+api.add_url_rule('/match/unverify/<int:undertaking_external_id>',
                  view_func=MatchUnverify.as_view('match-unverify'))
-api.add_url_rule('/match_test', view_func=MatchTest.as_view('match-test'))
-api.add_url_rule('/match_manual', view_func=MatchManual.as_view('match-manual'))
+api.add_url_rule('/match/test/<new>/<old>',
+                 view_func=MatchTest.as_view('match-test'))
+api.add_url_rule('/match/manual/<int:undertaking_id>/<oldcompany_account>',
+                 view_func=MatchManual.as_view('match-manual'))
