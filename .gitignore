@@ -8,4 +8,5 @@ db.*
 log_file.log
 .coverage
 .idea/
+.secret
 /settings.py

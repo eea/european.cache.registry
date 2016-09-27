@@ -1,22 +1,41 @@
 fgas:
-  image: eeacms/fgas-cache-server
+  build: .
+  mem_limit: 1500000000 #1.5GB
+  labels:
+    io.rancher.scheduler.affinity:host_label: hostname=eionet-cph-10
+  domainname: eionet.europa.eu #???
+  hostname: bdr #???
   ports:
   - "80:5000"
   links:
+#  - postgres:postgres
   - mysql:mysql
-  environment:
-  - API_TOKEN=token
+  env_file:
+  - .secret
   volumes:
   - /etc/localtime:/etc/localtime:ro
-  - ./settings.py:/var/local/fgas-cache-server/settings.py:ro
+  command: ["runserver"]
+
+# postgres:
+#   image: eeacms/postgres:9.5s
+#   environment:
+#   - POSTGRES_USER=postgres
+#   - POSTGRES_PASSWORD=postgres
+#   - POSTGRES_DBNAME=fcs
+#   - POSTGRES_DBUSER=fcs
+#   - POSTGRES_DBPASS=fcs
+#   volumes:
+#   - /etc/localtime:/etc/localtime:ro
+#   - fcs-pg-data:/var/lib/postgresql/data
+
 
 mysql:
   image: mysql
   environment:
   - MYSQL_DATABASE=fcs
-  - MYSQL_USER=edw
-  - MYSQL_PASSWORD=edw
-  - MYSQL_ROOT_PASSWORD=edw
+  - MYSQL_USER=fcs
+  - MYSQL_PASSWORD=fcs
+  - MYSQL_ROOT_PASSWORD=fcs
   volumes:
   - /etc/localtime:/etc/localtime:ro
   - fcs-mysql-data:/var/lib/mysql

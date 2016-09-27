@@ -10,7 +10,6 @@ from flask.ext.script import Manager
 
 
 db = SQLAlchemy()
-Base = db.Model
 db_manager = Manager()
 
 
@@ -32,7 +31,7 @@ class SerializableModel(object):
         return data
 
 
-class User(SerializableModel, Base):
+class User(SerializableModel, db.Model):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
@@ -46,7 +45,7 @@ class User(SerializableModel, Base):
         return self.undertakings.filter_by(oldcompany_verified=True)
 
 
-class Country(SerializableModel, Base):
+class Country(SerializableModel, db.Model):
     __tablename__ = 'country'
 
     id = Column(Integer, primary_key=True)
@@ -55,7 +54,7 @@ class Country(SerializableModel, Base):
     type = Column(String(64))
 
 
-class Address(SerializableModel, Base):
+class Address(SerializableModel, db.Model):
     __tablename__ = 'address'
 
     id = Column(Integer, primary_key=True)
@@ -71,7 +70,7 @@ class Address(SerializableModel, Base):
         return self.zipcode
 
 
-class EuLegalRepresentativeCompany(SerializableModel, Base):
+class EuLegalRepresentativeCompany(SerializableModel, db.Model):
     __tablename__ = 'represent'
 
     id = Column(Integer, primary_key=True)
@@ -88,7 +87,7 @@ class EuLegalRepresentativeCompany(SerializableModel, Base):
         return self.name
 
 
-class BusinessProfile(SerializableModel, Base):
+class BusinessProfile(SerializableModel, db.Model):
     __tablename__ = 'businessprofile'
 
     id = Column(Integer, primary_key=True)
@@ -106,7 +105,7 @@ undertaking_users = db.Table(
 )
 
 
-class Undertaking(SerializableModel, Base):
+class Undertaking(SerializableModel, db.Model):
     __tablename__ = 'undertaking'
 
     id = Column(Integer, primary_key=True)
@@ -168,7 +167,7 @@ class Undertaking(SerializableModel, Base):
         )
 
 
-class OldCompany(SerializableModel, Base):
+class OldCompany(SerializableModel, db.Model):
     __tablename__ = 'old_company'
 
     id = Column(Integer, primary_key=True)
@@ -191,7 +190,7 @@ class OldCompany(SerializableModel, Base):
         return country_obj and country_obj.name
 
 
-class OldCompanyLink(SerializableModel, Base):
+class OldCompanyLink(SerializableModel, db.Model):
     __tablename__ = 'old_company_link'
 
     oldcompany_id = Column(ForeignKey('old_company.id'), primary_key=True)
