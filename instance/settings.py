@@ -5,7 +5,7 @@ import os
 # Turn this off on production
 DEBUG = True if os.environ.get('DEBUG', '') in ('True','true') else False
 
-SQLALCHEMY_DATABASE_URI = 'mysql://fcs:fcs@mysql/fcs'
+SQLALCHEMY_DATABASE_URI = 'postgresql://fcs:fcs@postgres/fcs'
 
 BASE_URL = os.environ.get('BASE_URL', '')
 API_URL = BASE_URL + '/rest/api'

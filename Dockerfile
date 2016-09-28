@@ -3,11 +3,10 @@ MAINTAINER "EEA: IDM2 C-TEAM" <eea-edw-c-team-alerts@googlegroups.com>
 
 ENV WORK_DIR=/var/local/fcs
 
-RUN runDeps="curl vim build-essential netcat libmysqlclient-dev" \
+RUN runDeps="curl vim build-essential netcat libpq-dev" \
  && apt-get update \
  && apt-get install -y --no-install-recommends $runDeps \
- && rm -vrf /var/lib/apt/lists/* \
- && mkdir -p $WORK_DIR
+ && rm -vrf /var/lib/apt/lists/*
 
 COPY . $WORK_DIR/
 WORKDIR $WORK_DIR

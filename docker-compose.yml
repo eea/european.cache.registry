@@ -8,34 +8,20 @@ fgas:
   ports:
   - "80:5000"
   links:
-#  - postgres:postgres
-  - mysql:mysql
+  - postgres:postgres
   env_file:
   - .secret
   volumes:
   - /etc/localtime:/etc/localtime:ro
-  command: ["runserver"]
 
-# postgres:
-#   image: eeacms/postgres:9.5s
-#   environment:
-#   - POSTGRES_USER=postgres
-#   - POSTGRES_PASSWORD=postgres
-#   - POSTGRES_DBNAME=fcs
-#   - POSTGRES_DBUSER=fcs
-#   - POSTGRES_DBPASS=fcs
-#   volumes:
-#   - /etc/localtime:/etc/localtime:ro
-#   - fcs-pg-data:/var/lib/postgresql/data
-
-
-mysql:
-  image: mysql
+postgres:
+  image: eeacms/postgres:9.5s
   environment:
-  - MYSQL_DATABASE=fcs
-  - MYSQL_USER=fcs
-  - MYSQL_PASSWORD=fcs
-  - MYSQL_ROOT_PASSWORD=fcs
+  - POSTGRES_USER=postgres
+  - POSTGRES_PASSWORD=postgres
+  - POSTGRES_DBNAME=fcs
+  - POSTGRES_DBUSER=fcs
+  - POSTGRES_DBPASS=fcs
   volumes:
   - /etc/localtime:/etc/localtime:ro
-  - fcs-mysql-data:/var/lib/mysql
+  - fcs-pg-data:/var/lib/postgresql/data
