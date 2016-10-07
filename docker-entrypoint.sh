@@ -3,12 +3,13 @@ set -e
 
 COMMANDS="shell utils db sync runserver api match"
 
-if [ -z "$POSTGRES_ADDR" ]; then
-    POSTGRES_ADDR="postgres"
+if [ -z "$MYSQL_ADDR" ]; then
+  MYSQL_ADDR="mysql"
 fi
 
-while ! nc -z $POSTGRES_ADDR 5432; do
-  echo "Waiting for PostgreSQL server at '$POSTGRES_ADDR' to accept connections..."
+
+while ! nc -z $MYSQL_ADDR 3306; do
+  echo "Waiting for MySQL server at '$MYSQL_ADDR' to accept connections on port 3306..."
   sleep 3s
 done
 
