@@ -412,17 +412,16 @@ class MgmtCommand(ApiView):
         kwargs = kwargs or request.args.to_dict()
         with stdout_redirect(StringIO.StringIO()) as output:
             try:
-                result = self.command_func(**kwargs)
+                success = self.command_func(**kwargs)
                 message = ''
             except Exception as ex:
-                result = False
+                success = False
                 message = repr(ex)
 
         output.seek(0)
         message = output.read() + message
-        status = 'OK' if result else 'Error'
 
-        return {'status': status, 'message': message}
+        return {'success': success, 'message': message}
 
 
 class SyncFgases(MgmtCommand):
