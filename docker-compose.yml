@@ -1,5 +1,6 @@
 app:
-  image: eeacms/reportek.fcs
+  build: .
+  #image: eeacms/reportek.fcs
   mem_limit: 1500000000 #1.5GB
   labels:
     io.rancher.scheduler.affinity:host_label: reportek.fcs=yes
