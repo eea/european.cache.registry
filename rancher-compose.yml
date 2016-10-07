@@ -1,0 +1,8 @@
+app:
+  scale: 1
+  health_check:
+    port: 5000
+    interval: 2000
+    unhealthy_threshold: 3
+    response_timeout: 2000
+    healthy_threshold: 2

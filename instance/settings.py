@@ -5,7 +5,12 @@ import os
 # Turn this off on production
 DEBUG = True if os.environ.get('DEBUG', '') in ('True','true') else False
 
-SQLALCHEMY_DATABASE_URI = 'postgresql://fcs:fcs@postgres/fcs'
+SQLALCHEMY_DATABASE_URI = '{schema}://{user}:{pwd}@{host}/{dbname}'.format(
+  schema=os.environ.get('DB_SCHEMA', 'sqlite'),
+  user=os.environ.get('DB_USER', ''),
+  pwd=os.environ.get('DB_PASS', ''),
+  host=os.environ.get('DB_HOST', ''),
+  dbname=os.environ.get('DB_NAME', ''))
 
 BASE_URL = os.environ.get('BASE_URL', '')
 API_URL = BASE_URL + '/rest/api'
