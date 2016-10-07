@@ -69,3 +69,4 @@ def bdr():
         companies = get_old_companies(obl)
         print len([parse_company(c, obl) for c in companies]), "values"
     db.session.commit()
+    return True

@@ -416,7 +416,7 @@ class MgmtCommand(ApiView):
                 message = ''
             except Exception as ex:
                 result = False
-                message = ex.message
+                message = repr(ex)
 
         output.seek(0)
         message = output.read() + message

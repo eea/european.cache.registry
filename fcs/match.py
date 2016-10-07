@@ -218,6 +218,7 @@ def run():
         print "Autoverifying companies without candidates"
         for c in new_companies:
             verify_none(c['company_id'], 'SYSTEM')
+    return True
 
             # for company, links in get_all_candidates():
             #     print u"[{}] {} - {}:".format(company.id, company.name,
@@ -236,6 +237,7 @@ def verify(undertaking_id, oldcompany_id):
         print result.verified
     else:
         print "No such link"
+    return True
 
 
 @match_manager.command
@@ -246,6 +248,7 @@ def flush():
         models.db.session.delete(link)
 
     models.db.session.commit()
+    return True
 
 
 @match_manager.command
@@ -253,6 +256,7 @@ def unverify(undertaking_external_id):
     """ Remove a link from the matching database """
     u = unverify_link(undertaking_external_id, 'SYSTEM')
     print u and u.oldcompany_verified
+    return True
 
 
 @match_manager.command
@@ -262,6 +266,7 @@ def test(new, old):
     print "'{}' and '{}' match by {} (LIMIT: {})".format(new, old,
                                                          fuzz.ratio(new, old),
                                                          get_fuzz_limit())
+    return True
 
 
 @match_manager.command
@@ -269,3 +274,4 @@ def manual(undertaking_id, oldcompany_account):
     print "Verifying company: {} with old company account: {}".format(
         undertaking_id, oldcompany_account)
     print verify_manual(undertaking_id, oldcompany_account, 'SYSTEM')
+    return True
