@@ -12,7 +12,7 @@ SQLALCHEMY_DATABASE_URI = '{schema}://{user}:{pwd}@{host}/{dbname}'.format(
   host=os.environ.get('DB_HOST', ''),
   dbname=os.environ.get('DB_NAME', ''))
 
-BASE_URL = os.environ.get('BASE_URL', '')
+BASE_URL = os.environ.get('BASE_URL', 'http://localhost')
 API_URL = BASE_URL + '/rest/api'
 API_USER = os.environ.get('API_USER', '')
 API_PASSWORD = os.environ.get('API_PASSWORD', '')
@@ -27,7 +27,7 @@ BDR_ENDPOINT_PASSWORD = os.environ.get('BDR_ENDPOINT_PASSWORD', '')
 
 BDR_HELP_DESK_MAIL = os.environ.get('BDR_HELP_DESK_MAIL', '')
 
-LOG_FILE = os.environ.get('LOG_FILE', '')
+LOG_FILE = os.environ.get('LOG_FILE', 'log_file.log')
 
 # email server
 MAIL_SERVER = os.environ.get('MAIL_SERVER', '')
@@ -50,3 +50,8 @@ GET_ALL_INTERESTING_OBLIGATIONS = True if os.environ.get('GET_ALL_INTERESTING_OB
 
 # specify if notifications mails are sent
 SEND_MATCHING_MAILS = True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True','true') else False
+
+try:
+    from instance.localsettings import *
+except ImportError:
+    pass

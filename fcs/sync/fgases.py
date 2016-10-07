@@ -314,6 +314,15 @@ def eea_double_check(data):
                data['contactPersons'], data['domain'])
     ok = True
 
+    manufacturer = 'FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS' in data['types']
+    if all([manufacturer, len(data['types']) == 1,
+            data['address']['country']['type'] == 'NONEU_TYPE']):
+        message = 'NONEU_TYPE Equipment manufacturers only, have no reporting'\
+                  ' obligations'
+        current_app.logger.warning(message + identifier)
+        remove_undertaking(data)
+        ok = False
+
     if not all(('status' in data, data['status'] in ['VALID', 'DISABLED'])):
         message = 'Organisation status differs from VALID or DISABLED.'
         current_app.logger.warning(message + identifier)
@@ -341,6 +350,23 @@ def eea_double_check(data):
         ok = False
 
     return ok
+
+
+def remove_undertaking(data):
+    """Remove undertaking."""
+    undertaking = (
+        Undertaking.query
+        .filter_by(external_id=data.get('id'))
+        .first()
+    )
+    if undertaking:
+        msg = 'Removing undertaking name: {}'\
+              ' with id: {}'.format(undertaking.name, undertaking.id)
+        current_app.logger.warning(msg)
+        db.session.delete(undertaking)
+    else:
+        msg = 'No company with id: {} found in the db'.format(data.get('id'))
+        current_app.logger.warning(msg)
 
 
 def cleanup_unused_users():
