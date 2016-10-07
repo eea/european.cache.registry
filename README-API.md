@@ -45,6 +45,17 @@ Misc:
 * `/misc/alert_lockdown/wrong_lockdown` - alert on wrong lockdown
 * `/misc/alert_lockdown/unmatch` - alert at unmatch
 
+Sync & match:
+
+* `/sync/collections_title`
+* `/sync/fgases`
+* `/sync/bdr`
+* `/match/run`
+* `/match/flush`
+* `/match/verify/[int:undertaking_id]/[int:oldcompany_id]`
+* `/match/unverify/[int:undertaking_external_id]`
+* `/match/test/[new]/[old]`
+* `/match/manual/[int:undertaking_id]/[oldcompany_account]`
 
 Listing calls
 =============
@@ -681,3 +692,48 @@ The exepected input POST data should consist of an ``user`` and a ``company_id``
 
 This mail should be sent when an unmatching call has been made 
 The exepected input POST data should consist of an ``user`` and a ``company_id``
+
+
+Sync & match calls
+==================
+
+All endpoints in this category return a json response with the following
+format:
+
+
+    {
+        'success': True/False,
+        'message': 'Success/Error message'
+    }
+
+/sync/collections_title - GET
+-----------------------------
+
+/sync/fgases - GET
+------------------
+
+Optional parameters:
+
+* days (integer, default = 7)
+* updated_since (string, datetime format DD/MM/YYYY)
+
+/sync/bdr - GET
+---------------
+
+/match/run - GET
+----------------
+
+/match/flush - GET
+------------------
+
+/match/verify/[int:undertaking_id]/[int:oldcompany_id] - GET
+------------------------------------------------------------
+
+/match/unverify/[int:undertaking_external_id] - GET
+---------------------------------------------------
+
+/match/test/[new]/[old] - GET
+-----------------------------
+
+/match/manual/[int:undertaking_id]/[oldcompany_account] - GET
+-------------------------------------------------------------
