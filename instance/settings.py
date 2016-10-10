@@ -18,7 +18,7 @@ API_USER = os.environ.get('API_USER', '')
 API_PASSWORD = os.environ.get('API_PASSWORD', '')
 
 BDR_HOST = os.environ.get('BDR_HOST', '')
-BDR_API_URL = BDR_HOST + '/registry/api'
+BDR_API_URL = os.environ.get('BDR_API_URL', BDR_HOST + '/registry/api')
 BDR_API_KEY = os.environ.get('BDR_API_KEY', '')
 
 BDR_ENDPOINT_URL = os.environ.get('BDR_ENDPOINT_URL', '')
