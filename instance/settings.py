@@ -51,6 +51,9 @@ GET_ALL_INTERESTING_OBLIGATIONS = True if os.environ.get('GET_ALL_INTERESTING_OB
 # specify if notifications mails are sent
 SEND_MATCHING_MAILS = True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True','true') else False
 
+# fuzzy matching algorithm percent value (how much should old and new be alike). ex: 75
+FUZZ_LIMIT = int(os.environ.get('FUZZ_LIMIT', '75'))
+
 try:
     from instance.localsettings import *
 except ImportError:
