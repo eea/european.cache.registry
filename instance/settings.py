@@ -16,6 +16,7 @@ BASE_URL = os.environ.get('BASE_URL', 'http://localhost')
 API_URL = BASE_URL + '/rest/api'
 API_USER = os.environ.get('API_USER', '')
 API_PASSWORD = os.environ.get('API_PASSWORD', '')
+API_TOKEN = os.environ.get('API_TOKEN', '')
 
 BDR_HOST = os.environ.get('BDR_HOST', '')
 BDR_API_URL = os.environ.get('BDR_API_URL', BDR_HOST + '/registry/api')

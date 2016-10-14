@@ -55,7 +55,7 @@ class ApiView(MethodView):
         return resp
 
     def authenticate(self):
-        token = os.environ.get('API_TOKEN')
+        token = current_app.config.get('API_TOKEN')
         authorization = request.headers.get('Authorization')
         if authorization == token:
             return True
