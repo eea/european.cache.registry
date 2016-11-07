@@ -13,6 +13,14 @@ while ! nc -z $MYSQL_ADDR 3306; do
   sleep 3s
 done
 
+#create database for service
+if ! mysql -h mysql -u root -p$MYSQL_ROOT_PASSWORD -e "use $DB_NAME;"; then
+  echo "CREATE DATABASE $DB_NAME"
+  mysql -h mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $DB_NAME;"
+  mysql -h mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';"
+  mysql -h mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
+fi
+
 if [ ! -e .skip-db-init ]; then
   touch .skip-db-init
   echo "Running DB CMD: ./manage.py db init"
