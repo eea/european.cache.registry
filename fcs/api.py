@@ -5,7 +5,7 @@ import os
 import sys
 import StringIO
 
-from sqlalchemy import desc
+from sqlalchemy import desc, or_
 from flask import Blueprint, Response, abort, request, current_app
 from flask.views import MethodView
 from flask.ext.script import Manager
@@ -14,7 +14,7 @@ from fcs.models import (
     OrganizationLog, MatchingLog, db,
 )
 from fcs.match import (
-    get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
+    get_all_non_candidates, verify_link, unverify_link,
     get_candidates, verify_none, str_matches,
     run, verify, flush, unverify, test, manual,
 )
@@ -292,17 +292,19 @@ class OldCompanyDetail(DetailView):
 
 class CandidateList(ApiView):
     def get(self):
-        candidates = get_all_candidates()
+        companies = (
+            Undertaking.query
+            .filter(or_(Undertaking.oldcompany_verified == None,
+                        Undertaking.oldcompany_verified == False))
+        )
         data = []
-        for company, links in candidates:
-            links_data = [{'name': l.oldcompany.name} for l in links]
-            company_data = {
+        for company in companies:
+            data.append({
                 'company_id': company.external_id,
                 'name': company.name,
-            }
-            data.append(
-                {'undertaking': company_data, 'links': links_data}
-            )
+                'status': company.status,
+                'country': company.country_code
+            })
         return data
 
 

@@ -56,12 +56,6 @@ def get_oldcompanies_for_matching():
     return qs
 
 
-def get_all_candidates():
-    companies = get_unverified_companies()
-    data = [(company, company.links) for company in companies]
-    return data
-
-
 def get_candidates(external_id):
     company = (
         models.Undertaking.query.filter_by(external_id=external_id).first()
@@ -219,15 +213,6 @@ def run():
         for c in new_companies:
             verify_none(c['company_id'], 'SYSTEM')
     return True
-
-            # for company, links in get_all_candidates():
-            #     print u"[{}] {} - {}:".format(company.id, company.name,
-            #                                   company.country_code)
-            #     for l in links:
-            #         print u" - [{}] {} {} - {}".format(l.oldcompany_id,
-            #                                            l.oldcompany.name,
-            #                                            l.verified,
-            #                                            l.oldcompany.country_code)
 
 
 @match_manager.command
