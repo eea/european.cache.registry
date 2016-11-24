@@ -337,7 +337,6 @@ class CandidateVerifyNone(CandidateVerify):
         user = request.form['user']
         undertaking = verify_none(undertaking_id, user) or abort(404)
         data = ApiView.serialize(undertaking)
-        import pdb;pdb.set_trace();
         return {
             'verified': data['oldcompany_verified'],
             'company_id': data['company_id'],
