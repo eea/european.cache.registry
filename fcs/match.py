@@ -56,6 +56,10 @@ def get_oldcompanies_for_matching():
     return qs
 
 
+def get_all_candidates():
+    return get_unverified_companies()
+
+
 def get_candidates(external_id):
     company = (
         models.Undertaking.query.filter_by(external_id=external_id).first()

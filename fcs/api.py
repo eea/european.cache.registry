@@ -14,7 +14,7 @@ from fcs.models import (
     OrganizationLog, MatchingLog, db,
 )
 from fcs.match import (
-    get_all_non_candidates, verify_link, unverify_link,
+    get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
     get_candidates, verify_none, str_matches,
     run, verify, flush, unverify, test, manual,
 )
@@ -290,21 +290,20 @@ class OldCompanyDetail(DetailView):
         return rep
 
 
-class CandidateList(ApiView):
-    def get(self):
-        companies = (
-            Undertaking.query
-            .filter(or_(Undertaking.oldcompany_verified == None,
-                        Undertaking.oldcompany_verified == False))
-        )
-        data = []
-        for company in companies:
-            data.append({
-                'company_id': company.external_id,
-                'name': company.name,
-                'status': company.status,
-                'country': company.country_code
-            })
+class CandidateList(ListView):
+    model = Undertaking
+
+    def get_queryset(self):
+        return get_all_candidates()
+
+    @classmethod
+    def serialize(cls, obj):
+        data = {
+            'company_id': obj.external_id,
+            'name': obj.name,
+            'status': obj.status,
+            'country': obj.address.country.name
+        }
         return data
 
 
@@ -338,6 +337,7 @@ class CandidateVerifyNone(CandidateVerify):
         user = request.form['user']
         undertaking = verify_none(undertaking_id, user) or abort(404)
         data = ApiView.serialize(undertaking)
+        import pdb;pdb.set_trace();
         return {
             'verified': data['oldcompany_verified'],
             'company_id': data['company_id'],

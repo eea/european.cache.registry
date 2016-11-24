@@ -121,16 +121,11 @@ def test_user_companies_by_email(client):
 
 def test_candidates_list(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=False)
-    oldcompany = factories.OldCompanyFactory(id=2)
-    link = factories.OldCompanyLinkFactory(oldcompany=oldcompany,
-                                           undertaking=undertaking)
     resp = client.get(url_for('api.candidate-list'))
     data = resp.json
     assert len(data) == 1
     data = data[0]
-    assert data['undertaking']['company_id'] == undertaking.external_id
-    assert len(data['links']) == 1
-    assert data['links'][0]['name'] == oldcompany.name
+    assert data['company_id'] == undertaking.external_id
 
 
 def test_noncandidates_list(client):

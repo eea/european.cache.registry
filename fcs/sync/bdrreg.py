@@ -67,6 +67,7 @@ def bdr():
     for obl in get_obligations():
         print "Getting obligation: ", obl
         companies = get_old_companies(obl)
-        print len([parse_company(c, obl) for c in companies]), "values"
+        with db.session.no_autoflush:
+            print len([parse_company(c, obl) for c in companies]), "values"
     db.session.commit()
     return True
