@@ -10,7 +10,7 @@ from flask import Blueprint, Response, abort, request, current_app
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
-    Undertaking, User, EuLegalRepresentativeCompany, Address, OldCompany,
+    Undertaking, User, EuLegalRepresentativeCompany, Address,
     OrganizationLog, MatchingLog, db,
 )
 from fcs.match import (
@@ -214,8 +214,7 @@ class UndertakingDetail(DetailView):
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
-            'candidates': [OldCompanyDetail.serialize(c.oldcompany) for c in
-                           candidates],
+            'candidates': [],
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account
@@ -278,16 +277,6 @@ class EuLegalRepresentativeCompanyDetail(DetailView):
         return rep
 
 
-class OldCompanyDetail(DetailView):
-    model = OldCompany
-
-    @classmethod
-    def serialize(cls, obj):
-        rep = ApiView.serialize(obj)
-        rep['country'] = obj.country
-        return rep
-
-
 class CandidateList(ListView):
     model = Undertaking
 
@@ -324,13 +313,6 @@ class CandidateVerify(ApiView):
             )
         return data
 
-    def post(self, undertaking_id, oldcompany_id):
-        user = request.form['user']
-        link = verify_link(undertaking_id, oldcompany_id, user) or abort(404)
-        return self.serialize(link, pop_id=False)
-
-
-class CandidateVerifyNone(CandidateVerify):
     def post(self, undertaking_id):
         user = request.form['user']
         undertaking = verify_none(undertaking_id, user) or abort(404)
@@ -339,39 +321,6 @@ class CandidateVerifyNone(CandidateVerify):
             'verified': data['oldcompany_verified'],
             'company_id': data['company_id'],
         }
-
-
-class OldCompanyListByStatus(ListView):
-    model = OldCompany
-
-    def get_queryset(self, **kwargs):
-        return self.model.query.filter_by(valid=self.valid).all()
-
-
-class OldCompanyListValid(OldCompanyListByStatus):
-    valid = True
-
-
-class OldCompanyListInvalid(OldCompanyListByStatus):
-    valid = False
-
-
-class OldCompanySetStatus(DetailView):
-    model = OldCompany
-
-    def post(self, pk):
-        company = self.model.query.filter_by(external_id=pk).first_or_404()
-        company.valid = self.valid
-        db.session.commit()
-        return json.dumps(True)
-
-
-class OldCompanySetValid(OldCompanySetStatus):
-    valid = True
-
-
-class OldCompanySetInvalid(OldCompanySetStatus):
-    valid = False
 
 
 class CandidateUnverify(ApiView):
@@ -455,26 +404,10 @@ api.add_url_rule('/candidate/list',
 api.add_url_rule('/candidate/list/verified',
                  view_func=NonCandidateList.as_view('noncandidate-list'))
 
-api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
+api.add_url_rule('/candidate/verify/<undertaking_id>/',
                  view_func=CandidateVerify.as_view('candidate-verify'))
-api.add_url_rule('/candidate/verify-none/<undertaking_id>/',
-                 view_func=CandidateVerifyNone.as_view(
-                     'candidate-verify-none'))
 api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
-
-api.add_url_rule('/oldcompanies/list/valid/',
-                 view_func=OldCompanyListValid.as_view(
-                     'oldcompany-list-valid'))
-api.add_url_rule('/oldcompanies/list/invalid/',
-                 view_func=OldCompanyListInvalid.as_view(
-                     'oldcompany-list-invalid'))
-api.add_url_rule('/oldcompanies/<pk>/valid/',
-                 view_func=OldCompanySetValid.as_view(
-                     'oldcompany-set-valid'))
-api.add_url_rule('/oldcompanies/<pk>/invalid/',
-                 view_func=OldCompanySetInvalid.as_view(
-                     'oldcompany-set-invalid'))
 
 api.add_url_rule('/data_sync_log',
                  view_func=DataSyncLog.as_view('data-sync-log'))

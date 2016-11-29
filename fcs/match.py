@@ -44,7 +44,7 @@ def get_candidates(external_id):
     company = (
         models.Undertaking.query.filter_by(external_id=external_id).first()
     )
-    return company and company.links
+    return company
 
 
 def get_all_non_candidates(vat=None):
@@ -89,14 +89,6 @@ def unverify_link(undertaking_id, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
     if not u or not u.oldcompany_verified:
         return None
-    link = (
-        models.OldCompanyLink.query
-        .filter_by(undertaking_id=undertaking_id,
-                   oldcompany_id=u.oldcompany_id).first()
-    )
-    if link:
-        link.verified = False
-        link.date_verified = None
 
     u.oldcompany_verified = False
     u.oldcompany_account = None
@@ -108,20 +100,16 @@ def unverify_link(undertaking_id, user):
 
 
 def verify_none(undertaking_id, user):
-    return verify_manual(undertaking_id, None, user)
-
-
-def verify_manual(undertaking_id, oldcompany_account, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
     if not u:
         return None
     u.oldcompany = None
     u.oldcompany_verified = True
-    u.oldcompany_account = oldcompany_account
+    u.oldcompany_account = None
     u.oldcompany_extid = None
-    if call_bdr(u, old_collection=oldcompany_account):
+    if call_bdr(u, old_collection=None):
         log_match(undertaking_id, None, True, user,
-                  oldcompany_account=oldcompany_account)
+                  oldcompany_account=None)
         models.db.session.commit()
         send_match_mail(match=False, user=user, company_name=u.name,
                         company_id=u.external_id)

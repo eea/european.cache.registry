@@ -48,10 +48,7 @@ def test_undertaking_list_vat(client):
 
 
 def test_undertaking_details(client):
-    undertaking = factories.UndertakingFactory(oldcompany=None)
-    oldcompany = factories.OldCompanyFactory(id=2)
-    link = factories.OldCompanyLinkFactory(oldcompany=oldcompany,
-                                           undertaking=undertaking)
+    undertaking = factories.UndertakingFactory()
     resp = client.get(
         url_for('api.company-detail', pk=undertaking.external_id))
     data = resp.json
@@ -67,7 +64,6 @@ def test_undertaking_details(client):
     assert data['oldcompany_extid'] == undertaking.oldcompany_extid
     assert data['representative']['name'] == undertaking.represent.name
     assert data['address']['zipcode'] == undertaking.address.zipcode
-    assert data['candidates'][0]['company_id'] == oldcompany.external_id
 
 
 def test_undertaking_details_without_address(client):
@@ -137,48 +133,8 @@ def test_noncandidates_list(client):
     assert data['name'] == undertaking.name
 
 
-def test_oldcompany_list_valid(client):
-    undertaking1 = factories.OldCompanyFactory(id=1, valid=True)
-    undertaking2 = factories.OldCompanyFactory(id=2, valid=False)
-    resp = client.get(url_for('api.oldcompany-list-valid'))
-    data = resp.json
-    assert len(data) == 1
-    data = data[0]
-    assert data['company_id'] == undertaking1.external_id
-
-
-def test_oldcompany_list_invalid(client):
-    undertaking1 = factories.OldCompanyFactory(id=1, valid=True)
-    undertaking2 = factories.OldCompanyFactory(id=2, valid=False)
-    resp = client.get(url_for('api.oldcompany-list-invalid'))
-    data = resp.json
-    assert len(data) == 1
-    data = data[0]
-    assert data['company_id'] == undertaking2.external_id
-
-
-def test_oldcompany_set_valid(client):
-    oldcompany = factories.OldCompanyFactory(valid=False)
-    resp = client.post(url_for('api.oldcompany-set-valid',
-                               pk=oldcompany.external_id))
-    data = resp.body
-    assert data == 'true'
-    assert oldcompany.valid is True
-
-
-def test_oldcompany_set_invalid(client):
-    oldcompany = factories.OldCompanyFactory(valid=True)
-    resp = client.post(url_for('api.oldcompany-set-invalid',
-                               pk=oldcompany.external_id))
-    data = resp.body
-    assert data == 'true'
-    assert oldcompany.valid is False
-
-
 def test_unverify_link(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=True)
-    link = factories.OldCompanyLinkFactory(oldcompany=undertaking.oldcompany,
-                                           undertaking=undertaking)
     resp = client.post(url_for('api.candidate-unverify',
                                undertaking_id=undertaking.external_id),
                        dict(user='test_user'))
