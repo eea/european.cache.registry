@@ -18,7 +18,6 @@ from fcs.match import (
     get_candidates, verify_none, str_matches,
     run, verify, flush, unverify, test, manual,
 )
-from fcs.sync.bdrreg import bdr
 from fcs.sync.fgases import fgases, sync_collections_title
 
 api = Blueprint('api', __name__)
@@ -433,10 +432,6 @@ class SyncCollectionsTitle(MgmtCommand):
     command_func = staticmethod(sync_collections_title)
 
 
-class SyncBdr(MgmtCommand):
-    command_func = staticmethod(bdr)
-
-
 class MatchRun(MgmtCommand):
     command_func = staticmethod(run)
 
@@ -514,7 +509,6 @@ api.add_url_rule('/matching_log',
 api.add_url_rule('/sync/collections_title',
                  view_func=SyncCollectionsTitle.as_view('sync-collections'))
 api.add_url_rule('/sync/fgases', view_func=SyncFgases.as_view('sync-fgases'))
-api.add_url_rule('/sync/bdr', view_func=SyncBdr.as_view('sync-bdr'))
 api.add_url_rule('/match/run', view_func=MatchRun.as_view('match-run'))
 api.add_url_rule('/match/flush', view_func=MatchFlush.as_view('match-flush'))
 api.add_url_rule('/match/verify/<int:undertaking_id>/<int:oldcompany_id>',
