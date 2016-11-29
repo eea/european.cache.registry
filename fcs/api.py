@@ -16,7 +16,6 @@ from fcs.models import (
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
     get_candidates, verify_none, str_matches,
-    run, verify, flush, unverify, test, manual,
 )
 from fcs.sync.fgases import fgases, sync_collections_title
 
@@ -432,30 +431,6 @@ class SyncCollectionsTitle(MgmtCommand):
     command_func = staticmethod(sync_collections_title)
 
 
-class MatchRun(MgmtCommand):
-    command_func = staticmethod(run)
-
-
-class MatchFlush(MgmtCommand):
-    command_func = staticmethod(flush)
-
-
-class MatchVerify(MgmtCommand):
-    command_func = staticmethod(verify)
-
-
-class MatchUnverify(MgmtCommand):
-    command_func = staticmethod(unverify)
-
-
-class MatchTest(MgmtCommand):
-    command_func = staticmethod(test)
-
-
-class MatchManual(MgmtCommand):
-    command_func = staticmethod(manual)
-
-
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('company-list'))
 api.add_url_rule('/undertaking/list-small',
@@ -509,13 +484,3 @@ api.add_url_rule('/matching_log',
 api.add_url_rule('/sync/collections_title',
                  view_func=SyncCollectionsTitle.as_view('sync-collections'))
 api.add_url_rule('/sync/fgases', view_func=SyncFgases.as_view('sync-fgases'))
-api.add_url_rule('/match/run', view_func=MatchRun.as_view('match-run'))
-api.add_url_rule('/match/flush', view_func=MatchFlush.as_view('match-flush'))
-api.add_url_rule('/match/verify/<int:undertaking_id>/<int:oldcompany_id>',
-                 view_func=MatchVerify.as_view('match-verify'))
-api.add_url_rule('/match/unverify/<int:undertaking_external_id>',
-                 view_func=MatchUnverify.as_view('match-unverify'))
-api.add_url_rule('/match/test/<new>/<old>',
-                 view_func=MatchTest.as_view('match-test'))
-api.add_url_rule('/match/manual/<int:undertaking_id>/<oldcompany_account>',
-                 view_func=MatchManual.as_view('match-manual'))

@@ -28,32 +28,12 @@ def log_match(company_id, oldcompany_id, verified, user,
     models.db.session.add(matching_log)
 
 
-def add_link(company_id, oldcompany_id):
-    link = models.OldCompanyLink.query.filter_by(
-        undertaking_id=company_id,
-        oldcompany_id=oldcompany_id
-    ).first() or models.OldCompanyLink(
-        undertaking_id=company_id,
-        oldcompany_id=oldcompany_id,
-        date_added=datetime.now(),
-    )
-    models.db.session.add(link)
-    return link
-
-
 def get_unverified_companies():
     return (
         models.Undertaking.query
         .filter(or_(models.Undertaking.oldcompany_verified == None,
                     models.Undertaking.oldcompany_verified == False))
     )
-
-
-def get_oldcompanies_for_matching():
-    qs = models.OldCompany.query.filter_by(undertaking=None, valid=True)
-    if not current_app.config.get('GET_ALL_INTERESTING_OBLIGATIONS', ''):
-        qs = qs.filter_by(obligation='fgases')
-    return qs
 
 
 def get_all_candidates():
@@ -150,31 +130,6 @@ def verify_manual(undertaking_id, oldcompany_account, user):
     return u
 
 
-def get_country(country_code):
-    cc = country_code.lower()
-    if cc == 'gb':
-        cc = 'uk'
-    elif cc == 'el':
-        cc = 'gr'
-    return cc
-
-
-def has_match(company, old):
-    c_code = get_country(company['country_code'])
-    o_code = get_country(old['country_code'])
-    if c_code != o_code:
-        return False
-
-    c_vat = company['vat'] or ''
-    o_vat = old['vat_number'] or ''
-    if all((c_vat, o_vat)) and c_vat == o_vat:
-        return True
-
-    c_name = company['name'].lower()
-    o_name = old['name'].lower()
-    return str_matches(c_name, o_name)
-
-
 def get_fuzz_limit():
     return current_app.config.get('FUZZ_LIMIT', 75)
 
@@ -182,85 +137,3 @@ def get_fuzz_limit():
 def str_matches(new, old):
     return new and old and fuzz.ratio(new, old) >= get_fuzz_limit()
 
-
-def match_all(companies, oldcompanies):
-    links = []
-    new_companies = []
-
-    companies = [c.as_dict() for c in companies]
-    oldcompanies = [o.as_dict() for o in oldcompanies]
-
-    for c in companies:
-        candidates = [o for o in oldcompanies if has_match(c, o)]
-        if candidates:
-            links.append((c, candidates))
-        else:
-            new_companies.append(c)
-
-    for company, candidates in links:
-        for old in candidates:
-            add_link(company['id'], old['id'])
-
-    models.db.session.commit()
-    return links, new_companies
-
-
-@match_manager.command
-def run():
-    companies = get_unverified_companies()
-    oldcompanies = get_oldcompanies_for_matching()
-
-    links, new_companies = match_all(companies, oldcompanies)
-    print len(links), "matching links"
-    if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
-        print "Autoverifying companies without candidates"
-        for c in new_companies:
-            verify_none(c['company_id'], 'SYSTEM')
-    return True
-
-
-@match_manager.command
-def verify(undertaking_id, oldcompany_id):
-    result = verify_link(undertaking_id, oldcompany_id, "None - Mgmt Command")
-    if result:
-        print result.verified
-    else:
-        print "No such link"
-    return True
-
-
-@match_manager.command
-def flush():
-    """ Remove all previously created links in the match database.
-    """
-    for link in models.OldCompanyLink.query.all():
-        models.db.session.delete(link)
-
-    models.db.session.commit()
-    return True
-
-
-@match_manager.command
-def unverify(undertaking_external_id):
-    """ Remove a link from the matching database """
-    u = unverify_link(undertaking_external_id, 'SYSTEM')
-    print u and u.oldcompany_verified
-    return True
-
-
-@match_manager.command
-def test(new, old):
-    """ Show fuzzy match for two words
-    """
-    print "'{}' and '{}' match by {} (LIMIT: {})".format(new, old,
-                                                         fuzz.ratio(new, old),
-                                                         get_fuzz_limit())
-    return True
-
-
-@match_manager.command
-def manual(undertaking_id, oldcompany_account):
-    print "Verifying company: {} with old company account: {}".format(
-        undertaking_id, oldcompany_account)
-    print verify_manual(undertaking_id, oldcompany_account, 'SYSTEM')
-    return True
