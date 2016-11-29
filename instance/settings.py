@@ -42,9 +42,6 @@ MAILS_SENDER_NAME = os.environ.get('MAILS_SENDER_NAME', 'Help Desk')
  # set it to False to disable
 HTTPS_VERIFY = True if os.environ.get('HTTPS_VERIFY', '') in ('True','true') else False
 
-# if set to False, only retrieve organisations with 'fgases' obligation
-GET_ALL_INTERESTING_OBLIGATIONS = True if os.environ.get('GET_ALL_INTERESTING_OBLIGATIONS', '') in ('True','true') else False
-
 # specify if notifications mails are sent
 SEND_MATCHING_MAILS = True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True','true') else False
 

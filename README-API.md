@@ -24,9 +24,8 @@ Listing calls:
 Matching calls:
 
 * `/candidate/list` -  all matching candidates
-* `/candidate/verify/[company_id]/[collection_id]/` - link two objects
-* `/candidate/unverify/[company_id]/` - unlink
 * `/candidate/verify-none/[company_id]/` - mark an undertaking as linked, without a matching company
+* `/candidate/unverify/[company_id]/` - unlink
 * `/candidate/list/verified` - list verified undertakings
 
 Misc:
@@ -49,13 +48,6 @@ Sync & match:
 
 * `/sync/collections_title`
 * `/sync/fgases`
-* `/sync/bdr`
-* `/match/run`
-* `/match/flush`
-* `/match/verify/[int:undertaking_id]/[int:oldcompany_id]`
-* `/match/unverify/[int:undertaking_external_id]`
-* `/match/test/[new]/[old]`
-* `/match/manual/[int:undertaking_id]/[oldcompany_account]`
 
 Listing calls
 =============
@@ -64,50 +56,50 @@ Listing calls
 -----------------
 
 Returns the list of all verified undertakings in the system, as fetched from FGR.
-    
+
     [
       {
-        "website": "WEBSITE--10085", 
-        "status": "VALID", 
-        "domain": "FGAS", 
+        "website": "WEBSITE--10085",
+        "status": "VALID",
+        "domain": "FGAS",
         "users": [
           {
-            "username": "nzhouray", 
-            "first_name": "fname--9367", 
-            "last_name": "lname--9367", 
-            "id": 1, 
+            "username": "nzhouray",
+            "first_name": "fname--9367",
+            "last_name": "lname--9367",
+            "id": 1,
             "email": "9367email@climaOds2010.yyy"
           }
-        ], 
+        ],
         "representative": {
-          "name": "EULEGALNAME44", 
-          "contact_last_name": "lname--9853", 
-          "vatnumber": "EUVAT44", 
-          "contact_email": "9853email@climaOds2010.yyy", 
-          "contact_first_name": "fname--9853", 
+          "name": "EULEGALNAME44",
+          "contact_last_name": "lname--9853",
+          "vatnumber": "EUVAT44",
+          "contact_email": "9853email@climaOds2010.yyy",
+          "contact_first_name": "fname--9853",
           "address": {
-            "city": "city--7954", 
+            "city": "city--7954",
             "country": {
-              "code": "IE", 
-              "type": "EU_TYPE", 
+              "code": "IE",
+              "type": "EU_TYPE",
               "name": "Ireland"
-            }, 
-            "zipcode": "zipcode--7954", 
-            "number": "nrstreet--7954", 
+            },
+            "zipcode": "zipcode--7954",
+            "number": "nrstreet--7954",
             "street": "street--7954"
         },
-        "date_updated": "10/10/2014", 
-        "phone": "+3212310085", 
-        "country_code": "CN", 
+        "date_updated": "10/10/2014",
+        "phone": "+3212310085",
+        "country_code": "CN",
         "address": {
-          "city": "city--7953", 
+          "city": "city--7953",
           "country": {
-            "code": "CN", 
-            "type": "NONEU_TYPE", 
+            "code": "CN",
+            "type": "NONEU_TYPE",
             "name": "China (excluding Hong Kong and Macao)"
-          }, 
-          "zipcode": "zipcode--7953", 
-          "number": "nrstreet--7953", 
+          },
+          "zipcode": "zipcode--7953",
+          "number": "nrstreet--7953",
           "street": "street--7953"
         },
         "businessprofile": {
@@ -116,12 +108,12 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
         "oldcompany_verified": true,
         "oldcompany_account": "fgas22331",
         "oldcompany_extid": 4,
-        "collection_id": null, 
-        "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
-        "undertaking_type": "FGASUndertaking", 
-        "name": "FGAS-NMORGANIZATION--10085", 
-        "company_id": 10085, 
-        "date_created": "10/10/2014", 
+        "collection_id": null,
+        "types": "FGAS_PRODUCER_IMPORTER_HFCS",
+        "undertaking_type": "FGASUndertaking",
+        "name": "FGAS-NMORGANIZATION--10085",
+        "company_id": 10085,
+        "date_created": "10/10/2014",
         "vat": null
       },
     ]
@@ -132,27 +124,27 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
 
     [
       {
-        "domain": "FGAS", 
-        "name": "NMORGANIZATION--11973", 
-        "company_id": 11973, 
+        "domain": "FGAS",
+        "name": "NMORGANIZATION--11973",
+        "company_id": 11973,
         "address": {
-          "city": "city--9452", 
+          "city": "city--9452",
           "country": {
-            "code": "PT", 
-            "type": "EU_TYPE", 
+            "code": "PT",
+            "type": "EU_TYPE",
             "name": "Portugal"
-          }, 
-          "zipcode": "zipcode--9452", 
-          "number": "nrstreet--9452", 
+          },
+          "zipcode": "zipcode--9452",
+          "number": "nrstreet--9452",
           "street": "street--9452"
-        }, 
-        "date_created": "11/12/2014", 
-        "vat": "VAT11973", 
+        },
+        "date_created": "11/12/2014",
+        "vat": "VAT11973",
         "users": [
           {
-            "username": "nsecomic", 
-            "first_name": "fname--11749", 
-            "last_name": "lname--11749", 
+            "username": "nsecomic",
+            "first_name": "fname--11749",
+            "last_name": "lname--11749",
             "email": "11749email@climaOds2010.yyy"
           }
         ]
@@ -162,66 +154,66 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
 /undertaking/list/all
 ---------------------
 
-Returns a list of all undertakings in the system (verified or not), as fetched 
+Returns a list of all undertakings in the system (verified or not), as fetched
 from FGR.
-    
+
     [
       {
-        "website": "WEBSITE--10085", 
-        "status": "VALID", 
-        "domain": "FGAS", 
+        "website": "WEBSITE--10085",
+        "status": "VALID",
+        "domain": "FGAS",
         "users": [
           {
-            "username": "nzhouray", 
-            "first_name": "fname--9367", 
-            "last_name": "lname--9367", 
-            "id": 1, 
+            "username": "nzhouray",
+            "first_name": "fname--9367",
+            "last_name": "lname--9367",
+            "id": 1,
             "email": "9367email@climaOds2010.yyy"
           }
         ],
         "representative": {
-          "name": "EULEGALNAME44", 
-          "contact_last_name": "lname--9853", 
-          "vatnumber": "EUVAT44", 
-          "contact_email": "9853email@climaOds2010.yyy", 
-          "contact_first_name": "fname--9853", 
+          "name": "EULEGALNAME44",
+          "contact_last_name": "lname--9853",
+          "vatnumber": "EUVAT44",
+          "contact_email": "9853email@climaOds2010.yyy",
+          "contact_first_name": "fname--9853",
           "address": {
-            "city": "city--7954", 
+            "city": "city--7954",
             "country": {
-              "code": "IE", 
-              "type": "EU_TYPE", 
+              "code": "IE",
+              "type": "EU_TYPE",
               "name": "Ireland"
-            }, 
-            "zipcode": "zipcode--7954", 
-            "number": "nrstreet--7954", 
+            },
+            "zipcode": "zipcode--7954",
+            "number": "nrstreet--7954",
             "street": "street--7954"
         },
-        "date_updated": "10/10/2014", 
-        "phone": "+3212310085", 
-        "country_code": "CN", 
+        "date_updated": "10/10/2014",
+        "phone": "+3212310085",
+        "country_code": "CN",
         "address": {
-          "city": "city--7953", 
+          "city": "city--7953",
           "country": {
-            "code": "CN", 
-            "type": "NONEU_TYPE", 
+            "code": "CN",
+            "type": "NONEU_TYPE",
             "name": "China (excluding Hong Kong and Macao)"
-          }, 
-          "zipcode": "zipcode--7953", 
-          "number": "nrstreet--7953", 
+          },
+          "zipcode": "zipcode--7953",
+          "number": "nrstreet--7953",
           "street": "street--7953"
-        }, 
+        },
         "businessprofile": {
           "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
         },
-        "collection_id": null, 
+        "collection_id": null,
         "oldcompany_id": true,
         "oldcompany_account": "fgas22331",
         "oldcompany_extid": 4,
-        "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
-        "undertaking_type": "FGASUndertaking", 
-        "name": "FGAS-NMORGANIZATION--10085", 
-        "company_id": 10085, 
-        "date_created": "10/10/2014", 
+        "types": "FGAS_PRODUCER_IMPORTER_HFCS",
+        "undertaking_type": "FGASUndertaking",
+        "name": "FGAS-NMORGANIZATION--10085",
+        "company_id": 10085,
+        "date_created": "10/10/2014",
         "vat": null
       },
     ]
@@ -229,12 +221,12 @@ from FGR.
 /undertaking/list_by_vat/<vat>
 ------------------------------
 
-Returns a list of all verified undertakings in the system given by their VAT, 
+Returns a list of all verified undertakings in the system given by their VAT,
 as fetched  from FGR.
-    
+
     [
       {
-        "name": "FGAS-NMORGANIZATION--10078", 
+        "name": "FGAS-NMORGANIZATION--10078",
         "company_id": 10078
       }
     ]
@@ -259,59 +251,58 @@ The *name* and *OR_name* filters use LIKE queries.
 ---------------------------------
 
 Returns an undertakings details from the system, as fetched from FGR.
-    
+
     {
-      "company_id": 10085, 
-      "collection_id": null,      
-      "oldcompany_id": null, 
-      "undertaking_type": "FGASUndertaking", 
-      "website": "WEBSITE--10085", 
-      "status": "VALID", 
-      "domain": "FGAS", 
-      "name": "FGAS-NMORGANIZATION--10085", 
-      "phone": "+3212310085", 
+      "company_id": 10085,
+      "collection_id": null,
+      "oldcompany_id": null,
+      "undertaking_type": "FGASUndertaking",
+      "website": "WEBSITE--10085",
+      "status": "VALID",
+      "domain": "FGAS",
+      "name": "FGAS-NMORGANIZATION--10085",
+      "phone": "+3212310085",
       "oldcompany_id": true,
       "oldcompany_account": "fgas22331",
       "oldcompany_extid": 4,
       "businessprofile": {
         "highleveluses": ""
-      }, 
-      "candidates": [], 
+      },
       "representative": {
-        "name": "EULEGALNAME44", 
-        "contact_last_name": "lname--9853", 
-        "vatnumber": "EUVAT44", 
-        "contact_email": "9853email@climaOds2010.yyy", 
-        "contact_first_name": "fname--9853", 
+        "name": "EULEGALNAME44",
+        "contact_last_name": "lname--9853",
+        "vatnumber": "EUVAT44",
+        "contact_email": "9853email@climaOds2010.yyy",
+        "contact_first_name": "fname--9853",
         "address": {
-          "city": "city--7954", 
+          "city": "city--7954",
           "country": {
-            "code": "IE", 
-            "type": "EU_TYPE", 
+            "code": "IE",
+            "type": "EU_TYPE",
             "name": "Ireland"
-          }, 
-          "zipcode": "zipcode--7954", 
-          "number": "nrstreet--7954", 
+          },
+          "zipcode": "zipcode--7954",
+          "number": "nrstreet--7954",
           "street": "street--7954"
         }
-      }, 
+      },
       "address": {
-        "city": "city--7953", 
+        "city": "city--7953",
         "country": {
-          "code": "CN", 
-          "type": "NONEU_TYPE", 
+          "code": "CN",
+          "type": "NONEU_TYPE",
           "name": "China (excluding Hong Kong and Macao)"
-        }, 
-        "zipcode": "zipcode--7953", 
-        "number": "nrstreet--7953", 
+        },
+        "zipcode": "zipcode--7953",
+        "number": "nrstreet--7953",
         "street": "street--7953"
-      }, 
-      "vat": null, 
+      },
+      "vat": null,
       "users": [
         {
-          "username": "nzhouray", 
-          "first_name": "fname--9367", 
-          "last_name": "lname--9367", 
+          "username": "nzhouray",
+          "first_name": "fname--9367",
+          "last_name": "lname--9367",
           "email": "9367email@climaOds2010.yyy"
         }
       ]
@@ -321,7 +312,7 @@ Returns an undertakings details from the system, as fetched from FGR.
 ----------
 
 Returns a list of all undertakings in the system, as fetched from FGR.
-    
+
     [
       {
         "username": "user1",
@@ -341,20 +332,16 @@ Returns the list of undertakings for a user given by its unique username.
 
     [
       {
-        "collection_id": null, 
-        "domain": "FGAS", 
-        "country": "CN", 
-        "company_id": 10085, 
+        "collection_id": null,
+        "domain": "FGAS",
+        "country": "CN",
+        "company_id": 10085,
         "name": "FGAS-NMORGANIZATION--10085"
       }
     ]
 
 Matching calls
 ==============
-
-These calls are related to the matching algorithm between Undertakings and
-Old Companies. An automated process creates the links between these objects,
-then manual user intervention is required for validating these links.
 
 The methods available via HTTP POST should also encapsulate the username, for
 logging purposes.
@@ -366,63 +353,25 @@ Lists all possible Company candidates for matching with existing Undertakings.
 
     [
       {
-        "undertaking": {
-          "website": "WEBSITE--10085", 
-          "status": "VALID", 
-          "name": "FGAS-NMORGANIZATION--10085", 
-          "undertaking_type": "FGASUndertaking", 
-          "date_updated": "10/10/2014", 
-          "domain": "FGAS", 
-          "company_id": 10085, 
-          "phone": "+3212310085", 
-          "types": "FGAS_PRODUCER_IMPORTER_HFCS", 
-          "country_code": "CN", 
-          "date_created": "10/10/2014", 
-          "vat": null, 
-        }, 
-        "links": [
-          {
-            "website": null, 
-            "account": "fgas22331", 
-            "name": "Airconditioning Group Ltd", 
-            "company_id": 4, 
-            "date_registered": "07/12/2012", 
-            "country_code": "gb", 
-            "active": true, 
-            "vat_number": "634456631", 
-            "eori": null,
-            "obligation": "fgases"
-          }, 
-          {
-            "website": "", 
-            "account": "fgas21484", 
-            "name": "Alcan International Network Ltd", 
-            "company_id": 5, 
-            "date_registered": "07/12/2012", 
-            "country_code": "gb", 
-            "active": false, 
-            "vat_number": "", 
-            "eori": "",
-            "obligation": "fgases"
-          }, 
+        "status": "VALID",
+        "country": "Italy",
+        "company_id": 22549,
+        "name": "NMORGANIZATION--22549"
       },
     ]
 
-/candidate/verify/[company_id]/[collection_id]/ - POST
-------------------------------------------------------
 
-Verifies a link between an Undertaking (from FGR) and a Company (from BDR
- Registry).
+/candidate/verify/[company_id]/ - POST
+-------------------------------------------
+
+Verifies a company is unlinked with any old companies.
 
     {
-      "verified": true, 
-      "company_id": 10085, 
-      "collection_id": 4, 
-      "date_verified": "24/11/2014", 
-      "date_added": "24/11/2014",
+      "verified": true,
+      "company_id": 10085
     }
-    
-    
+
+
 /candidate/unverify/[company_id]/ - POST
 ----------------------------------------
 
@@ -448,16 +397,6 @@ Removes any link between an Undertaking (from FGR) and a Company.
       "oldcompany_account": null,
       "vat": null,
       "businessprofile_id": 1
-    }
-    
-/candidate/verify-none/[company_id]/ - POST
--------------------------------------------
-
-Verifies a company is unlinked with any old companies.
-
-    {
-      "verified": true, 
-      "company_id": 10085
     }
 
 
@@ -491,74 +430,21 @@ Lists the already verified undertakings.
     ]
 
 
-/oldcompanies/list/valid/
--------------------------
-
-List all the old valid companies.
-    
-    [
-      {
-        "website": "", 
-        "account": "fgas23460", 
-        "name": "3M Belgium N.V.", 
-        "company_id": 1, 
-        "date_registered": "07/12/2012 13:01", 
-        "valid": true, 
-        "country_code": "be", 
-        "active": true, 
-        "vat_number": "", 
-        "eori": ""
-      }
-    ]
-
-
-/oldcompanies/list/invalid/
----------------------------
-
-List all the old invalid companies.
-    
-    [
-      {
-        "website": null, 
-        "account": "fgas22700", 
-        "name": "AIR PRODUCTS S.A", 
-        "company_id": 3, 
-        "date_registered": "07/12/2012 13:01", 
-        "valid": false, 
-        "country_code": "be", 
-        "active": true, 
-        "vat_number": null, 
-        "eori": null
-      }
-
-
-/oldcompanies/<pk>/valid/
--------------------------
-
-On POST method, sets the valid flag of an old company to True.
-
-
-/oldcompanies/<pk>/invalid/
----------------------------
-
-On POST method, sets the valid flag of an old company to False.
-
-
 Misc calls
 ==========
 
 /matching_log
 -------------
 
-Lists a matching log list for 2 companies and the user who made it at which 
+Lists a matching log list for 2 companies and the user who made it at which
 time, sorted in decrease order by timestamp.
 
     [
       {
-        "verified": true, 
-        "timestamp": "27/11/2014 15:56", 
-        "company_id": 10051, 
-        "user": "vitalie", 
+        "verified": true,
+        "timestamp": "27/11/2014 15:56",
+        "company_id": 10051,
+        "user": "vitalie",
         "oldcompany_id": 4
       }
     ]
@@ -567,13 +453,13 @@ time, sorted in decrease order by timestamp.
 /data_sync_log
 --------------
 
-Lists a data sync log which shows when the sync was ran, sorted in decrease 
+Lists a data sync log which shows when the sync was ran, sorted in decrease
 order by execution_time
 
     [
       {
-        "execution_time": "26/11/2014 16:42", 
-        "organizations": 413, 
+        "execution_time": "26/11/2014 16:42",
+        "organizations": 413,
         "using_last_update": "10/10/2014"
         "for_user": False,
       }
@@ -595,7 +481,7 @@ This url is used to update the status of a company by POST method with the new s
 /misc/user/export
 -----------------
 
-This URL is used to export the list of users with their companies and the 
+This URL is used to export the list of users with their companies and the
 companies' contact persons as an Excel file.
 
 
@@ -605,7 +491,7 @@ companies' contact persons as an Excel file.
 Display the value of the configured middleware settings
 
     {
-      "BASE_URL": "http://example.com", 
+      "BASE_URL": "http://example.com",
       "AUTO_VERIFY_COMPANIES": false
     }
 
@@ -627,7 +513,7 @@ Display the list of all mails to be notified about companies matching
 /misc/mail/add - POST
 ---------------------
 
-Add a new contact to be notified on matchings. The POST should contain the 
+Add a new contact to be notified on matchings. The POST should contain the
 following data:
 
     {
@@ -652,7 +538,7 @@ On failure returns:
 /misc/mail/delete - POST
 ------------------------
 
-Delete a contact from the mailing list. The POST should contain the 
+Delete a contact from the mailing list. The POST should contain the
 following data:
 
     {
@@ -682,7 +568,7 @@ The exepected input POST data should consist of an ``user`` and a ``company_id``
 /misc/alert_lockdown/wrong_lockdown - POST
 ------------------------------------------
 
-In case the lockdown is over and no matching should be changed, the interested 
+In case the lockdown is over and no matching should be changed, the interested
 parties will be alerted with an email
 The exepected input POST data should consist of an ``user`` and a ``company_id``
 
@@ -690,7 +576,7 @@ The exepected input POST data should consist of an ``user`` and a ``company_id``
 /misc/alert_lockdown/unmatch - POST
 -----------------------------------
 
-This mail should be sent when an unmatching call has been made 
+This mail should be sent when an unmatching call has been made
 The exepected input POST data should consist of an ``user`` and a ``company_id``
 
 
@@ -716,24 +602,3 @@ Optional parameters:
 
 * days (integer, default = 7)
 * updated_since (string, datetime format DD/MM/YYYY)
-
-/sync/bdr - GET
----------------
-
-/match/run - GET
-----------------
-
-/match/flush - GET
-------------------
-
-/match/verify/[int:undertaking_id]/[int:oldcompany_id] - GET
-------------------------------------------------------------
-
-/match/unverify/[int:undertaking_external_id] - GET
----------------------------------------------------
-
-/match/test/[new]/[old] - GET
------------------------------
-
-/match/manual/[int:undertaking_id]/[oldcompany_account] - GET
--------------------------------------------------------------
