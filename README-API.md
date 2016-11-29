@@ -44,7 +44,7 @@ Misc:
 * `/misc/alert_lockdown/wrong_lockdown` - alert on wrong lockdown
 * `/misc/alert_lockdown/unmatch` - alert at unmatch
 
-Sync & match:
+Sync:
 
 * `/sync/collections_title`
 * `/sync/fgases`
@@ -234,7 +234,7 @@ as fetched  from FGR.
 /undertaking/filter?[name|id|vat|countrycode|OR_vat|OR_name]
 ------------------------------------------------------------
 
-Return true or false if companies matching the filter exists.
+Return true or false if there are companies for the given filter.
 
 The *OR_name* and *OR_vat* filters refer to EuLegalRepresentative.
 
@@ -580,7 +580,7 @@ This mail should be sent when an unmatching call has been made
 The exepected input POST data should consist of an ``user`` and a ``company_id``
 
 
-Sync & match calls
+Sync calls
 ==================
 
 All endpoints in this category return a json response with the following
