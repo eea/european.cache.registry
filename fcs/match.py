@@ -103,6 +103,8 @@ def verify_none(undertaking_id, user):
     u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
     if not u:
         return None
+    if u.oldcompany_verified is True:
+        return u
     u.oldcompany = None
     u.oldcompany_verified = True
     u.oldcompany_account = None

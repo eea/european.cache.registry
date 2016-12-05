@@ -6,7 +6,10 @@ import sqlalchemy as sa
 
 
 def upgrade():
-    op.drop_constraint(u'email', 'user', type_='unique')
+    try:
+        op.drop_constraint(u'email', 'user', type_='unique')
+    except:
+        pass
 
 
 def downgrade():

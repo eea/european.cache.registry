@@ -491,8 +491,7 @@ companies' contact persons as an Excel file.
 Display the value of the configured middleware settings
 
     {
-      "BASE_URL": "http://example.com",
-      "AUTO_VERIFY_COMPANIES": false
+      "BASE_URL": "http://example.com"
     }
 
 

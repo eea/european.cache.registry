@@ -13,6 +13,24 @@ Initialize database:
 
     ./manage.py db init
 
+Upgrade database;
+
+    ./manage.py db alembic upgrade head|<revision name>
+
+Create a new revision:
+
+    ./manage.py db alembic revision -m "<revision name>"
+
+Current revision:
+
+    ./manage.py db alembic current
+
+Revisions history:
+
+    ./manage.py db alembic history
+
+[Alembic tutorial](http://alembic.zzzcomputing.com/en/latest/tutorial.html)
+
 ### Sync
 
 Fetch the latest data from a test server (cron):

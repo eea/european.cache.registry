@@ -14,7 +14,6 @@ from fcs.sync import sync_manager, Unauthorized, InvalidResponse
 from fcs.sync.bdr import get_auth as get_bdr_auth
 from fcs.sync.utils import update_obj
 
-
 def not_null(func):
     def inner(rc):
         if not rc:
@@ -385,6 +384,10 @@ def cleanup_unused_users():
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def fgases(days=7, updated_since=None):
+    # import at this level since an import at module level will break
+    #due to a circular import between fcs.match and fcs.sync.fgases
+    from fcs.match import verify_none
+
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
@@ -407,9 +410,17 @@ def fgases(days=7, updated_since=None):
     print "Using last_update {}".format(last_update)
     undertakings = get_latest_undertakings(updated_since=last_update)
 
-    undertakings_count = len([parse_undertaking(u)
-                              for u in undertakings
-                              if eea_double_check(u)])
+    undertakings_count = 0
+    for u in undertakings:
+        if eea_double_check(u):
+            parse_undertaking(u)
+            undertakings_count += 1
+            #automatically approve undertaking
+            current_app.logger.info(
+                'Automatically approve {}'.format(
+                    u['external_id']))
+            verify_none(u['external_id'], 'SYSTEM')
+
     cleanup_unused_users()
     if isinstance(last_update, datetime):
         last_update = last_update.date()
