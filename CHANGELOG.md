@@ -8,7 +8,7 @@ Changelog
   - removed unnecessary ENV variables
   - updated api accordingly
   - dropped unneeded tables: old_company and old_company_link
-  - all companies synced are automatically approved
+  - all synced companies are automatically approved
   - added new alembic revision
   [chiridra refs #78691]
 
