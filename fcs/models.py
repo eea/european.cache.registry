@@ -132,7 +132,6 @@ class Undertaking(SerializableModel, db.Model):
     oldcompany_verified = Column(Boolean, default=False)
     oldcompany_account = Column(String(255), nullable=True, default=None)
     oldcompany_extid = Column(Integer, nullable=True, default=None)
-    oldcompany_id = Column(Integer, nullable=True, default=None)
 
     address = relationship(Address)
     represent = relationship(EuLegalRepresentativeCompany)
@@ -176,7 +175,6 @@ class MatchingLog(SerializableModel, db.Model):
     timestamp = Column(DateTime, default=datetime.utcnow)
     user = Column(String(255))
     company_id = Column(Integer)
-    oldcompany_id = Column(Integer, nullable=True)
     oldcompany_account = Column(String(255), nullable=True)
     verified = Column(Boolean)
 

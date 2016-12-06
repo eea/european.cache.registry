@@ -10,6 +10,7 @@ Changelog
   - dropped unneeded tables: old_company and old_company_link
   - all synced companies are automatically approved
   - added new alembic revision
+  - removed oldcompany_id field
   [chiridra refs #78691]
 
 1.0 - (2016-10-23)

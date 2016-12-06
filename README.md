@@ -15,11 +15,15 @@ Initialize database:
 
 Upgrade database;
 
-    ./manage.py db alembic upgrade head|<revision name>
+    ./manage.py db alembic upgrade head|revision
+
+Downgrade database;
+
+    ./manage.py db alembic downgrade revision
 
 Create a new revision:
 
-    ./manage.py db alembic revision -m "<revision name>"
+    ./manage.py db alembic revision --autogenerate -m "revision name"
 
 Current revision:
 

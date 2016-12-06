@@ -91,7 +91,7 @@ def send_wrong_lockdown_mail(user, company_id):
     return True
 
 
-def send_unmatch_mail(user, company_id, oldcompany_id, oldcollection_path):
+def send_unmatch_mail(user, company_id, oldcollection_path):
     template = 'mails/unmatch.html'
     subject = 'BDR - Unmatch alert'
     company = Undertaking.query.filter_by(external_id=company_id).first()

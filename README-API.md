@@ -206,7 +206,6 @@ from FGR.
           "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
         },
         "collection_id": null,
-        "oldcompany_id": true,
         "oldcompany_account": "fgas22331",
         "oldcompany_extid": 4,
         "types": "FGAS_PRODUCER_IMPORTER_HFCS",
@@ -255,14 +254,12 @@ Returns an undertakings details from the system, as fetched from FGR.
     {
       "company_id": 10085,
       "collection_id": null,
-      "oldcompany_id": null,
       "undertaking_type": "FGASUndertaking",
       "website": "WEBSITE--10085",
       "status": "VALID",
       "domain": "FGAS",
       "name": "FGAS-NMORGANIZATION--10085",
       "phone": "+3212310085",
-      "oldcompany_id": true,
       "oldcompany_account": "fgas22331",
       "oldcompany_extid": 4,
       "businessprofile": {
@@ -392,7 +389,6 @@ Removes any link between an Undertaking (from FGR) and a Company.
       "company_id": 10085,
       "types": "FGAS_PRODUCER_IMPORTER_HFCS",
       "country_code": "CN",
-      "oldcompany_id": null,
       "date_created": "10/10/2014",
       "oldcompany_account": null,
       "vat": null,
@@ -421,7 +417,6 @@ Lists the already verified undertakings.
         "company_id": 10085,
         "types": "FGAS_PRODUCER_IMPORTER_HFCS",
         "country_code": "CN",
-        "oldcompany_id": null,
         "date_created": "10/10/2014",
         "oldcompany_account": null,
         "vat": null,
@@ -445,7 +440,6 @@ time, sorted in decrease order by timestamp.
         "timestamp": "27/11/2014 15:56",
         "company_id": 10051,
         "user": "vitalie",
-        "oldcompany_id": 4
       }
     ]
 

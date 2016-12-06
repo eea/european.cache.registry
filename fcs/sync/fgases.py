@@ -411,15 +411,15 @@ def fgases(days=7, updated_since=None):
     undertakings = get_latest_undertakings(updated_since=last_update)
 
     undertakings_count = 0
-    for u in undertakings:
-        if eea_double_check(u):
-            parse_undertaking(u)
+    for undertaking in undertakings:
+        if eea_double_check(undertaking):
+            parse_undertaking(undertaking)
             undertakings_count += 1
             #automatically approve undertaking
             current_app.logger.info(
                 'Automatically approve {}'.format(
-                    u['external_id']))
-            verify_none(u['external_id'], 'SYSTEM')
+                    undertaking['external_id']))
+            verify_none(undertaking['external_id'], 'SYSTEM')
 
     cleanup_unused_users()
     if isinstance(last_update, datetime):

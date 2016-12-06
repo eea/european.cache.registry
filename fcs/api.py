@@ -14,7 +14,7 @@ from fcs.models import (
     OrganizationLog, MatchingLog, db,
 )
 from fcs.match import (
-    get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
+    get_all_candidates, get_all_non_candidates, unverify_link,
     get_candidates, verify_none, str_matches,
 )
 from fcs.sync.fgases import fgases, sync_collections_title
@@ -95,7 +95,7 @@ class UndertakingList(ListView):
     def serialize(cls, obj):
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'businessprofile_id', 'address_id', 'oldcompany_id',
+            'businessprofile_id', 'address_id',
             'represent_id',
         )
         for field in _strip_fields:
@@ -141,7 +141,7 @@ class UndertakingListByVat(UndertakingList):
     def serialize(cls, obj):
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'businessprofile_id', 'address_id', 'oldcompany_id',
+            'businessprofile_id', 'address_id',
             'represent_id', 'phone', 'country_code', 'date_created',
             'oldcompany_account', 'types', 'oldcompany_extid', 'domain',
             'website', 'status', 'undertaking_type', 'date_updated',
@@ -306,7 +306,6 @@ class CandidateVerify(ApiView):
         data = ApiView.serialize(obj, pop_id=pop_id)
         if data:
             data.pop('undertaking_id')
-            data.pop('oldcompany_id')
             data['company_id'] = obj.undertaking.external_id
             data['collection_id'] = (
                 obj.oldcompany and obj.oldcompany.external_id
