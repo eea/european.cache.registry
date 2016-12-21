@@ -4,6 +4,7 @@ from datetime import datetime
 from fuzzywuzzy import fuzz
 
 from sqlalchemy import or_
+from sqlalchemy.orm import joinedload
 from flask.ext.script import Manager
 from flask import current_app
 
@@ -47,7 +48,14 @@ def get_candidates(external_id):
 
 
 def get_all_non_candidates(vat=None):
-    queryset = models.Undertaking.query.filter_by(oldcompany_verified=True)
+    queryset = (
+        models.db.session.query(models.Undertaking)
+        .options(joinedload(models.Undertaking.address))
+        .options(joinedload(models.Undertaking.represent))
+        .options(joinedload(models.Undertaking.businessprofile))
+        .options(joinedload(models.Undertaking.contact_persons))
+        .filter_by(oldcompany_verified=True)
+    )
     if vat:
         queryset = queryset.filter_by(vat=vat)
     return queryset.all()

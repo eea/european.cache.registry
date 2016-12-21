@@ -257,7 +257,7 @@ def parse_undertaking(data):
             update_obj(undertaking.represent, represent)
 
     unique_emails = set([cp.get('email') for cp in contact_persons])
-    existing_persons = undertaking.contact_persons.all()
+    existing_persons = undertaking.contact_persons
     for contact_person in contact_persons:
         user = None
         username = contact_person['username']

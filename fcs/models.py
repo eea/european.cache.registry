@@ -140,7 +140,6 @@ class Undertaking(SerializableModel, db.Model):
         User,
         secondary=undertaking_users,
         backref=db.backref('undertakings', lazy='dynamic'),
-        lazy='dynamic',
     )
 
     def get_country_code(self):
