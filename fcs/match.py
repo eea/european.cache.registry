@@ -1,6 +1,4 @@
 # coding=utf-8
-from datetime import datetime
-
 from fuzzywuzzy import fuzz
 
 from sqlalchemy import or_
@@ -102,4 +100,3 @@ def get_fuzz_limit():
 
 def str_matches(new, old):
     return new and old and fuzz.ratio(new, old) >= get_fuzz_limit()
-

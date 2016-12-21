@@ -1,21 +1,20 @@
 # coding=utf-8
 import contextlib
 import json
-import os
 import sys
 import StringIO
 
-from sqlalchemy import desc, or_
+from sqlalchemy import desc
 from flask import Blueprint, Response, abort, request, current_app
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
     Undertaking, User, EuLegalRepresentativeCompany, Address,
-    OrganizationLog, MatchingLog, db,
+    OrganizationLog, MatchingLog,
 )
 from fcs.match import (
     get_all_candidates, get_all_non_candidates, unverify_link,
-    get_candidates, verify_none, str_matches,
+    verify_none, str_matches,
 )
 from fcs.sync.fgases import fgases, sync_collections_title
 
@@ -200,7 +199,6 @@ class UndertakingDetail(DetailView):
 
     @classmethod
     def serialize(cls, obj):
-        candidates = get_candidates(obj.external_id)
         data = ApiView.serialize(obj)
         _strip_fields = (
             'date_updated', 'address_id', 'businessprofile_id',

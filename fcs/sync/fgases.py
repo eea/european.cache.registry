@@ -14,6 +14,7 @@ from fcs.sync import sync_manager, Unauthorized, InvalidResponse
 from fcs.sync.bdr import get_auth as get_bdr_auth
 from fcs.sync.utils import update_obj
 
+
 def not_null(func):
     def inner(rc):
         if not rc:
@@ -385,7 +386,7 @@ def cleanup_unused_users():
                      help="Date in DD/MM/YYYY format")
 def fgases(days=7, updated_since=None):
     # import at this level since an import at module level will break
-    #due to a circular import between fcs.match and fcs.sync.fgases
+    # due to a circular import between fcs.match and fcs.sync.fgases
     from fcs.match import verify_none
 
     if updated_since:
@@ -415,7 +416,7 @@ def fgases(days=7, updated_since=None):
         if eea_double_check(undertaking):
             parse_undertaking(undertaking)
             undertakings_count += 1
-            #automatically approve undertaking
+            # automatically approve undertaking
             current_app.logger.info(
                 'Automatically approve {}'.format(
                     undertaking['external_id']))
