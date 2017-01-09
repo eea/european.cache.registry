@@ -12,4 +12,3 @@ class InvalidResponse(Exception):
 
 
 import fcs.sync.fgases
-import fcs.sync.bdrreg

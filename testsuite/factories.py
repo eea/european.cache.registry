@@ -52,25 +52,6 @@ class BusinessProfileFactory(SQLAlchemyModelFactory):
         sqlalchemy_session = models.db.session
 
 
-class OldCompanyFactory(SQLAlchemyModelFactory):
-
-    class Meta:
-        model = models.OldCompany
-        sqlalchemy_session = models.db.session
-
-    id = 1
-    external_id = 10
-    name = 'old_company_name'
-    country_code = 'RO'
-    account = 'account'
-    vat_number = 'account'
-    eori = 'account'
-    active = True
-    website = 'website'
-    date_registered = date(2015, 1, 1)
-    valid = True
-
-
 class UndertakingFactory(SQLAlchemyModelFactory):
 
     class Meta:
@@ -95,7 +76,6 @@ class UndertakingFactory(SQLAlchemyModelFactory):
     address = SubFactory(AddressFactory)
     represent = SubFactory(RepresentativeFactory)
     businessprofile = SubFactory(BusinessProfileFactory)
-    oldcompany = SubFactory(OldCompanyFactory)
 
     @post_generation
     def contact_persons(self, create, extracted, **kwargs):
@@ -105,17 +85,6 @@ class UndertakingFactory(SQLAlchemyModelFactory):
         if extracted:
             for cp in extracted:
                 self.contact_persons.add(cp)
-
-
-class OldCompanyLinkFactory(SQLAlchemyModelFactory):
-
-    class Meta:
-        model = models.OldCompanyLink
-        sqlalchemy_session = models.db.session
-
-    verified = True
-    date_added = date(2015, 1, 1)
-    date_verified = date(2015, 1, 1)
 
 
 class UserFactory(SQLAlchemyModelFactory):

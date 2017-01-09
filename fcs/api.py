@@ -1,7 +1,6 @@
 # coding=utf-8
 import contextlib
 import json
-import os
 import sys
 import StringIO
 
@@ -10,15 +9,13 @@ from flask import Blueprint, Response, abort, request, current_app
 from flask.views import MethodView
 from flask.ext.script import Manager
 from fcs.models import (
-    Undertaking, User, EuLegalRepresentativeCompany, Address, OldCompany,
-    OrganizationLog, MatchingLog, db,
+    Undertaking, User, EuLegalRepresentativeCompany, Address,
+    OrganizationLog, MatchingLog,
 )
 from fcs.match import (
-    get_all_candidates, get_all_non_candidates, verify_link, unverify_link,
-    get_candidates, verify_none, str_matches,
-    run, verify, flush, unverify, test, manual,
+    get_all_candidates, get_all_non_candidates, unverify_link,
+    verify_none, str_matches,
 )
-from fcs.sync.bdrreg import bdr
 from fcs.sync.fgases import fgases, sync_collections_title
 
 api = Blueprint('api', __name__)
@@ -97,7 +94,7 @@ class UndertakingList(ListView):
     def serialize(cls, obj):
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'businessprofile_id', 'address_id', 'oldcompany_id',
+            'businessprofile_id', 'address_id',
             'represent_id',
         )
         for field in _strip_fields:
@@ -143,7 +140,7 @@ class UndertakingListByVat(UndertakingList):
     def serialize(cls, obj):
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'businessprofile_id', 'address_id', 'oldcompany_id',
+            'businessprofile_id', 'address_id',
             'represent_id', 'phone', 'country_code', 'date_created',
             'oldcompany_account', 'types', 'oldcompany_extid', 'domain',
             'website', 'status', 'undertaking_type', 'date_updated',
@@ -202,7 +199,6 @@ class UndertakingDetail(DetailView):
 
     @classmethod
     def serialize(cls, obj):
-        candidates = get_candidates(obj.external_id)
         data = ApiView.serialize(obj)
         _strip_fields = (
             'date_updated', 'address_id', 'businessprofile_id',
@@ -216,8 +212,7 @@ class UndertakingDetail(DetailView):
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'users': [UserList.serialize(cp) for cp in obj.contact_persons],
-            'candidates': [OldCompanyDetail.serialize(c.oldcompany) for c in
-                           candidates],
+            'candidates': [],
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account
@@ -280,29 +275,20 @@ class EuLegalRepresentativeCompanyDetail(DetailView):
         return rep
 
 
-class OldCompanyDetail(DetailView):
-    model = OldCompany
+class CandidateList(ListView):
+    model = Undertaking
+
+    def get_queryset(self):
+        return get_all_candidates()
 
     @classmethod
     def serialize(cls, obj):
-        rep = ApiView.serialize(obj)
-        rep['country'] = obj.country
-        return rep
-
-
-class CandidateList(ApiView):
-    def get(self):
-        candidates = get_all_candidates()
-        data = []
-        for company, links in candidates:
-            links_data = [{'name': l.oldcompany.name} for l in links]
-            company_data = {
-                'company_id': company.external_id,
-                'name': company.name,
-            }
-            data.append(
-                {'undertaking': company_data, 'links': links_data}
-            )
+        data = {
+            'company_id': obj.external_id,
+            'name': obj.name,
+            'status': obj.status,
+            'country': obj.address.country.name
+        }
         return data
 
 
@@ -318,20 +304,12 @@ class CandidateVerify(ApiView):
         data = ApiView.serialize(obj, pop_id=pop_id)
         if data:
             data.pop('undertaking_id')
-            data.pop('oldcompany_id')
             data['company_id'] = obj.undertaking.external_id
             data['collection_id'] = (
                 obj.oldcompany and obj.oldcompany.external_id
             )
         return data
 
-    def post(self, undertaking_id, oldcompany_id):
-        user = request.form['user']
-        link = verify_link(undertaking_id, oldcompany_id, user) or abort(404)
-        return self.serialize(link, pop_id=False)
-
-
-class CandidateVerifyNone(CandidateVerify):
     def post(self, undertaking_id):
         user = request.form['user']
         undertaking = verify_none(undertaking_id, user) or abort(404)
@@ -340,39 +318,6 @@ class CandidateVerifyNone(CandidateVerify):
             'verified': data['oldcompany_verified'],
             'company_id': data['company_id'],
         }
-
-
-class OldCompanyListByStatus(ListView):
-    model = OldCompany
-
-    def get_queryset(self, **kwargs):
-        return self.model.query.filter_by(valid=self.valid).all()
-
-
-class OldCompanyListValid(OldCompanyListByStatus):
-    valid = True
-
-
-class OldCompanyListInvalid(OldCompanyListByStatus):
-    valid = False
-
-
-class OldCompanySetStatus(DetailView):
-    model = OldCompany
-
-    def post(self, pk):
-        company = self.model.query.filter_by(external_id=pk).first_or_404()
-        company.valid = self.valid
-        db.session.commit()
-        return json.dumps(True)
-
-
-class OldCompanySetValid(OldCompanySetStatus):
-    valid = True
-
-
-class OldCompanySetInvalid(OldCompanySetStatus):
-    valid = False
 
 
 class CandidateUnverify(ApiView):
@@ -432,34 +377,6 @@ class SyncCollectionsTitle(MgmtCommand):
     command_func = staticmethod(sync_collections_title)
 
 
-class SyncBdr(MgmtCommand):
-    command_func = staticmethod(bdr)
-
-
-class MatchRun(MgmtCommand):
-    command_func = staticmethod(run)
-
-
-class MatchFlush(MgmtCommand):
-    command_func = staticmethod(flush)
-
-
-class MatchVerify(MgmtCommand):
-    command_func = staticmethod(verify)
-
-
-class MatchUnverify(MgmtCommand):
-    command_func = staticmethod(unverify)
-
-
-class MatchTest(MgmtCommand):
-    command_func = staticmethod(test)
-
-
-class MatchManual(MgmtCommand):
-    command_func = staticmethod(manual)
-
-
 api.add_url_rule('/undertaking/list',
                  view_func=UndertakingList.as_view('company-list'))
 api.add_url_rule('/undertaking/list-small',
@@ -484,26 +401,10 @@ api.add_url_rule('/candidate/list',
 api.add_url_rule('/candidate/list/verified',
                  view_func=NonCandidateList.as_view('noncandidate-list'))
 
-api.add_url_rule('/candidate/verify/<undertaking_id>/<oldcompany_id>/',
+api.add_url_rule('/candidate/verify/<undertaking_id>/',
                  view_func=CandidateVerify.as_view('candidate-verify'))
-api.add_url_rule('/candidate/verify-none/<undertaking_id>/',
-                 view_func=CandidateVerifyNone.as_view(
-                     'candidate-verify-none'))
 api.add_url_rule('/candidate/unverify/<undertaking_id>/',
                  view_func=CandidateUnverify.as_view('candidate-unverify'))
-
-api.add_url_rule('/oldcompanies/list/valid/',
-                 view_func=OldCompanyListValid.as_view(
-                     'oldcompany-list-valid'))
-api.add_url_rule('/oldcompanies/list/invalid/',
-                 view_func=OldCompanyListInvalid.as_view(
-                     'oldcompany-list-invalid'))
-api.add_url_rule('/oldcompanies/<pk>/valid/',
-                 view_func=OldCompanySetValid.as_view(
-                     'oldcompany-set-valid'))
-api.add_url_rule('/oldcompanies/<pk>/invalid/',
-                 view_func=OldCompanySetInvalid.as_view(
-                     'oldcompany-set-invalid'))
 
 api.add_url_rule('/data_sync_log',
                  view_func=DataSyncLog.as_view('data-sync-log'))
@@ -513,14 +414,3 @@ api.add_url_rule('/matching_log',
 api.add_url_rule('/sync/collections_title',
                  view_func=SyncCollectionsTitle.as_view('sync-collections'))
 api.add_url_rule('/sync/fgases', view_func=SyncFgases.as_view('sync-fgases'))
-api.add_url_rule('/sync/bdr', view_func=SyncBdr.as_view('sync-bdr'))
-api.add_url_rule('/match/run', view_func=MatchRun.as_view('match-run'))
-api.add_url_rule('/match/flush', view_func=MatchFlush.as_view('match-flush'))
-api.add_url_rule('/match/verify/<int:undertaking_id>/<int:oldcompany_id>',
-                 view_func=MatchVerify.as_view('match-verify'))
-api.add_url_rule('/match/unverify/<int:undertaking_external_id>',
-                 view_func=MatchUnverify.as_view('match-unverify'))
-api.add_url_rule('/match/test/<new>/<old>',
-                 view_func=MatchTest.as_view('match-test'))
-api.add_url_rule('/match/manual/<int:undertaking_id>/<oldcompany_account>',
-                 view_func=MatchManual.as_view('match-manual'))

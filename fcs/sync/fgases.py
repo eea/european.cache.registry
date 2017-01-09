@@ -258,7 +258,7 @@ def parse_undertaking(data):
             update_obj(undertaking.represent, represent)
 
     unique_emails = set([cp.get('email') for cp in contact_persons])
-    existing_persons = undertaking.contact_persons.all()
+    existing_persons = undertaking.contact_persons
     for contact_person in contact_persons:
         user = None
         username = contact_person['username']
@@ -385,6 +385,10 @@ def cleanup_unused_users():
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def fgases(days=7, updated_since=None):
+    # import at this level since an import at module level will break
+    # due to a circular import between fcs.match and fcs.sync.fgases
+    from fcs.match import verify_none
+
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
@@ -407,9 +411,17 @@ def fgases(days=7, updated_since=None):
     print "Using last_update {}".format(last_update)
     undertakings = get_latest_undertakings(updated_since=last_update)
 
-    undertakings_count = len([parse_undertaking(u)
-                              for u in undertakings
-                              if eea_double_check(u)])
+    undertakings_count = 0
+    for undertaking in undertakings:
+        if eea_double_check(undertaking):
+            parse_undertaking(undertaking)
+            undertakings_count += 1
+            # automatically approve undertaking
+            current_app.logger.info(
+                'Automatically approve {}'.format(
+                    undertaking['external_id']))
+            verify_none(undertaking['external_id'], 'SYSTEM')
+
     cleanup_unused_users()
     if isinstance(last_update, datetime):
         last_update = last_update.date()
