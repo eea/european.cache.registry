@@ -1,7 +1,10 @@
 Changelog
 =========
 
-1.1.dev0 - (unreleased)
+1.2.dev0 - (unreleased)
+-----------------------
+
+1.1 - (2017-01-09)
 -----------------------
 * Delete organisation matching from the Fgas Cache Registry
   - removed all the code related with bdr matching
