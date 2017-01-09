@@ -61,3 +61,8 @@ Modify the fuzzy matching algorithm percent value (how much should old and new
 be alike):
 
     FUZZ_LIMIT = 75
+
+### Testing
+
+    pip install -r requirements-dev.txt
+    py.test --cov=fcs testsuite
