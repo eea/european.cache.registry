@@ -1,8 +1,15 @@
 Changelog
 =========
 
-1.2.dev0 - (unreleased)
+1.3.dev0 - (unreleased)
 -----------------------
+
+1.2 - (2017-01-13)
+-----------------------
+* HG zip codes
+  - zipcode field increased up to 64 characters
+  - upgrade revision for alembic generated
+  [chiridra refs #80654]
 
 1.1 - (2017-01-09)
 -----------------------
