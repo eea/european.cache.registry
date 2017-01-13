@@ -60,7 +60,7 @@ class Address(SerializableModel, db.Model):
     id = Column(Integer, primary_key=True)
     street = Column(String(255))
     number = Column(String(64))
-    zipcode = Column(String(16))
+    zipcode = Column(String(64))
     city = Column(String(255))
     country_id = Column(ForeignKey('country.id'))
 
