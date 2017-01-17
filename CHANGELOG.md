@@ -1,18 +1,24 @@
 Changelog
 =========
 
-1.3.dev0 - (unreleased)
+1.4.dev0 - (unreleased)
 -----------------------
 
+1.3 - (2017-01-17)
+------------------
+* Task: use logspout cu send logs to graylog
+  - used gunicorn instead of waitress-serve to start app
+  [chiridra refs #80762]
+
 1.2 - (2017-01-13)
------------------------
+------------------
 * HG zip codes
   - zipcode field increased up to 64 characters
   - upgrade revision for alembic generated
   [chiridra refs #80654]
 
 1.1 - (2017-01-09)
------------------------
+------------------
 * Delete organisation matching from the Fgas Cache Registry
   - removed all the code related with bdr matching
   - removed unnecessary ENV variables

@@ -29,11 +29,11 @@ fi
 
 if [ -z "$1" ]; then
   echo "Serving on port 5000"
-  exec waitress-serve --port 5000 manage:app
-fi
-
-if [[ "$1" == "--"* ]]; then
-  exec waitress-serve "$@" manage:app
+  exec gunicorn manage:app \
+                --name fgas \
+                --bind 0.0.0.0:5000 \
+                --access-logfile - \
+                --error-logfile -
 fi
 
 if [[ $COMMANDS == *"$1"* ]]; then
