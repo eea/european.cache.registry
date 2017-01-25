@@ -436,6 +436,53 @@ def fgases(days=7, updated_since=None):
 
 
 @sync_manager.command
+@sync_manager.option('-u', '--updated', dest='updated_since',
+                     help="Date in DD/MM/YYYY format")
+def fgases_debug_noneu(days=7, updated_since=None):
+    # returns a list with all NON EU companies without a legal representative
+    # import at this level since an import at module level will break
+    # due to a circular import between fcs.match and fcs.sync.fgases
+    from fcs.match import verify_none
+
+    if updated_since:
+        try:
+            last_update = datetime.strptime(updated_since, '%d/%m/%Y')
+        except ValueError:
+            print 'Invalid date format. Please use DD/MM/YYYY'
+            return False
+    else:
+        days = int(days)
+        if days > 0:
+            last_update = datetime.now() - timedelta(days=days)
+        else:
+            last = (
+                Undertaking.query
+                .order_by(desc(Undertaking.date_updated))
+                .first()
+            )
+            last_update = last.date_updated - timedelta(
+                days=1) if last else None
+
+    print "Using last_update {}".format(last_update)
+    undertakings = get_latest_undertakings(updated_since=last_update)
+
+    undertakings_count = 0
+    for undertaking in undertakings:
+        if undertaking['euLegalRepresentativeCompany'] == None:
+            undertaking_address = undertaking.get('address', None)
+            if undertaking_address != None:
+                undertaking_country = undertaking_address.get('country', None)
+                if undertaking_country != None:
+                    undertaking_country_type = undertaking_country.get('type', None)
+                    if undertaking_country_type == 'NONEU_TYPE':
+                        undertakings_count += 1
+                        print undertaking
+
+    print undertakings_count, "values"
+    return True
+
+
+@sync_manager.command
 def sync_collections_title():
     collections = get_bdr_collections()
     if collections:

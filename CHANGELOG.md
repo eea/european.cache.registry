@@ -3,6 +3,10 @@ Changelog
 
 1.4.dev0 - (unreleased)
 -----------------------
+* Equipment manufacturers missing from BDR
+  - added API method to print a list with
+    all NON EU companies without a legal representative
+  [chiridra refs #80976]
 
 1.3 - (2017-01-17)
 ------------------

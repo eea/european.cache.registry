@@ -62,6 +62,13 @@ be alike):
 
     FUZZ_LIMIT = 75
 
+### DEBUGING
+
+Fetch the latest data from a test server (cron) and prints the list of NON EU companies
+without a legal representative:
+
+    ./manage.py sync fgases_debug_noneu [-d 30]
+
 ### Testing
 
     pip install -r requirements-dev.txt

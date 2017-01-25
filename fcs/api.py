@@ -16,7 +16,7 @@ from fcs.match import (
     get_all_candidates, get_all_non_candidates, unverify_link,
     verify_none, str_matches,
 )
-from fcs.sync.fgases import fgases, sync_collections_title
+from fcs.sync.fgases import fgases, fgases_debug_noneu, sync_collections_title
 
 api = Blueprint('api', __name__)
 api_manager = Manager()
@@ -373,6 +373,10 @@ class SyncFgases(MgmtCommand):
     command_func = staticmethod(fgases)
 
 
+class SyncFgasesDebugNoneu(MgmtCommand):
+    command_func = staticmethod(fgases_debug_noneu)
+
+
 class SyncCollectionsTitle(MgmtCommand):
     command_func = staticmethod(sync_collections_title)
 
@@ -413,4 +417,7 @@ api.add_url_rule('/matching_log',
 
 api.add_url_rule('/sync/collections_title',
                  view_func=SyncCollectionsTitle.as_view('sync-collections'))
-api.add_url_rule('/sync/fgases', view_func=SyncFgases.as_view('sync-fgases'))
+api.add_url_rule('/sync/fgases',
+                 view_func=SyncFgases.as_view('sync-fgases'))
+api.add_url_rule('/sync/fgases_debug_noneu',
+                 view_func=SyncFgasesDebugNoneu.as_view('sync-fgases-debug-noneu'))

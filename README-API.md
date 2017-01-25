@@ -49,6 +49,10 @@ Sync:
 * `/sync/collections_title`
 * `/sync/fgases`
 
+Debug:
+
+* `/sync/fgases_debug_noneu` - returns a list with all NON EU companies without a legal representative
+
 Listing calls
 =============
 
@@ -590,6 +594,27 @@ format:
 
 /sync/fgases - GET
 ------------------
+
+Optional parameters:
+
+* days (integer, default = 7)
+* updated_since (string, datetime format DD/MM/YYYY)
+
+
+Debug calls
+==================
+
+All endpoints in this category return a json response with the following
+format:
+
+
+    {
+        'success': True/False,
+        'message': 'Success/Error message'
+    }
+
+/sync/fgases_debug_noneu - GET
+------------------------------
 
 Optional parameters:
 
