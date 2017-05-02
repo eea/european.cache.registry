@@ -102,6 +102,27 @@ class UserListExport(MethodView):
         return response
 
 
+class UserListExportJSON(MethodView):
+
+    def get(self, **kwargs):
+        users = User.query.all()
+
+        resp = []
+        for user in users:
+            for company in user.verified_undertakings:
+                for cp in company.contact_persons:
+                    if cp.username == user.username:
+                        resp.append({
+                            'username': user.username,
+                            'companyname': company.name,
+                            'country': company.address.country.name,
+                            'contact_firstname': cp.first_name,
+                            'contact_lastname': cp.last_name,
+                            'contact_email': cp.email
+                          })
+        return Response(json.dumps(resp, indent=2), mimetype='application/json')
+
+
 class SettingsOverview(MethodView):
     def get(self, **kwargs):
         resp = {
@@ -193,6 +214,9 @@ misc.add_url_rule('/misc/undertaking/<pk>/statusupdate',
 misc.add_url_rule('/misc/user/export',
                   view_func=UserListExport.as_view(
                       'user-list-export'))
+misc.add_url_rule('/misc/user/export/json',
+                  view_func=UserListExportJSON.as_view(
+                      'user-list-export-json'))
 misc.add_url_rule('/misc/settings',
                   view_func=SettingsOverview.as_view(
                       'settings-overview'))

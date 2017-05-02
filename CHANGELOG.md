@@ -7,6 +7,10 @@ Changelog
   - added API method to print a list with
     all NON EU companies without a legal representative
   [chiridra refs #80976]
+* BDR registry integration of invitations and reminders:
+  middleware and email sending
+  - added API method export all users in JSON format
+  [chiridra refs #84119]
 
 1.3 - (2017-01-17)
 ------------------
