@@ -63,7 +63,7 @@ class UndertakingFactory(SQLAlchemyModelFactory):
     name = 'n'
     website = 'w'
     phone = 'p'
-    domain = 'd'
+    domain = 'FGAS'
     status = 's'
     date_created = date(2015, 1, 1)
     date_updated = date(2015, 1, 1)

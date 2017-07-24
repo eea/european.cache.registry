@@ -45,7 +45,7 @@ def get_candidates(external_id):
     return company
 
 
-def get_all_non_candidates(vat=None):
+def get_all_non_candidates(domain='FGAS', vat=None):
     queryset = (
         models.db.session.query(models.Undertaking)
         .options(joinedload(models.Undertaking.address))
@@ -53,6 +53,7 @@ def get_all_non_candidates(vat=None):
         .options(joinedload(models.Undertaking.businessprofile))
         .options(joinedload(models.Undertaking.contact_persons))
         .filter_by(oldcompany_verified=True)
+        .filter_by(domain=domain)
     )
     if vat:
         queryset = queryset.filter_by(vat=vat)

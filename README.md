@@ -1,7 +1,7 @@
 fgas-cache-server
 =================
 
-A middleware between F-Gas Registry and BDR
+A middleware between F-Gas and ODS Registries and BDR
 
 
 Usage (testing)
@@ -40,6 +40,7 @@ Revisions history:
 Fetch the latest data from a test server (cron):
 
     ./manage.py sync fgases [-d 30]
+    ./manage.py sync ods [-d 30]
 
 In order to sync BDR collections title with the cache server's corresponding undertakings name:
 
@@ -68,6 +69,7 @@ Fetch the latest data from a test server (cron) and prints the list of NON EU co
 without a legal representative:
 
     ./manage.py sync fgases_debug_noneu [-d 30]
+    ./manage.py sync ods_debug_noneu [-d 30]
 
 ### Testing
 
