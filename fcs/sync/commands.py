@@ -4,7 +4,6 @@ from flask import current_app
 from sqlalchemy import desc
 from sqlalchemy.orm import session
 
-from fcs.match import verify_none
 from fcs.models import Undertaking, db, OrganizationLog
 
 from fcs.sync import undertakings as undertakings_module
@@ -48,6 +47,7 @@ def get_last_update(days, updated_since):
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def fgases(days=7, updated_since=None):
+    from fcs.match import verify_none
     with session.no_autoflush:
         last_update = get_last_update(days, updated_since)
         undertakings = undertakings_module.get_latest_undertakings(
