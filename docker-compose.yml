@@ -18,6 +18,9 @@ services:
   mysql:
     image: mysql:5.5
     container_name: fcs.db
+
+mysql:
+    image: mysql:5.5
     environment:
     - MYSQL_DATABASE=fcs
     - MYSQL_USER=fcs
