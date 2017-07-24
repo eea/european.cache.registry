@@ -16,7 +16,7 @@ from fcs.match import (
     get_all_candidates, get_all_non_candidates, unverify_link,
     verify_none, str_matches,
 )
-from fcs.sync.fgases import fgases, fgases_debug_noneu, sync_collections_title
+from fcs.sync.commands import fgases, fgases_debug_noneu, sync_collections_title
 
 api = Blueprint('api', __name__)
 api_manager = Manager()
