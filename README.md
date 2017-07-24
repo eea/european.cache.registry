@@ -1,7 +1,7 @@
 fgas-cache-server
 =================
 
-A middleware between F-Gas Registry and BDR
+A middleware between F-Gas and ODS Registries and BDR
 
 
 Installation
@@ -61,6 +61,9 @@ Fetch the latest data from a test server:
 
     $ docker exec fcs.app bash -c "python ./manage.py sync fgases -d 500"
 
+    ./manage.py sync fgases [-d 30]
+    ./manage.py sync ods [-d 30]
+
 In order to sync BDR collections title with the cache server's corresponding undertakings name:
 
     $ docker exec fcs.app bash -c "./manage.py sync sync_collections_title"
@@ -89,3 +92,11 @@ Fetch the latest data from a test server (cron) and prints the list of NON EU co
 without a legal representative:
 
     $ docker exec fcs.app bash -c "python ./manage.py sync fgases_debug_noneu -d 500"
+
+    ./manage.py sync fgases_debug_noneu [-d 30]
+    ./manage.py sync ods_debug_noneu [-d 30]
+
+### Testing
+
+    pip install -r requirements-dev.txt
+    py.test --cov=fcs testsuite

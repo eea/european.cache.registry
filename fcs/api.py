@@ -92,7 +92,8 @@ class UndertakingList(ListView):
     model = Undertaking
 
     def get_queryset(self):
-        return get_all_non_candidates()
+        domain = request.args.get('domain', 'FGAS')
+        return get_all_non_candidates(domain=domain)
 
     @classmethod
     def serialize(cls, obj):
@@ -119,7 +120,8 @@ class UndertakingListSmall(ListView):
     model = Undertaking
 
     def get_queryset(self):
-        return get_all_non_candidates()
+        domain = request.args.get('domain', 'FGAS')
+        return get_all_non_candidates(domain=domain)
 
     @classmethod
     def serialize(cls, obj):
@@ -138,7 +140,8 @@ class UndertakingListSmall(ListView):
 
 class UndertakingListByVat(UndertakingList):
     def get_queryset(self, vat):
-        return get_all_non_candidates(vat=vat)
+        domain = request.args.get('domain', 'FGAS')
+        return get_all_non_candidates(vat=vat, domain=domain)
 
     @classmethod
     def serialize(cls, obj):
