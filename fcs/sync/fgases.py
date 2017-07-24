@@ -5,6 +5,7 @@ import requests
 
 from sqlalchemy import desc
 from flask import current_app
+from sqlalchemy.orm import session
 
 from fcs.models import (
     Undertaking, db, Address, Country, BusinessProfile, User,
@@ -388,58 +389,58 @@ def fgases(days=7, updated_since=None):
     # import at this level since an import at module level will break
     # due to a circular import between fcs.match and fcs.sync.fgases
     from fcs.match import verify_none
-
-    if updated_since:
-        try:
-            last_update = datetime.strptime(updated_since, '%d/%m/%Y')
-        except ValueError:
-            print 'Invalid date format. Please use DD/MM/YYYY'
-            return False
-    else:
-        days = int(days)
-        if days > 0:
-            last_update = datetime.now() - timedelta(days=days)
+    with session.no_autoflush:
+        if updated_since:
+            try:
+                last_update = datetime.strptime(updated_since, '%d/%m/%Y')
+            except ValueError:
+                print 'Invalid date format. Please use DD/MM/YYYY'
+                return False
         else:
-            last = (
-                Undertaking.query
-                .order_by(desc(Undertaking.date_updated))
-                .first()
-            )
-            last_update = last.date_updated - timedelta(
-                days=1) if last else None
+            days = int(days)
+            if days > 0:
+                last_update = datetime.now() - timedelta(days=days)
+            else:
+                last = (
+                    Undertaking.query
+                    .order_by(desc(Undertaking.date_updated))
+                    .first()
+                )
+                last_update = last.date_updated - timedelta(
+                    days=1) if last else None
 
-    print "Using last_update {}".format(last_update)
-    undertakings = get_latest_undertakings(updated_since=last_update)
+        print "Using last_update {}".format(last_update)
+        undertakings = get_latest_undertakings(updated_since=last_update)
 
-    undertakings_count = 0
-    batch = []
-    for undertaking in undertakings:
-        if eea_double_check(undertaking):
-            batch.append(parse_undertaking(undertaking))
-            if undertakings_count % 10 == 1:
-                db.session.add_all(batch)
-                db.session.commit()
-                del batch[:]
-            undertakings_count += 1
-            # automatically approve undertaking
-            current_app.logger.info(
-                'Automatically approve {}'.format(
-                    undertaking['external_id']))
-            verify_none(undertaking['external_id'], 'SYSTEM')
+        undertakings_count = 0
+        batch = []
+        for undertaking in undertakings:
+            if eea_double_check(undertaking):
+                batch.append(parse_undertaking(undertaking))
+                if undertakings_count % 10 == 1:
+                    db.session.add_all(batch)
+                    db.session.commit()
+                    del batch[:]
+                undertakings_count += 1
+                # automatically approve undertaking
+                current_app.logger.info(
+                    'Automatically approve {}'.format(
+                        undertaking['external_id']))
+                verify_none(undertaking['external_id'], 'SYSTEM')
 
-    db.session.add_all(batch)
-    db.session.commit()
-    del batch[:]
-    cleanup_unused_users()
-    if isinstance(last_update, datetime):
-        last_update = last_update.date()
-    log = OrganizationLog(
-        organizations=undertakings_count,
-        using_last_update=last_update)
-    db.session.add(log)
-    print undertakings_count, "values"
+        db.session.add_all(batch)
+        db.session.commit()
+        del batch[:]
 
-    db.session.commit()
+        cleanup_unused_users()
+        if isinstance(last_update, datetime):
+            last_update = last_update.date()
+        log = OrganizationLog(
+            organizations=undertakings_count,
+            using_last_update=last_update)
+        db.session.add(log)
+        print undertakings_count, "values"
+        db.session.commit()
     return True
 
 
