@@ -3,10 +3,12 @@ import requests
 from flask import current_app
 
 from fcs.models import (
-    Undertaking, Address, BusinessProfile,
-    EuLegalRepresentativeCompany, User)
+    Address, BusinessProfile, EuLegalRepresentativeCompany, Type, Undertaking,
+    UndertakingTypes, User
+)
 from fcs.models import db
 from fcs.sync import parsers
+from instance.settings import ODS
 from .bdr import update_bdr_col_name, get_absolute_url
 from .auth import get_auth, Unauthorized, InvalidResponse, patch_users
 
@@ -50,21 +52,23 @@ def update_undertaking(data):
     address = parsers.parse_address(data.pop('address'))
     business_profile = parsers.parse_bp(data.pop('businessProfile'))
     contact_persons = parsers.parse_cp_list(data.pop('contactPersons'))
-    represent = parsers.parse_rc(data.pop('euLegalRepresentativeCompany'))
-
+    types = data.pop('types')
+    if not data['domain'] == ODS:
+        represent = parsers.parse_rc(data.pop('euLegalRepresentativeCompany'))
     contact_persons = patch_users(data['id'], contact_persons)
-    data['types'] = ','.join(data['types'])
     data['external_id'] = data.pop('id')
     data['date_created'] = parsers.parse_date(data.pop('dateCreated'))
     data['date_updated'] = parsers.parse_date(data.pop('dateUpdated'))
     data['undertaking_type'] = data.pop('@type', None)
 
+    if data['domain'] == ODS:
+        represent = None
+        data['vat'] = data.pop('eoriNumber')
     undertaking = (
         Undertaking.query
         .filter_by(external_id=data['external_id'])
         .first()
     )
-
     if not undertaking:
         undertaking = Undertaking(**data)
     else:
@@ -107,6 +111,13 @@ def update_undertaking(data):
         else:
             parsers.update_obj(undertaking.represent.address, address)
             parsers.update_obj(undertaking.represent, represent)
+
+    # Update or create types
+    UndertakingTypes.query.filter_by(undertaking=undertaking).delete()
+    for type in types:
+        type_object = Type.query.filter_by(
+            type=type, domain=data['domain']).first()
+        undertaking.types.append(type_object)
 
     unique_emails = set([cp.get('email') for cp in contact_persons])
     existing_persons = undertaking.contact_persons
@@ -152,11 +163,12 @@ def update_undertaking(data):
     return undertaking
 
 
-def remove_undertaking(data):
+def remove_undertaking(data, domain):
     """Remove undertaking."""
+
     undertaking = (
-        Undertaking.query.fgases()
-        .filter_by(external_id=data.get('id'))
+        Undertaking.query
+        .filter_by(external_id=data.get('id'), domain=domain)
         .first()
     )
     if undertaking:
