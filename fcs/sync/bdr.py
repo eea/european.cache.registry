@@ -4,31 +4,40 @@ from datetime import datetime
 
 from flask import current_app
 
-
-def get_auth():
-    return (
-        current_app.config.get('BDR_ENDPOINT_USER', 'user'),
-        current_app.config.get('BDR_ENDPOINT_PASSWORD', 'pass'),
-    )
+from .auth import get_auth
+from fcs.sync.undertakings import get_absolute_url
 
 
-def get_absolute_url(url):
-    return current_app.config['BDR_ENDPOINT_URL'] + url
-
-
-def do_bdr_request(params, relative_url):
-    url = get_absolute_url(relative_url)
-    auth = get_auth()
+def bdr_request(url, params=None):
+    auth = get_auth('BDR_ENDPOINT_USER', 'BDR_ENDPOINT_PASSWORD')
     ssl_verify = current_app.config['HTTPS_VERIFY']
 
-    error_message = ''
     response = None
     try:
         response = requests.get(url, params=params, auth=auth,
                                 verify=ssl_verify)
     except requests.ConnectionError:
         error_message = 'BDR was unreachable - {}'.format(datetime.now())
+        current_app.logger.warning(error_message)
+        print error_message
+        if 'sentry' in current_app.extensions:
+            current_app.extensions['sentry'].captureMessage(error_message)
 
+    return response
+
+
+def get_bdr_collections():
+    endpoint = current_app.config['BDR_ENDPOINT_URL']
+    url = endpoint + '/api/collections_json'
+    response = bdr_request(url)
+    if response and response.status_code == 200:
+        return response.json()
+
+
+def check_bdr_request(params, relative_url):
+    url = get_absolute_url('BDR_ENDPOINT_URL', relative_url)
+    response = bdr_request(url, params)
+    error_message = ''
     if response is not None and response.headers.get(
             'content-type') == 'application/json':
         json_data = json.loads(response.content)
@@ -38,12 +47,6 @@ def do_bdr_request(params, relative_url):
             error_message = 'Invalid status code: ' + response.status_code
     else:
         error_message = 'Invalid response: ' + str(response)
-
-    if error_message:
-        current_app.logger.warning(error_message)
-        if 'sentry' in current_app.extensions:
-            current_app.extensions['sentry'].captureMessage(error_message)
-
     return not error_message
 
 
@@ -62,4 +65,4 @@ def call_bdr(undertaking, old_collection=False):
 
     relative_url = '/ReportekEngine/update_company_collection'
 
-    return do_bdr_request(params, relative_url)
+    return check_bdr_request(params, relative_url)
