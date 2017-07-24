@@ -3,17 +3,16 @@ import requests
 from flask import current_app
 
 from fcs.models import Undertaking, db
-from fcs.sync import Unauthorized, InvalidResponse
-from fcs.sync.auth import get_auth
+from .auth import get_auth, Unauthorized, InvalidResponse
 
 
 def get_absolute_url(base_url, url):
     return current_app.config[base_url] + url
 
 
-def get_latest_undertakings(updated_since=None):
+def get_latest_undertakings(type_url, updated_since=None):
     auth = get_auth('API_USER', 'API_PASSWORD')
-    url = get_absolute_url('API_URL', '/latest/fgasundertakings/')
+    url = get_absolute_url('API_URL', type_url)
     if updated_since:
         updated_since = updated_since.strftime('%d/%m/%Y')
         params = {'updatedSince': updated_since}

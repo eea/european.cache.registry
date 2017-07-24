@@ -4,6 +4,14 @@ from flask import current_app
 from fcs.models import db, User
 
 
+class Unauthorized(Exception):
+    pass
+
+
+class InvalidResponse(Exception):
+    pass
+
+
 def get_auth(user, password):
     return (
         current_app.config.get(user, 'user'),
