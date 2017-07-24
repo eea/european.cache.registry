@@ -298,7 +298,7 @@ def parse_undertaking(data):
 
     undertaking.country_code = undertaking.get_country_code()
     undertaking.country_code_orig = undertaking.get_country_code_orig()
-    db.session.add(undertaking)
+    return undertaking
 
 
 def eea_double_check(data):
@@ -412,9 +412,14 @@ def fgases(days=7, updated_since=None):
     undertakings = get_latest_undertakings(updated_since=last_update)
 
     undertakings_count = 0
+    batch = []
     for undertaking in undertakings:
         if eea_double_check(undertaking):
-            parse_undertaking(undertaking)
+            batch.append(parse_undertaking(undertaking))
+            if undertakings_count % 10 == 1:
+                db.session.add_all(batch)
+                db.session.commit()
+                del batch[:]
             undertakings_count += 1
             # automatically approve undertaking
             current_app.logger.info(
@@ -422,6 +427,9 @@ def fgases(days=7, updated_since=None):
                     undertaking['external_id']))
             verify_none(undertaking['external_id'], 'SYSTEM')
 
+    db.session.add_all(batch)
+    db.session.commit()
+    del batch[:]
     cleanup_unused_users()
     if isinstance(last_update, datetime):
         last_update = last_update.date()
