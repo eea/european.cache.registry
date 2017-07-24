@@ -12,6 +12,7 @@ from .auth import get_auth, Unauthorized, InvalidResponse, patch_users
 
 
 def get_latest_undertakings(type_url, updated_since=None):
+    """ Get latest undertakings from specific API url """
     auth = get_auth('API_USER', 'API_PASSWORD')
     url = get_absolute_url('API_URL', type_url)
     if updated_since:
@@ -52,7 +53,8 @@ def patch_undertaking(external_id, data):
     return data
 
 
-def create_undertaking(data):
+def update_undertaking(data):
+    """ Create or update undertaking from received data """
     data = patch_undertaking(data['id'], data)
     address = parsers.parse_address(data.pop('address'))
     business_profile = parsers.parse_bp(data.pop('businessProfile'))
