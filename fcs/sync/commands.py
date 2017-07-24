@@ -48,42 +48,43 @@ def get_last_update(days, updated_since):
                      help="Date in DD/MM/YYYY format")
 def fgases(days=7, updated_since=None):
     from fcs.match import verify_none
-    with session.no_autoflush:
-        last_update = get_last_update(days, updated_since)
-        undertakings = undertakings_module.get_latest_undertakings(
-            type_url='/latest/fgasundertakings/',
-            updated_since=last_update
-        )
+    cleanup_unused_users()
+    db.session.autoflush = False
+    last_update = get_last_update(days, updated_since)
+    undertakings = undertakings_module.get_latest_undertakings(
+        type_url='/latest/fgasundertakings/',
+        updated_since=last_update
+    )
 
-        undertakings_count = 0
-        batch = []
-        for undertaking in undertakings:
-            if eea_double_check_fgases(undertaking):
-                batch.append(parse_fgases_undertaking(undertaking))
-                if undertakings_count % 10 == 1:
-                    db.session.add_all(batch)
-                    db.session.commit()
-                    del batch[:]
-                undertakings_count += 1
-                # automatically approve undertaking
-                current_app.logger.info(
-                    'Automatically approve {}'.format(
-                        undertaking['external_id']))
-                verify_none(undertaking['external_id'], 'SYSTEM')
+    undertakings_count = 0
+    batch = []
+    for undertaking in undertakings:
+        if eea_double_check_fgases(undertaking):
+            batch.append(parse_fgases_undertaking(undertaking))
+            if undertakings_count % 10 == 1:
+                db.session.add_all(batch)
+                db.session.commit()
+                del batch[:]
+            undertakings_count += 1
+            # automatically approve undertaking
+            current_app.logger.info(
+                'Automatically approve {}'.format(
+                    undertaking['external_id']))
+            verify_none(undertaking['external_id'], 'SYSTEM')
 
-        db.session.add_all(batch)
-        db.session.commit()
-        del batch[:]
-        cleanup_unused_users()
-        if isinstance(last_update, datetime):
-            last_update = last_update.date()
-        log = OrganizationLog(
-            organizations=undertakings_count,
-            using_last_update=last_update)
-        db.session.add(log)
-        print undertakings_count, "values"
+    db.session.add_all(batch)
+    db.session.commit()
+    del batch[:]
+    cleanup_unused_users()
+    if isinstance(last_update, datetime):
+        last_update = last_update.date()
+    log = OrganizationLog(
+        organizations=undertakings_count,
+        using_last_update=last_update)
+    db.session.add(log)
+    print undertakings_count, "values"
 
-        db.session.commit()
+    db.session.commit()
     return True
 
 
