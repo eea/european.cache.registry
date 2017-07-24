@@ -1,3 +1,4 @@
+import ast
 import json
 import requests
 from datetime import datetime
@@ -5,10 +6,13 @@ from datetime import datetime
 from flask import current_app
 
 from .auth import get_auth
-from .undertakings import get_absolute_url
 
 
-def bdr_request(url, params=None):
+def get_absolute_url(base_url, url):
+    return current_app.config[base_url] + url
+
+
+def do_bdr_request(url, params=None):
     auth = get_auth('BDR_ENDPOINT_USER', 'BDR_ENDPOINT_PASSWORD')
     ssl_verify = current_app.config['HTTPS_VERIFY']
 
@@ -29,14 +33,14 @@ def bdr_request(url, params=None):
 def get_bdr_collections():
     endpoint = current_app.config['BDR_ENDPOINT_URL']
     url = endpoint + '/api/collections_json'
-    response = bdr_request(url)
+    response = do_bdr_request(url)
     if response and response.status_code == 200:
         return response.json()
 
 
 def check_bdr_request(params, relative_url):
     url = get_absolute_url('BDR_ENDPOINT_URL', relative_url)
-    response = bdr_request(url, params)
+    response = do_bdr_request(url, params)
     error_message = ''
     if response is not None and response.headers.get(
             'content-type') == 'application/json':
@@ -66,3 +70,50 @@ def call_bdr(undertaking, old_collection=False):
     relative_url = '/ReportekEngine/update_company_collection'
 
     return check_bdr_request(params, relative_url)
+
+
+def update_bdr_col_name(undertaking):
+    """ Update the BDR collection name with the new name
+        For the moment, use the API script in the BDR's api/
+        folder in order to change the name. This should be changed
+        in the future to use a unified API for registries
+    """
+    DOMAIN_TO_ZOPE_FOLDER = {
+        'FGAS': 'fgases'
+    }
+    endpoint = current_app.config['BDR_ENDPOINT_URL']
+    if not endpoint:
+        current_app.logger.warning('No bdr endpoint. No bdr call.')
+        return True
+
+    params = {
+        'country_code': undertaking.country_code.lower(),
+        'obligation_folder_name': DOMAIN_TO_ZOPE_FOLDER.get(undertaking.domain),
+        'account_uid': str(undertaking.external_id),
+        'organisation_name': undertaking.name,
+        'oldcompany_account': undertaking.oldcompany_account
+    }
+
+    url = endpoint + '/api/update_organisation_name'
+    response = do_bdr_request(url, params)
+    error_message = ''
+    if response is not None:
+        try:
+            res = ast.literal_eval(response.content)
+        except:
+            res = {}
+        if not res.get('updated') is True:
+            error_message = 'Collection for id: {0} not updated'\
+                            .format(undertaking.external_id)
+        elif response.status_code != 200:
+            error_message = 'Invalid status code: ' + response.status_code
+    else:
+        error_message = 'Invalid response: ' + str(response)
+
+    if error_message:
+        current_app.logger.warning(error_message)
+        print error_message
+        if 'sentry' in current_app.extensions:
+            current_app.extensions['sentry'].captureMessage(error_message)
+
+    return not error_message

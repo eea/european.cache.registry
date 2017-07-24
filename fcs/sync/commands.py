@@ -2,21 +2,14 @@ from datetime import datetime, timedelta
 
 from flask import current_app
 from sqlalchemy import desc
-from sqlalchemy.orm import session
 
 from fcs.models import Undertaking, db, OrganizationLog
 
-from fcs.sync import undertakings as undertakings_module
-
 from . import sync_manager
 from .auth import cleanup_unused_users
-from .bdr import get_bdr_collections
-
-from .fgases import (
-    eea_double_check_fgases,
-    parse_fgases_undertaking,
-    update_bdr_col_name
-)
+from .bdr import get_bdr_collections, update_bdr_col_name
+from .undertakings import create_undertaking, get_latest_undertakings
+from .fgases import eea_double_check_fgases
 
 
 def get_last_update(days, updated_since):
@@ -43,24 +36,13 @@ def get_last_update(days, updated_since):
     return last_update
 
 
-@sync_manager.command
-@sync_manager.option('-u', '--updated', dest='updated_since',
-                     help="Date in DD/MM/YYYY format")
-def fgases(days=7, updated_since=None):
+def update_undertakings(undertakings, check_function):
     from fcs.match import verify_none
-    cleanup_unused_users()
-    db.session.autoflush = False
-    last_update = get_last_update(days, updated_since)
-    undertakings = undertakings_module.get_latest_undertakings(
-        type_url='/latest/fgasundertakings/',
-        updated_since=last_update
-    )
-
     undertakings_count = 0
     batch = []
     for undertaking in undertakings:
-        if eea_double_check_fgases(undertaking):
-            batch.append(parse_fgases_undertaking(undertaking))
+        if check_function(undertaking):
+            batch.append(create_undertaking(undertaking))
             if undertakings_count % 10 == 1:
                 db.session.add_all(batch)
                 db.session.commit()
@@ -75,15 +57,33 @@ def fgases(days=7, updated_since=None):
     db.session.add_all(batch)
     db.session.commit()
     del batch[:]
-    cleanup_unused_users()
+    return undertakings_count
+
+
+def log_changes(last_update, undertakings_count):
     if isinstance(last_update, datetime):
         last_update = last_update.date()
     log = OrganizationLog(
         organizations=undertakings_count,
         using_last_update=last_update)
     db.session.add(log)
-    print undertakings_count, "values"
 
+
+@sync_manager.command
+@sync_manager.option('-u', '--updated', dest='updated_since',
+                     help="Date in DD/MM/YYYY format")
+def fgases(days=7, updated_since=None):
+    db.session.autoflush = False
+    last_update = get_last_update(days, updated_since)
+    undertakings = get_latest_undertakings(
+        type_url='/latest/fgasundertakings/',
+        updated_since=last_update
+    )
+    undertakings_count = update_undertakings(undertakings,
+                                             eea_double_check_fgases)
+    cleanup_unused_users()
+    log_changes(last_update, undertakings_count)
+    print undertakings_count, "values"
     db.session.commit()
     return True
 
@@ -98,7 +98,7 @@ def fgases_debug_noneu(days=7, updated_since=None):
     from fcs.match import verify_none
 
     last_update = get_last_update(days, updated_since)
-    undertakings = undertakings_module.get_latest_undertakings(
+    undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
         updated_since=last_update
     )
