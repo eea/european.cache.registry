@@ -5,6 +5,8 @@ from sqlalchemy import (
     Column, Date, DateTime, ForeignKey, Integer, String, Boolean
 )
 from sqlalchemy.orm import relationship
+
+from flask.ext.sqlalchemy import BaseQuery
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 
@@ -105,8 +107,17 @@ undertaking_users = db.Table(
 )
 
 
+class DomainQuery(BaseQuery):
+    def fgases(self):
+        return self.filter(Undertaking.domain == 'FGAS')
+
+    def ods(self):
+        return self.filter(Undertaking.domain == 'ODS')
+
+
 class Undertaking(SerializableModel, db.Model):
     __tablename__ = 'undertaking'
+    query_class = DomainQuery
 
     id = Column(Integer, primary_key=True)
 
