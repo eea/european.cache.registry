@@ -11,7 +11,7 @@ def test_parse_undertaking_new_cp(client):
     username1 = data[1]['contactPersons'][1]['userName']
     update_undertaking(data[0])
     update_undertaking(data[1])
-    undertakings = models.Undertaking.query.all()
+    undertakings = models.Undertaking.query.fgases().all()
     assert len(undertakings) == 1
     u = undertakings[0]
     cp = u.contact_persons
@@ -26,7 +26,7 @@ def test_parse_undertaking_remove_cp(client):
     remaining_username = data[0]['contactPersons'][0]['userName']
     update_undertaking(data[1])
     update_undertaking(data[0])
-    undertakings = models.Undertaking.query.all()
+    undertakings = models.Undertaking.query.fgases().all()
     assert len(undertakings) == 1
     u = undertakings[0]
     cp = u.contact_persons
@@ -41,7 +41,7 @@ def test_parse_undertaking_update_cpinfo(client):
     username1 = data[2]['contactPersons'][1]
     update_undertaking(data[1])
     update_undertaking(data[2])
-    undertakings = models.Undertaking.query.all()
+    undertakings = models.Undertaking.query.fgases().all()
     assert len(undertakings) == 1
     u = undertakings[0]
     cp = u.contact_persons
