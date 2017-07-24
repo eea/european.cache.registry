@@ -6,10 +6,10 @@ from fcs.models import (
     Undertaking, db, Address, BusinessProfile, User,
     EuLegalRepresentativeCompany
 )
-from fcs.sync import parsers
-from fcs.sync import undertakings as undertakings_module
-from fcs.sync.bdr import bdr_request
-from fcs.sync.auth import patch_users
+from . import parsers
+from . import undertakings as undertakings_module
+from .bdr import bdr_request
+from .auth import patch_users
 
 
 def update_obj(obj, d):
@@ -68,7 +68,7 @@ def update_bdr_col_name(undertaking):
     return not error_message
 
 
-def parse_undertaking(data):
+def parse_fgases_undertaking(data):
     data = undertakings_module.patch_undertaking(data['id'], data)
     address = parsers.parse_address(data.pop('address'))
     business_profile = parsers.parse_bp(data.pop('businessProfile'))

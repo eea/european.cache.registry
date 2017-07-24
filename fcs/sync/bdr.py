@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import current_app
 
 from .auth import get_auth
-from fcs.sync.undertakings import get_absolute_url
+from .undertakings import get_absolute_url
 
 
 def bdr_request(url, params=None):
