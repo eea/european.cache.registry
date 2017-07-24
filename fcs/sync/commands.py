@@ -8,8 +8,10 @@ from fcs.models import Undertaking, db, OrganizationLog
 from . import sync_manager
 from .auth import cleanup_unused_users
 from .bdr import get_bdr_collections, update_bdr_col_name
-from .undertakings import create_undertaking, get_latest_undertakings
+from .undertakings import update_undertaking, get_latest_undertakings
+
 from .fgases import eea_double_check_fgases
+from .ods import eea_double_check_ods
 
 
 def get_last_update(days, updated_since):
@@ -37,12 +39,14 @@ def get_last_update(days, updated_since):
 
 
 def update_undertakings(undertakings, check_function):
+    # import at this level since an import at module level will break
+    # due to a circular import between fcs.match and fcs.sync.fgases
     from fcs.match import verify_none
     undertakings_count = 0
     batch = []
     for undertaking in undertakings:
         if check_function(undertaking):
-            batch.append(create_undertaking(undertaking))
+            batch.append(update_undertaking(undertaking))
             if undertakings_count % 10 == 1:
                 db.session.add_all(batch)
                 db.session.commit()
@@ -69,6 +73,22 @@ def log_changes(last_update, undertakings_count):
     db.session.add(log)
 
 
+def print_all_undertakings(undertakings):
+    undertakings_count = 0
+    for undertaking in undertakings:
+        if undertaking['euLegalRepresentativeCompany'] is None:
+            undertaking_address = undertaking.get('address', None)
+            if undertaking_address is not None:
+                undertaking_country = undertaking_address.get('country', None)
+                if undertaking_country is not None:
+                    undertaking_country_type = undertaking_country.get('type', None)
+                    if undertaking_country_type == 'NONEU_TYPE':
+                        undertakings_count += 1
+                        print undertaking
+
+    print undertakings_count, "values"
+
+
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
@@ -91,31 +111,47 @@ def fgases(days=7, updated_since=None):
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
+def ods(days=7, updated_since=None):
+    db.session.autoflush = False
+    last_update = get_last_update(days, updated_since)
+    undertakings = get_latest_undertakings(
+        type_url='/latest/odsundertakings/',
+        updated_since=last_update
+    )
+    undertakings_count = update_undertakings(undertakings,
+                                             eea_double_check_ods)
+    cleanup_unused_users()
+    log_changes(last_update, undertakings_count)
+    print undertakings_count, "values"
+    db.session.commit()
+    return True
+
+
+@sync_manager.command
+@sync_manager.option('-u', '--updated', dest='updated_since',
+                     help="Date in DD/MM/YYYY format")
 def fgases_debug_noneu(days=7, updated_since=None):
     # returns a list with all NON EU companies without a legal representative
-    # import at this level since an import at module level will break
-    # due to a circular import between fcs.match and fcs.sync.fgases
-    from fcs.match import verify_none
-
     last_update = get_last_update(days, updated_since)
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
         updated_since=last_update
     )
+    print_all_undertakings(undertakings)
+    return True
 
-    undertakings_count = 0
-    for undertaking in undertakings:
-        if undertaking['euLegalRepresentativeCompany'] is None:
-            undertaking_address = undertaking.get('address', None)
-            if undertaking_address is not None:
-                undertaking_country = undertaking_address.get('country', None)
-                if undertaking_country is not None:
-                    undertaking_country_type = undertaking_country.get('type', None)
-                    if undertaking_country_type == 'NONEU_TYPE':
-                        undertakings_count += 1
-                        print undertaking
 
-    print undertakings_count, "values"
+@sync_manager.command
+@sync_manager.option('-u', '--updated', dest='updated_since',
+                     help="Date in DD/MM/YYYY format")
+def ods_debug_noneu(days=7, updated_since=None):
+    # returns a list with all NON EU companies without a legal representative
+    last_update = get_last_update(days, updated_since)
+    undertakings = get_latest_undertakings(
+        type_url='/latest/odsundertakings/',
+        updated_since=last_update
+    )
+    print_all_undertakings(undertakings)
     return True
 
 
