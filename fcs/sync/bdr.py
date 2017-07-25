@@ -79,7 +79,8 @@ def update_bdr_col_name(undertaking):
         in the future to use a unified API for registries
     """
     DOMAIN_TO_ZOPE_FOLDER = {
-        'FGAS': 'fgases'
+        'FGAS': 'fgases',
+        'ODS': 'ods'
     }
     endpoint = current_app.config['BDR_ENDPOINT_URL']
     if not endpoint:
