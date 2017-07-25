@@ -67,7 +67,9 @@ def send_wrong_match_mail(user, company_id):
             app.extensions['sentry'].captureMessage(message)
         return False
 
-    company = Undertaking.query.filter_by(external_id=company_id).first()
+    company = Undertaking.query.fgases().filter_by(
+        external_id=company_id
+    ).first()
     kwargs = {
         'user': user,
         'bdr_help_desk_email': hd,
@@ -81,7 +83,9 @@ def send_wrong_match_mail(user, company_id):
 def send_wrong_lockdown_mail(user, company_id):
     template = 'mails/wrong_lockdown.html'
     subject = 'BDR - Wrong lockdown alert'
-    company = Undertaking.query.filter_by(external_id=company_id).first()
+    company = Undertaking.query.fgases().filter_by(
+        external_id=company_id
+    ).first()
     kwargs = {
         'user': user,
         'company_name': company.name,
@@ -94,7 +98,9 @@ def send_wrong_lockdown_mail(user, company_id):
 def send_unmatch_mail(user, company_id, oldcollection_path):
     template = 'mails/unmatch.html'
     subject = 'BDR - Unmatch alert'
-    company = Undertaking.query.filter_by(external_id=company_id).first()
+    company = Undertaking.query.fgases().filter_by(
+        external_id=company_id
+    ).first()
     kwargs = {
         'user': user,
         'company_name': company.name,
