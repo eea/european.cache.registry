@@ -7,7 +7,7 @@ from fcs.models import db
 TEST_CONFIG = {
     'DEBUG': True,
     'SERVER_NAME': 'noname',
-    'BDR_ENDPOINT_URL': 'http://10.0.0.164',
+    'BDR_ENDPOINT_URL': '',
     'BDR_ENDPOINT_USER': 'user',
     'BDR_ENDPOINT_PASSWORD': 'password',
 }
