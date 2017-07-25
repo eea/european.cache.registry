@@ -55,7 +55,8 @@ def update_undertakings(undertakings, check_function):
             current_app.logger.info(
                 'Automatically approve {}'.format(
                     undertaking['external_id']))
-            verify_none(undertaking['external_id'], 'SYSTEM')
+            verify_none(undertaking['external_id'], undertaking['domain'],
+                        'SYSTEM')
 
     db.session.add_all(batch)
     db.session.commit()

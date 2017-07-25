@@ -325,8 +325,9 @@ class CandidateVerify(ApiView):
         return data
 
     def post(self, undertaking_id):
+        domain = request.args.get('domain', 'FGAS')
         user = request.form['user']
-        undertaking = verify_none(undertaking_id, user) or abort(404)
+        undertaking = verify_none(undertaking_id, domain, user) or abort(404)
         data = ApiView.serialize(undertaking)
         return {
             'verified': data['oldcompany_verified'],
@@ -336,8 +337,9 @@ class CandidateVerify(ApiView):
 
 class CandidateUnverify(ApiView):
     def post(self, undertaking_id):
+        domain = request.args.get('domain', 'FGAS')
         user = request.form['user']
-        link = unverify_link(undertaking_id, user) or abort(404)
+        link = unverify_link(undertaking_id, domain, user) or abort(404)
         return ApiView.serialize(link)
 
 
