@@ -98,3 +98,7 @@ without a legal representative:
 
     pip install -r requirements-dev.txt
     py.test --cov=fcs testsuite
+
+Generate a coverage report:
+
+    py.test --cov-report html --cov=fcs testsuite
