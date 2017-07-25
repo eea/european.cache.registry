@@ -5,7 +5,7 @@ from fcs.sync.undertakings import update_undertaking
 
 
 def test_parse_undertaking_new_cp(client):
-    with open('testsuite/companies.json') as f:
+    with open('testsuite/fixtures/companies.json') as f:
         data = json.load(f)
     username0 = data[0]['contactPersons'][0]['userName']
     username1 = data[1]['contactPersons'][1]['userName']
@@ -21,7 +21,7 @@ def test_parse_undertaking_new_cp(client):
 
 
 def test_parse_undertaking_remove_cp(client):
-    with open('testsuite/companies.json') as f:
+    with open('testsuite/fixtures/companies.json') as f:
         data = json.load(f)
     remaining_username = data[0]['contactPersons'][0]['userName']
     update_undertaking(data[1])
@@ -35,7 +35,7 @@ def test_parse_undertaking_remove_cp(client):
 
 
 def test_parse_undertaking_update_cpinfo(client):
-    with open('testsuite/companies.json') as f:
+    with open('testsuite/fixtures/companies.json') as f:
         data = json.load(f)
     username0 = data[2]['contactPersons'][0]
     username1 = data[2]['contactPersons'][1]

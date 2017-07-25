@@ -92,7 +92,6 @@ def print_all_undertakings(undertakings):
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def fgases(days=7, updated_since=None):
-    db.session.autoflush = False
     last_update = get_last_update(days, updated_since)
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
@@ -111,7 +110,6 @@ def fgases(days=7, updated_since=None):
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def ods(days=7, updated_since=None):
-    db.session.autoflush = False
     last_update = get_last_update(days, updated_since)
     undertakings = get_latest_undertakings(
         type_url='/latest/odsundertakings/',
