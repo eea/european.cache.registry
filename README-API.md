@@ -2,7 +2,7 @@ fgas-cache-server API Documentation
 ===================================
 
 The fgas-cache-server API allows a client (BDR) to access cached data fetched
-from various sources (FGas Registry, BDR Registry).
+from various sources (FGas Registry, ODS Registry, BDR Registry).
 
 The API uses HTTP for transport, JSON as data format and does not require
 authentication.
@@ -12,14 +12,16 @@ Overview
 
 Listing calls:
 
-* `/undertaking/list` - all verified undertakings
-* `/undertaking/list-small` - all verified undertakings but with fewer details
-* `/undertaking/list/all` - all undertakings, including unverified
-* `/undertaking/list_by_vat/[vat]` - filter by vat
-* `/undertaking/filter` - count of undertakings, given field filters
+* `/undertaking/list?domain=[domain]` - all verified undertakings from domain
+* `/undertaking/list-small?domain=[domain]` - all verified undertakings from domain but with fewer details
+* `/undertaking/list/all?domain=[domain]` - all undertakings from domain, including unverified
+* `/undertaking/list_by_vat/[vat]?domain=[domain]` - filter by vat undertakings from domain
+* `/undertaking/filter?domain=[domain]` - count of undertakings from domain, given field filters
 * `/undertaking/[company_id]/details` - details about an undertaking
 * `/user/list` - all users
 * `/user/[username]/companies` - all verified companies and user has access to
+
+For backwards compatibility, all domain query params default to "FGAS".
 
 Matching calls:
 
