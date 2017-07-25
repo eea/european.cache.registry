@@ -195,7 +195,8 @@ class UndertakingFilterCount(ApiView):
 
 class UndertakingListAll(UndertakingList):
     def get_queryset(self):
-        return self.model.query.all()
+        domain = request.args.get('domain', 'FGAS')
+        return self.model.query.filter(domain=domain)
 
 
 class UndertakingDetail(DetailView):
