@@ -58,7 +58,6 @@ class UndertakingFactory(SQLAlchemyModelFactory):
         model = models.Undertaking
         sqlalchemy_session = models.db.session
 
-    id = 1
     external_id = 10
     name = 'n'
     website = 'w'

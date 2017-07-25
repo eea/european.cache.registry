@@ -7,43 +7,77 @@ from . import factories
 def test_undertaking_list(client):
     undertaking = factories.UndertakingFactory()
     resp = client.get(url_for('api.company-list'))
-    data = resp.json
-    assert len(data) == 1
-    data = data[0]
+    resp_data = resp.json
+    assert len(resp_data) == 1
+    data = resp_data[0]
     assert data['company_id'] == undertaking.external_id
-    assert data['name'] == undertaking.name
-    assert data['website'] == undertaking.website
-    assert data['phone'] == undertaking.phone
-    assert data['domain'] == undertaking.domain
-    assert data['date_created'] == undertaking.date_created.strftime(
-        '%d/%m/%Y')
-    assert data['date_updated'] == undertaking.date_updated.strftime(
-        '%d/%m/%Y')
-    assert data['status'] == undertaking.status
-    assert data['undertaking_type'] == undertaking.undertaking_type
-    assert data['vat'] == undertaking.vat
-    assert data['types'] == undertaking.types
-    assert data['oldcompany_verified'] == undertaking.oldcompany_verified
-    assert data['oldcompany_account'] == undertaking.oldcompany_account
-    assert data['oldcompany_extid'] == undertaking.oldcompany_extid
+
+    for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
+                  'vat', 'types', 'oldcompany_verified', 'oldcompany_account',
+                  'oldcompany_extid']:
+        assert data[field] == getattr(undertaking, field)
+
+    for date_field in ['date_created', 'date_updated']:
+        assert data[date_field] == getattr(undertaking, date_field).strftime('%d/%m/%Y')
+
+
+def test_undertaking_list_domain_filter(client):
+    factories.UndertakingFactory(domain='FGAS')
+    undertaking = factories.UndertakingFactory(domain='ODS')
+    resp = client.get(url_for('api.company-list', domain='ODS'))
+    resp_data = resp.json
+    assert len(resp_data) == 1
+    data = resp_data[0]
+    assert data['company_id'] == undertaking.external_id
+
+    for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
+                  'vat', 'types', 'oldcompany_verified', 'oldcompany_account',
+                  'oldcompany_extid']:
+        assert data[field] == getattr(undertaking, field)
+
+    for date_field in ['date_created', 'date_updated']:
+        assert data[date_field] == getattr(
+            undertaking, date_field).strftime('%d/%m/%Y')
 
 
 def test_undertaking_list_all(client):
     undertaking = factories.UndertakingFactory()
     undertaking.oldcompany_verified = False
     resp = client.get(url_for('api.company-list-all'))
-    data = resp.json
-    assert len(data) == 1
-    data = data[0]
+    resp_data = resp.json
+    assert len(resp_data) == 1
+    data = resp_data[0]
+    assert data['company_id'] == undertaking.external_id
+
+
+def test_undertaking_list_all_domain_filter(client):
+    factories.UndertakingFactory(domain='FGAS')
+    undertaking = factories.UndertakingFactory(domain='ODS')
+    undertaking.oldcompany_verified = False
+    resp = client.get(url_for('api.company-list-all', domain='ODS'))
+    resp_data = resp.json
+    assert len(resp_data) == 1
+    data = resp_data[0]
     assert data['company_id'] == undertaking.external_id
 
 
 def test_undertaking_list_vat(client):
     undertaking = factories.UndertakingFactory()
     resp = client.get(url_for('api.company-list-by-vat', vat=undertaking.vat))
-    data = resp.json
-    assert len(data) == 1
-    data = data[0]
+    resp_data = resp.json
+    assert len(resp_data) == 1
+    data = resp_data[0]
+    assert data['company_id'] == undertaking.external_id
+
+
+def test_undertaking_list_vat_domain_filter(client):
+    factories.UndertakingFactory(domain='FGAS')
+    undertaking = factories.UndertakingFactory(domain='ODS')
+    resp = client.get(url_for('api.company-list-by-vat', vat=undertaking.vat,
+                              domain='ODS'))
+    resp_data = resp.json
+    assert len(resp_data) == 1
+    data = resp_data[0]
     assert data['company_id'] == undertaking.external_id
 
 
@@ -53,15 +87,13 @@ def test_undertaking_details(client):
         url_for('api.company-detail', pk=undertaking.external_id))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
-    assert data['name'] == undertaking.name
-    assert data['website'] == undertaking.website
-    assert data['phone'] == undertaking.phone
-    assert data['domain'] == undertaking.domain
-    assert data['status'] == undertaking.status
-    assert data['vat'] == undertaking.vat
-    assert data['oldcompany_verified'] == undertaking.oldcompany_verified
-    assert data['oldcompany_account'] == undertaking.oldcompany_account
-    assert data['oldcompany_extid'] == undertaking.oldcompany_extid
+
+    for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
+                  'vat', 'types', 'oldcompany_verified', 'oldcompany_account',
+                  'oldcompany_extid']:
+        assert data[field] == getattr(undertaking, field)
+
+    assert data['date_created'] == undertaking.date_created.strftime('%d/%m/%Y')
     assert data['representative']['name'] == undertaking.represent.name
     assert data['address']['zipcode'] == undertaking.address.zipcode
 
@@ -155,22 +187,32 @@ def test_filter_undertaking(client):
                                                country_code='ro',
                                                country_code_orig='cn',
                                                name='A Good Company Name')
+    wrong_data = {
+        'id': [43, 44],
+        'vat': [21891],
+        'name': ['Bad Company', 'Bad Name'],
+        'OR_name': ['Orice', 'Bad represent'],
+        'countrycode': ['bg', undertaking.country_code]
+    }
+
+    good_data = {
+        'id': [undertaking.external_id],
+        'vat': [undertaking.vat],
+        'name': [undertaking.name, 'Good Companyy Name', 'A Good Companyy N'],
+        'OR_vat': [1234],
+        'OR_name': [undertaking.represent.name, 'Le repreesenta'],
+        'countrycode': [undertaking.country_code_orig]
+    }
 
     def _test_params(count, **params):
         resp = client.get(url_for('api.company-filter'), params)
         data = resp.json
         assert data['count'] == count
 
-    _test_params(0, id=43)
-    _test_params(1, id=42)
-    _test_params(1, vat=21890)
-    _test_params(0, vat=21891)
-    _test_params(1, name='Good Companyy Name')
-    _test_params(1, name='A Good Companyy N')
-    _test_params(0, name='Bad Company')
-    _test_params(1, OR_vat=1234)
-    _test_params(1, OR_name='Le repreesenta')
-    _test_params(0, OR_name='Orice')
-    _test_params(0, countrycode='bg')
-    _test_params(0, countrycode='ro')
-    _test_params(1, countrycode='cn')
+    for field, values in good_data.items():
+        for value in values:
+            _test_params(1, **{field: value})
+
+    for field, values in wrong_data.items():
+        for value in values:
+            _test_params(0, **{field: value})
