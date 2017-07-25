@@ -174,9 +174,9 @@ class UndertakingFilterCount(ApiView):
         elif domain == 'ODS':
             qs = Undertaking.query.ods()
         else:
-            qs = Undertaking.query.none()
+            return {'exists': False, 'count': 0}
         if any([a for a in request.args if a.startswith('OR_')]):
-            qs = Undertaking.query.fgases().join(EuLegalRepresentativeCompany)
+            qs = qs.join(EuLegalRepresentativeCompany)
         qs = qs.filter(Undertaking.oldcompany_verified == True)
 
         for k, v in request.args.iteritems():
