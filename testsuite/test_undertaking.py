@@ -54,7 +54,7 @@ def test_parse_undertaking_update_cpinfo(client):
 
 
 def test_remove_undertaking(client):
-    with open('testsuite/companies.json') as f:
+    with open('testsuite/fixtures/companies.json') as f:
         data = json.load(f)
     UndertakingFactory(external_id=data[0]['id'])
     remove_undertaking(data[0])
