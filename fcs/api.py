@@ -168,7 +168,13 @@ class UndertakingFilterCount(ApiView):
     }
 
     def get(self):
-        qs = Undertaking.query.fgases()
+        domain = request.args.get('domain', 'FGAS')
+        if domain == 'FGAS':
+            qs = Undertaking.query.fgases()
+        elif domain == 'ODS':
+            qs = Undertaking.query.ods()
+        else:
+            qs = Undertaking.query.none()
         if any([a for a in request.args if a.startswith('OR_')]):
             qs = Undertaking.query.fgases().join(EuLegalRepresentativeCompany)
         qs = qs.filter(Undertaking.oldcompany_verified == True)
@@ -196,7 +202,7 @@ class UndertakingFilterCount(ApiView):
 class UndertakingListAll(UndertakingList):
     def get_queryset(self):
         domain = request.args.get('domain', 'FGAS')
-        return self.model.query.filter(domain=domain)
+        return self.model.query.filter(domain == domain)
 
 
 class UndertakingDetail(DetailView):
