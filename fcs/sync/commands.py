@@ -27,9 +27,8 @@ def get_last_update(days, updated_since):
             last_update = datetime.now() - timedelta(days=days)
         else:
             last = (
-                Undertaking.query
-                    .order_by(desc(Undertaking.date_updated))
-                    .first()
+                Undertaking.query.fgases()
+                .order_by(desc(Undertaking.date_updated)).first()
             )
             last_update = last.date_updated - timedelta(
                 days=1) if last else None
@@ -168,7 +167,7 @@ def sync_collections_title():
                 else:
                     print 'Duplicate collection for company_id: {0} have {1}'\
                           ' and found {2}'.format(c_id, colls[c_id], collection)
-        undertakings = Undertaking.query.all()
+        undertakings = Undertaking.query.fgases()
         for undertaking in undertakings:
             ext_id = str(undertaking.external_id)
             title = undertaking.name

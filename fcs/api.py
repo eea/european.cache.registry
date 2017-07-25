@@ -168,9 +168,9 @@ class UndertakingFilterCount(ApiView):
     }
 
     def get(self):
-        qs = Undertaking.query
+        qs = Undertaking.query.fgases()
         if any([a for a in request.args if a.startswith('OR_')]):
-            qs = Undertaking.query.join(EuLegalRepresentativeCompany)
+            qs = Undertaking.query.fgases().join(EuLegalRepresentativeCompany)
         qs = qs.filter(Undertaking.oldcompany_verified == True)
 
         for k, v in request.args.iteritems():
@@ -352,7 +352,8 @@ class MatchingsLog(ListView):
     @classmethod
     def serialize(cls, obj, pop_id=True):
         data = ApiView.serialize(obj, pop_id)
-        u = Undertaking.query.filter_by(external_id=data['company_id']).first()
+        u = Undertaking.query.fgases().filter_by(
+            external_id=data['company_id']).first()
         if u:
             data['domain'] = u.domain
             data['country_code'] = u.country_code

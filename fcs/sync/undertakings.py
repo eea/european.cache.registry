@@ -164,7 +164,7 @@ def update_undertaking(data):
 def remove_undertaking(data):
     """Remove undertaking."""
     undertaking = (
-        Undertaking.query
+        Undertaking.query.fgases()
         .filter_by(external_id=data.get('id'))
         .first()
     )

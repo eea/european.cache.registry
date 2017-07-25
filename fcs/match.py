@@ -28,7 +28,7 @@ def log_match(company_id, verified, user,
 
 def get_unverified_companies():
     return (
-        models.Undertaking.query
+        models.Undertaking.query.fgases()
         .filter(or_(models.Undertaking.oldcompany_verified == None,
                     models.Undertaking.oldcompany_verified == False))
     )
@@ -40,7 +40,9 @@ def get_all_candidates():
 
 def get_candidates(external_id):
     company = (
-        models.Undertaking.query.filter_by(external_id=external_id).first()
+        models.Undertaking.query.fgases().filter_by(
+            external_id=external_id
+        ).first()
     )
     return company
 
@@ -61,7 +63,9 @@ def get_all_non_candidates(domain='FGAS', vat=None):
 
 
 def unverify_link(undertaking_id, user):
-    u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
+    u = models.Undertaking.query.fgases().filter_by(
+        external_id=undertaking_id
+    ).first()
     if not u or not u.oldcompany_verified:
         return None
 
@@ -75,7 +79,10 @@ def unverify_link(undertaking_id, user):
 
 
 def verify_none(undertaking_id, user):
-    u = models.Undertaking.query.filter_by(external_id=undertaking_id).first()
+    u = models.Undertaking.query.fgases().filter_by(
+        external_id=undertaking_id
+    ).first()
+
     if not u:
         return None
     if u.oldcompany_verified is True:
