@@ -62,9 +62,10 @@ def get_all_non_candidates(domain='FGAS', vat=None):
     return queryset.all()
 
 
-def unverify_link(undertaking_id, user):
+def unverify_link(undertaking_id, domain, user):
     u = models.Undertaking.query.filter_by(
-        external_id=undertaking_id
+        external_id=undertaking_id,
+        domain=domain
     ).first()
     if not u or not u.oldcompany_verified:
         return None
@@ -78,9 +79,10 @@ def unverify_link(undertaking_id, user):
     return u
 
 
-def verify_none(undertaking_id, user):
+def verify_none(undertaking_id, domain, user):
     u = models.Undertaking.query.filter_by(
-        external_id=undertaking_id
+        external_id=undertaking_id,
+        domain=domain
     ).first()
 
     if not u:
