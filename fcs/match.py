@@ -15,8 +15,15 @@ from fcs.sync.bdr import call_bdr
 match_manager = Manager()
 
 
-def log_match(company_id, verified, user,
-              oldcompany_account=None):
+def get_fuzz_limit():
+    return current_app.config.get('FUZZ_LIMIT', 75)
+
+
+def str_matches(new, old):
+    return new and old and fuzz.ratio(new, old) >= get_fuzz_limit()
+
+
+def log_match(company_id, verified, user, oldcompany_account=None):
     matching_log = models.MatchingLog(
         company_id=company_id,
         oldcompany_account=oldcompany_account,
@@ -26,28 +33,30 @@ def log_match(company_id, verified, user,
     models.db.session.add(matching_log)
 
 
-def get_unverified_companies():
+def get_unverified_companies(domain):
     return (
         models.Undertaking.query
         .filter(or_(models.Undertaking.oldcompany_verified == None,
                     models.Undertaking.oldcompany_verified == False))
+        .filter_by(domain=domain)
     )
 
 
-def get_all_candidates():
-    return get_unverified_companies()
+def get_all_candidates(domain):
+    return get_unverified_companies(domain)
 
 
-def get_candidates(external_id):
+def get_candidates(external_id, domain):
     company = (
         models.Undertaking.query.filter_by(
-            external_id=external_id
+            external_id=external_id,
+            domain=domain
         ).first()
     )
     return company
 
 
-def get_all_non_candidates(domain='FGAS', vat=None):
+def get_all_non_candidates(domain, vat=None):
     queryset = (
         models.db.session.query(models.Undertaking)
         .options(joinedload(models.Undertaking.address))
@@ -102,11 +111,3 @@ def verify_none(undertaking_id, domain, user):
     else:
         models.db.session.rollback()
     return u
-
-
-def get_fuzz_limit():
-    return current_app.config.get('FUZZ_LIMIT', 75)
-
-
-def str_matches(new, old):
-    return new and old and fuzz.ratio(new, old) >= get_fuzz_limit()
