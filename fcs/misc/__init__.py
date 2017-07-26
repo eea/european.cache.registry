@@ -97,6 +97,6 @@ class SettingsOverview(MethodView):
         return Response(json.dumps(resp, indent=2), mimetype='application/json')
 
 
-misc.add_url_rule('/misc/settings',
+misc.add_url_rule('/settings',
                   view_func=SettingsOverview.as_view(
-                      'settings-overview'))
+                      'settings'))

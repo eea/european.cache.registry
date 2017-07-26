@@ -4,6 +4,7 @@ import json
 from flask import abort, request
 
 from fcs.api.views import DetailView, ListView, ApiView
+from fcs.api.user import UserListView
 from fcs.models import Undertaking, EuLegalRepresentativeCompany, Address, db
 from fcs.match import get_all_non_candidates, str_matches
 
@@ -51,7 +52,7 @@ class UndertakingListView(ListView):
             data.pop(field)
         data.update({
             'address': AddressDetail.serialize(obj.address),
-            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+            'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'businessprofile': ApiView.serialize(obj.businessprofile)
@@ -78,7 +79,7 @@ class UndertakingListSmallView(ListView):
             'vat': obj.vat,
             'date_created': obj.date_created.strftime('%d/%m/%Y'),
             'address': AddressDetail.serialize(obj.address),
-            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+            'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
         }
 
 
@@ -169,7 +170,7 @@ class UndertakingDetailView(DetailView):
             'businessprofile': ApiView.serialize(obj.businessprofile),
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
-            'users': [UserList.serialize(cp) for cp in obj.contact_persons],
+            'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
             'candidates': [],
         })
         data['company_id'] = obj.external_id
