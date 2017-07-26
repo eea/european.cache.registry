@@ -7,8 +7,9 @@ from flask import current_app
 from flask import Blueprint, Response, request
 from flask.views import MethodView
 
+from fcs.api.undertaking import UndertakingListView
+from fcs.api.views import ListView, ApiView
 from fcs.match import get_all_non_candidates
-from fcs.api import UndertakingList, ListView, ApiView
 from fcs.models import User, MailAddress, db, Undertaking
 from fcs.mails import (send_wrong_match_mail, send_wrong_lockdown_mail,
                        send_unmatch_mail)
@@ -37,8 +38,8 @@ class UndertakingListExport(MethodView):
         'representative_address_country_name'
     ]
 
-    def get_data(self):
-        return [UndertakingList.serialize(c) for c in get_all_non_candidates()]
+    def get_data(self, domain):
+        return [UndertakingListView.serialize(c) for c in get_all_non_candidates(domain)]
 
     def parse_column(self, qs, column):
         def _parse_address(qs, column):
@@ -58,8 +59,8 @@ class UndertakingListExport(MethodView):
             return qs[repr_info]
         return qs[column]
 
-    def get(self, **kwargs):
-        queryset = self.get_data()
+    def get(self, domain, **kwargs):
+        queryset = self.get_data(domain)
 
         wb = Workbook()
         ws = wb.active
@@ -204,7 +205,7 @@ class UndertakingStatusUpdate(ApiView):
             return json.dumps(True)
 
 
-misc.add_url_rule('/misc/undertaking/export',
+misc.add_url_rule('/misc/undertaking/<domain>/export',
                   view_func=UndertakingListExport.as_view(
                       'company-list-export'))
 
