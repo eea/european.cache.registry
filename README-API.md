@@ -10,58 +10,69 @@ authentication.
 Overview
 --------
 
-Listing calls:
+**Undertaking calls:**
 
-* `/undertaking/list?domain=[domain]` - all verified undertakings from domain
-* `/undertaking/list-small?domain=[domain]` - all verified undertakings from domain but with fewer details
-* `/undertaking/list/all?domain=[domain]` - all undertakings from domain, including unverified
-* `/undertaking/list_by_vat/[vat]?domain=[domain]` - filter by vat undertakings from domain
-* `/undertaking/filter?domain=[domain]` - count of undertakings from domain, given field filters
-* `/undertaking/[company_id]/details` - details about an undertaking
+* `/undertaking/[domain]/list` - all verified undertakings from domain
+* `/undertaking/[domain]/list-small` - all verified undertakings from domain but with fewer details
+* `/undertaking/[domain]/list/all` - all undertakings from domain, including unverified
+* `/undertaking/[domain]/list_by_vat/[vat]` - filter by vat undertakings from domain
+* `/undertaking/[domain]/filter` - count of undertakings from domain, given field filters
+* `/undertaking/[domain]/[company_id]/details` - details about an undertaking from a domain
+* `/undertaking/[domain]/[company_id]/statusupdate` - change the status of a company from a domain
+
+**User calls:**
+
 * `/user/list` - all users
 * `/user/[username]/companies` - all verified companies and user has access to
 
-For backwards compatibility, all domain query params default to "FGAS".
+**Matching calls:**
 
-Matching calls:
+* `/candidate/[domain]/list` -  all matching candidates from domain
+* `/candidate/[domain]/list/verified` - list verified undertakings from domain
+* `/candidate/[domain]/verify/[company_id]/` - mark an undertaking as linked, without a matching company, from domain
+* `/candidate/[domain]/unverify/[company_id]/` - unlink undertaking from domain
 
-* `/candidate/list` -  all matching candidates
-* `/candidate/verify-none/[company_id]/` - mark an undertaking as linked, without a matching company
-* `/candidate/unverify/[company_id]/` - unlink
-* `/candidate/list/verified` - list verified undertakings
+**Export calls:**
 
-Misc:
+* `/export/user/list` - export users list as CSV
+* `/export/user/json` - export users list as JSON
+* `/export/undertaking/[domain]` - export companies list from domain as CSV
 
-* `/matching_log` - matching logs
-* `/data_sync_log` - data sync logs
+**Mails calls:**
 
-* `/misc/user/export` - export users list as CSV
-* `/misc/undertaking/export` - export companies list as CSV
-* `/misc/undertaking/[company_id]/statusupdate` - change the status of a company
-* `/misc/settings` - overview of the middleware settings
-* `/misc/mail/list` - list the mails
-* `/misc/mail/add` - add a mail to the list
-* `/misc/mail/delete` - delete a mail from the list
-* `/misc/alert_lockdown/wrong_match` - alert on wrong matching of a company
-* `/misc/alert_lockdown/wrong_lockdown` - alert on wrong lockdown
-* `/misc/alert_lockdown/unmatch` - alert at unmatch
+* `/mail/list` - list the mails
+* `/mail/add` - add a mail to the list
+* `/mail/delete` - delete a mail from the list
+* `/alert_lockdown/wrong_match` - alert on wrong matching of a company
+* `/alert_lockdown/wrong_lockdown` - alert on wrong lockdown
+* `/alert_lockdown/unmatch` - alert at unmatch
 
-Sync:
+**Sync**:
 
 * `/sync/collections_title`
 * `/sync/fgases`
+* `/sync/ods`
 
-Debug:
+**Log calls:**
+* `/log/matching` - matching logs
+* `/log/sync` - data sync logs
 
-* `/sync/fgases_debug_noneu` - returns a list with all NON EU companies without a legal representative
+**Settings:**
 
-Listing calls
-=============
+* `/settings` - overview of the middleware settings
 
-/undertaking/list
------------------
+**Debug:**
 
-Returns the list of all verified undertakings in the system, as fetched from FGR.
+* `/sync/fgases_debug_noneu` - returns a list with all NON EU companies without a legal representative from FGas
+* `/sync/ods_debug_noneu` - returns a list with all NON EU companies without a legal representative from ODS
+
+Undertaking calls
+=================
+
+/undertaking/[domain]/list
+--------------------------
+
+Returns the list of all verified undertakings in the system, as fetched from domain registry.
 
     [
       {
@@ -125,8 +136,8 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
     ]
 
 
-/undertaking/list-small
------------------------
+/undertaking/[domain]/list-small
+--------------------------------
 
     [
       {
@@ -157,11 +168,10 @@ Returns the list of all verified undertakings in the system, as fetched from FGR
       }
     ]
 
-/undertaking/list/all
----------------------
+/undertaking/[domain]/list/all
+------------------------------
 
-Returns a list of all undertakings in the system (verified or not), as fetched
-from FGR.
+Returns a list of all undertakings in the system (verified or not), as fetched from domain registry.
 
     [
       {
@@ -223,11 +233,10 @@ from FGR.
       },
     ]
 
-/undertaking/list_by_vat/<vat>
-------------------------------
+/undertaking/[domain]/list_by_vat/<vat>
+---------------------------------------
 
-Returns a list of all verified undertakings in the system given by their VAT,
-as fetched  from FGR.
+Returns a list of all verified undertakings in the system given by their VAT, as fetched from domain registry.
 
     [
       {
@@ -236,8 +245,8 @@ as fetched  from FGR.
       }
     ]
 
-/undertaking/filter?[name|id|vat|countrycode|OR_vat|OR_name]
-------------------------------------------------------------
+/undertaking/[domain]/filter?[name|id|vat|countrycode|OR_vat|OR_name]
+---------------------------------------------------------------------
 
 Return true or false if there are companies for the given filter.
 
@@ -252,10 +261,10 @@ The *name* and *OR_name* filters use LIKE queries.
       }
     ]
 
-/undertaking/[company_id]/details
----------------------------------
+/undertaking/[domain]/[company_id]/details
+------------------------------------------
 
-Returns an undertakings details from the system, as fetched from FGR.
+Returns an undertakings details from the system, as fetched from domain registry.
 
     {
       "company_id": 10085,
@@ -311,10 +320,20 @@ Returns an undertakings details from the system, as fetched from FGR.
       ]
     }
 
+/undertaking/[domain]/[company_id]/statusupdate - POST
+------------------------------------------------------
+
+This url is used to update the status of a company from a certain domain by POST method with the new status
+
+
+User calls
+==========
+
+
 /user/list
 ----------
 
-Returns a list of all undertakings in the system, as fetched from FGR.
+Returns a list of all undertakings in the system, as fetched from all registries.
 
     [
       {
@@ -349,10 +368,10 @@ Matching calls
 The methods available via HTTP POST should also encapsulate the username, for
 logging purposes.
 
-/candidate/list
----------------
+/candidate/[domain]/list
+------------------------
 
-Lists all possible Company candidates for matching with existing Undertakings.
+Lists all possible Company candidates for matching with existing Undertakings from domain.
 
     [
       {
@@ -364,10 +383,10 @@ Lists all possible Company candidates for matching with existing Undertakings.
     ]
 
 
-/candidate/verify/[company_id]/ - POST
--------------------------------------------
+/candidate/[domain]/verify/[company_id]/ - POST
+-----------------------------------------------
 
-Verifies a company is unlinked with any old companies.
+Verifies a company from a certain domain is unlinked with any old companies.
 
     {
       "verified": true,
@@ -375,10 +394,10 @@ Verifies a company is unlinked with any old companies.
     }
 
 
-/candidate/unverify/[company_id]/ - POST
-----------------------------------------
+/candidate/[domain]/unverify/[company_id]/ - POST
+-------------------------------------------------
 
-Removes any link between an Undertaking (from FGR) and a Company.
+Removes any link between an Undertaking (from a domain) and a Company.
 
     {
       "website": "WEBSITE--10085",
@@ -402,10 +421,10 @@ Removes any link between an Undertaking (from FGR) and a Company.
     }
 
 
-/candidate/list/verified
-------------------------
+/candidate/[domain]/list/verified
+---------------------------------
 
-Lists the already verified undertakings.
+Lists the already verified undertakings from a domain.
 
     [
       {
@@ -430,75 +449,27 @@ Lists the already verified undertakings.
       }
     ]
 
+Export calls
+============
 
-Misc calls
-==========
-
-/matching_log
--------------
-
-Lists a matching log list for 2 companies and the user who made it at which
-time, sorted in decrease order by timestamp.
-
-    [
-      {
-        "verified": true,
-        "timestamp": "27/11/2014 15:56",
-        "company_id": 10051,
-        "user": "vitalie",
-      }
-    ]
-
-
-/data_sync_log
---------------
-
-Lists a data sync log which shows when the sync was ran, sorted in decrease
-order by execution_time
-
-    [
-      {
-        "execution_time": "26/11/2014 16:42",
-        "organizations": 413,
-        "using_last_update": "10/10/2014"
-        "for_user": False,
-      }
-    ]
-
-
-/misc/undertaking/export
-------------------------
-
-This URL is used to export the list of undertakings from ``/undertakings/list``
-as an Excel file.
-
-/misc/undertaking/[company_id]/statusupdate - POST
---------------------------------------------------
-
-This url is used to update the status of a company by POST method with the new status
-
-
-/misc/user/export
+/export/user/list
 -----------------
 
-This URL is used to export the list of users with their companies and the
-companies' contact persons as an Excel file.
+This URL is used to export the list of users with their companies and the companies' contact persons as an Excel file.
+
+/export/undertaking/[domain]
+----------------------------
+
+This URL is used to export the list of undertakings from ``/undertakings/[domain]/list`` as an Excel file.
+
+Mails calls
+===========
 
 
-/misc/settings
---------------
+/mail/list
+----------
 
-Display the value of the configured middleware settings
-
-    {
-      "BASE_URL": "http://example.com"
-    }
-
-
-/misc/mail/list
----------------
-
-Display the list of all mails to be notified about companies matching
+Display the list of all mails to be notified about companies matching.
 
     [
       {
@@ -509,11 +480,10 @@ Display the list of all mails to be notified about companies matching
     ]
 
 
-/misc/mail/add - POST
----------------------
+/mail/add - POST
+----------------
 
-Add a new contact to be notified on matchings. The POST should contain the
-following data:
+Add a new contact to be notified on matching. The POST should contain the following data:
 
     {
       'mail': 'new@mail.com',
@@ -534,11 +504,10 @@ On failure returns:
         'message': 'This email address already exists'
     }
 
-/misc/mail/delete - POST
-------------------------
+/mail/delete - POST
+-------------------
 
-Delete a contact from the mailing list. The POST should contain the
-following data:
+Delete a contact from the mailing list. The POST should contain the following data:
 
     {
       'mail': 'mail_to_be_deleted@example.com',
@@ -557,33 +526,30 @@ On failure returns:
         'message': 'This email address does not exists'
     }
 
-/misc/alert_lockdown/wrong_match - POST
----------------------------------------
+/alert_lockdown/wrong_match - POST
+----------------------------------
 
-Send an alert email when a company matching was done wrong
-The exepected input POST data should consist of an ``user`` and a ``company_id``
-
-
-/misc/alert_lockdown/wrong_lockdown - POST
-------------------------------------------
-
-In case the lockdown is over and no matching should be changed, the interested
-parties will be alerted with an email
-The exepected input POST data should consist of an ``user`` and a ``company_id``
+Send an alert email when a company matching was done wrong. 
+The expected input POST data should consist of an ``user`` and a ``company_id``.
 
 
-/misc/alert_lockdown/unmatch - POST
------------------------------------
+/alert_lockdown/wrong_lockdown - POST
+-------------------------------------
 
-This mail should be sent when an unmatching call has been made
-The exepected input POST data should consist of an ``user`` and a ``company_id``
+In case the lock down is over and no matching should be changed, the interested parties will be alerted with an email.
+The expected input POST data should consist of an ``user`` and a ``company_id``.
 
+
+/alert_lockdown/unmatch - POST
+------------------------------
+
+This mail should be sent when an unmatching call has been made.
+The expected input POST data should consist of an ``user`` and a ``company_id``.
 
 Sync calls
 ==================
 
-All endpoints in this category return a json response with the following
-format:
+All endpoints in this category return a json response with the following format:
 
 
     {
@@ -602,13 +568,67 @@ Optional parameters:
 * days (integer, default = 7)
 * updated_since (string, datetime format DD/MM/YYYY)
 
+/sync/ods - GET
+---------------
+
+Optional parameters:
+
+* days (integer, default = 7)
+* updated_since (string, datetime format DD/MM/YYYY)
+
+
+
+Log calls
+=========
+
+/log/matching
+-------------
+
+Lists a matching log list for 2 companies and the user who made it at which
+time, sorted in decrease order by timestamp.
+
+    [
+      {
+        "verified": true,
+        "timestamp": "27/11/2014 15:56",
+        "company_id": 10051,
+        "user": "vitalie",
+      }
+    ]
+
+
+/log/sync
+---------
+
+Lists a data sync log which shows when the sync was ran, sorted in decrease
+order by execution_time
+
+    [
+      {
+        "execution_time": "26/11/2014 16:42",
+        "organizations": 413,
+        "using_last_update": "10/10/2014"
+        "for_user": False,
+      }
+    ]
+
+Settings calls
+==============
+
+/settings
+---------
+
+Display the value of the configured middleware settings
+
+    {
+      "BASE_URL": "http://example.com"
+    }
+
 
 Debug calls
 ==================
 
-All endpoints in this category return a json response with the following
-format:
-
+All endpoints in this category return a json response with the following format:
 
     {
         'success': True/False,
@@ -617,6 +637,15 @@ format:
 
 /sync/fgases_debug_noneu - GET
 ------------------------------
+
+Optional parameters:
+
+* days (integer, default = 7)
+* updated_since (string, datetime format DD/MM/YYYY)
+
+
+/sync/ods_debug_noneu - GET
+---------------------------
 
 Optional parameters:
 
