@@ -12,7 +12,7 @@ MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
 def test_export_companies(client):
     undertaking = factories.UndertakingFactory()
-    resp = client.get(url_for('misc.company-list-export',
+    resp = client.get(url_for('misc.export-company-list',
                               domain=undertaking.domain))
     assert resp.status_code == 200
     assert resp.content_type == MIMETYPE
@@ -42,7 +42,7 @@ def test_export_companies(client):
 def test_export_companies_domain_filter(client):
     factories.UndertakingFactory(domain='ODS')
     undertaking = factories.UndertakingFactory(domain='FGAS')
-    resp = client.get(url_for('misc.company-list-export',
+    resp = client.get(url_for('misc.export-company-list',
                               domain=undertaking.domain))
     assert resp.status_code == 200
     assert resp.content_type == MIMETYPE
