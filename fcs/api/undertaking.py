@@ -1,8 +1,10 @@
 # coding=utf-8
+import json
+
 from flask import abort, request
 
 from fcs.api.views import DetailView, ListView, ApiView
-from fcs.models import Undertaking, EuLegalRepresentativeCompany, Address
+from fcs.models import Undertaking, EuLegalRepresentativeCompany, Address, db
 from fcs.match import get_all_non_candidates, str_matches
 
 
@@ -173,3 +175,17 @@ class UndertakingDetailView(DetailView):
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account
         return data
+
+
+class UndertakingStatusUpdate(ApiView):
+    model = Undertaking
+
+    def post(self, domain, pk):
+        status = request.form['status']
+        if status:
+            company = self.model.query.filter_by(
+                domain=domain,
+                external_id=pk).first_or_404()
+            company.status = status
+            db.session.commit()
+            return json.dumps(True)
