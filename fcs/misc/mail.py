@@ -67,5 +67,6 @@ class AlertUnmatch(ApiView):
     def post(self):
         resp = send_unmatch_mail(request.form['user'],
                                  request.form['company_id'],
+                                 request.form['old_company'],
                                  request.form['oldcollection_path'])
         return json.dumps(resp)

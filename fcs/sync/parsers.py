@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from fcs import models
+from fcs.models import OldCompany, db
 
 
 def not_null(func):
@@ -10,6 +11,15 @@ def not_null(func):
         return func(rc)
 
     return inner
+
+
+def update_obj(obj, d):
+    if not d:
+        obj = None
+    else:
+        for name, value in d.iteritems():
+            setattr(obj, name, value)
+    return obj
 
 
 def parse_date(date_value):
@@ -53,3 +63,30 @@ def parse_cp_list(cp_list):
         cp['last_name'] = cp.pop('lastName')
         cp['email'] = cp.pop('emailAddress')
     return cp_list
+
+
+def parse_date_for_company(datestr):
+    DATE_FORMAT = '%Y/%m/%d %H:%M'
+    datestr = datestr[:-11]
+    return datetime.strptime(datestr, DATE_FORMAT)
+
+
+def parse_company(company, obligation):
+    country = company.pop('country')
+    for f in ('addr_street', 'addr_place1', 'addr_place2', 'addr_postalcode'):
+        company.pop(f)
+    company['country_code'] = country['code']
+    company['external_id'] = company.pop('pk')
+    company['date_registered'] = parse_date_for_company(company['date_registered'])
+    company['obligation'] = obligation
+
+    oldcompany = (
+        OldCompany.query.filter_by(external_id=company['external_id']).first()
+    )
+    if oldcompany:
+        update_obj(oldcompany, company)
+    else:
+        oldcompany = OldCompany(**company)
+        db.session.add(oldcompany)
+    return company
+

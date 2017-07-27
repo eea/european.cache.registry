@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
 
+from fcs.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
 
+# from fcs.match import get_obligations, get_old_companies
 from fcs.models import Undertaking, db, OrganizationLog
 
 from . import sync_manager
@@ -175,4 +177,14 @@ def sync_collections_title():
                 if update_bdr_col_name(undertaking):
                     print "Updated collection title for: {0}"\
                           .format(ext_id)
+    return True
+
+
+@sync_manager.command
+def bdr():
+    for obl in get_obligations():
+        print "Getting obligation: ", obl
+        companies = get_old_companies(obl)
+        print len([parse_company(c, obl) for c in companies]), "values"
+    db.session.commit()
     return True

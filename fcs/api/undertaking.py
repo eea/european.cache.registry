@@ -4,9 +4,10 @@ import json
 from flask import abort, request
 
 from fcs.api.views import DetailView, ListView, ApiView
+from fcs.api.old_company import OldCompanyDetail
 from fcs.api.user import UserListView
 from fcs.models import Undertaking, EuLegalRepresentativeCompany, Address, db
-from fcs.match import get_all_non_candidates, str_matches
+from fcs.match import get_all_non_candidates, str_matches, get_candidates
 
 
 class AddressDetail(DetailView):
@@ -46,7 +47,7 @@ class UndertakingListView(ListView):
         data = ApiView.serialize(obj)
         _strip_fields = (
             'businessprofile_id', 'address_id',
-            'represent_id',
+            'represent_id', 'oldcompany_id'
         )
         for field in _strip_fields:
             data.pop(field)
@@ -93,7 +94,7 @@ class UndertakingListByVatView(UndertakingListView):
     def serialize(cls, obj, **kwargs):
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'businessprofile_id', 'address_id',
+            'businessprofile_id', 'address_id', 'oldcompany_id',
             'represent_id', 'phone', 'country_code', 'date_created',
             'oldcompany_account', 'types', 'oldcompany_extid', 'domain',
             'website', 'status', 'undertaking_type', 'date_updated',
@@ -158,6 +159,7 @@ class UndertakingDetailView(DetailView):
 
     @classmethod
     def serialize(cls, obj, **kwargs):
+        candidates = get_candidates(obj.external_id, obj.domain)
         data = ApiView.serialize(obj)
         _strip_fields = (
             'date_updated', 'address_id', 'businessprofile_id',
@@ -171,7 +173,8 @@ class UndertakingDetailView(DetailView):
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
-            'candidates': [],
+            'candidates': [OldCompanyDetail.serialize(c.oldcompany) for c in
+                           candidates],
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account

@@ -35,15 +35,6 @@ def get_latest_undertakings(type_url, updated_since=None):
     return response.json()
 
 
-def update_obj(obj, d):
-    if not d:
-        obj = None
-    else:
-        for name, value in d.iteritems():
-            setattr(obj, name, value)
-    return obj
-
-
 def patch_undertaking(external_id, data):
     external_id = str(external_id)
     patch = current_app.config.get('PATCH_COMPANIES', {})
@@ -78,7 +69,7 @@ def update_undertaking(data):
         undertaking = Undertaking(**data)
     else:
         u_name = undertaking.name
-        update_obj(undertaking, data)
+        parsers.update_obj(undertaking, data)
         if undertaking.name != u_name:
             if update_bdr_col_name(undertaking):
                 print "Updated collection title for: {0}"\
@@ -89,14 +80,14 @@ def update_undertaking(data):
         db.session.add(addr)
         undertaking.address = addr
     else:
-        update_obj(undertaking.address, address)
+        parsers.update_obj(undertaking.address, address)
 
     if not undertaking.businessprofile:
         bp = BusinessProfile(**business_profile)
         db.session.add(bp)
         undertaking.businessprofile = bp
     else:
-        update_obj(undertaking.businessprofile, business_profile)
+        parsers.update_obj(undertaking.businessprofile, business_profile)
 
     if not represent:
         old_represent = undertaking.represent
@@ -114,8 +105,8 @@ def update_undertaking(data):
             undertaking.represent = r
             undertaking.represent.address = addr
         else:
-            update_obj(undertaking.represent.address, address)
-            update_obj(undertaking.represent, represent)
+            parsers.update_obj(undertaking.represent.address, address)
+            parsers.update_obj(undertaking.represent, represent)
 
     unique_emails = set([cp.get('email') for cp in contact_persons])
     existing_persons = undertaking.contact_persons
@@ -142,7 +133,7 @@ def update_undertaking(data):
                 if value != getattr(user, key):
                     do_update = True
             if do_update:
-                update_obj(user, contact_person)
+                parsers.update_obj(user, contact_person)
         else:
             user = User(**contact_person)
             db.session.add(user)
