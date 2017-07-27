@@ -89,7 +89,10 @@ def test_undertaking_list_vat_domain_filter(client):
 
 
 def test_undertaking_details(client):
-    undertaking = factories.UndertakingFactory()
+    undertaking = factories.UndertakingFactory(oldcompany=None)
+    oldcompany = factories.OldCompanyFactory(id=2)
+    link = factories.OldCompanyLinkFactory(oldcompany=oldcompany,
+                                           undertaking=undertaking)
     resp = client.get(
         url_for('api.company-detail',
                 domain=undertaking.domain,
@@ -105,6 +108,7 @@ def test_undertaking_details(client):
     assert data['date_created'] == undertaking.date_created.strftime('%d/%m/%Y')
     assert data['representative']['name'] == undertaking.represent.name
     assert data['address']['zipcode'] == undertaking.address.zipcode
+    assert data['candidates'][0]['company_id'] == oldcompany.external_id
 
 
 def test_undertaking_details_domain_filter(client):
@@ -257,12 +261,17 @@ def test_user_companies_by_email(client):
 
 def test_candidates_list(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=False)
+    oldcompany = factories.OldCompanyFactory(id=2)
+    link = factories.OldCompanyLinkFactory(oldcompany=oldcompany,
+                                           undertaking=undertaking)
     resp = client.get(url_for('api.candidate-list',
                               domain=undertaking.domain))
     data = resp.json
     assert len(data) == 1
     data = data[0]
-    assert data['company_id'] == undertaking.external_id
+    assert data['undertaking']['company_id'] == undertaking.external_id
+    assert len(data['links']) == 1
+    assert data['links'][0]['name'] == oldcompany.name
 
 
 def test_noncandidates_list(client):
@@ -277,6 +286,8 @@ def test_noncandidates_list(client):
 
 def test_unverify_link(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=True)
+    link = factories.OldCompanyLinkFactory(
+        oldcompany=undertaking.oldcompany,undertaking=undertaking)
     resp = client.post(url_for('api.candidate-unverify',
                                domain=undertaking.domain,
                                undertaking_id=undertaking.external_id),

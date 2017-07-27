@@ -25,6 +25,7 @@ def test_parse_undertaking_remove_cp(client):
     with open('testsuite/fixtures/companies.json') as f:
         data = json.load(f)
     remaining_username = data[0]['contactPersons'][0]['userName']
+    removed_username = data[1]['contactPersons'][1]['userName']
     update_undertaking(data[1])
     update_undertaking(data[0])
     undertakings = models.Undertaking.query.fgases().all()
