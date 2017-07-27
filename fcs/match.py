@@ -154,7 +154,7 @@ def verify_none(undertaking_id, domain, user):
     return verify_manual(undertaking_id, domain, None, user)
 
 
-def verify_manual(undertaking_id, domain, oldcompany_accout, user):
+def verify_manual(undertaking_id, domain, oldcompany_account, user):
     u = models.Undertaking.query.filter_by(
         external_id=undertaking_id,
         domain=domain
@@ -165,11 +165,11 @@ def verify_manual(undertaking_id, domain, oldcompany_accout, user):
         return u
     u.oldcompany = None
     u.oldcompany_verified = True
-    u.oldcompany_account = oldcompany_accout
+    u.oldcompany_account = oldcompany_account
     u.oldcompany_extid = None
-    if call_bdr(u, old_collection=oldcompany_accout):
+    if call_bdr(u, old_collection=oldcompany_account):
         log_match(undertaking_id, None, True, user,
-                  oldcompany_account=oldcompany_accout)
+                  oldcompany_account=oldcompany_account)
         models.db.session.commit()
         send_match_mail(match=False, user=user, company_name=u.name,
                         company_id=u.external_id)
