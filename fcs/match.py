@@ -1,18 +1,16 @@
 # coding=utf-8
 from datetime import datetime
 
-import requests
 from fuzzywuzzy import fuzz
 
 from sqlalchemy import or_
-from sqlalchemy.orm import joinedload
 from flask.ext.script import Manager
 from flask import current_app
 
 from fcs import models
 from fcs.mails import send_match_mail
-from fcs.sync.auth import InvalidResponse, Unauthorized
-from fcs.sync.bdr import call_bdr, get_absolute_url
+
+from fcs.sync.bdr import call_bdr
 
 
 match_manager = Manager()
@@ -51,10 +49,6 @@ def add_link(company_id, oldcompany_id):
     return link
 
 
-def get_obligations():
-    return current_app.config.get('INTERESTING_OBLIGATIONS', [])
-
-
 def get_unverified_companies(domain):
     return (
         models.Undertaking.query
@@ -62,22 +56,6 @@ def get_unverified_companies(domain):
                     models.Undertaking.oldcompany_verified == False))
         .filter_by(domain=domain)
     )
-
-
-def get_old_companies(obligation):
-    auth = current_app.config.get('BDR_API_KEY', '')
-    url = get_absolute_url('BDR_API_URL',
-                           '/company/obligation/{0}/'.format(obligation))
-    params = {'apikey': auth}
-    ssl_verify = current_app.config['HTTPS_VERIFY']
-
-    response = requests.get(url, params=params, verify=ssl_verify)
-    if response.status_code in (401, 403):
-        raise Unauthorized()
-    if response.status_code != 200:
-        raise InvalidResponse()
-
-    return response.json()
 
 
 def get_oldcompanies_for_matching():
