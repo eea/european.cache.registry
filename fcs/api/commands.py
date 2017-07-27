@@ -7,12 +7,15 @@ import StringIO
 
 from fcs.api.views import ApiView
 from fcs.sync.commands import (
+    bdr,
     fgases,
     fgases_debug_noneu,
     ods,
     ods_debug_noneu,
     sync_collections_title
 )
+
+from fcs.match import run, flush, verify, unverify, test, manual
 
 
 @contextlib.contextmanager
@@ -61,3 +64,31 @@ class SyncODSDebugNoneuView(MgmtCommand):
 
 class SyncCollectionsTitleView(MgmtCommand):
     command_func = staticmethod(sync_collections_title)
+
+
+class SyncBdr(MgmtCommand):
+    command_func = staticmethod(bdr)
+
+
+class MatchRun(MgmtCommand):
+    command_func = staticmethod(run)
+
+
+class MatchFlush(MgmtCommand):
+    command_func = staticmethod(flush)
+
+
+class MatchVerify(MgmtCommand):
+    command_func = staticmethod(verify)
+
+
+class MatchUnverify(MgmtCommand):
+    command_func = staticmethod(unverify)
+
+
+class MatchTest(MgmtCommand):
+    command_func = staticmethod(test)
+
+
+class MatchManual(MgmtCommand):
+    command_func = staticmethod(manual)
