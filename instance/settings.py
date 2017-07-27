@@ -33,19 +33,42 @@ LOG_FILE = os.environ.get('LOG_FILE', 'log_file.log')
 # email server
 MAIL_SERVER = os.environ.get('MAIL_SERVER', '')
 MAIL_PORT = os.environ.get('MAIL_PORT', '')
-MAIL_USE_TLS = True if os.environ.get('MAIL_USE_TLS', '') in ('True','true') else False
-MAIL_USE_SSL = True if os.environ.get('MAIL_USE_SSL', '') in ('True','true') else False
+MAIL_USE_TLS = (
+    True if os.environ.get('MAIL_USE_TLS', '') in ('True', 'true') else False
+)
+MAIL_USE_SSL = (
+    True if os.environ.get('MAIL_USE_SSL', '') in ('True', 'true') else False
+)
 MAIL_USERNAME = os.environ.get('MAIL_USERNAME', '')
 MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '')
 MAILS_SENDER_NAME = os.environ.get('MAILS_SENDER_NAME', 'Help Desk')
 
- # set it to False to disable
-HTTPS_VERIFY = True if os.environ.get('HTTPS_VERIFY', '') in ('True','true') else False
+# set it to False to disable
+HTTPS_VERIFY = (
+    True if os.environ.get('HTTPS_VERIFY', '') in ('True', 'true') else False
+)
+
+
+# this switch tells if companies with no matching candidates are automatically
+# verified as being so by the system or not
+AUTO_VERIFY_NEW_COMPANIES = (
+    True if os.environ.get('AUTO_VERIFY_NEW_COMPANIES', '') in ('True', 'true') else False
+)
+
+# if set to False, only retrieve organisations with 'fgases' obligation
+INTERESTING_OBLIGATIONS = (
+    os.environ.get('INTERESTING_OBLIGATIONS', 'ods,fgases').split(',')
+)
 
 # specify if notifications mails are sent
-SEND_MATCHING_MAILS = True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True','true') else False
+SEND_MATCHING_MAILS = (
+    True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True','true') else False
+)
 
-# fuzzy matching algorithm percent value (how much should old and new be alike). ex: 75
+"""
+fuzzy matching algorithm percent value
+(how much should old and new be alike). ex: 75
+"""
 FUZZ_LIMIT = int(os.environ.get('FUZZ_LIMIT', '75'))
 
 try:
