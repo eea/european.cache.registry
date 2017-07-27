@@ -1,19 +1,35 @@
+import requests
+
 from datetime import datetime, timedelta
 
 from fcs.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
-
-# from fcs.match import get_obligations, get_old_companies
 from fcs.models import Undertaking, db, OrganizationLog
 
 from . import sync_manager
-from .auth import cleanup_unused_users
-from .bdr import get_bdr_collections, update_bdr_col_name
+from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
+from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url
 from .undertakings import update_undertaking, get_latest_undertakings
 
 from .fgases import eea_double_check_fgases
 from .ods import eea_double_check_ods
+
+
+def get_old_companies(obligation):
+    auth = current_app.config.get('BDR_API_KEY', '')
+    url = get_absolute_url('BDR_API_URL',
+                           '/company/obligation/{0}/'.format(obligation))
+    params = {'apikey': auth}
+    ssl_verify = current_app.config['HTTPS_VERIFY']
+
+    response = requests.get(url, params=params, verify=ssl_verify)
+    if response.status_code in (401, 403):
+        raise Unauthorized()
+    if response.status_code != 200:
+        raise InvalidResponse()
+
+    return response.json()
 
 
 def get_last_update(days, updated_since):
@@ -182,7 +198,8 @@ def sync_collections_title():
 
 @sync_manager.command
 def bdr():
-    for obl in get_obligations():
+    obligations = current_app.config.get('INTERESTING_OBLIGATIONS', [])
+    for obl in obligations:
         print "Getting obligation: ", obl
         companies = get_old_companies(obl)
         print len([parse_company(c, obl) for c in companies]), "values"
