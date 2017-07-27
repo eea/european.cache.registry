@@ -49,12 +49,12 @@ def add_link(company_id, oldcompany_id):
     return link
 
 
-def get_unverified_companies(domain):
+def get_unverified_companies(domains):
     return (
         models.Undertaking.query
         .filter(or_(models.Undertaking.oldcompany_verified == None,
                     models.Undertaking.oldcompany_verified == False))
-        .filter_by(domain=domain)
+        .filter(models.Undertaking.domain.in_(domains))
     )
 
 
@@ -62,12 +62,12 @@ def get_oldcompanies_for_matching():
     qs = models.OldCompany.query.filter_by(undertaking=None, valid=True)
     obligations = current_app.config.get('INTERESTING_OBLIGATIONS', ['fgases',
                                                                      'ods'])
-    qs = qs.filter_by(obligation__in=obligations)
+    qs = qs.filter(models.OldCompany.obligation.in_(obligations))
     return qs
 
 
 def get_all_candidates(domain):
-    companies = get_unverified_companies(domain)
+    companies = get_unverified_companies([domain])
     data = [(company, company.links) for company in
             companies]
     return data
@@ -101,7 +101,7 @@ def verify_link(undertaking_id, oldcompany_id, user):
         external_id=oldcompany_id).first()
     link = (
         models.OldCompanyLink.query
-            .filter_by(undertaking=undertaking, oldcompany=oldcompany).first()
+        .filter_by(undertaking=undertaking, oldcompany=oldcompany).first()
     )
     if not link:
         return None
@@ -222,7 +222,15 @@ def match_all(companies, oldcompanies):
 
 @match_manager.command
 def run():
-    companies = get_unverified_companies()
+    auto_verify_domains = current_app.config.get(
+        'AUTO_VERIFY_ALL_COMPANIES', ['fgases', 'ods']
+    )
+    companies = get_unverified_companies(auto_verify_domains)
+    for company in companies:
+        verify_none(company.id, company.domain, 'SYSTEM')
+    interesting_obligations = current_app.config.get('INTERESTING_OBLIGATIONS',
+                                                     [])
+    companies = get_unverified_companies(interesting_obligations)
     oldcompanies = get_oldcompanies_for_matching()
 
     links, new_companies = match_all(companies, oldcompanies)
@@ -230,7 +238,7 @@ def run():
     if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
         print "Autoverifying companies without candidates"
         for c in new_companies:
-            verify_none(c['company_id'], 'SYSTEM')
+            verify_none(c['company_id'], c['domain'], 'SYSTEM')
     return True
 
 
@@ -254,9 +262,9 @@ def flush():
 
 
 @match_manager.command
-def unverify(undertaking_external_id):
+def unverify(undertaking_external_id, domain):
     """ Remove a link from the matching database """
-    u = unverify_link(undertaking_external_id, 'SYSTEM')
+    u = unverify_link(undertaking_external_id, domain, 'SYSTEM')
     print u and u.oldcompany_verified
     return True
 
@@ -271,8 +279,8 @@ def test(new, old):
 
 
 @match_manager.command
-def manual(undertaking_id, oldcompany_account):
+def manual(undertaking_id, domain, oldcompany_account):
     print "Verifying company: {} with old company account: {}".format(
         undertaking_id, oldcompany_account)
-    print verify_manual(undertaking_id, oldcompany_account, 'SYSTEM')
+    print verify_manual(undertaking_id, domain, oldcompany_account, 'SYSTEM')
     return True
