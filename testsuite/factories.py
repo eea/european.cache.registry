@@ -6,6 +6,34 @@ from factory import SubFactory, post_generation
 from fcs import models
 
 
+class OldCompanyLinkFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.OldCompanyLink
+        sqlalchemy_session = models.db.session
+
+    verified = True
+    date_added = date(2015, 1, 1)
+    date_verified = date(2015, 1, 1)
+
+
+class OldCompanyFactory(SQLAlchemyModelFactory):
+
+    class Meta:
+        model = models.OldCompany
+        sqlalchemy_session = models.db.session
+
+    external_id = 10
+    name = 'old_company_name'
+    country_code = 'RO'
+    account = 'account'
+    vat_number = 'account'
+    eori = 'account'
+    active = True
+    website = 'website'
+    date_registered = date(2015, 1, 1)
+    valid = True
+
+
 class CountryFactory(SQLAlchemyModelFactory):
 
     class Meta:
@@ -75,6 +103,7 @@ class UndertakingFactory(SQLAlchemyModelFactory):
     address = SubFactory(AddressFactory)
     represent = SubFactory(RepresentativeFactory)
     businessprofile = SubFactory(BusinessProfileFactory)
+    oldcompany = SubFactory(OldCompanyFactory)
 
     @post_generation
     def contact_persons(self, create, extracted, **kwargs):
