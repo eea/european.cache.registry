@@ -55,14 +55,20 @@ AUTO_VERIFY_NEW_COMPANIES = (
     True if os.environ.get('AUTO_VERIFY_NEW_COMPANIES', '') in ('True', 'true') else False
 )
 
-# if set to False, only retrieve organisations with 'fgases' obligation
+# this list of domains skips matching for all companies with the given domains
+# by automatically verifying them
+AUTO_VERIFY_ALL_COMPANIES = (
+    os.environ.get('AUTO_VERIFY_ALL_COMPANIES', 'ods,fgases').split(',')
+)
+
+# Retrieve organisations with the following domains
 INTERESTING_OBLIGATIONS = (
     os.environ.get('INTERESTING_OBLIGATIONS', 'ods,fgases').split(',')
 )
 
 # specify if notifications mails are sent
 SEND_MATCHING_MAILS = (
-    True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True','true') else False
+    True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True', 'true') else False
 )
 
 """
