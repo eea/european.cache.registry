@@ -12,21 +12,21 @@ from fcs.match import (
 from fcs.models import Undertaking
 
 
-class CandidateList(ListView):
-    model = Undertaking
+class CandidateList(ApiView):
 
-    def get_queryset(self, **kwargs):
+    def get(self, **kwargs):
         domain = kwargs.get('domain')
-        return get_all_candidates(domain=domain)
-
-    @classmethod
-    def serialize(cls, obj, **kwargs):
-        data = {
-            'company_id': obj.external_id,
-            'name': obj.name,
-            'status': obj.status,
-            'country': obj.address.country.name
-        }
+        candidates = get_all_candidates(domain)
+        data = []
+        for company, links in candidates:
+            links_data = [{'name': l.oldcompany.name} for l in links]
+            company_data = {
+                'company_id': company.external_id,
+                'name': company.name,
+            }
+            data.append(
+                {'undertaking': company_data, 'links': links_data}
+            )
         return data
 
 
@@ -42,6 +42,7 @@ class CandidateVerify(ApiView):
         data = ApiView.serialize(obj, pop_id=pop_id)
         if data:
             data.pop('undertaking_id')
+            data.pop('oldcompany_id')
             data['company_id'] = obj.undertaking.external_id
             data['collection_id'] = (
                 obj.oldcompany and obj.oldcompany.external_id
@@ -50,9 +51,22 @@ class CandidateVerify(ApiView):
 
     def post(self, domain, undertaking_id):
         user = request.form['user']
+        link = verify_link(undertaking_id,
+                           oldcompany_id, user) or abort(404)
         undertaking = verify_none(undertaking_id=undertaking_id,
                                   user=user,
                                   domain=domain) or abort(404)
+        data = ApiView.serialize(undertaking)
+        return {
+            'verified': data['oldcompany_verified'],
+            'company_id': data['company_id'],
+        }
+
+
+class CandidateVerifyNone(CandidateVerify):
+    def post(self, undertaking_id):
+        user = request.form['user']
+        undertaking = verify_none(undertaking_id, user) or abort(404)
         data = ApiView.serialize(undertaking)
         return {
             'verified': data['oldcompany_verified'],

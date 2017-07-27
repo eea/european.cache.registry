@@ -3,7 +3,7 @@ import smtplib
 from flask.ext.mail import Mail, Message
 from flask import current_app as app, render_template
 
-from fcs.models import MailAddress, Undertaking
+from fcs.models import MailAddress, Undertaking, OldCompany, OldCompanyLink
 
 
 def send_mail(subject, html, recipients):
@@ -70,11 +70,14 @@ def send_wrong_match_mail(user, company_id):
     company = Undertaking.query.fgases().filter_by(
         external_id=company_id
     ).first()
+    link = OldCompanyLink.query.filter_by(
+        undertaking=company
+    ).first()
     kwargs = {
         'user': user,
         'bdr_help_desk_email': hd,
         'company_name': company.name,
-        'oldcompany_name': None
+        'oldcompany_name': link.oldcompany.name
     }
     send_mail_to_list(template, subject, kwargs)
     return True
@@ -86,25 +89,31 @@ def send_wrong_lockdown_mail(user, company_id):
     company = Undertaking.query.fgases().filter_by(
         external_id=company_id
     ).first()
+    link = OldCompanyLink.query.filter_by(
+        undertaking=company
+    ).first()
     kwargs = {
         'user': user,
         'company_name': company.name,
-        'oldcompany_name': None
+        'oldcompany_name': link.oldcompany.name
     }
     send_mail_to_list(template, subject, kwargs)
     return True
 
 
-def send_unmatch_mail(user, company_id, oldcollection_path):
+def send_unmatch_mail(user, company_id, oldcompany_id, oldcollection_path):
     template = 'mails/unmatch.html'
     subject = 'BDR - Unmatch alert'
     company = Undertaking.query.fgases().filter_by(
         external_id=company_id
     ).first()
+    oldcompany = OldCompany.query.filter_by(
+        external_id=oldcompany_id
+    ).first()
     kwargs = {
         'user': user,
         'company_name': company.name,
-        'oldcompany_name': None,
+        'oldcompany_name': oldcompany.name,
         'oldcollection_path': oldcollection_path,
     }
     send_mail_to_list(template, subject, kwargs)

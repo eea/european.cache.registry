@@ -4,6 +4,7 @@ from flask.ext.script import Manager
 
 from .candidate import *
 from .commands import *
+from .old_company import *
 from .undertaking import *
 from .user import *
 
@@ -88,7 +89,7 @@ register_url(prefix=candidate_prefix, name=candidate_name,
              view_name='non-list')
 
 register_url(prefix=candidate_prefix, name=candidate_name,
-             url='/verify/<undertaking_id>/',
+             url='/verify/<undertaking_id>/<oldcompany_id>',
              view=CandidateVerify,
              view_name='verify')
 
@@ -96,7 +97,10 @@ register_url(prefix=candidate_prefix, name=candidate_name,
              url='/unverify/<undertaking_id>/',
              view=CandidateUnverify,
              view_name='unverify')
-
+register_url(prefix=candidate_prefix, name=candidate_name,
+             view=CandidateVerifyNone,
+             url='/verify-none/<undertaking_id>',
+             view_name='verify_none')
 # Commands
 
 command_prefix = '/sync'
@@ -118,6 +122,11 @@ register_url(prefix=command_prefix, name=command_name,
              view_name='ods')
 
 register_url(prefix=command_prefix, name=command_name,
+             url='/bdr',
+             view=SyncBdr,
+             view_name='sync-bdr')
+
+register_url(prefix=command_prefix, name=command_name,
              url='/fgases_debug_noneu',
              view=SyncFgasesDebugNoneuView,
              view_name='fgases-debug-noneu')
@@ -126,3 +135,61 @@ register_url(prefix=command_prefix, name=command_name,
              url='/ods_debug_noneu',
              view=SyncODSDebugNoneuView,
              view_name='ods-debug-noneu')
+
+# Old companies
+command_prefix = '/oldcompanies'
+command_name = 'oldcompany'
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/list/valid/',
+             view=OldCompanyListValid,
+             view_name='list-valid')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/list/invalid/',
+             view=OldCompanyListInvalid,
+             view_name='list-invalid')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/<pk>/valid/',
+             view=OldCompanySetValid,
+             view_name='set-valid')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/<pk>/invalid/',
+             view=OldCompanySetInvalid,
+             view_name='set-invalid')
+
+# Match
+command_prefix = '/match'
+command_name = 'match'
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/run',
+             view=MatchRun,
+             view_name='run')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/flush',
+             view=MatchFlush,
+             view_name='flush')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/verify/<int:undertaking_id>/<int:oldcompany_id>',
+             view=MatchVerify,
+             view_name='verify')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/unverify/<int:undertaking_external_id>',
+             view=MatchUnverify,
+             view_name='unverify')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/test/<new>/<old>',
+             view=MatchTest,
+             view_name='test')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/manual/<int:undertaking_id>/<oldcompany_account>',
+             view=MatchManual,
+             view_name='manual')
