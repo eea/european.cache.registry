@@ -23,6 +23,8 @@ class CandidateList(ApiView):
             company_data = {
                 'company_id': company.external_id,
                 'name': company.name,
+                'status': company.status,
+                'country': company.address.country.name
             }
             data.append(
                 {'undertaking': company_data, 'links': links_data}
