@@ -11,7 +11,7 @@ from fcs import models
 from fcs.mails import send_match_mail
 
 from fcs.sync.bdr import call_bdr
-
+from sqlalchemy.orm import joinedload
 
 match_manager = Manager()
 
@@ -85,7 +85,11 @@ def get_candidates(external_id, domain):
 
 def get_all_non_candidates(domain, vat=None):
     queryset = (
-        models.Undertaking.query
+        models.db.session.query(models.Undertaking)
+        .options(joinedload(models.Undertaking.address))
+        .options(joinedload(models.Undertaking.represent))
+        .options(joinedload(models.Undertaking.businessprofile))
+        .options(joinedload(models.Undertaking.contact_persons))
         .filter_by(oldcompany_verified=True)
         .filter_by(domain=domain)
     )
