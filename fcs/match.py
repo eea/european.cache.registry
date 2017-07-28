@@ -223,7 +223,7 @@ def match_all(companies, oldcompanies):
 @match_manager.command
 def run():
     auto_verify_domains = current_app.config.get(
-        'AUTO_VERIFY_ALL_COMPANIES', ['fgases', 'ods']
+        'AUTO_VERIFY_ALL_COMPANIES', ['FGAS', 'ODS']
     )
     companies = get_unverified_companies(auto_verify_domains)
     for company in companies:
