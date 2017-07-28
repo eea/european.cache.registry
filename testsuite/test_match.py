@@ -63,7 +63,6 @@ def test_verify_none(client, monkeypatch):
     assert data['company_id'] == 10
 
 
-@unittest.skip("")
 def test_auto_verify_companies(client, monkeypatch):
     monkeypatch.setattr(requests, 'get', mockreturn)
     undertaking = factories.UndertakingFactory(oldcompany=None,
