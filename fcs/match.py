@@ -161,8 +161,6 @@ def verify_manual(undertaking_id, domain, oldcompany_account, user):
     ).first()
     if not u:
         return None
-    if u.oldcompany_verified is True:
-        return u
     u.oldcompany = None
     u.oldcompany_verified = True
     u.oldcompany_account = oldcompany_account
