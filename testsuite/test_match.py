@@ -40,7 +40,6 @@ def test_verify_link(client, monkeypatch):
     assert data['oldcompany_account'] == oldcompany.account
 
 
-@unittest.skip("")
 def test_verify_none(client, monkeypatch):
     monkeypatch.setattr(requests, 'get', mockreturn)
     undertaking = factories.UndertakingFactory(oldcompany=None)
