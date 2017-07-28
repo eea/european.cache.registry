@@ -1,15 +1,15 @@
 from flask import abort
 from flask import request
 
-from fcs.api.views import ListView, ApiView
+from fcs.api.views import ApiView
 
 from fcs.match import (
     get_all_candidates,
     verify_none,
+    verify_link,
     unverify_link,
     get_all_non_candidates
 )
-from fcs.models import Undertaking
 
 
 class CandidateList(ApiView):
@@ -49,24 +49,17 @@ class CandidateVerify(ApiView):
             )
         return data
 
-    def post(self, domain, undertaking_id):
+    def post(self, domain, undertaking_id, oldcompany_id):
         user = request.form['user']
-        link = verify_link(undertaking_id,
-                           oldcompany_id, user) or abort(404)
-        undertaking = verify_none(undertaking_id=undertaking_id,
-                                  user=user,
-                                  domain=domain) or abort(404)
-        data = ApiView.serialize(undertaking)
-        return {
-            'verified': data['oldcompany_verified'],
-            'company_id': data['company_id'],
-        }
+        link = verify_link(undertaking_id, oldcompany_id,
+                           user) or abort(404)
+        return self.serialize(link, pop_id=False)
 
 
 class CandidateVerifyNone(CandidateVerify):
-    def post(self, undertaking_id):
+    def post(self, domain, undertaking_id):
         user = request.form['user']
-        undertaking = verify_none(undertaking_id, user) or abort(404)
+        undertaking = verify_none(undertaking_id, domain, user) or abort(404)
         data = ApiView.serialize(undertaking)
         return {
             'verified': data['oldcompany_verified'],
