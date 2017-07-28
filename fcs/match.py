@@ -227,7 +227,7 @@ def run():
     )
     companies = get_unverified_companies(auto_verify_domains)
     for company in companies:
-        verify_none(company.id, company.domain, 'SYSTEM')
+        verify_none(company.external_id, company.domain, 'SYSTEM')
     interesting_obligations = current_app.config.get('INTERESTING_OBLIGATIONS',
                                                      [])
     companies = get_unverified_companies(interesting_obligations)
@@ -238,7 +238,7 @@ def run():
     if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
         print "Autoverifying companies without candidates"
         for c in new_companies:
-            verify_none(c['company_id'], c['domain'], 'SYSTEM')
+            verify_none(c['company_external_id'], c['domain'], 'SYSTEM')
     return True
 
 
