@@ -29,7 +29,7 @@ def test_verify_link(client, monkeypatch):
                         undertaking_id=undertaking.external_id,
                         oldcompany_id=oldcompany.external_id),
                 dict(user='test_user'))
-    resp = client.get(url_for('misc.log-matching'))
+    resp = client.get(url_for('misc.log-matching', domain=undertaking.domain))
     data = resp.json
     assert len(data) == 1
     data = data[0]
@@ -51,7 +51,7 @@ def test_verify_none(client, monkeypatch):
                         domain=undertaking.domain,
                         undertaking_id=undertaking.external_id),
                 dict(user='test_user'))
-    resp = client.get(url_for('misc.log-matching'))
+    resp = client.get(url_for('misc.log-matching', domain=undertaking.domain))
     data = resp.json
 
     assert len(data) == 1
