@@ -56,12 +56,12 @@ alert_prefix = '/alert_lockdown'
 alert_name = 'alert'
 
 register_url(prefix=alert_prefix, name=alert_name,
-             url='/wrong_match',
+             url='/wrong_match/<domain>',
              view=AlertWrongMatch,
              view_name='wrong-match')
 
 register_url(prefix=alert_prefix, name=alert_name,
-             url='/wrong_lockdown',
+             url='/wrong_lockdown/<domain>',
              view=AlertWrongLockdown,
              view_name='wrong-lockdown')
 
