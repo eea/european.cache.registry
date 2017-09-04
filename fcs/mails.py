@@ -87,7 +87,7 @@ def send_wrong_match_mail(user, company_id, domain):
 def send_wrong_lockdown_mail(user, company_id, domain):
     template = 'mails/wrong_lockdown.html'
     subject = 'BDR - Wrong lockdown alert'
-    company = Undertaking.query.fgases().filter_by(
+    company = Undertaking.query.filter_by(
         external_id=company_id,
         domain=domain
     ).first()
@@ -107,7 +107,7 @@ def send_unmatch_mail(user, company_id, oldcompany_id, oldcollection_path,
                       domain):
     template = 'mails/unmatch.html'
     subject = 'BDR - Unmatch alert'
-    company = Undertaking.query.fgases().filter_by(
+    company = Undertaking.query.filter_by(
         external_id=company_id,
         domain=domain
     ).first()
