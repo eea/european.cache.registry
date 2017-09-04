@@ -50,23 +50,26 @@ class MailsDelete(ApiView):
 
 
 class AlertWrongMatch(ApiView):
-    def post(self):
+    def post(self, **kwargs):
         resp = send_wrong_match_mail(request.form['user'],
-                                     request.form['company_id'])
+                                     request.form['company_id'],
+                                     kwargs['domain'])
         return json.dumps(resp)
 
 
 class AlertWrongLockdown(ApiView):
-    def post(self):
+    def post(self, **kwargs):
         resp = send_wrong_lockdown_mail(request.form['user'],
-                                        request.form['company_id'])
+                                        request.form['company_id'],
+                                        kwargs['domain'])
         return json.dumps(resp)
 
 
 class AlertUnmatch(ApiView):
-    def post(self):
+    def post(self, **kwargs):
         resp = send_unmatch_mail(request.form['user'],
                                  request.form['company_id'],
                                  request.form['old_company'],
-                                 request.form['oldcollection_path'])
+                                 request.form['oldcollection_path'],
+                                 kwargs['domain'])
         return json.dumps(resp)

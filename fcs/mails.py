@@ -55,7 +55,7 @@ def send_mail_to_list(template, subject, kwargs):
         send_mail(subject, html, [contact.mail])
 
 
-def send_wrong_match_mail(user, company_id):
+def send_wrong_match_mail(user, company_id, domain):
     template = 'mails/wrong_match.html'
     subject = 'BDR - Wrong match alert'
     hd = app.config.get('BDR_HELP_DESK_MAIL')
@@ -67,8 +67,9 @@ def send_wrong_match_mail(user, company_id):
             app.extensions['sentry'].captureMessage(message)
         return False
 
-    company = Undertaking.query.fgases().filter_by(
-        external_id=company_id
+    company = Undertaking.query.filter_by(
+        external_id=company_id,
+        domain=domain
     ).first()
     link = OldCompanyLink.query.filter_by(
         undertaking=company
@@ -83,11 +84,12 @@ def send_wrong_match_mail(user, company_id):
     return True
 
 
-def send_wrong_lockdown_mail(user, company_id):
+def send_wrong_lockdown_mail(user, company_id, domain):
     template = 'mails/wrong_lockdown.html'
     subject = 'BDR - Wrong lockdown alert'
     company = Undertaking.query.fgases().filter_by(
-        external_id=company_id
+        external_id=company_id,
+        domain=domain
     ).first()
     link = OldCompanyLink.query.filter_by(
         undertaking=company
@@ -101,11 +103,13 @@ def send_wrong_lockdown_mail(user, company_id):
     return True
 
 
-def send_unmatch_mail(user, company_id, oldcompany_id, oldcollection_path):
+def send_unmatch_mail(user, company_id, oldcompany_id, oldcollection_path,
+                      domain):
     template = 'mails/unmatch.html'
     subject = 'BDR - Unmatch alert'
     company = Undertaking.query.fgases().filter_by(
-        external_id=company_id
+        external_id=company_id,
+        domain=domain
     ).first()
     oldcompany = OldCompany.query.filter_by(
         external_id=oldcompany_id
