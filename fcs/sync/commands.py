@@ -82,12 +82,13 @@ def update_undertakings(undertakings, check_function):
     return undertakings_count
 
 
-def log_changes(last_update, undertakings_count):
+def log_changes(last_update, undertakings_count, domain):
     if isinstance(last_update, datetime):
         last_update = last_update.date()
     log = OrganizationLog(
         organizations=undertakings_count,
-        using_last_update=last_update)
+        using_last_update=last_update,
+        domain=domain)
     db.session.add(log)
 
 
@@ -119,7 +120,7 @@ def fgases(days=7, updated_since=None):
     undertakings_count = update_undertakings(undertakings,
                                              eea_double_check_fgases)
     cleanup_unused_users()
-    log_changes(last_update, undertakings_count)
+    log_changes(last_update, undertakings_count, domain='Fgas')
     print undertakings_count, "values"
     db.session.commit()
     return True
@@ -137,7 +138,7 @@ def ods(days=7, updated_since=None):
     undertakings_count = update_undertakings(undertakings,
                                              eea_double_check_ods)
     cleanup_unused_users()
-    log_changes(last_update, undertakings_count)
+    log_changes(last_update, undertakings_count, domain='Ods')
     print undertakings_count, "values"
     db.session.commit()
     return True
