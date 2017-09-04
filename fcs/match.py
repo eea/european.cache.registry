@@ -24,7 +24,7 @@ def str_matches(new, old):
     return new and old and fuzz.ratio(new, old) >= get_fuzz_limit()
 
 
-def log_match(company_id, oldcompany_id, verified, user,
+def log_match(company_id, oldcompany_id, verified, user, domain,
               oldcompany_account=None):
     matching_log = models.MatchingLog(
         company_id=company_id,
@@ -32,6 +32,7 @@ def log_match(company_id, oldcompany_id, verified, user,
         oldcompany_account=oldcompany_account,
         verified=verified,
         user=user,
+        domain=domain
     )
     models.db.session.add(matching_log)
 
@@ -117,7 +118,9 @@ def verify_link(undertaking_id, oldcompany_id, user):
     link.undertaking.oldcompany_extid = link.oldcompany.external_id
     if call_bdr(undertaking, old_collection=True):
         log_match(undertaking_id, oldcompany_id, True, user,
-                  oldcompany_account=undertaking.oldcompany_account)
+                  domain=undertaking.domain,
+                  oldcompany_account=undertaking.oldcompany_account
+        )
         models.db.session.commit()
         send_match_mail(match=True, user=user,
                         company_name=undertaking.name,
@@ -149,7 +152,7 @@ def unverify_link(undertaking_id, domain, user):
     u.oldcompany_account = None
     u.oldcompany_extid = None
     u.oldcompany = None
-    log_match(undertaking_id, None, False, user)
+    log_match(undertaking_id, None, False, user, domain=domain)
     models.db.session.commit()
     return u
 
@@ -171,6 +174,7 @@ def verify_manual(undertaking_id, domain, oldcompany_account, user):
     u.oldcompany_extid = None
     if call_bdr(u, old_collection=oldcompany_account):
         log_match(undertaking_id, None, True, user,
+                  domain=domain,
                   oldcompany_account=oldcompany_account)
         models.db.session.commit()
         send_match_mail(match=False, user=user, company_name=u.name,

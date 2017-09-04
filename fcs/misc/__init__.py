@@ -77,13 +77,13 @@ log_name = 'log'
 
 
 register_url(prefix=log_prefix, name=log_name,
-             url='/sync',
+             url='/sync/<domain>',
              view=DataSyncLogsView,
              view_name='sync')
 
 
 register_url(prefix=log_prefix, name=log_name,
-             url='/matching',
+             url='/matching/<domain>',
              view=MatchingLogsView,
              view_name='matching')
 

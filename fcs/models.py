@@ -217,6 +217,7 @@ class OrganizationLog(SerializableModel, db.Model):
     __tablename__ = 'organization_log'
 
     id = Column(Integer, primary_key=True)
+    domain = Column(String(32), default="FGAS")
     execution_time = Column(DateTime, default=datetime.utcnow)
     using_last_update = Column(Date)
     organizations = Column(Integer)
@@ -228,6 +229,7 @@ class MatchingLog(SerializableModel, db.Model):
     id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime, default=datetime.utcnow)
     user = Column(String(255))
+    domain = Column(String(32), default="FGAS")
     company_id = Column(Integer)
     oldcompany_id = Column(Integer, nullable=True)
     oldcompany_account = Column(String(255), nullable=True)
