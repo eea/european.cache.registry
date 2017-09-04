@@ -84,7 +84,9 @@ class UserListExport(MethodView):
         ws.title = 'Users List'
         ws.append(self.COLUMNS)
         for user in users:
-            for company in user.verified_undertakings:
+            companies_with_domain = user.verified_undertakings.filter_by(
+                domain=kwargs['domain'])
+            for company in companies_with_domain:
                 for cp in company.contact_persons:
                     if cp.username == user.username:
                         values = [user.username, company.name,
@@ -104,7 +106,9 @@ class UserListExportJSON(MethodView):
 
         resp = []
         for user in users:
-            for company in user.verified_undertakings:
+            companies_with_domain = user.verified_undertakings.filter_by(
+                domain=kwargs['domain'])
+            for company in companies_with_domain:
                 for cp in company.contact_persons:
                     if cp.username == user.username:
                         resp.append({

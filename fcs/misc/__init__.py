@@ -23,12 +23,12 @@ register_url(prefix=export_prefix, name=export_name,
              view_name='company-list')
 
 register_url(prefix=export_prefix, name=export_name,
-             url='/user/list',
+             url='/user/list/<domain>',
              view=UserListExport,
              view_name='user-list')
 
 register_url(prefix=export_prefix, name=export_name,
-             url='/user/json',
+             url='/user/json/<domain>',
              view=UserListExportJSON,
              view_name='user-list-json')
 
