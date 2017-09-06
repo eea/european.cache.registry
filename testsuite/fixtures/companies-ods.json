@@ -11,7 +11,7 @@
             "country" : {
                 "code" : "CN",
                 "name" : "China (excluding Hong Kong and Macao)",
-                "type" : "NONEU_TYPE"
+                "type" : "EU_TYPE"
             }
         },
         "website" : null,
@@ -26,29 +26,15 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : {
-            "name" : "eulegalrep org",
-            "address" : {
-                "street" : "street",
-                "number" : null,
-                "zipCode" : "1233",
-                "city" : "asdfafd",
-                "country" : {
-                    "code" : "BE",
-                    "name" : "Belgium",
-                    "type" : "EU_TYPE"
-                }
-            },
-            "vatNumber" : "VAT23424",
-            "contactPersonFirstName" : "fname--9270",
-            "contactPersonLastName" : "lname--9270",
-            "contactPersonEmailAddress" : "email@email.com"
-        },
-        "vat" : null,
+        "eoriNumber": "BE123456789",
+        "types" : ["IMPORTER"],
         "businessProfile" : {
-            "highLevelUses" : []
-        },
-        "types" : ["a", "b", "c"]
+            "highLevelUses" : [
+                "import.of.halon.for.critical.use",
+                "import.of.methyl.bromide.for.repackaging.and.re-export",
+                "export.of.substance.for.laboratory.or.analytical.use"
+            ]
+        }
     },
     {
         "@type" : "ODSUndertaking",
@@ -62,7 +48,7 @@
             "country" : {
                 "code" : "CN",
                 "name" : "China (excluding Hong Kong and Macao)",
-                "type" : "NONEU_TYPE"
+                "type" : "EU_TYPE"
             }
         },
         "website" : null,
@@ -85,29 +71,11 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : {
-            "name" : "eulegalrep org",
-            "address" : {
-                "street" : "street",
-                "number" : null,
-                "zipCode" : "1233",
-                "city" : "asdfafd",
-                "country" : {
-                    "code" : "BE",
-                    "name" : "Belgium",
-                    "type" : "EU_TYPE"
-                }
-            },
-            "vatNumber" : "VAT23424",
-            "contactPersonFirstName" : "fname--9270",
-            "contactPersonLastName" : "lname--9270",
-            "contactPersonEmailAddress" : "email@email.com"
-        },
-        "vat" : null,
+        "eoriNumber": "BE1423424543",
+        "types" :  ["IMPORTER", "EXPORTER_ODS"],
         "businessProfile" : {
-            "highLevelUses" : []
-        },
-        "types" : ["a", "b", "c"]
+            "highLevelUses" : ["import.of.halon.for.critical.use"]
+        }
     },
     {
         "@type" : "ODSUndertaking",
@@ -121,7 +89,7 @@
             "country" : {
                 "code" : "CN",
                 "name" : "China (excluding Hong Kong and Macao)",
-                "type" : "NONEU_TYPE"
+                "type" : "EU_TYPE"
             }
         },
         "website" : null,
@@ -144,28 +112,10 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : {
-            "name" : "eulegalrep org",
-            "address" : {
-                "street" : "street",
-                "number" : null,
-                "zipCode" : "1233",
-                "city" : "asdfafd",
-                "country" : {
-                    "code" : "BE",
-                    "name" : "Belgium",
-                    "type" : "EU_TYPE"
-                }
-            },
-            "vatNumber" : "VAT23424",
-            "contactPersonFirstName" : "fname--9270",
-            "contactPersonLastName" : "lname--9270",
-            "contactPersonEmailAddress" : "email@email.com"
-        },
-        "vat" : null,
+        "eoriNumber": "BE123456789",
+        "types" : ["IMPORTER", "EXPORTER_ODS"],
         "businessProfile" : {
-            "highLevelUses" : []
-        },
-        "types" : ["a", "b", "c"]
+            "highLevelUses" : ["import.of.halon.for.critical.use"]
+        }
     }
 ]
