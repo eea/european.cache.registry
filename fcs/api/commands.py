@@ -58,10 +58,6 @@ class SyncODSView(MgmtCommand):
     command_func = staticmethod(ods)
 
 
-class SyncODSDebugNoneuView(MgmtCommand):
-    command_func = staticmethod(ods_debug_noneu)
-
-
 class SyncCollectionsTitleView(MgmtCommand):
     command_func = staticmethod(sync_collections_title)
 

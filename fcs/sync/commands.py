@@ -93,6 +93,9 @@ def log_changes(last_update, undertakings_count, domain):
 
 
 def print_all_undertakings(undertakings):
+    """
+    only used for FGAS as ODS has EU_TYPE countries only
+    """
     undertakings_count = 0
     for undertaking in undertakings:
         if undertaking['euLegalRepresentativeCompany'] is None:
@@ -152,20 +155,6 @@ def fgases_debug_noneu(days=7, updated_since=None):
     last_update = get_last_update(days, updated_since)
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
-        updated_since=last_update
-    )
-    print_all_undertakings(undertakings)
-    return True
-
-
-@sync_manager.command
-@sync_manager.option('-u', '--updated', dest='updated_since',
-                     help="Date in DD/MM/YYYY format")
-def ods_debug_noneu(days=7, updated_since=None):
-    # returns a list with all NON EU companies without a legal representative
-    last_update = get_last_update(days, updated_since)
-    undertakings = get_latest_undertakings(
-        type_url='/latest/odsundertakings/',
         updated_since=last_update
     )
     print_all_undertakings(undertakings)
