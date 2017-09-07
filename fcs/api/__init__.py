@@ -131,11 +131,6 @@ register_url(prefix=command_prefix, name=command_name,
              view=SyncFgasesDebugNoneuView,
              view_name='fgases-debug-noneu')
 
-register_url(prefix=command_prefix, name=command_name,
-             url='/ods_debug_noneu',
-             view=SyncODSDebugNoneuView,
-             view_name='ods-debug-noneu')
-
 # Old companies
 command_prefix = '/oldcompanies'
 command_name = 'oldcompany'
