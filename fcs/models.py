@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 from flask.ext.sqlalchemy import BaseQuery
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
-
+from instance.settings import FGAS, ODS
 
 db = SQLAlchemy()
 db_manager = Manager()
@@ -109,10 +109,10 @@ undertaking_users = db.Table(
 
 class DomainQuery(BaseQuery):
     def fgases(self):
-        return self.filter(Undertaking.domain == 'FGAS')
+        return self.filter(Undertaking.domain == FGAS)
 
     def ods(self):
-        return self.filter(Undertaking.domain == 'ODS')
+        return self.filter(Undertaking.domain == ODS)
 
 
 class Undertaking(SerializableModel, db.Model):

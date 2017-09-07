@@ -4,6 +4,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 from factory import SubFactory, post_generation
 
 from fcs import models
+from instance.settings import FGAS
 
 
 class OldCompanyLinkFactory(SQLAlchemyModelFactory):
@@ -90,7 +91,7 @@ class UndertakingFactory(SQLAlchemyModelFactory):
     name = 'n'
     website = 'w'
     phone = 'p'
-    domain = 'FGAS'
+    domain = FGAS
     status = 's'
     date_created = date(2015, 1, 1)
     date_updated = date(2015, 1, 1)

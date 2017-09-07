@@ -4,6 +4,7 @@ import json
 from flask import url_for
 from openpyxl import load_workbook
 
+from instance.settings import FGAS, ODS
 from testsuite import factories
 from fcs.models import MailAddress
 
@@ -40,8 +41,8 @@ def test_export_companies(client):
 
 
 def test_export_companies_domain_filter(client):
-    factories.UndertakingFactory(domain='ODS')
-    undertaking = factories.UndertakingFactory(domain='FGAS')
+    factories.UndertakingFactory(domain=ODS)
+    undertaking = factories.UndertakingFactory(domain=FGAS)
     resp = client.get(url_for('misc.export-company-list',
                               domain=undertaking.domain))
     assert resp.status_code == 200
