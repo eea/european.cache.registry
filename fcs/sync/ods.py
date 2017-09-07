@@ -24,7 +24,7 @@ def eea_double_check_ods(data):
     ok = True
     for field in required_fields:
         if not all((field in data, data[field])):
-            message = "Organisation {0} is missing.".format(field)
+            message = "Organisation {0} field is missing.".format(field)
             current_app.logger.warning(message + identifier)
             ok = False
 
@@ -71,6 +71,7 @@ def eea_double_check_ods(data):
                 message = "Organisation user {0} is missing.".format(field)
                 current_app.logger.warning(message + identifier)
                 ok = False
+
     for type in data['types']:
         if type not in ODS_TYPES:
             message = "Organisation type {0} is not accepted.".format(type)
