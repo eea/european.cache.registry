@@ -174,7 +174,7 @@ def sync_collections_title():
                 else:
                     print 'Duplicate collection for company_id: {0} have {1}'\
                           ' and found {2}'.format(c_id, colls[c_id], collection)
-        undertakings = Undertaking.query.fgases()
+        undertakings = Undertaking.query
         for undertaking in undertakings:
             ext_id = str(undertaking.external_id)
             title = undertaking.name
