@@ -1,7 +1,7 @@
 from flask import current_app
 
 from .undertakings import remove_undertaking
-from instance import FGAS
+from instance.settings import FGAS
 
 
 def eea_double_check_fgases(data):
