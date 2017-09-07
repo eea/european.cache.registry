@@ -32,7 +32,7 @@ def get_old_companies(obligation):
     return response.json()
 
 
-def get_last_update(days, updated_since):
+def get_last_update(days, updated_since, domain):
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
@@ -45,7 +45,7 @@ def get_last_update(days, updated_since):
             last_update = datetime.now() - timedelta(days=days)
         else:
             last = (
-                Undertaking.query.fgases()
+                Undertaking.query.filter_by(domain=domain)
                 .order_by(desc(Undertaking.date_updated)).first()
             )
             last_update = last.date_updated - timedelta(
@@ -115,7 +115,7 @@ def print_all_undertakings(undertakings):
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def fgases(days=7, updated_since=None):
-    last_update = get_last_update(days, updated_since)
+    last_update = get_last_update(days, updated_since, domain='FGAS')
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
         updated_since=last_update
@@ -133,7 +133,7 @@ def fgases(days=7, updated_since=None):
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def ods(days=7, updated_since=None):
-    last_update = get_last_update(days, updated_since)
+    last_update = get_last_update(days, updated_since, domain='ODS')
     undertakings = get_latest_undertakings(
         type_url='/latest/odsundertakings/',
         updated_since=last_update
@@ -152,7 +152,7 @@ def ods(days=7, updated_since=None):
                      help="Date in DD/MM/YYYY format")
 def fgases_debug_noneu(days=7, updated_since=None):
     # returns a list with all NON EU companies without a legal representative
-    last_update = get_last_update(days, updated_since)
+    last_update = get_last_update(days, updated_since, domain='FGAS')
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
         updated_since=last_update
