@@ -126,7 +126,8 @@ def verify_link(undertaking_id, oldcompany_id, user):
         send_match_mail(match=True, user=user,
                         company_name=undertaking.name,
                         company_id=undertaking.external_id,
-                        oldcompany_name=oldcompany.name)
+                        oldcompany_name=oldcompany.name,
+                        domain=undertaking.domain)
     else:
         models.db.session.rollback()
 
@@ -179,7 +180,7 @@ def verify_manual(undertaking_id, domain, oldcompany_account, user):
                   oldcompany_account=oldcompany_account)
         models.db.session.commit()
         send_match_mail(match=False, user=user, company_name=u.name,
-                        company_id=u.external_id)
+                        company_id=u.external_id, domain=domain)
     else:
         models.db.session.rollback()
     return u
