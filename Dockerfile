@@ -8,10 +8,11 @@ RUN runDeps="curl vim build-essential netcat mysql-client libmysqlclient-dev" \
  && apt-get install -y --no-install-recommends $runDeps \
  && rm -vrf /var/lib/apt/lists/*
 
-COPY . $WORK_DIR/
+COPY requirements*.txt $WORK_DIR/
 WORKDIR $WORK_DIR
+RUN pip install -r requirements-dep.txt
 
-RUN pip install -r requirements-dep.txt \
- && mv docker-entrypoint.sh /bin/
+COPY . $WORK_DIR/
+RUN mv docker-entrypoint.sh /bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
