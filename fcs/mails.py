@@ -78,7 +78,8 @@ def send_wrong_match_mail(user, company_id, domain):
         'user': user,
         'bdr_help_desk_email': hd,
         'company_name': company.name,
-        'oldcompany_name': link.oldcompany.name
+        'oldcompany_name': link.oldcompany.name,
+        'domain': domain,
     }
     send_mail_to_list(template, subject, kwargs)
     return True
@@ -97,7 +98,8 @@ def send_wrong_lockdown_mail(user, company_id, domain):
     kwargs = {
         'user': user,
         'company_name': company.name,
-        'oldcompany_name': link.oldcompany.name
+        'oldcompany_name': link.oldcompany.name,
+        'domain': domain,
     }
     send_mail_to_list(template, subject, kwargs)
     return True
@@ -119,6 +121,7 @@ def send_unmatch_mail(user, company_id, oldcompany_id, oldcollection_path,
         'company_name': company.name,
         'oldcompany_name': oldcompany.name,
         'oldcollection_path': oldcollection_path,
+        'domain': domain,
     }
     send_mail_to_list(template, subject, kwargs)
     return True
