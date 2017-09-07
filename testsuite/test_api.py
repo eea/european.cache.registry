@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import url_for
-
+from instance.settings import FGAS, ODS
 from . import factories
 
 
@@ -23,10 +23,10 @@ def test_undertaking_list(client):
 
 
 def test_undertaking_list_domain_filter(client):
-    factories.UndertakingFactory(domain='FGAS')
-    undertaking = factories.UndertakingFactory(domain='ODS')
+    factories.UndertakingFactory(domain=FGAS)
+    undertaking = factories.UndertakingFactory(domain=ODS)
     resp = client.get(url_for('api.company-list',
-                              domain='ODS'))
+                              domain=ODS))
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
@@ -54,11 +54,11 @@ def test_undertaking_list_all(client):
 
 
 def test_undertaking_list_all_domain_filter(client):
-    factories.UndertakingFactory(domain='FGAS')
-    undertaking = factories.UndertakingFactory(domain='ODS')
+    factories.UndertakingFactory(domain=FGAS)
+    undertaking = factories.UndertakingFactory(domain=ODS)
     undertaking.oldcompany_verified = False
     resp = client.get(url_for('api.company-list-all',
-                              domain='ODS'))
+                              domain=ODS))
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
@@ -77,11 +77,11 @@ def test_undertaking_list_vat(client):
 
 
 def test_undertaking_list_vat_domain_filter(client):
-    factories.UndertakingFactory(domain='FGAS')
-    undertaking = factories.UndertakingFactory(domain='ODS')
+    factories.UndertakingFactory(domain=FGAS)
+    undertaking = factories.UndertakingFactory(domain=ODS)
     resp = client.get(url_for('api.company-list-by-vat',
                               vat=undertaking.vat,
-                              domain='ODS'))
+                              domain=ODS))
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
@@ -112,8 +112,8 @@ def test_undertaking_details(client):
 
 
 def test_undertaking_details_domain_filter(client):
-    undertaking = factories.UndertakingFactory(domain='FGAS')
-    factories.UndertakingFactory(domain='ODS',
+    undertaking = factories.UndertakingFactory(domain=FGAS)
+    factories.UndertakingFactory(domain=ODS,
                                  external_id=undertaking.external_id)
     resp = client.get(
         url_for('api.company-detail',
@@ -145,8 +145,8 @@ def test_undertaking_details_without_address(client):
 
 
 def test_undertaking_details_without_address_domain_filter(client):
-    undertaking = factories.UndertakingFactory(domain='FGAS')
-    factories.UndertakingFactory(domain='ODS',
+    undertaking = factories.UndertakingFactory(domain=FGAS)
+    factories.UndertakingFactory(domain=ODS,
                                  external_id=undertaking.external_id)
     undertaking.address = None
     resp = client.get(
@@ -171,8 +171,8 @@ def test_undertaking_details_without_representative(client):
 
 
 def test_undertaking_details_without_representative_domain_filter(client):
-    undertaking = factories.UndertakingFactory(domain='FGAS')
-    factories.UndertakingFactory(domain='ODS',
+    undertaking = factories.UndertakingFactory(domain=FGAS)
+    factories.UndertakingFactory(domain=ODS,
                                  external_id=undertaking.external_id)
     undertaking.represent = None
     resp = client.get(
@@ -195,7 +195,7 @@ def test_filter_undertaking(client):
                                                represent=represent,
                                                external_id=42,
                                                country_code='ro',
-                                               domain='FGAS',
+                                               domain=FGAS,
                                                country_code_orig='cn',
                                                name='A Good Company Name')
     wrong_data = {
@@ -217,7 +217,7 @@ def test_filter_undertaking(client):
 
     def _test_params(count, **params):
         resp = client.get(url_for('api.company-filter',
-                                  domain='FGAS'), params)
+                                  domain=FGAS), params)
         data = resp.json
         assert data['count'] == count
 

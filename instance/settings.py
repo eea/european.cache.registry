@@ -109,6 +109,9 @@ ODS_TYPES = [
 ]
 
 
+ODS = 'ODS'
+FGAS = 'FGAS'
+
 """
 fuzzy matching algorithm percent value
 (how much should old and new be alike). ex: 75
