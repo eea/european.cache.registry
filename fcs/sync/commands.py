@@ -6,7 +6,7 @@ from fcs.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
 from fcs.models import Undertaking, db, OrganizationLog
-
+from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
 from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url
@@ -115,7 +115,7 @@ def print_all_undertakings(undertakings):
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def fgases(days=7, updated_since=None):
-    last_update = get_last_update(days, updated_since, domain='FGAS')
+    last_update = get_last_update(days, updated_since, domain=FGAS)
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
         updated_since=last_update
@@ -123,7 +123,7 @@ def fgases(days=7, updated_since=None):
     undertakings_count = update_undertakings(undertakings,
                                              eea_double_check_fgases)
     cleanup_unused_users()
-    log_changes(last_update, undertakings_count, domain='Fgas')
+    log_changes(last_update, undertakings_count, domain=FGAS)
     print undertakings_count, "values"
     db.session.commit()
     return True
@@ -133,7 +133,7 @@ def fgases(days=7, updated_since=None):
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
 def ods(days=7, updated_since=None):
-    last_update = get_last_update(days, updated_since, domain='ODS')
+    last_update = get_last_update(days, updated_since, domain=ODS)
     undertakings = get_latest_undertakings(
         type_url='/latest/odsundertakings/',
         updated_since=last_update
@@ -141,7 +141,7 @@ def ods(days=7, updated_since=None):
     undertakings_count = update_undertakings(undertakings,
                                              eea_double_check_ods)
     cleanup_unused_users()
-    log_changes(last_update, undertakings_count, domain='Ods')
+    log_changes(last_update, undertakings_count, domain=ODS)
     print undertakings_count, "values"
     db.session.commit()
     return True
@@ -152,7 +152,7 @@ def ods(days=7, updated_since=None):
                      help="Date in DD/MM/YYYY format")
 def fgases_debug_noneu(days=7, updated_since=None):
     # returns a list with all NON EU companies without a legal representative
-    last_update = get_last_update(days, updated_since, domain='FGAS')
+    last_update = get_last_update(days, updated_since, domain=FGAS)
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
         updated_since=last_update

@@ -1,6 +1,7 @@
 from flask import current_app
 
 from .undertakings import remove_undertaking
+from instance import FGAS
 
 
 def eea_double_check_fgases(data):
@@ -22,7 +23,7 @@ def eea_double_check_fgases(data):
         message = 'NONEU_TYPE Equipment manufacturers only, have no reporting'\
                   ' obligations'
         current_app.logger.warning(message + identifier)
-        remove_undertaking(data, domain='FGAS')
+        remove_undertaking(data, domain=FGAS)
         ok = False
 
     if not all(('status' in data, data['status'] in ['VALID', 'DISABLED'])):
@@ -46,7 +47,7 @@ def eea_double_check_fgases(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
-    if not data['domain'] == 'FGAS':
+    if not data['domain'] == FGAS:
         message = "Organisation domain is not FGAS"
         current_app.logger.warning(message + identifier)
         ok = False

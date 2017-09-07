@@ -7,6 +7,7 @@ from fcs.models import (
     EuLegalRepresentativeCompany, User)
 from fcs.models import db
 from fcs.sync import parsers
+from instance.settings import ODS
 from .bdr import update_bdr_col_name, get_absolute_url
 from .auth import get_auth, Unauthorized, InvalidResponse, patch_users
 
@@ -50,7 +51,7 @@ def update_undertaking(data):
     address = parsers.parse_address(data.pop('address'))
     business_profile = parsers.parse_bp(data.pop('businessProfile'))
     contact_persons = parsers.parse_cp_list(data.pop('contactPersons'))
-    if not data['domain'] == 'ODS':
+    if not data['domain'] == ODS:
         represent = parsers.parse_rc(data.pop('euLegalRepresentativeCompany'))
     contact_persons = patch_users(data['id'], contact_persons)
     data['types'] = ','.join(data['types'])
@@ -59,7 +60,7 @@ def update_undertaking(data):
     data['date_updated'] = parsers.parse_date(data.pop('dateUpdated'))
     data['undertaking_type'] = data.pop('@type', None)
 
-    if data['domain'] == 'ODS':
+    if data['domain'] == ODS:
         represent = None
         data['vat'] = data.pop('eoriNumber')
     undertaking = (

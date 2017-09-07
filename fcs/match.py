@@ -11,6 +11,7 @@ from fcs import models
 from fcs.mails import send_match_mail
 
 from fcs.sync.bdr import call_bdr
+from instance.settings import FGAS, ODS
 from sqlalchemy.orm import joinedload
 
 match_manager = Manager()
@@ -229,7 +230,7 @@ def match_all(companies, oldcompanies):
 @match_manager.command
 def run():
     auto_verify_domains = current_app.config.get(
-        'AUTO_VERIFY_ALL_COMPANIES', ['FGAS', 'ODS']
+        'AUTO_VERIFY_ALL_COMPANIES', [FGAS, ODS]
     )
     companies = get_unverified_companies(auto_verify_domains)
     for company in companies:

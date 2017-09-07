@@ -1,5 +1,5 @@
 from flask import current_app
-from instance.settings import  ODS_BUSINESS_PROFILES, ODS_TYPES
+from instance.settings import ODS, ODS_BUSINESS_PROFILES, ODS_TYPES
 
 
 def eea_double_check_ods(data):
@@ -33,7 +33,7 @@ def eea_double_check_ods(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
-    if not data['domain'] == 'ODS':
+    if not data['domain'] == ODS:
         message = "Organisation domain is not ODS."
         current_app.logger.warning(message + identifier)
         ok = False
