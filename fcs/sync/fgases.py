@@ -22,7 +22,7 @@ def eea_double_check_fgases(data):
         message = 'NONEU_TYPE Equipment manufacturers only, have no reporting'\
                   ' obligations'
         current_app.logger.warning(message + identifier)
-        remove_undertaking(data)
+        remove_undertaking(data, domain='FGAS')
         ok = False
 
     if not all(('status' in data, data['status'] in ['VALID', 'DISABLED'])):
