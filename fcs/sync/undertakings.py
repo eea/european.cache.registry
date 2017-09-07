@@ -50,8 +50,8 @@ def update_undertaking(data):
     address = parsers.parse_address(data.pop('address'))
     business_profile = parsers.parse_bp(data.pop('businessProfile'))
     contact_persons = parsers.parse_cp_list(data.pop('contactPersons'))
-    represent = parsers.parse_rc(data.pop('euLegalRepresentativeCompany'))
-
+    if not data['domain'] == 'ODS':
+        represent = parsers.parse_rc(data.pop('euLegalRepresentativeCompany'))
     contact_persons = patch_users(data['id'], contact_persons)
     data['types'] = ','.join(data['types'])
     data['external_id'] = data.pop('id')
@@ -59,12 +59,14 @@ def update_undertaking(data):
     data['date_updated'] = parsers.parse_date(data.pop('dateUpdated'))
     data['undertaking_type'] = data.pop('@type', None)
 
+    if data['domain'] == 'ODS':
+        represent = None
+        data['vat'] = data.pop('eoriNumber')
     undertaking = (
         Undertaking.query
         .filter_by(external_id=data['external_id'])
         .first()
     )
-
     if not undertaking:
         undertaking = Undertaking(**data)
     else:
@@ -152,11 +154,12 @@ def update_undertaking(data):
     return undertaking
 
 
-def remove_undertaking(data):
+def remove_undertaking(data, domain):
     """Remove undertaking."""
+
     undertaking = (
-        Undertaking.query.fgases()
-        .filter_by(external_id=data.get('id'))
+        Undertaking.query
+        .filter_by(external_id=data.get('id'), domain=domain)
         .first()
     )
     if undertaking:
