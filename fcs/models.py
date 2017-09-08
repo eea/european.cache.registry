@@ -89,11 +89,27 @@ class EuLegalRepresentativeCompany(SerializableModel, db.Model):
         return self.name
 
 
+# Many-to-many table connecting Undertakings and BusinessProfiles
+undertaking_businessprofile = db.Table(
+    'undertaking_businessprofile',
+    db.Column(
+        'undertaking_id', db.Integer, db.ForeignKey('undertaking.id')),
+    db.Column(
+        'businessprofile_id', db.Integer, db.ForeignKey('businessprofile.id')),
+)
+
+
 class BusinessProfile(SerializableModel, db.Model):
     __tablename__ = 'businessprofile'
 
     id = Column(Integer, primary_key=True)
     highleveluses = Column(String(255))
+    domain = Column(String(32), default="FGAS")  # TODO: Use ChoiceType
+    undertakings = relationship(
+        'Undertaking',
+        secondary=undertaking_businessprofile,
+        backref=db.backref('businessprofiles', lazy='dynamic')
+    )
 
     def __unicode__(self):
         return self.highleveluses
@@ -127,7 +143,7 @@ class Undertaking(SerializableModel, db.Model):
     address_id = Column(ForeignKey('address.id'))
     website = Column(String(255))
     phone = Column(String(32))
-    domain = Column(String(32), default="FGAS")
+    domain = Column(String(32), default="FGAS")  # TODO: Use ChoiceType
     date_created = Column(Date)
     date_updated = Column(Date)
     status = Column(String(64))
@@ -138,7 +154,6 @@ class Undertaking(SerializableModel, db.Model):
     vat = Column(String(255))
     types = Column(String(255))
     represent_id = Column(ForeignKey('represent.id'))
-    businessprofile_id = Column(ForeignKey('businessprofile.id'))
     # Link
     oldcompany_verified = Column(Boolean, default=False)
     oldcompany_account = Column(String(255), nullable=True, default=None)
@@ -147,7 +162,6 @@ class Undertaking(SerializableModel, db.Model):
                            default=None)
     address = relationship(Address)
     represent = relationship(EuLegalRepresentativeCompany)
-    businessprofile = relationship(BusinessProfile)
     contact_persons = relationship(
         User,
         secondary=undertaking_users,
