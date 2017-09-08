@@ -4,46 +4,66 @@ fgas-cache-server
 A middleware between F-Gas Registry and BDR
 
 
-Usage (testing)
----------------
+Installation
+------------
 
-### Database
+* Install `Docker <https://docker.com>`_
+* Install `Docker Compose <https://docs.docker.com/compose>`_
 
-Initialize database:
+Usage
+-----
 
-    ./manage.py db init
+1. Clone the repository:
 
-Upgrade database;
+        $ git clone https://github.com/eea/eea.docker.fcs
+        $ cd eea.docker.fcs
 
-    ./manage.py db alembic upgrade head|revision
+2. Customize env files:
 
-Downgrade database;
+        $ cp .secret.example .secret
+        $ vim .secret
 
-    ./manage.py db alembic downgrade revision
+3. Start application stack:
 
-Create a new revision:
+        $ docker-compose pull
+        $ docker-compose up -d
+        $ docker-compose logs
 
-    ./manage.py db alembic revision --autogenerate -m "revision name"
+4. Create a superuser:
 
-Current revision:
+        $ docker exec -it fcs.app sh
+        $ ./manage.py createsuperuser
 
-    ./manage.py db alembic current
+5. Run tests:
 
-Revisions history:
+        $ docker exec -it fcs.app sh
+        # apk add --no-cache libxslt-dev libffi-dev
+        # pip install -r requirements-dev.txt
+        # ./manage.py test
+        # py.test --cov=fcs testsuite
 
-    ./manage.py db alembic history
+6. Type: http://localhost:8000
 
-[Alembic tutorial](http://alembic.zzzcomputing.com/en/latest/tutorial.html)
 
-### Sync
+Data import
+-----------
 
-Fetch the latest data from a test server (cron):
+Copy the test database in fcs.db container and import into mysql:
 
-    ./manage.py sync fgases [-d 30]
+    $ docker cp fcs.sql fcs.db:/var/lib/mysql/fcs.sql
+    $ docker exec -it fcs.db bash
+    # mysql -uroot -p fcs < /var/lib/mysql/fcs.sql
+
+Syncronise with FGAS/ODS Portal
+--------------------------------
+
+Fetch the latest data from a test server:
+
+    $ docker exec fcs.app bash -c "python ./manage.py sync fgases -d 500"
 
 In order to sync BDR collections title with the cache server's corresponding undertakings name:
 
-    ./manage.py sync sync_collections_title
+    $ docker exec fcs.app bash -c "./manage.py sync sync_collections_title"
 
 For syncing bdr without SSL verification, set the following switch in settings:
 
@@ -55,7 +75,8 @@ containing values to be updated. Use the company external id as a key.
 For patching user access, set `PATCH_USERS` to a list of users to be added to
 a company. Use the company external id as a key.
 
-### Matching
+Matching
+--------
 
 Modify the fuzzy matching algorithm percent value (how much should old and new
 be alike):
@@ -67,9 +88,4 @@ be alike):
 Fetch the latest data from a test server (cron) and prints the list of NON EU companies
 without a legal representative:
 
-    ./manage.py sync fgases_debug_noneu [-d 30]
-
-### Testing
-
-    pip install -r requirements-dev.txt
-    py.test --cov=fcs testsuite
+    $ docker exec fcs.app bash -c "python ./manage.py sync fgases_debug_noneu -d 500"
