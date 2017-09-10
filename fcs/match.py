@@ -4,7 +4,7 @@ from datetime import datetime
 from fuzzywuzzy import fuzz
 
 from sqlalchemy import or_
-from flask.ext.script import Manager
+from flask_script import Manager
 from flask import current_app
 
 from fcs import models

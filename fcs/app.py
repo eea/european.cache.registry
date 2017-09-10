@@ -1,7 +1,7 @@
 import logging
 
 import flask
-from flask.ext.script import Manager
+from flask_script import Manager
 from fcs.models import db, db_manager
 from fcs.api import api, api_manager
 from fcs.misc import misc

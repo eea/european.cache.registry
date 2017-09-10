@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import Blueprint
-from flask.ext.script import Manager
+from flask_script import Manager
 
 from .candidate import *
 from .commands import *
