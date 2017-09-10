@@ -6,9 +6,9 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
-from flask.ext.sqlalchemy import BaseQuery
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.script import Manager
+from flask_sqlalchemy import BaseQuery
+from flask_sqlalchemy import SQLAlchemy
+from flask_script import Manager
 from instance.settings import FGAS, ODS
 
 db = SQLAlchemy()
