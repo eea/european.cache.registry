@@ -144,12 +144,11 @@ class Undertaking(SerializableModel, db.Model):
     # Undertaking:
     undertaking_type = Column(String(32), default='FGASUndertaking')
     vat = Column(String(255))
-    types = Column(String(255))
-    types_new = relationship(
-        'Type',
-        secondary='undertaking_types',
-        backref=db.backref('undertaking'),
-        lazy='dynamic'
+    types = relationship(
+         'Type',
+         secondary='undertaking_types',
+         backref=db.backref('undertaking'),
+         lazy='dynamic'
     )
     represent_id = Column(ForeignKey('represent.id'))
     businessprofile_id = Column(ForeignKey('businessprofile.id'))
