@@ -99,6 +99,14 @@ class BusinessProfile(SerializableModel, db.Model):
         return self.highleveluses
 
 
+class Type(SerializableModel, db.Model):
+    __tablename__ = 'type'
+
+    id = Column(Integer, primary_key=True)
+    type = Column(String(255))
+    domain = Column(String(32), default="FGAS")
+
+
 undertaking_users = db.Table(
     'undertaking_users',
     db.Column('user_id', db.Integer(),
@@ -137,6 +145,12 @@ class Undertaking(SerializableModel, db.Model):
     undertaking_type = Column(String(32), default='FGASUndertaking')
     vat = Column(String(255))
     types = Column(String(255))
+    types_new = relationship(
+        'Type',
+        secondary='undertaking_types',
+        backref=db.backref('undertaking'),
+        lazy='dynamic'
+    )
     represent_id = Column(ForeignKey('represent.id'))
     businessprofile_id = Column(ForeignKey('businessprofile.id'))
     # Link
@@ -211,6 +225,15 @@ class OldCompanyLink(SerializableModel, db.Model):
 
     oldcompany = relationship('OldCompany')
     undertaking = relationship('Undertaking', backref=db.backref('links'))
+
+
+class UndertakingTypes(SerializableModel, db.Model):
+    __tablename__ = 'undertaking_types'
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
+    type_id = Column(ForeignKey('type.id'), primary_key=True)
+    undertaking = relationship('Undertaking', backref=db.backref('types_link'))
+    type = relationship('Type')
 
 
 class OrganizationLog(SerializableModel, db.Model):
