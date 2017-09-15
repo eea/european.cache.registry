@@ -54,6 +54,7 @@ class UndertakingListView(ListView):
         data.update({
             'address': AddressDetail.serialize(obj.address),
             'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
+            'types': ",".join([type.type for type in obj.types]),
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'businessprofile': ApiView.serialize(obj.businessprofile)
@@ -96,7 +97,7 @@ class UndertakingListByVatView(UndertakingListView):
         _strip_fields = (
             'businessprofile_id', 'address_id', 'oldcompany_id',
             'represent_id', 'phone', 'country_code', 'date_created',
-            'oldcompany_account', 'types', 'oldcompany_extid', 'domain',
+            'oldcompany_account', 'oldcompany_extid', 'domain',
             'website', 'status', 'undertaking_type', 'date_updated',
             'oldcompany_verified', 'vat'
         )
@@ -175,6 +176,7 @@ class UndertakingDetailView(DetailView):
             'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
             'candidates': [OldCompanyDetail.serialize(c.oldcompany) for c in
                            candidates],
+            'types': ",".join([type.type for type in obj.types])
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account

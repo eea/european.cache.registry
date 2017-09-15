@@ -2,7 +2,7 @@ from pytest import fixture
 from flask.ext.webtest import TestApp
 from fcs.app import create_app
 from fcs.models import db
-
+from fcs.models import loaddata
 
 TEST_CONFIG = {
     'DEBUG': True,
@@ -27,6 +27,7 @@ def app(request):
     app_context = app.app_context()
     app_context.push()
     db.create_all()
+    loaddata('fcs/fixtures/types.json')
 
     @request.addfinalizer
     def fin():

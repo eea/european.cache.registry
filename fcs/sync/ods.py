@@ -1,5 +1,7 @@
 from flask import current_app
-from instance.settings import ODS, ODS_BUSINESS_PROFILES, ODS_TYPES
+from instance.settings import ODS, ODS_BUSINESS_PROFILES
+
+from fcs.models import Type
 
 
 def eea_double_check_ods(data):
@@ -72,8 +74,9 @@ def eea_double_check_ods(data):
                 current_app.logger.warning(message + identifier)
                 ok = False
 
+    types = [object.type for object in Type.query.all()]
     for type in data['types']:
-        if type not in ODS_TYPES:
+        if type not in types:
             message = "Organisation type {0} is not accepted.".format(type)
             current_app.logger.warning(message + identifier)
             ok = False

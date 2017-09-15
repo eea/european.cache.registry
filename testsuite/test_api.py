@@ -6,17 +6,23 @@ from . import factories
 
 def test_undertaking_list(client):
     undertaking = factories.UndertakingFactory()
+    type = factories.TypeFactory(
+        domain=undertaking.domain,
+        type='IMPORTER'
+    )
+    undertaking.types.append(type)
     resp = client.get(url_for('api.company-list',
                               domain=undertaking.domain))
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
     assert data['company_id'] == undertaking.external_id
-
     for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
-                  'vat', 'types', 'oldcompany_verified', 'oldcompany_account',
+                  'vat', 'oldcompany_verified', 'oldcompany_account',
                   'oldcompany_extid']:
         assert data[field] == getattr(undertaking, field)
+
+    assert data['types'] == type.type
 
     for date_field in ['date_created', 'date_updated']:
         assert data[date_field] == getattr(undertaking, date_field).strftime('%d/%m/%Y')
@@ -25,6 +31,11 @@ def test_undertaking_list(client):
 def test_undertaking_list_domain_filter(client):
     factories.UndertakingFactory(domain=FGAS)
     undertaking = factories.UndertakingFactory(domain=ODS)
+    type = factories.TypeFactory(
+        domain=undertaking.domain,
+        type='IMPORTER'
+    )
+    undertaking.types.append(type)
     resp = client.get(url_for('api.company-list',
                               domain=ODS))
     resp_data = resp.json
@@ -33,9 +44,10 @@ def test_undertaking_list_domain_filter(client):
     assert data['company_id'] == undertaking.external_id
 
     for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
-                  'vat', 'types', 'oldcompany_verified', 'oldcompany_account',
+                  'vat', 'oldcompany_verified', 'oldcompany_account',
                   'oldcompany_extid']:
         assert data[field] == getattr(undertaking, field)
+    assert data['types'] == type.type
 
     for date_field in ['date_created', 'date_updated']:
         assert data[date_field] == getattr(
@@ -90,6 +102,9 @@ def test_undertaking_list_vat_domain_filter(client):
 
 def test_undertaking_details(client):
     undertaking = factories.UndertakingFactory(oldcompany=None)
+    type = factories.TypeFactory(domain=undertaking.domain,
+                                 type='EXPORTER')
+    undertaking.types.append(type)
     oldcompany = factories.OldCompanyFactory(id=2)
     link = factories.OldCompanyLinkFactory(oldcompany=oldcompany,
                                            undertaking=undertaking)
@@ -99,9 +114,8 @@ def test_undertaking_details(client):
                 pk=undertaking.external_id))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
-
     for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
-                  'vat', 'types', 'oldcompany_verified', 'oldcompany_account',
+                  'vat', 'oldcompany_verified', 'oldcompany_account',
                   'oldcompany_extid']:
         assert data[field] == getattr(undertaking, field)
 
@@ -109,27 +123,30 @@ def test_undertaking_details(client):
     assert data['representative']['name'] == undertaking.represent.name
     assert data['address']['zipcode'] == undertaking.address.zipcode
     assert data['candidates'][0]['company_id'] == oldcompany.external_id
+    assert data['types'] == type.type
 
 
 def test_undertaking_details_domain_filter(client):
     undertaking = factories.UndertakingFactory(domain=FGAS)
     factories.UndertakingFactory(domain=ODS,
                                  external_id=undertaking.external_id)
+    type = factories.TypeFactory(domain=ODS, type='EXPORTER')
+    undertaking.types.append(type)
     resp = client.get(
         url_for('api.company-detail',
                 domain=undertaking.domain,
                 pk=undertaking.external_id))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
-
     for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
-                  'vat', 'types', 'oldcompany_verified', 'oldcompany_account',
+                  'vat', 'oldcompany_verified', 'oldcompany_account',
                   'oldcompany_extid']:
         assert data[field] == getattr(undertaking, field)
 
     assert data['date_created'] == undertaking.date_created.strftime('%d/%m/%Y')
     assert data['representative']['name'] == undertaking.represent.name
     assert data['address']['zipcode'] == undertaking.address.zipcode
+    assert data['types'] == type.type
 
 
 def test_undertaking_details_without_address(client):
