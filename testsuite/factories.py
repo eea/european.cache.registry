@@ -97,7 +97,6 @@ class UndertakingFactory(SQLAlchemyModelFactory):
     date_updated = date(2015, 1, 1)
     undertaking_type = 'FGASUndertaking'
     vat = 'v'
-    types = 't'
     oldcompany_verified = True
     oldcompany_account = 'oldcompany_account'
     oldcompany_extid = 100
@@ -114,6 +113,23 @@ class UndertakingFactory(SQLAlchemyModelFactory):
         if extracted:
             for cp in extracted:
                 self.contact_persons.add(cp)
+    @post_generation
+    def types(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for type in extracted:
+                self.types.add(type)
+
+
+class TypeFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.Type
+        sqlalchemy_session = models.db.session
+
+    domain = FGAS
+    type = 'IMPORTER'
 
 
 class UserFactory(SQLAlchemyModelFactory):
