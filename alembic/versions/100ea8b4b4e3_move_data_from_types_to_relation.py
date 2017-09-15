@@ -13,7 +13,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.dialects import mysql
 from sqlalchemy.ext.declarative import declarative_base
 
-from fcs.models import db
+from fcs.models import db, loaddata
 
 import sqlalchemy as sa
 
@@ -53,7 +53,6 @@ def upgrade():
                     sa.Column('type', sa.String(length=255), nullable=True),
                     sa.Column('domain', sa.String(length=32), nullable=True),
                     sa.PrimaryKeyConstraint('id'))
-
     op.create_table('undertaking_types',
                     sa.Column('undertaking_id', sa.Integer(),
                               nullable=False),
@@ -70,15 +69,18 @@ def upgrade():
     session = Session(bind=bind)
     undertakings = session.query(Undertaking)
     undertaking_types = []
+    loaddata('fcs/fixtures/types.json', session=session)
     for undertaking in undertakings:
         for type in undertaking.types.split(','):
+            type = type.strip()
             if not type:
                 continue
             type_object = session.query(Type).filter_by(type=type).first()
             if not type_object:
-                type_object = Type(type=type, domain=undertaking.domain)
-                session.add_all([type_object])
-                session.commit()
+                op.drop_table('type')
+                op.drop_table('undertaking_types')
+                raise Exception(
+                    'Related type object {0} not found in the database.'.format(type))
             undertaking_types.append({
                 'undertaking_id': undertaking.id,
                 'type_id': type_object.id
