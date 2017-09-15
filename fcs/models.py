@@ -1,5 +1,9 @@
 # coding: utf-8
 import argparse
+import json
+import os
+import sys
+from alembic import op
 from datetime import date, datetime
 from sqlalchemy import (
     Column, Date, DateTime, ForeignKey, Integer, String, Boolean
@@ -147,8 +151,7 @@ class Undertaking(SerializableModel, db.Model):
     types = relationship(
          'Type',
          secondary='undertaking_types',
-         backref=db.backref('undertaking'),
-         lazy='dynamic'
+         backref=db.backref('undertaking', lazy='dynamic'),
     )
     represent_id = Column(ForeignKey('represent.id'))
     businessprofile_id = Column(ForeignKey('businessprofile.id'))
@@ -296,3 +299,28 @@ def upgrade(revision='head'):
 @db_manager.command
 def downgrade(revision):
     return alembic(['downgrade', revision])
+
+
+@db_manager.command
+def loaddata(fixture, session=None):
+    if not session:
+        session = db.session
+    if not os.path.isfile(fixture):
+        print "Please provide a fixture file name"
+    else:
+        objects = get_fixture_objects(fixture)
+    session.commit()
+    for object in objects:
+        database_object = eval(object['model']).query.filter_by(
+            id=object['fields']['id']
+        )
+        if database_object:
+            database_object.delete()
+        session.add(eval(object['model'])(**object['fields']))
+    session.commit()
+
+
+def get_fixture_objects(file):
+    with open(file) as f:
+        import json
+        return json.loads(f.read())
