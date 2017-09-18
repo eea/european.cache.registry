@@ -5,6 +5,8 @@ import os
 # Turn this off on production
 DEBUG = True if os.environ.get('DEBUG', '') in ('True','true') else False
 
+SENTRY_DSN = os.environ.get('SENTRY_DSN', '')
+
 SQLALCHEMY_DATABASE_URI = '{schema}://{user}:{pwd}@{host}/{dbname}'.format(
   schema=os.environ.get('DB_SCHEMA', 'sqlite'),
   user=os.environ.get('DB_USER', ''),
