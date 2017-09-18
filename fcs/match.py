@@ -85,11 +85,8 @@ def get_candidates(external_id, domain):
     return company and company.links
 
 
-<<<<<<< aa74bb5cf51d7a2576c67daa448766b3c25e7aec
-def get_all_non_candidates(domain, vat=None):
-=======
 def get_all_non_candidates(domain='FGAS', vat=None):
->>>>>>> [refs #85843] Allow query param on list api to filter by domain
+
     queryset = (
         models.db.session.query(models.Undertaking)
         .options(joinedload(models.Undertaking.address))
