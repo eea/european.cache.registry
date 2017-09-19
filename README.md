@@ -52,25 +52,43 @@ https://coveralls.io/github/eea/eea.docker.fcs)
         $ docker-compose ps
 
 ### Development instructions
-* Start stack, all services should be "Up" :
+
+1. Customize docker orchestration for local development:
+        
+        $ cp docker-compose.override.yml.example docker-compose.override.yml
+
+By default, it builds a local image for app service and maps the project directory
+inside the app container.
+
+You can add a fixed port number instead the floating one by specifying it under
+the ports directive (e.g. "5000:5000" instead of "5000").
+
+2. Start stack, all services should be "Up" :
 
         $ docker-compose up -d
         $ docker-compose ps
 
-* Check application logs:
+3. Check application logs:
 
         $ docker-compose logs
 
-* When the image is modified you should update the stack:
-
+4. When the image is modified you should update the stack:
+    
+        $ docker-compose down -v #optional step for droping all containers and volumes
         $ docker-compose up -d --build
+        
+### DEBUGING
+* Please make sure that `DEBUG=True` in `.secret`
 
-* Cleanup containers, images and volumes:
+* Update `docker-compose.override.yml` file `app` section with the following so that
+`docker-entrypoint.sh` is not executed:
 
-        $ docker-compose down -v
-        $ docker rm $(docker ps -aq)
-        $ docker rmi $(docker images -q)
-        $ docker volume rm $(docker volume ls -q)
+        entrypoint: ["/usr/bin/tail", "-f", "/dev/null"]
+        
+* Attach to docker container and start the server in debug mode:
+        
+        $ docker exec -it fcs.app sh
+        # ./manage.py runserver --host 0.0.0.0
 
 ### Data import
 
@@ -79,22 +97,6 @@ https://coveralls.io/github/eea/eea.docker.fcs)
         $ docker cp fcs.sql fcs.db:/var/lib/mysql/fcs.sql
         $ docker exec -it fcs.db bash
         # mysql -uroot -p fcs < /var/lib/mysql/fcs.sql
-        
-### DEBUGING
-* Please make sure that `DEBUG=True` in `settings.py`
-
-* Update docker-compose `app` section with the following so that `docker-entrypoint.sh`
-is not executed:
-
-        entrypoint: ["/usr/bin/tail", "-f", "/dev/null"]
-        
-* Attach to docker container and start the server in debug mode:
-        
-        gunicorn manage:app \
-                --name fgas \
-                --bind 0.0.0.0:5000 \
-                --access-logfile - \
-                --error-logfile -
 
 ### Syncronise with FGAS/ODS Portal
 
