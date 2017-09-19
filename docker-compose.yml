@@ -2,18 +2,14 @@ version: '2'
 
 services:
   app:
-    #image: eeacms/reportek.fcs
+    image: eeacms/reportek.fcs
     container_name: fcs.app
-    build: .
-    ports:
-    - "5000:5000"
     depends_on:
     - mysql
     env_file:
     - .secret
     volumes:
     - /etc/localtime:/etc/localtime:ro
-    - .:/var/local/fcs
 
   mysql:
     image: mysql:5.5
