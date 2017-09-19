@@ -21,6 +21,7 @@ services:
     - MYSQL_ROOT_PASSWORD=fcs
     volumes:
     - /etc/localtime:/etc/localtime:ro
+    - fcs-mysql-data:/var/lib/mysql
 
 volumes:
   fcs-mysql-data:

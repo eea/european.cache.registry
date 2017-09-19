@@ -88,7 +88,7 @@ the ports directive (e.g. "5000:5000" instead of "5000").
 * Attach to docker container and start the server in debug mode:
         
         $ docker exec -it fcs.app sh
-        # ./manage.py runserver --host 0.0.0.0
+        # ./manage.py runserver -h 0.0.0.0 -p 5000
 
 ### Data import
 

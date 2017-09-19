@@ -7,7 +7,3 @@ services:
     - "5000"
     volumes:
     - .:/var/local/fcs
-
-  mysql:
-    volumes:
-    - fcs-mysql-data:/var/lib/mysql
