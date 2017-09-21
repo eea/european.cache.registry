@@ -5,6 +5,9 @@ import os
 # Turn this off on production
 DEBUG = True if os.environ.get('DEBUG', '') in ('True','true') else False
 
+ODS = 'ODS'
+FGAS = 'FGAS'
+
 SENTRY_DSN = os.environ.get('SENTRY_DSN', '')
 
 SQLALCHEMY_DATABASE_URI = '{schema}://{user}:{pwd}@{host}/{dbname}'.format(
@@ -60,12 +63,12 @@ AUTO_VERIFY_NEW_COMPANIES = (
 # this list of domains skips matching for all companies with the given domains
 # by automatically verifying them
 AUTO_VERIFY_ALL_COMPANIES = (
-    os.environ.get('AUTO_VERIFY_ALL_COMPANIES', 'ods,fgases').split(',')
+    os.environ.get('AUTO_VERIFY_ALL_COMPANIES', 'ODS,FGAS').split(',')
 )
 
 # Retrieve organisations with the following domains
 INTERESTING_OBLIGATIONS = (
-    os.environ.get('INTERESTING_OBLIGATIONS', 'ods,fgases').split(',')
+    os.environ.get('INTERESTING_OBLIGATIONS', 'ODS,FGAS').split(',')
 )
 
 # specify if notifications mails are sent
@@ -103,9 +106,6 @@ ODS_BUSINESS_PROFILES = [
     'export.of.hcfc.other',
 ]
 
-
-ODS = 'ODS'
-FGAS = 'FGAS'
 
 """
 fuzzy matching algorithm percent value
