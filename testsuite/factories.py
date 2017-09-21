@@ -25,6 +25,7 @@ class OldCompanyFactory(SQLAlchemyModelFactory):
 
     external_id = 10
     name = 'old_company_name'
+    obligation = FGAS
     country_code = 'RO'
     account = 'account'
     vat_number = 'account'
@@ -146,6 +147,12 @@ class UserFactory(SQLAlchemyModelFactory):
 class MatchingLog(SQLAlchemyModelFactory):
     class Meta:
         model = models.MatchingLog
+        sqlalchemy_session = models.db.session
+
+
+class OrganizationLog(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.OrganizationLog
         sqlalchemy_session = models.db.session
 
 

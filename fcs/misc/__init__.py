@@ -66,7 +66,7 @@ register_url(prefix=alert_prefix, name=alert_name,
              view_name='wrong-lockdown')
 
 register_url(prefix=alert_prefix, name=alert_name,
-             url='/unmatch',
+             url='/unmatch/<domain>',
              view=AlertUnmatch,
              view_name='unmatch')
 

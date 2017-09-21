@@ -26,24 +26,7 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : {
-            "name" : "eulegalrep org",
-            "address" : {
-                "street" : "street",
-                "number" : null,
-                "zipCode" : "1233",
-                "city" : "asdfafd",
-                "country" : {
-                    "code" : "BE",
-                    "name" : "Belgium",
-                    "type" : "EU_TYPE"
-                }
-            },
-            "vatNumber" : "VAT23424",
-            "contactPersonFirstName" : "fname--9270",
-            "contactPersonLastName" : "lname--9270",
-            "contactPersonEmailAddress" : "email@email.com"
-        },
+        "euLegalRepresentativeCompany" : null,
         "vat" : null,
         "businessProfile" : {
             "highLevelUses" : [ "fgas.imports.for.destruction",
@@ -89,24 +72,7 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : {
-            "name" : "eulegalrep org",
-            "address" : {
-                "street" : "street",
-                "number" : null,
-                "zipCode" : "1233",
-                "city" : "asdfafd",
-                "country" : {
-                    "code" : "BE",
-                    "name" : "Belgium",
-                    "type" : "EU_TYPE"
-                }
-            },
-            "vatNumber" : "VAT23424",
-            "contactPersonFirstName" : "fname--9270",
-            "contactPersonLastName" : "lname--9270",
-            "contactPersonEmailAddress" : "email@email.com"
-        },
+        "euLegalRepresentativeCompany" : {},
         "vat" : null,
         "businessProfile" : {
             "highLevelUses" : [ "fgas.imports.for.destruction",
@@ -152,24 +118,7 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : {
-            "name" : "eulegalrep org",
-            "address" : {
-                "street" : "street",
-                "number" : null,
-                "zipCode" : "1233",
-                "city" : "asdfafd",
-                "country" : {
-                    "code" : "BE",
-                    "name" : "Belgium",
-                    "type" : "EU_TYPE"
-                }
-            },
-            "vatNumber" : "VAT23424",
-            "contactPersonFirstName" : "fname--9270",
-            "contactPersonLastName" : "lname--9270",
-            "contactPersonEmailAddress" : "email@email.com"
-        },
+        "euLegalRepresentativeCompany" : null,
         "vat" : null,
         "businessProfile" : {
             "highLevelUses" : [ "fgas.imports.for.destruction",
