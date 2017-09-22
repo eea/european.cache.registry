@@ -103,7 +103,6 @@ class UndertakingFactory(SQLAlchemyModelFactory):
     oldcompany_extid = 100
     address = SubFactory(AddressFactory)
     represent = SubFactory(RepresentativeFactory)
-    businessprofile = SubFactory(BusinessProfileFactory)
     oldcompany = SubFactory(OldCompanyFactory)
 
     @post_generation
@@ -114,6 +113,7 @@ class UndertakingFactory(SQLAlchemyModelFactory):
         if extracted:
             for cp in extracted:
                 self.contact_persons.add(cp)
+
     @post_generation
     def types(self, create, extracted, **kwargs):
         if not create:
@@ -122,6 +122,15 @@ class UndertakingFactory(SQLAlchemyModelFactory):
         if extracted:
             for type in extracted:
                 self.types.add(type)
+
+    @post_generation
+    def businessprofiles(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for businessprofile in extracted:
+                self.businessprofiles.add(businessprofile)
 
 
 class TypeFactory(SQLAlchemyModelFactory):

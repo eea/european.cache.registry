@@ -36,6 +36,7 @@ def app(request):
     app_context.push()
     db.create_all()
     loaddata('fcs/fixtures/types.json')
+    loaddata('fcs/fixtures/business_profiles.json')
 
     @request.addfinalizer
     def fin():

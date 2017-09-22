@@ -4,7 +4,7 @@ from flask import current_app
 
 from fcs.models import (
     Address, BusinessProfile, EuLegalRepresentativeCompany, Type, Undertaking,
-    UndertakingTypes, User
+    UndertakingBusinessProfile, UndertakingTypes, User
 )
 from fcs.models import db
 from fcs.sync import parsers
@@ -50,7 +50,7 @@ def update_undertaking(data):
     """ Create or update undertaking from received data """
     data = patch_undertaking(data['id'], data)
     address = parsers.parse_address(data.pop('address'))
-    business_profile = parsers.parse_bp(data.pop('businessProfile'))
+    business_profiles = data.pop('businessProfile')
     contact_persons = parsers.parse_cp_list(data.pop('contactPersons'))
     types = data.pop('types')
     if not data['domain'] == ODS:
@@ -85,13 +85,11 @@ def update_undertaking(data):
         undertaking.address = addr
     else:
         parsers.update_obj(undertaking.address, address)
-
-    if not undertaking.businessprofile:
-        bp = BusinessProfile(**business_profile)
-        db.session.add(bp)
-        undertaking.businessprofile = bp
-    else:
-        parsers.update_obj(undertaking.businessprofile, business_profile)
+    UndertakingBusinessProfile.query.filter_by(undertaking=undertaking).delete()
+    for business_profile in business_profiles['highLevelUses']:
+        business_profile_object = BusinessProfile.query.filter_by(
+            highleveluses=business_profile, domain=data['domain']).first()
+        undertaking.businessprofiles.append(business_profile_object)
 
     if not represent:
         old_represent = undertaking.represent

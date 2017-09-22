@@ -77,35 +77,6 @@ SEND_MATCHING_MAILS = (
 )
 
 
-ODS_BUSINESS_PROFILES = [
-    'import.of.products.or.equipment.for.laboratory.or.analytical.use',
-    'import.of.hcfc.for.repackaging.and.re-export',
-    'export.of.hcfc.re-export.after.re-packaging',
-    'import.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts',
-    'export.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts',
-    'import.of.products.or.equipment.for.destruction',
-    'import.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts',
-    'export.of.products.or.equipment.covered.by.an.exemption.decision',
-    'export.of.halon.for.critical.use',
-    'import.of.substance.for.destruction',
-    'import.of.substance.for.feedstock.use',
-    'import.of.halon.for.critical.use',
-    'export.of.products.or.equipment.for.laboratory.or.analytical.use',
-    'export.of.substance.for.process.agent.use',
-    'export.of.substance.for.feedstock.use',
-    'import.or.production.of.substance.for.laboratory.or.analytical.use',
-    'import.of.methyl.bromide.for.repackaging.and.re-export',
-    'export.of.methyl.bromide.for.quarantine.and.pre-shipment.use',
-    'export.of.substance.for.laboratory.or.analytical.use',
-    'import.of.products.or.equipment.covered.by.an.exemption.decision',
-    'import.of.methyl.bromide.for.emergency.use',
-    'export.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts',
-    'export.of.metered.dose.inhalers',
-    'import.of.substance.for.process.agent.use',
-    'export.of.hcfc.produced.and.repackaged.inside.the.eu',
-    'export.of.hcfc.other',
-]
-
 
 """
 fuzzy matching algorithm percent value
