@@ -41,11 +41,6 @@ def parse_address(address):
     return address
 
 
-def parse_bp(bp):
-    bp['highleveluses'] = ",".join(bp.pop('highLevelUses'))
-    return bp
-
-
 @not_null
 def parse_rc(rc):
     rc['vatnumber'] = rc.pop('vatNumber')

@@ -46,8 +46,8 @@ class UndertakingListView(ListView):
     def serialize(cls, obj, **kwargs):
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'businessprofile_id', 'address_id',
-            'represent_id', 'oldcompany_id'
+            'address_id', 'represent_id',
+            'oldcompany_id'
         )
         for field in _strip_fields:
             data.pop(field)
@@ -57,7 +57,10 @@ class UndertakingListView(ListView):
             'types': ",".join([type.type for type in obj.types]),
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
-            'businessprofile': ApiView.serialize(obj.businessprofile)
+            'businessprofile': ",".join(
+                [businessprofiles.highleveluses for
+                 businessprofiles in obj.businessprofiles]
+            )
         })
         data['company_id'] = obj.external_id
         data['collection_id'] = obj.oldcompany_account
@@ -95,11 +98,10 @@ class UndertakingListByVatView(UndertakingListView):
     def serialize(cls, obj, **kwargs):
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'businessprofile_id', 'address_id', 'oldcompany_id',
-            'represent_id', 'phone', 'country_code', 'date_created',
-            'oldcompany_account', 'oldcompany_extid', 'domain',
-            'website', 'status', 'undertaking_type', 'date_updated',
-            'oldcompany_verified', 'vat'
+            'address_id', 'oldcompany_id', 'represent_id',
+            'phone', 'country_code', 'date_created', 'oldcompany_account',
+            'oldcompany_extid', 'domain', 'website', 'status',
+            'undertaking_type', 'date_updated', 'oldcompany_verified', 'vat'
         )
         for field in _strip_fields:
             data.pop(field)
@@ -163,14 +165,17 @@ class UndertakingDetailView(DetailView):
         candidates = get_candidates(obj.external_id, obj.domain)
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'date_updated', 'address_id', 'businessprofile_id',
+            'date_updated', 'address_id',
             'represent_id',
         )
         for field in _strip_fields:
             data.pop(field)
         data.update({
             'address': AddressDetail.serialize(obj.address),
-            'businessprofile': ApiView.serialize(obj.businessprofile),
+            'businessprofile': ",".join(
+                [businessprofile.highleveluses for
+                 businessprofile in obj.businessprofiles]
+            ),
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'users': [UserListView.serialize(cp) for cp in obj.contact_persons],

@@ -1,7 +1,7 @@
 from flask import current_app
-from instance.settings import ODS, ODS_BUSINESS_PROFILES
+from instance.settings import ODS
 
-from fcs.models import Type
+from fcs.models import Type, BusinessProfile
 
 
 def eea_double_check_ods(data):
@@ -74,15 +74,17 @@ def eea_double_check_ods(data):
                 current_app.logger.error(message + identifier)
                 ok = False
 
-    types = [object.type for object in Type.query.all()]
+    types = [object.type for object in Type.query.filter_by(domain=ODS)]
     for type in data['types']:
         if type not in types:
             message = "Organisation type {0} is not accepted.".format(type)
             current_app.logger.error(message + identifier)
             ok = False
 
+    businessprofiles = [object.highleveluses for object in
+                        BusinessProfile.query.filter_by(domain=ODS)]
     for high_level_use in data['businessProfile']['highLevelUses']:
-        if high_level_use not in ODS_BUSINESS_PROFILES:
+        if high_level_use not in businessprofiles:
             message = "Organisation highlevel use {0} is not accepted.".format(
                 high_level_use
             )
