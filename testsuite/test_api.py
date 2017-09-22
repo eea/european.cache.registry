@@ -1,4 +1,6 @@
 # coding=utf-8
+import json
+
 from flask import url_for
 from instance.settings import FGAS, ODS
 from . import factories
@@ -17,15 +19,31 @@ def test_undertaking_list(client):
     assert len(resp_data) == 1
     data = resp_data[0]
     assert data['company_id'] == undertaking.external_id
-    for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
-                  'vat', 'oldcompany_verified', 'oldcompany_account',
-                  'oldcompany_extid']:
+    for field in ['name', 'website', 'phone', 'domain', 'status',
+                  'undertaking_type', 'vat', 'oldcompany_verified',
+                  'oldcompany_account', 'oldcompany_extid']:
         assert data[field] == getattr(undertaking, field)
 
     assert data['types'] == type.type
 
     for date_field in ['date_created', 'date_updated']:
-        assert data[date_field] == getattr(undertaking, date_field).strftime('%d/%m/%Y')
+        assert data[date_field] == getattr(undertaking,
+                                           date_field).strftime('%d/%m/%Y')
+
+
+def test_undertaking_list_small(client):
+    undertaking = factories.UndertakingFactory()
+    resp = client.get(url_for('api.company-list-small',
+                              domain=undertaking.domain))
+
+    resp_data = resp.json
+    assert len(resp_data) == 1
+    data = resp_data[0]
+    assert data['company_id'] == undertaking.external_id
+    for field in ['name', 'domain', 'vat']:
+        assert data[field] == getattr(undertaking, field)
+    assert data['date_created'] == getattr(undertaking,
+                                           'date_created').strftime('%d/%m/%Y')
 
 
 def test_undertaking_list_domain_filter(client):
@@ -43,9 +61,9 @@ def test_undertaking_list_domain_filter(client):
     data = resp_data[0]
     assert data['company_id'] == undertaking.external_id
 
-    for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
-                  'vat', 'oldcompany_verified', 'oldcompany_account',
-                  'oldcompany_extid']:
+    for field in ['name', 'website', 'phone', 'domain', 'status',
+                  'undertaking_type', 'vat', 'oldcompany_verified',
+                  'oldcompany_account', 'oldcompany_extid']:
         assert data[field] == getattr(undertaking, field)
     assert data['types'] == type.type
 
@@ -106,17 +124,17 @@ def test_undertaking_details(client):
                                  type='EXPORTER')
     undertaking.types.append(type)
     oldcompany = factories.OldCompanyFactory(id=2)
-    link = factories.OldCompanyLinkFactory(oldcompany=oldcompany,
-                                           undertaking=undertaking)
+    factories.OldCompanyLinkFactory(oldcompany=oldcompany,
+                                    undertaking=undertaking)
     resp = client.get(
         url_for('api.company-detail',
                 domain=undertaking.domain,
                 pk=undertaking.external_id))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
-    for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
-                  'vat', 'oldcompany_verified', 'oldcompany_account',
-                  'oldcompany_extid']:
+    for field in ['name', 'website', 'phone', 'domain', 'status',
+                  'undertaking_type', 'vat', 'oldcompany_verified',
+                  'oldcompany_account', 'oldcompany_extid']:
         assert data[field] == getattr(undertaking, field)
 
     assert data['date_created'] == undertaking.date_created.strftime('%d/%m/%Y')
@@ -138,9 +156,9 @@ def test_undertaking_details_domain_filter(client):
                 pk=undertaking.external_id))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
-    for field in ['name', 'website', 'phone', 'domain', 'status', 'undertaking_type',
-                  'vat', 'oldcompany_verified', 'oldcompany_account',
-                  'oldcompany_extid']:
+    for field in ['name', 'website', 'phone', 'domain', 'status',
+                  'undertaking_type', 'vat', 'oldcompany_verified',
+                  'oldcompany_account', 'oldcompany_extid']:
         assert data[field] == getattr(undertaking, field)
 
     assert data['date_created'] == undertaking.date_created.strftime('%d/%m/%Y')
@@ -279,8 +297,8 @@ def test_user_companies_by_email(client):
 def test_candidates_list(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=False)
     oldcompany = factories.OldCompanyFactory(id=2)
-    link = factories.OldCompanyLinkFactory(oldcompany=oldcompany,
-                                           undertaking=undertaking)
+    factories.OldCompanyLinkFactory(oldcompany=oldcompany,
+                                    undertaking=undertaking)
     resp = client.get(url_for('api.candidate-list',
                               domain=undertaking.domain))
     data = resp.json
@@ -303,11 +321,21 @@ def test_noncandidates_list(client):
 
 def test_unverify_link(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=True)
-    link = factories.OldCompanyLinkFactory(
-        oldcompany=undertaking.oldcompany,undertaking=undertaking)
+    factories.OldCompanyLinkFactory(oldcompany=undertaking.oldcompany,
+                                    undertaking=undertaking)
     resp = client.post(url_for('api.candidate-unverify',
                                domain=undertaking.domain,
                                undertaking_id=undertaking.external_id),
                        dict(user='test_user'))
     data = resp.json
     assert data['company_id'] == undertaking.external_id
+
+
+def test_update_status_undertaking(client):
+    undertaking = factories.UndertakingFactory(status='DISABLED')
+    resp = client.post(url_for('api.company-statusupdate',
+                       domain=undertaking.domain,
+                       pk=undertaking.external_id),
+                       dict(status='VALID'))
+    assert json.loads(resp.body)
+    assert undertaking.status == 'VALID'
