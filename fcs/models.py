@@ -119,14 +119,6 @@ undertaking_users = db.Table(
     db.Column('undertaking_id', db.Integer(), db.ForeignKey('undertaking.id')),
 )
 
-undertaking_businessprofile = db.Table(
-    'undertaking_businessprofile',
-    db.Column(
-        'undertaking_id', db.Integer, db.ForeignKey('undertaking.id')),
-    db.Column(
-        'businessprofile_id', db.Integer, db.ForeignKey('businessprofile.id')),
-)
-
 
 class DomainQuery(BaseQuery):
     def fgases(self):
@@ -249,6 +241,17 @@ class UndertakingTypes(SerializableModel, db.Model):
     type_id = Column(ForeignKey('type.id'), primary_key=True)
     undertaking = relationship('Undertaking', backref=db.backref('types_link'))
     type = relationship('Type')
+
+
+class UndertakingBusinessProfile(SerializableModel, db.Model):
+    __tablename__ = 'undertaking_businessprofile'
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
+    businessprofile_id = Column(ForeignKey('businessprofile.id'),
+                                primary_key=True)
+    undertaking = relationship('Undertaking',
+                               backref=db.backref('businessprofiles_link'))
+    businessprofile = relationship('BusinessProfile')
 
 
 class OrganizationLog(SerializableModel, db.Model):
