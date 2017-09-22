@@ -98,6 +98,7 @@ class BusinessProfile(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     highleveluses = Column(String(255))
+    domain = Column(String(32), default="FGAS")
 
     def __unicode__(self):
         return self.highleveluses
@@ -116,6 +117,14 @@ undertaking_users = db.Table(
     db.Column('user_id', db.Integer(),
               db.ForeignKey('user.id')),
     db.Column('undertaking_id', db.Integer(), db.ForeignKey('undertaking.id')),
+)
+
+undertaking_businessprofile = db.Table(
+    'undertaking_businessprofile',
+    db.Column(
+        'undertaking_id', db.Integer, db.ForeignKey('undertaking.id')),
+    db.Column(
+        'businessprofile_id', db.Integer, db.ForeignKey('businessprofile.id')),
 )
 
 
@@ -154,7 +163,7 @@ class Undertaking(SerializableModel, db.Model):
          backref=db.backref('undertaking', lazy='dynamic'),
     )
     represent_id = Column(ForeignKey('represent.id'))
-    businessprofile_id = Column(ForeignKey('businessprofile.id'))
+
     # Link
     oldcompany_verified = Column(Boolean, default=False)
     oldcompany_account = Column(String(255), nullable=True, default=None)
@@ -163,7 +172,11 @@ class Undertaking(SerializableModel, db.Model):
                            default=None)
     address = relationship(Address)
     represent = relationship(EuLegalRepresentativeCompany)
-    businessprofile = relationship(BusinessProfile)
+    businessprofiles = relationship(
+        'BusinessProfile',
+        secondary=undertaking_businessprofile,
+        backref=db.backref('undertakings', lazy='dynamic')
+    )
     contact_persons = relationship(
         User,
         secondary=undertaking_users,
