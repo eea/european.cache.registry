@@ -3,7 +3,7 @@ from flask.ext.webtest import TestApp
 from fcs.app import create_app
 from fcs.models import db
 from fcs.models import loaddata
-
+from instance.settings import FGAS, ODS
 TEST_CONFIG = {
     'DEBUG': True,
     'SERVER_NAME': 'noname',
@@ -11,6 +11,14 @@ TEST_CONFIG = {
     'BDR_ENDPOINT_USER': 'user',
     'BDR_ENDPOINT_PASSWORD': 'password',
     'AUTO_VERIFY_NEW_COMPANIES': True,
+    'AUTO_VERIFY_ALL_COMPANIES': [],
+    'SENTRY_DSN': '',
+    'BDR_HELP_DESK_MAIL': 'test-mail',
+    'LOG_FILE': 'test.log',
+    'INTERESTING_OBLIGATIONS': [FGAS, ODS],
+    'MAIL_SERVER': 'localhost',
+    'MAIL_PORT': 25,
+    'TESTING': True,
 }
 
 

@@ -1,9 +1,30 @@
+import ast
 import json
+import StringIO
+import sys
+from datetime import datetime, timedelta
 
 from fcs import models
-from fcs.sync.commands import update_undertakings
+from fcs.sync.commands import (
+    update_undertakings,
+    print_all_undertakings,
+    get_last_update
+)
+
+from fcs.manager import check_integrity
+from fcs.models import OldCompany
 from fcs.sync.fgases import eea_double_check_fgases
 from fcs.sync.ods import eea_double_check_ods
+from fcs.sync.parsers import parse_company
+from instance.settings import FGAS
+
+
+from .factories import (
+    CountryFactory,
+    AddressFactory,
+    UndertakingFactory,
+    UserFactory,
+)
 
 
 def test_update_undertakings_fgas(client):
@@ -20,3 +41,61 @@ def test_update_undertakings_ods(client):
         undertakings_count = update_undertakings(data, eea_double_check_ods)
         assert undertakings_count == len(data)
         assert models.Undertaking.query.ods().count() == len(data)
+
+
+def test_parse_company(client):
+    country = dict(code='test code', name='Test Name')
+    old_company_data = dict(pk=200,
+                            addr_street='Test street',
+                            addr_place1='Test address1',
+                            addr_place2='Test address2',
+                            addr_postalcode='000324',
+                            # todo find why this string comes like this from bdr
+                            date_registered='2017/03/03 12:54 123456789',
+                            country=country)
+    parse_company(old_company_data, FGAS)
+    old_companies = OldCompany.query.all()
+    assert len(old_companies) == 1
+    assert old_companies[0].external_id == old_company_data['external_id']
+
+
+def test_print_all_undertakings(client):
+    with open('testsuite/fixtures/companies-fgas.json') as file:
+        undertakings = json.load(file)
+    capturedOutput = StringIO.StringIO()
+    sys.stdout = capturedOutput
+    print_all_undertakings(undertakings)
+    sys.stdout = sys.__stdout__
+    assert len(capturedOutput.getvalue()) > 100
+
+
+def test_get_last_update(client):
+    date_n_days_ago = datetime.now() - timedelta(days=40)
+    undertaking = UndertakingFactory(date_updated=date_n_days_ago)
+    days = 30
+
+    updated_since = datetime.now().strftime('%d/%m/%Y')
+    last_update = get_last_update(updated_since=updated_since,
+                                  days=None,
+                                  domain=undertaking.domain)
+    assert last_update.date() == datetime.now().date()
+
+    last_update = get_last_update(updated_since=None,
+                                  days=days,
+                                  domain=undertaking.domain)
+    assert last_update.date() == (datetime.now() - timedelta(days=30)).date()
+    last_update = get_last_update(updated_since=None,
+                                  days=-1,
+                                  domain=undertaking.domain)
+    assert last_update.date() == (undertaking.date_updated - timedelta(days=1)).date()
+
+
+def test_manager(client):
+    user1 = UserFactory(username='test1', email='test@mail.com')
+    user2 = UserFactory(username='test2', email='test@mail.com')
+    capturedOutput = StringIO.StringIO()
+    sys.stdout = capturedOutput
+    check_integrity()
+    sys.stdout = sys.__stdout__
+    duplicates = ast.literal_eval(capturedOutput.getvalue())
+    assert duplicates[user1.email] == [user1.id, user2.id]

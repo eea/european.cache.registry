@@ -6,7 +6,9 @@ import requests
 from flask import url_for
 from . import factories
 
+from instance.settings import INTERESTING_OBLIGATIONS
 from fcs.match import run
+from fcs.models import OldCompanyLink
 
 
 def mockreturn(url, **kwargs):
@@ -64,11 +66,30 @@ def test_verify_none(client, monkeypatch):
 
 def test_auto_verify_companies(client, monkeypatch):
     monkeypatch.setattr(requests, 'get', mockreturn)
-    undertaking = factories.UndertakingFactory(oldcompany=None,
+    old_company = factories.OldCompanyFactory(country_code='FR')
+    undertaking = factories.UndertakingFactory(oldcompany=old_company,
+                                               country_code='FR',
+                                               vat='1234',
                                                oldcompany_verified=False)
-    oldcompany = factories.OldCompanyFactory()
     run()
     assert undertaking.oldcompany_verified is True
     assert undertaking.oldcompany_id is None
     assert undertaking.oldcompany_account is None
     assert undertaking.oldcompany_extid is None
+
+
+def test_find_company_link(client, monkeypatch):
+    monkeypatch.setattr(requests, 'get', mockreturn)
+    undertaking = factories.UndertakingFactory(country_code='FR',
+                                               vat='1234',
+                                               oldcompany_verified=False)
+    old_company = factories.OldCompanyFactory(
+        country_code=undertaking.country_code,
+        vat_number=undertaking.vat
+    )
+    run()
+    links = OldCompanyLink.query.all()
+    assert len(links) == 1
+    assert not links[0].verified
+    assert links[0].undertaking_id == undertaking.id
+    assert links[0].oldcompany_id == old_company.id
