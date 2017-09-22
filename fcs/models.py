@@ -166,7 +166,7 @@ class Undertaking(SerializableModel, db.Model):
     represent = relationship(EuLegalRepresentativeCompany)
     businessprofiles = relationship(
         'BusinessProfile',
-        secondary=undertaking_businessprofile,
+        secondary='undertaking_businessprofile',
         backref=db.backref('undertakings', lazy='dynamic')
     )
     contact_persons = relationship(
