@@ -200,3 +200,4 @@ class UndertakingStatusUpdate(ApiView):
             company.status = status
             db.session.commit()
             return json.dumps(True)
+        return json.dumps(False)
