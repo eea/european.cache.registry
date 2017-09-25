@@ -34,8 +34,8 @@ Overview
 
 **Export calls:**
 
-* `/export/user/list` - export users list as CSV
-* `/export/user/json` - export users list as JSON
+* `/export/user/list/[domain]` - export users list as CSV
+* `/export/user/json/[domain]` - export users list as JSON
 * `/export/undertaking/[domain]` - export companies list from domain as CSV
 
 **Mails calls:**
@@ -54,8 +54,8 @@ Overview
 * `/sync/ods`
 
 **Log calls:**
-* `/log/matching` - matching logs
-* `/log/sync` - data sync logs
+* `/log/matching/[domain]` - matching logs
+* `/log/sync[domain]` - data sync logs
 
 **Settings:**
 
@@ -64,7 +64,6 @@ Overview
 **Debug:**
 
 * `/sync/fgases_debug_noneu` - returns a list with all NON EU companies without a legal representative from FGas
-* `/sync/ods_debug_noneu` - returns a list with all NON EU companies without a legal representative from ODS
 
 Undertaking calls
 =================
@@ -132,7 +131,7 @@ Returns the list of all verified undertakings in the system, as fetched from dom
         "company_id": 10085,
         "date_created": "10/10/2014",
         "vat": null
-      },
+      }
     ]
 
 
@@ -140,32 +139,32 @@ Returns the list of all verified undertakings in the system, as fetched from dom
 --------------------------------
 
     [
-      {
-        "domain": "FGAS",
-        "name": "NMORGANIZATION--11973",
-        "company_id": 11973,
+    {
+        "domain": "ODS",
+        "name": "NMORGANIZATION--26610",
+        "company_id": 26610,
         "address": {
-          "city": "city--9452",
-          "country": {
-            "code": "PT",
-            "type": "EU_TYPE",
-            "name": "Portugal"
-          },
-          "zipcode": "zipcode--9452",
-          "number": "nrstreet--9452",
-          "street": "street--9452"
+            "city": " Sofia",
+            "country": {
+                "code": "BG",
+                "type": "EU_TYPE",
+                "name": "Bulgaria"
+            },
+            "zipcode": "cp19855",
+            "number": "1",
+            "street": "str--19855"
         },
-        "date_created": "11/12/2014",
-        "vat": "VAT11973",
+        "date_created": "07/04/2017",
+        "vat": "NREORI26610",
         "users": [
-          {
-            "username": "nsecomic",
-            "first_name": "fname--11749",
-            "last_name": "lname--11749",
-            "email": "11749email@climaOds2010.yyy"
-          }
+            {
+                "username": "nwuderra",
+                "first_name": "fname--25688",
+                "last_name": "lname--25688",
+                "email": "25688email@climaOds2010.yyy"
+            }
         ]
-      }
+    }
     ]
 
 /undertaking/[domain]/list/all
@@ -452,7 +451,7 @@ Lists the already verified undertakings from a domain.
 Export calls
 ============
 
-/export/user/list
+/export/user/list/[domain]
 -----------------
 
 This URL is used to export the list of users with their companies and the companies' contact persons as an Excel file.
@@ -581,7 +580,7 @@ Optional parameters:
 Log calls
 =========
 
-/log/matching
+/log/matching/[domain]
 -------------
 
 Lists a matching log list for 2 companies and the user who made it at which
@@ -597,7 +596,7 @@ time, sorted in decrease order by timestamp.
     ]
 
 
-/log/sync
+/log/sync/[domain]
 ---------
 
 Lists a data sync log which shows when the sync was ran, sorted in decrease
@@ -643,9 +642,33 @@ Optional parameters:
 * days (integer, default = 7)
 * updated_since (string, datetime format DD/MM/YYYY)
 
+    ]
 
-/sync/ods_debug_noneu - GET
----------------------------
+Settings calls
+==============
+
+/settings
+---------
+
+Display the value of the configured middleware settings
+
+    {
+      "BASE_URL": "http://example.com"
+    }
+
+
+Debug calls
+==================
+
+All endpoints in this category return a json response with the following format:
+
+    {
+        'success': True/False,
+        'message': 'Success/Error message'
+    }
+
+/sync/fgases_debug_noneu - GET
+------------------------------
 
 Optional parameters:
 
