@@ -22,34 +22,34 @@ def eea_double_check_fgases(data):
             data['address']['country']['type'] == 'NONEU_TYPE']):
         message = 'NONEU_TYPE Equipment manufacturers only, have no reporting'\
                   ' obligations'
-        current_app.logger.warning(message + identifier)
+        current_app.logger.error(message + identifier)
         remove_undertaking(data, domain=FGAS)
         ok = False
 
     if not all(('status' in data, data['status'] in ['VALID', 'DISABLED'])):
         message = 'Organisation status differs from VALID or DISABLED.'
-        current_app.logger.warning(message + identifier)
+        current_app.logger.error(message + identifier)
         ok = False
 
     if not all([l.startswith('FGAS_') for l in data['types']]):
         message = "Organisation types elements don't start with 'FGAS_'"
-        current_app.logger.warning(message + identifier)
+        current_app.logger.error(message + identifier)
         ok = False
 
     if not all([l.startswith('fgas.')
                 for l in data['businessProfile']['highLevelUses']]):
         message = "Organisation highLevelUses elements don't start with 'fgas.'"
-        current_app.logger.warning(message + identifier)
+        current_app.logger.error(message + identifier)
         ok = False
 
     if all([data['status'] == 'DISABLED', len(data['contactPersons']) > 0]):
         message = "Contact Persons available for DISABLED company"
-        current_app.logger.warning(message + identifier)
+        current_app.logger.error(message + identifier)
         ok = False
 
     if not data['domain'] == FGAS:
         message = "Organisation domain is not FGAS"
-        current_app.logger.warning(message + identifier)
+        current_app.logger.error(message + identifier)
         ok = False
 
     return ok
