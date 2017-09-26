@@ -34,7 +34,8 @@ def create_app(config={}):
     if app.config.get('SENTRY_DSN'):
         from raven.contrib.flask import Sentry
 
-        Sentry(app, logging=True, level=logging.ERROR)
+        Sentry(app, dsn=app.config.get('SENTRY_DSN'),
+               logging=True, level=logging.ERROR)
 
     return app
 
