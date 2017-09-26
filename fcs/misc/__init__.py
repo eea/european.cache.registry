@@ -3,6 +3,7 @@ from flask import current_app
 from .export import *
 from .log import *
 from .mail import *
+from .error import *
 
 misc = Blueprint('misc', __name__)
 
@@ -102,3 +103,8 @@ class SettingsOverview(MethodView):
 misc.add_url_rule('/settings',
                   view_func=SettingsOverview.as_view(
                       'settings'))
+
+misc.add_url_rule('/crashme',
+                  view_func=CrashMe.as_view(
+                      'crashme'
+                  ))
