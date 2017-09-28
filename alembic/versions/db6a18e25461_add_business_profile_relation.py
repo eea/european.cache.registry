@@ -51,6 +51,7 @@ def upgrade():
             continue
         profiles = undertaking.businessprofile.highleveluses.split(',')
         undertaking_businessprofiles[undertaking.id] = profiles
+    op.drop_constraint('undertaking_ibfk_3', 'undertaking', 'foreignkey')
     session.query(BusinessProfile).delete()
 
     op.add_column(
@@ -74,7 +75,6 @@ def upgrade():
                 }
             )
     op.bulk_insert(UndertakingBusinessProfile.__table__, m2m_values)
-    op.drop_column(u'undertaking', 'businessprofile_id')
 
 
 def downgrade():
