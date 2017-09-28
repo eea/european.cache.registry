@@ -287,12 +287,6 @@ class MailAddress(SerializableModel, db.Model):
     last_name = Column(String(255))
 
 
-@db_manager.command
-def init():
-    db.create_all()
-    alembic(['stamp', 'head'])
-
-
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
 def alembic(alembic_args):
     from alembic.config import CommandLine
