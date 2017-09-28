@@ -5,11 +5,14 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
+
 def upgrade():
-    op.drop_table('old_company')
     op.drop_table('old_company_link')
+    op.drop_constraint('fk_old_company', 'undertaking', 'foreignkey')
     op.drop_column('undertaking', 'oldcompany_id')
+    op.drop_table('old_company')
     op.drop_column('matching_log', 'oldcompany_id')
+
 
 def downgrade():
     op.create_table('old_company_link',
