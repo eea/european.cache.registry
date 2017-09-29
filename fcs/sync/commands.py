@@ -60,14 +60,9 @@ def update_undertakings(undertakings, check_function):
     # due to a circular import between fcs.match and fcs.sync.fgases
     from fcs.match import verify_none
     undertakings_count = 0
-    batch = []
     for undertaking in undertakings:
         if check_function(undertaking):
-            batch.append(update_undertaking(undertaking))
-            if undertakings_count % 10 == 1:
-                db.session.add_all(batch)
-                db.session.commit()
-                del batch[:]
+            db.session.add(update_undertaking(undertaking))
             undertakings_count += 1
             # automatically approve undertaking
             current_app.logger.info(
@@ -75,10 +70,6 @@ def update_undertakings(undertakings, check_function):
                     undertaking['external_id']))
             verify_none(undertaking['external_id'], undertaking['domain'],
                         'SYSTEM')
-
-    db.session.add_all(batch)
-    db.session.commit()
-    del batch[:]
     return undertakings_count
 
 

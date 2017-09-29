@@ -158,6 +158,7 @@ def update_undertaking(data):
 
     undertaking.country_code = undertaking.get_country_code()
     undertaking.country_code_orig = undertaking.get_country_code_orig()
+    db.session.add(undertaking)
     return undertaking
 
 
