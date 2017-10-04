@@ -62,7 +62,7 @@ def update_undertakings(undertakings, check_function):
     undertakings_count = 0
     for undertaking in undertakings:
         if check_function(undertaking):
-            db.session.add(update_undertaking(undertaking))
+            update_undertaking(undertaking)
             undertakings_count += 1
             # automatically approve undertaking
             current_app.logger.info(

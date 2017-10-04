@@ -89,7 +89,8 @@ def update_undertaking(data):
     for business_profile in business_profiles['highLevelUses']:
         business_profile_object = BusinessProfile.query.filter_by(
             highleveluses=business_profile, domain=data['domain']).first()
-        undertaking.businessprofiles.append(business_profile_object)
+        if business_profile_object not in undertaking.businessprofiles:
+            undertaking.businessprofiles.append(business_profile_object)
 
     if not represent:
         old_represent = undertaking.represent
@@ -115,7 +116,8 @@ def update_undertaking(data):
     for type in types:
         type_object = Type.query.filter_by(
             type=type, domain=data['domain']).first()
-        undertaking.types.append(type_object)
+        if type_object not in undertaking.types:
+            undertaking.types.append(type_object)
 
     unique_emails = set([cp.get('email') for cp in contact_persons])
     existing_persons = undertaking.contact_persons
