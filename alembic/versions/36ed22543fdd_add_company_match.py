@@ -30,8 +30,11 @@ def upgrade():
     sa.Column('date_verified', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['oldcompany_id'], ['old_company.id'], ),
     sa.ForeignKeyConstraint(['undertaking_id'], ['undertaking.id'], ),
-    sa.PrimaryKeyConstraint('oldcompany_id', 'undertaking_id')
+    sa.PrimaryKeyConstraint('oldcompany_id', 'undertaking_id'),
+    mysql_default_charset=u'utf8',
+    mysql_engine=u'MyISAM',
     )
+
     op.add_column(u'matching_log', sa.Column('oldcompany_id', sa.Integer(), nullable=True))
     op.add_column(u'undertaking', sa.Column('oldcompany_id', sa.Integer(), nullable=True))
     ### end Alembic commands ###
