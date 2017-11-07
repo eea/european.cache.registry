@@ -1,9 +1,9 @@
 from flask import abort
 from flask import request
 
-from fcs.api.views import ApiView
+from cache_registry.api.views import ApiView
 
-from fcs.match import (
+from cache_registry.match import (
     get_all_candidates,
     verify_none,
     verify_link,

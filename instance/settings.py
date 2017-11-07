@@ -63,7 +63,7 @@ AUTO_VERIFY_NEW_COMPANIES = (
 # this list of domains skips matching for all companies with the given domains
 # by automatically verifying them
 AUTO_VERIFY_ALL_COMPANIES = (
-    os.environ.get('AUTO_VERIFY_ALL_COMPANIES', 'ODS,FGAS').split(',')
+    os.environ.get('AUTO_VERIFY_ALL_COMPANIES', '').split(',')
 )
 
 # Retrieve organisations with the following domains

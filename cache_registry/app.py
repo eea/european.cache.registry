@@ -2,13 +2,13 @@ import logging
 
 import flask
 from flask.ext.script import Manager
-from fcs.models import db, db_manager
-from fcs.api import api, api_manager
-from fcs.misc import misc
-from fcs.sync import sync_manager
-from fcs.match import match_manager
-from fcs.manager import utils_manager
-from fcs.admin import admin
+from cache_registry.models import db, db_manager
+from cache_registry.api import api, api_manager
+from cache_registry.misc import misc
+from cache_registry.sync import sync_manager
+from cache_registry.match import match_manager
+from cache_registry.manager import utils_manager
+from cache_registry.admin import admin
 
 DEFAULT_CONFIG = {
     'API_URL': 'http://example.com/rest/api',

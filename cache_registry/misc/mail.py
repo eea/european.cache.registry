@@ -2,13 +2,13 @@ import json
 
 from flask import request
 
-from fcs.api.views import ListView, ApiView
-from fcs.mails import (
+from cache_registry.api.views import ListView, ApiView
+from cache_registry.mails import (
     send_wrong_match_mail,
     send_wrong_lockdown_mail,
     send_unmatch_mail
 )
-from fcs.models import MailAddress, db
+from cache_registry.models import MailAddress, db
 
 
 class MailsList(ListView):

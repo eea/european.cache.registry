@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import logging
-from fcs.app import create_app, create_manager
+from cache_registry.app import create_app, create_manager
 
 app = create_app()
 

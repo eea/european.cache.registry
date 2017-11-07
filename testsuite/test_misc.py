@@ -6,7 +6,7 @@ from openpyxl import load_workbook
 
 from instance.settings import FGAS, ODS, BDR_HELP_DESK_MAIL
 from testsuite import factories
-from fcs.models import MailAddress
+from cache_registry.models import MailAddress
 from flask_mail import Mail
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

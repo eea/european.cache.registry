@@ -3,7 +3,7 @@ import smtplib
 from flask.ext.mail import Mail, Message
 from flask import current_app as app, render_template
 
-from fcs.models import MailAddress, Undertaking, OldCompany, OldCompanyLink
+from cache_registry.models import MailAddress, Undertaking, OldCompany, OldCompanyLink
 
 
 def send_mail(subject, html, recipients):

@@ -1,8 +1,8 @@
 import json
 
 from .factories import UndertakingFactory
-from fcs import models
-from fcs.sync.undertakings import update_undertaking, remove_undertaking
+from cache_registry import models
+from cache_registry.sync.undertakings import update_undertaking, remove_undertaking
 
 
 def test_parse_undertaking_new_cp(client):

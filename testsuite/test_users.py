@@ -1,7 +1,7 @@
 from .factories import UserFactory
-from fcs import models
+from cache_registry import models
 
-from fcs.sync.auth import cleanup_unused_users
+from cache_registry.sync.auth import cleanup_unused_users
 
 
 def test_cleanup_unused_users(client):

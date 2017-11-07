@@ -1,7 +1,7 @@
 from sqlalchemy import desc
 
-from fcs.models import OrganizationLog, MatchingLog, Undertaking
-from fcs.api.views import ListView, ApiView
+from cache_registry.models import OrganizationLog, MatchingLog, Undertaking
+from cache_registry.api.views import ListView, ApiView
 
 
 class DataSyncLogsView(ListView):

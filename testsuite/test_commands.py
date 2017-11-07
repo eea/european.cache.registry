@@ -4,18 +4,18 @@ import StringIO
 import sys
 from datetime import datetime, timedelta
 
-from fcs import models
-from fcs.sync.commands import (
+from cache_registry import models
+from cache_registry.sync.commands import (
     update_undertakings,
     print_all_undertakings,
     get_last_update
 )
 
-from fcs.manager import check_integrity
-from fcs.models import OldCompany
-from fcs.sync.fgases import eea_double_check_fgases
-from fcs.sync.ods import eea_double_check_ods
-from fcs.sync.parsers import parse_company
+from cache_registry.manager import check_integrity
+from cache_registry.models import OldCompany
+from cache_registry.sync.fgases import eea_double_check_fgases
+from cache_registry.sync.ods import eea_double_check_ods
+from cache_registry.sync.parsers import parse_company
 from instance.settings import FGAS
 
 

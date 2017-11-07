@@ -1,5 +1,5 @@
-fgas-cache-server
-=================
+european.cache.registry
+=======================
 
 A middleware between FGAS and ODS Registries and BDR.
 

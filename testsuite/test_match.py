@@ -7,8 +7,8 @@ from flask import url_for
 from . import factories
 
 from instance.settings import INTERESTING_OBLIGATIONS
-from fcs.match import run
-from fcs.models import OldCompanyLink
+from cache_registry.match import run
+from cache_registry.models import OldCompanyLink
 
 
 def mockreturn(url, **kwargs):

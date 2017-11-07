@@ -7,7 +7,7 @@ from sqlalchemy.dialects import mysql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-from fcs.models import loaddata
+from cache_registry.models import loaddata
 
 Session = sessionmaker()
 Base = declarative_base()
@@ -58,7 +58,7 @@ def upgrade():
             u'businessprofile',
             sa.Column('domain', sa.String(length=32))
     )
-    loaddata('fcs/fixtures/business_profiles.json', session=session)
+    loaddata('cache_registry/fixtures/business_profiles.json', session=session)
     m2m_values = []
     for undertaking_id, highleveluses in undertaking_businessprofiles.items():
 

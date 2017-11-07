@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from fcs import models
-from fcs.models import OldCompany, db
+from cache_registry import models
+from cache_registry.models import OldCompany, db
 
 
 def not_null(func):

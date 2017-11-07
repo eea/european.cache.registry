@@ -7,10 +7,10 @@ from sqlalchemy import or_
 from flask.ext.script import Manager
 from flask import current_app
 
-from fcs import models
-from fcs.mails import send_match_mail
+from cache_registry import models
+from cache_registry.mails import send_match_mail
 
-from fcs.sync.bdr import call_bdr
+from cache_registry.sync.bdr import call_bdr
 from instance.settings import FGAS, ODS
 from sqlalchemy.orm import joinedload
 
