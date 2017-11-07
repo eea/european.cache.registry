@@ -3,7 +3,7 @@ from datetime import date
 from factory.alchemy import SQLAlchemyModelFactory
 from factory import SubFactory, post_generation
 
-from fcs import models
+from cache_registry import models
 from instance.settings import FGAS
 
 

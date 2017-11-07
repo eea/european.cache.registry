@@ -1,8 +1,8 @@
 from flask import current_app
 from werkzeug.exceptions import abort
 
-from fcs.api.views import ListView, DetailView
-from fcs.models import User
+from cache_registry.api.views import ListView, DetailView
+from cache_registry.models import User
 
 
 class UserListView(ListView):

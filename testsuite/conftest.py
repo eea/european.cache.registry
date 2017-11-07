@@ -1,8 +1,8 @@
 from pytest import fixture
 from flask.ext.webtest import TestApp
-from fcs.app import create_app
-from fcs.models import db
-from fcs.models import loaddata
+from cache_registry.app import create_app
+from cache_registry.models import db
+from cache_registry.models import loaddata
 from instance.settings import FGAS, ODS
 TEST_CONFIG = {
     'DEBUG': True,
@@ -35,8 +35,8 @@ def app(request):
     app_context = app.app_context()
     app_context.push()
     db.create_all()
-    loaddata('fcs/fixtures/types.json')
-    loaddata('fcs/fixtures/business_profiles.json')
+    loaddata('cache_registry/fixtures/types.json')
+    loaddata('cache_registry/fixtures/business_profiles.json')
 
     @request.addfinalizer
     def fin():

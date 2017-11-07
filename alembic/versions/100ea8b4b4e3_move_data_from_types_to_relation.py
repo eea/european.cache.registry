@@ -13,7 +13,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.dialects import mysql
 from sqlalchemy.ext.declarative import declarative_base
 
-from fcs.models import db, loaddata
+from cache_registry.models import db, loaddata
 
 import sqlalchemy as sa
 
@@ -69,7 +69,7 @@ def upgrade():
     session = Session(bind=bind)
     undertakings = session.query(Undertaking)
     undertaking_types = []
-    loaddata('fcs/fixtures/types.json', session=session)
+    loaddata('cache_registry/fixtures/types.json', session=session)
     for undertaking in undertakings:
         for type in undertaking.types.split(','):
             type = type.strip()

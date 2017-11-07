@@ -1,7 +1,7 @@
 
 from flask import current_app
 
-from fcs.models import db, User
+from cache_registry.models import db, User
 
 
 class Unauthorized(Exception):

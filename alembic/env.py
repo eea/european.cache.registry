@@ -1,5 +1,5 @@
 from alembic import context
-from fcs.models import db
+from cache_registry.models import db
 
 
 context.configure(

@@ -6,9 +6,9 @@ from flask.views import MethodView
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
 
-from fcs.api.undertaking import UndertakingListView
-from fcs.match import get_all_non_candidates
-from fcs.models import User
+from cache_registry.api.undertaking import UndertakingListView
+from cache_registry.match import get_all_non_candidates
+from cache_registry.models import User
 
 MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 

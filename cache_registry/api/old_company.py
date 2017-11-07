@@ -1,7 +1,7 @@
 import json
 
-from fcs.api.views import ApiView, DetailView, ListView
-from fcs.models import OldCompany, db
+from cache_registry.api.views import ApiView, DetailView, ListView
+from cache_registry.models import OldCompany, db
 
 
 class OldCompanyDetail(DetailView):

@@ -1,9 +1,9 @@
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView
 
-from fcs import models
+from cache_registry import models
 
-admin = Admin(name="fcs")
+admin = Admin(name="cache_registry")
 
 
 class UndertakingView(ModelView):

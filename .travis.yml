@@ -2,5 +2,5 @@ language: python
 python:
   - "2.7"
 install: pip install -r requirements-dev.txt
-script:  py.test --cov=fcs testsuite
+script:  py.test --cov=cache_registry testsuite
 after_success: coveralls

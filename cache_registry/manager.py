@@ -3,7 +3,7 @@ import pprint
 
 from flask.ext.script import Manager
 
-from fcs.models import User
+from cache_registry.models import User
 
 
 utils_manager = Manager()

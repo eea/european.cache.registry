@@ -5,8 +5,8 @@ import sys
 from flask import request
 import StringIO
 
-from fcs.api.views import ApiView
-from fcs.sync.commands import (
+from cache_registry.api.views import ApiView
+from cache_registry.sync.commands import (
     bdr,
     fgases,
     fgases_debug_noneu,
@@ -14,7 +14,7 @@ from fcs.sync.commands import (
     sync_collections_title
 )
 
-from fcs.match import run, flush, verify, unverify, test, manual
+from cache_registry.match import run, flush, verify, unverify, test, manual
 
 
 @contextlib.contextmanager

@@ -3,11 +3,11 @@ import json
 
 from flask import abort, request
 
-from fcs.api.views import DetailView, ListView, ApiView
-from fcs.api.old_company import OldCompanyDetail
-from fcs.api.user import UserListView
-from fcs.models import Undertaking, EuLegalRepresentativeCompany, Address, db
-from fcs.match import get_all_non_candidates, str_matches, get_candidates
+from cache_registry.api.views import DetailView, ListView, ApiView
+from cache_registry.api.old_company import OldCompanyDetail
+from cache_registry.api.user import UserListView
+from cache_registry.models import Undertaking, EuLegalRepresentativeCompany, Address, db
+from cache_registry.match import get_all_non_candidates, str_matches, get_candidates
 
 
 class AddressDetail(DetailView):

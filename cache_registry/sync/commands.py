@@ -2,10 +2,10 @@ import requests
 
 from datetime import datetime, timedelta
 
-from fcs.sync.parsers import parse_company
+from cache_registry.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
-from fcs.models import Undertaking, db, OrganizationLog
+from cache_registry.models import Undertaking, db, OrganizationLog
 from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
@@ -57,8 +57,8 @@ def get_last_update(days, updated_since, domain):
 
 def update_undertakings(undertakings, check_function):
     # import at this level since an import at module level will break
-    # due to a circular import between fcs.match and fcs.sync.fgases
-    from fcs.match import verify_none
+    # due to a circular import between cache_registry.match and cache_registry.sync.fgases
+    from cache_registry.match import verify_none
     undertakings_count = 0
     for undertaking in undertakings:
         if check_function(undertaking):

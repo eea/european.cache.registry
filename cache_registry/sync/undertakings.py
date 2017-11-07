@@ -2,12 +2,12 @@ import requests
 
 from flask import current_app
 
-from fcs.models import (
+from cache_registry.models import (
     Address, BusinessProfile, EuLegalRepresentativeCompany, Type, Undertaking,
     UndertakingBusinessProfile, UndertakingTypes, User
 )
-from fcs.models import db
-from fcs.sync import parsers
+from cache_registry.models import db
+from cache_registry.sync import parsers
 from instance.settings import ODS
 from .bdr import update_bdr_col_name, get_absolute_url
 from .auth import get_auth, Unauthorized, InvalidResponse, patch_users

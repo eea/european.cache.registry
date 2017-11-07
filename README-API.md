@@ -1,7 +1,7 @@
-fgas-cache-server API Documentation
-===================================
+european.cache.registry API Documentation
+=========================================
 
-The fgas-cache-server API allows a client (BDR) to access cached data fetched
+The european.cache.registry API allows a client (BDR) to access cached data fetched
 from various sources (FGas Registry, ODS Registry, BDR Registry).
 
 The API uses HTTP for transport, JSON as data format and does not require

@@ -1,7 +1,7 @@
 from flask import current_app
 from instance.settings import ODS
 
-from fcs.models import Type, BusinessProfile
+from cache_registry.models import Type, BusinessProfile
 
 
 def eea_double_check_ods(data):
