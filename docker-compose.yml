@@ -2,8 +2,8 @@ version: '2'
 
 services:
   app:
-    image: eeacms/reportek.fcs
-    container_name: fcs.app
+    image: eeacms/european.cache.registry
+    container_name: ecr.app
     depends_on:
     - mysql
     env_file:
@@ -13,15 +13,15 @@ services:
 
   mysql:
     image: mysql:5.5
-    container_name: fcs.db
+    container_name: ecr.db
     environment:
-    - MYSQL_DATABASE=fcs
-    - MYSQL_USER=fcs
-    - MYSQL_PASSWORD=fcs
-    - MYSQL_ROOT_PASSWORD=fcs
+    - MYSQL_DATABASE=ecr
+    - MYSQL_USER=ecr
+    - MYSQL_PASSWORD=ecr
+    - MYSQL_ROOT_PASSWORD=ecr
     volumes:
     - /etc/localtime:/etc/localtime:ro
-    - fcs-mysql-data:/var/lib/mysql
+    - data:/var/lib/mysql
 
 volumes:
   fcs-mysql-data:
