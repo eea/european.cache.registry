@@ -1,0 +1,282 @@
+[
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 1,
+            "domain": "FGAS",
+            "highleveluses": "fgas.importer.of.other.products.and.equipment"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 2,
+            "domain": "FGAS",
+            "highleveluses": "fgas.mdis"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 3,
+            "domain": "FGAS",
+            "highleveluses": "fgas.semiconductor.manufacture"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 4,
+            "domain": "FGAS",
+            "highleveluses": "fgas.military.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 5,
+            "domain": "FGAS",
+            "highleveluses": "fgas.export"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 6,
+            "domain": "FGAS",
+            "highleveluses": "fgas.imports.for.destruction"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 7,
+            "domain": "FGAS",
+            "highleveluses": "fgas.feedstock.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 8,
+            "domain": "FGAS",
+            "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 9,
+            "domain": "ODS",
+            "highleveluses": "import.of.products.or.equipment.for.laboratory.or.analytical.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 10,
+            "domain": "ODS",
+            "highleveluses": "import.of.hcfc.for.repackaging.and.re-export"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 11,
+            "domain": "ODS",
+            "highleveluses": "export.of.hcfc.re-export.after.re-packaging"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 12,
+            "domain": "ODS",
+            "highleveluses": "import.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 13,
+            "domain": "ODS",
+            "highleveluses": "export.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 14,
+            "domain": "ODS",
+            "highleveluses": "import.of.products.or.equipment.for.destruction"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 15,
+            "domain": "ODS",
+            "highleveluses": "import.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 16,
+            "domain": "ODS",
+            "highleveluses": "export.of.products.or.equipment.covered.by.an.exemption.decision"
+        }
+    },
+    {
+        "model": "BusinessProfile",
+        "fields":{
+            "id": 17,
+            "domain": "ODS",
+            "highleveluses": "export.of.halon.for.critical.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 18,
+            "domain": "ODS",
+            "highleveluses": "import.of.substance.for.destruction"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 19,
+            "domain": "ODS",
+            "highleveluses": "import.of.substance.for.feedstock.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 20,
+            "domain": "ODS",
+            "highleveluses": "import.of.halon.for.critical.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 21,
+            "domain": "ODS",
+            "highleveluses": "import.of.halon.for.critical.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 22,
+            "domain": "ODS",
+            "highleveluses": "export.of.products.or.equipment.for.laboratory.or.analytical.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 23,
+            "domain": "ODS",
+            "highleveluses": "export.of.substance.for.process.agent.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 24,
+            "domain": "ODS",
+            "highleveluses": "export.of.substance.for.feedstock.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 25,
+            "domain": "ODS",
+            "highleveluses": "import.or.production.of.substance.for.laboratory.or.analytical.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 26,
+            "domain": "ODS",
+            "highleveluses": "import.of.methyl.bromide.for.repackaging.and.re-export"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 27,
+            "domain": "ODS",
+            "highleveluses": "export.of.methyl.bromide.for.quarantine.and.pre-shipment.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 28,
+            "domain": "ODS",
+            "highleveluses": "export.of.substance.for.laboratory.or.analytical.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 29,
+            "domain": "ODS",
+            "highleveluses": "import.of.products.or.equipment.covered.by.an.exemption.decision"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 30,
+            "domain": "ODS",
+            "highleveluses": "import.of.methyl.bromide.for.emergency.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 31,
+            "domain": "ODS",
+            "highleveluses": "export.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 32,
+            "domain": "ODS",
+            "highleveluses": "export.of.metered.dose.inhalers"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 33,
+            "domain": "ODS",
+            "highleveluses": "import.of.substance.for.process.agent.use"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 34,
+            "domain": "ODS",
+            "highleveluses": "export.of.hcfc.produced.and.repackaged.inside.the.eu"
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 35,
+            "domain": "ODS",
+            "highleveluses": "export.of.hcfc.other"
+        }
+    }
+]

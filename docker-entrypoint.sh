@@ -23,8 +23,8 @@ fi
 
 if [ ! -e .skip-db-init ]; then
   touch .skip-db-init
-  echo "Running DB CMD: ./manage.py db init"
-  python manage.py db init
+  echo "Running DB CMD: ./manage.py db alembic upgrade head"
+  python manage.py db alembic upgrade head
 fi
 
 if [ -z "$1" ]; then

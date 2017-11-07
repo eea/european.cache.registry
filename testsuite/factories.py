@@ -4,6 +4,36 @@ from factory.alchemy import SQLAlchemyModelFactory
 from factory import SubFactory, post_generation
 
 from fcs import models
+from instance.settings import FGAS
+
+
+class OldCompanyLinkFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.OldCompanyLink
+        sqlalchemy_session = models.db.session
+
+    verified = True
+    date_added = date(2015, 1, 1)
+    date_verified = date(2015, 1, 1)
+
+
+class OldCompanyFactory(SQLAlchemyModelFactory):
+
+    class Meta:
+        model = models.OldCompany
+        sqlalchemy_session = models.db.session
+
+    external_id = 10
+    name = 'old_company_name'
+    obligation = FGAS
+    country_code = 'RO'
+    account = 'account'
+    vat_number = 'account'
+    eori = 'account'
+    active = True
+    website = 'website'
+    date_registered = date(2015, 1, 1)
+    valid = True
 
 
 class CountryFactory(SQLAlchemyModelFactory):
@@ -58,24 +88,22 @@ class UndertakingFactory(SQLAlchemyModelFactory):
         model = models.Undertaking
         sqlalchemy_session = models.db.session
 
-    id = 1
     external_id = 10
     name = 'n'
     website = 'w'
     phone = 'p'
-    domain = 'd'
+    domain = FGAS
     status = 's'
     date_created = date(2015, 1, 1)
     date_updated = date(2015, 1, 1)
     undertaking_type = 'FGASUndertaking'
     vat = 'v'
-    types = 't'
     oldcompany_verified = True
     oldcompany_account = 'oldcompany_account'
     oldcompany_extid = 100
     address = SubFactory(AddressFactory)
     represent = SubFactory(RepresentativeFactory)
-    businessprofile = SubFactory(BusinessProfileFactory)
+    oldcompany = SubFactory(OldCompanyFactory)
 
     @post_generation
     def contact_persons(self, create, extracted, **kwargs):
@@ -85,6 +113,33 @@ class UndertakingFactory(SQLAlchemyModelFactory):
         if extracted:
             for cp in extracted:
                 self.contact_persons.add(cp)
+
+    @post_generation
+    def types(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for type in extracted:
+                self.types.add(type)
+
+    @post_generation
+    def businessprofiles(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for businessprofile in extracted:
+                self.businessprofiles.add(businessprofile)
+
+
+class TypeFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.Type
+        sqlalchemy_session = models.db.session
+
+    domain = FGAS
+    type = 'IMPORTER'
 
 
 class UserFactory(SQLAlchemyModelFactory):
@@ -101,6 +156,12 @@ class UserFactory(SQLAlchemyModelFactory):
 class MatchingLog(SQLAlchemyModelFactory):
     class Meta:
         model = models.MatchingLog
+        sqlalchemy_session = models.db.session
+
+
+class OrganizationLog(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.OrganizationLog
         sqlalchemy_session = models.db.session
 
 

@@ -1,0 +1,138 @@
+[
+    {
+        "model":"Type",
+        "fields":{
+            "id": 1,
+            "domain": "FGAS",
+            "type":"FGAS_PRODUCER_IMPORTER_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 2,
+            "domain": "FGAS",
+            "type":"FGAS_IMPORTER_OF_EQUIPMENT_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 3,
+            "domain": "FGAS",
+            "type":"FGAS_PRODUCER_IMPORTER_EXPORTER_NON_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 4,
+            "domain": "FGAS",
+            "type":"FGAS_RECEIVER_EXEMPTED_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 5,
+            "domain": "FGAS",
+            "type":"FGAS_EXPORTER_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 6,
+            "domain": "FGAS",
+            "type":"FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 7,
+            "domain": "FGAS",
+            "type":"FGAS_FEEDSTOCK_USER_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 8,
+            "domain": "FGAS",
+            "type":"FGAS_DESTROYER_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 9,
+            "domain": "ODS",
+            "type":"IMPORTER"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 10,
+            "domain": "ODS",
+            "type":"IMPORTER_ODS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 11,
+            "domain": "ODS",
+            "type":"IMPORTER_MIXTURES_SUBSTANCES"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 12,
+            "domain": "ODS",
+            "type":"EXPORTER"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 13,
+            "domain": "ODS",
+            "type":"EXPORTER_ODS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 14,
+            "domain": "ODS",
+            "type":"EXPORTER_MIXTURES_SUBSTANCES"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 15,
+            "domain": "ODS",
+            "type":"PRODUCER_OR_IMPORTER"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 16,
+            "domain": "ODS",
+            "type":"REPACKAGER"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 17,
+            "domain": "ODS",
+            "type":"PRODUCER"
+        }
+    }
+]

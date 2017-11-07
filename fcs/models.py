@@ -1,13 +1,19 @@
 # coding: utf-8
 import argparse
+import json
+import os
+import sys
+from alembic import op
 from datetime import date, datetime
 from sqlalchemy import (
     Column, Date, DateTime, ForeignKey, Integer, String, Boolean
 )
 from sqlalchemy.orm import relationship
+
+from flask.ext.sqlalchemy import BaseQuery
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
-
+from instance.settings import FGAS, ODS
 
 db = SQLAlchemy()
 db_manager = Manager()
@@ -92,9 +98,18 @@ class BusinessProfile(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     highleveluses = Column(String(255))
+    domain = Column(String(32), default="FGAS")
 
     def __unicode__(self):
         return self.highleveluses
+
+
+class Type(SerializableModel, db.Model):
+    __tablename__ = 'type'
+
+    id = Column(Integer, primary_key=True)
+    type = Column(String(255))
+    domain = Column(String(32), default="FGAS")
 
 
 undertaking_users = db.Table(
@@ -105,8 +120,17 @@ undertaking_users = db.Table(
 )
 
 
+class DomainQuery(BaseQuery):
+    def fgases(self):
+        return self.filter(Undertaking.domain == FGAS)
+
+    def ods(self):
+        return self.filter(Undertaking.domain == ODS)
+
+
 class Undertaking(SerializableModel, db.Model):
     __tablename__ = 'undertaking'
+    query_class = DomainQuery
 
     id = Column(Integer, primary_key=True)
 
@@ -125,21 +149,37 @@ class Undertaking(SerializableModel, db.Model):
     # Undertaking:
     undertaking_type = Column(String(32), default='FGASUndertaking')
     vat = Column(String(255))
-    types = Column(String(255))
+    types = relationship(
+         'Type',
+         secondary='undertaking_types',
+         backref=db.backref('undertaking', lazy='dynamic'),
+    )
     represent_id = Column(ForeignKey('represent.id'))
-    businessprofile_id = Column(ForeignKey('businessprofile.id'))
+
     # Link
     oldcompany_verified = Column(Boolean, default=False)
     oldcompany_account = Column(String(255), nullable=True, default=None)
     oldcompany_extid = Column(Integer, nullable=True, default=None)
-
+    oldcompany_id = Column(ForeignKey('old_company.id'), nullable=True,
+                           default=None)
     address = relationship(Address)
     represent = relationship(EuLegalRepresentativeCompany)
-    businessprofile = relationship(BusinessProfile)
+    businessprofiles = relationship(
+        'BusinessProfile',
+        secondary='undertaking_businessprofile',
+        backref=db.backref('undertakings', lazy='dynamic')
+    )
     contact_persons = relationship(
         User,
         secondary=undertaking_users,
         backref=db.backref('undertakings', lazy='dynamic'),
+    )
+    oldcompany = relationship('OldCompany',
+                              backref=db.backref('undertaking'))
+    candidates = relationship(
+        'OldCompany',
+        secondary='old_company_link',
+        lazy='dynamic',
     )
 
     def get_country_code(self):
@@ -158,10 +198,67 @@ class Undertaking(SerializableModel, db.Model):
         )
 
 
+class OldCompany(SerializableModel, db.Model):
+    __tablename__ = 'old_company'
+
+    id = Column(Integer, primary_key=True)
+    external_id = Column(Integer)
+    name = Column(String(255))
+    country_code = Column(String(10))
+    account = Column(String(255))
+    vat_number = Column(String(32))
+    eori = Column(String(32))
+    active = Column(Boolean)
+    website = Column(String(255))
+    date_registered = Column(DateTime)
+    valid = Column(Boolean, default=True)
+    obligation = Column(String(32))
+
+    @property
+    def country(self):
+        country_obj = Country.query.filter_by(
+            code=self.country_code.upper()).first()
+        return country_obj and country_obj.name
+
+
+class OldCompanyLink(SerializableModel, db.Model):
+    __tablename__ = 'old_company_link'
+
+    oldcompany_id = Column(ForeignKey('old_company.id'), primary_key=True)
+    undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
+    verified = Column(Boolean, default=False)
+    date_added = Column(DateTime)
+    date_verified = Column(DateTime)
+
+    oldcompany = relationship('OldCompany')
+    undertaking = relationship('Undertaking', backref=db.backref('links'))
+
+
+class UndertakingTypes(SerializableModel, db.Model):
+    __tablename__ = 'undertaking_types'
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
+    type_id = Column(ForeignKey('type.id'), primary_key=True)
+    undertaking = relationship('Undertaking', backref=db.backref('types_link'))
+    type = relationship('Type')
+
+
+class UndertakingBusinessProfile(SerializableModel, db.Model):
+    __tablename__ = 'undertaking_businessprofile'
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
+    businessprofile_id = Column(ForeignKey('businessprofile.id'),
+                                primary_key=True)
+    undertaking = relationship('Undertaking',
+                               backref=db.backref('businessprofiles_link'))
+    businessprofile = relationship('BusinessProfile')
+
+
 class OrganizationLog(SerializableModel, db.Model):
     __tablename__ = 'organization_log'
 
     id = Column(Integer, primary_key=True)
+    domain = Column(String(32), default="FGAS")
     execution_time = Column(DateTime, default=datetime.utcnow)
     using_last_update = Column(Date)
     organizations = Column(Integer)
@@ -173,7 +270,9 @@ class MatchingLog(SerializableModel, db.Model):
     id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime, default=datetime.utcnow)
     user = Column(String(255))
+    domain = Column(String(32), default="FGAS")
     company_id = Column(Integer)
+    oldcompany_id = Column(Integer, nullable=True)
     oldcompany_account = Column(String(255), nullable=True)
     verified = Column(Boolean)
 
@@ -186,12 +285,6 @@ class MailAddress(SerializableModel, db.Model):
     timestamp = Column(DateTime, default=datetime.utcnow)
     first_name = Column(String(255))
     last_name = Column(String(255))
-
-
-@db_manager.command
-def init():
-    db.create_all()
-    alembic(['stamp', 'head'])
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
@@ -216,3 +309,28 @@ def upgrade(revision='head'):
 @db_manager.command
 def downgrade(revision):
     return alembic(['downgrade', revision])
+
+
+@db_manager.command
+def loaddata(fixture, session=None):
+    if not session:
+        session = db.session
+    if not os.path.isfile(fixture):
+        print "Please provide a fixture file name"
+    else:
+        objects = get_fixture_objects(fixture)
+    session.commit()
+    for object in objects:
+        database_object = eval(object['model']).query.filter_by(
+            id=object['fields']['id']
+        )
+        if database_object:
+            database_object.delete()
+        session.add(eval(object['model'])(**object['fields']))
+    session.commit()
+
+
+def get_fixture_objects(file):
+    with open(file) as f:
+        import json
+        return json.loads(f.read())

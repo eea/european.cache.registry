@@ -4,12 +4,13 @@
   Dear {{ first_name }} {{ last_name }},
 
   <p>
-    User <b>{{ user }}</b> has added <b>{{ company_name }}</b> company (registered in the FGAS portal).
+    User <b>{{ user }}</b> has added <b>{{ company_name }}</b> company (registered in the {{ domain }} portal).
     It had not match with any of the old records.
 
     <br>
 
     You can see the company details here:
+    <!-- todo change fgases_registry to fcs_registry -->
     <a href="{{ host }}/fgases_registry/organisation_details?id={{ company_id }}">
       {{ host }}/organisation_details?id={{ company_id }}
     </a>
