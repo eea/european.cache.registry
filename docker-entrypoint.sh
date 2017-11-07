@@ -30,7 +30,7 @@ fi
 if [ -z "$1" ]; then
   echo "Serving on port 5000"
   exec gunicorn manage:app \
-                --name fgas \
+                --name european.cache.registry \
                 --bind 0.0.0.0:5000 \
                 --access-logfile - \
                 --error-logfile -
