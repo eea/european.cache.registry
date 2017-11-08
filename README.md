@@ -19,9 +19,9 @@ mistake was made, the link can be unverified.
 Company, without a prior matching link.
 
 [![Travis](https://travis-ci.org/eea/european.cache.registry.svg?branch=master)](
-https://travis-ci.org/eea/eea.docker.fcs)
+https://travis-ci.org/eea/european.cache.registry)
 [![Coverage](https://coveralls.io/repos/github/eea/european.cache.registry/badge.svg?branch=master)](
-https://coveralls.io/github/eea/eea.docker.fcs)
+https://coveralls.io/github/eea/european.cache.registry)
 
 ### Prerequisites
 
@@ -70,7 +70,7 @@ https://coveralls.io/github/eea/eea.docker.fcs)
 
 1. Customize docker orchestration for local development:
         
-        $ cp docker-compose.override.yml.example docker-compose.override.yml
+        $ cp docker-compose.override.dev.yml docker-compose.override.yml
 
 By default, it builds a local image for app service and maps the project directory
 inside the app container.
