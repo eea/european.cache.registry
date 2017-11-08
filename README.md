@@ -18,9 +18,9 @@ mistake was made, the link can be unverified.
 * An authenticated user can make a **manual** connection between an Undertaking and a
 Company, without a prior matching link.
 
-[![Travis](https://travis-ci.org/eea/eea.docker.fcs.svg?branch=master)](
+[![Travis](https://travis-ci.org/eea/european.cache.registry.svg?branch=master)](
 https://travis-ci.org/eea/eea.docker.fcs)
-[![Coverage](https://coveralls.io/repos/github/eea/eea.docker.fcs/badge.svg?branch=master)](
+[![Coverage](https://coveralls.io/repos/github/eea/european.cache.registry/badge.svg?branch=master)](
 https://coveralls.io/github/eea/eea.docker.fcs)
 
 ### Prerequisites
@@ -32,8 +32,8 @@ https://coveralls.io/github/eea/eea.docker.fcs)
 
 1. Clone the repository:
 
-        $ git clone https://github.com/eea/eea.docker.fcs
-        $ cd eea.docker.fcs
+        $ git clone https://github.com/eea/european.cache.registry
+        $ cd european.cache.registry
 
 2. Customize env files:
 
@@ -48,9 +48,9 @@ https://coveralls.io/github/eea/eea.docker.fcs)
 
 4. Run tests:
 
-        $ docker exec -it fcs.app sh
+        $ docker exec -it ecr.app sh
         # pip install -r requirements-dev.txt
-        # py.test --cov=fcs testsuite
+        # py.test --cov=cache_registry testsuite
 
 5. Type: http://localhost:5000
 
@@ -58,7 +58,7 @@ https://coveralls.io/github/eea/eea.docker.fcs)
 
 1. Get the latest version of source code:
 
-        $ cd eea.docker.fcs
+        $ cd european.cache.registry
         $ git pull origin master
 
 2. Update the application stack, all services should be "Up":
@@ -102,28 +102,28 @@ the ports directive (e.g. "5000:5000" instead of "5000").
         
 * Attach to docker container and start the server in debug mode:
         
-        $ docker exec -it fcs.app sh
+        $ docker exec -it ecr.app sh
         # ./manage.py runserver -h 0.0.0.0 -p 5000
 
 ### Data import
 
-* Copy the test database in fcs.db container and import into mysql:
+* Copy the test database in ecr.db container and import into mysql:
 
-        $ docker cp fcs.sql fcs.db:/var/lib/mysql/fcs.sql
-        $ docker exec -it fcs.db bash
-        # mysql -uroot -p fcs < /var/lib/mysql/fcs.sql
+        $ docker cp ecr.sql ecr.db:/var/lib/mysql/ecr.sql
+        $ docker exec -it ecr.db bash
+        # mysql -uroot -p ecr < /var/lib/mysql/ecr.sql
 
 ### Syncronise with FGAS/ODS Portal
 
 * Fetch the latest data from a test server:
 
-        $ docker exec fcs.app bash -c "python ./manage.py sync fgases -d 500"
+        $ docker exec ecr.app bash -c "python ./manage.py sync fgases -d 500"
         ./manage.py sync fgases [-d 30]
         ./manage.py sync ods [-d 30]
 
 * In order to sync BDR collections title with the cache server's corresponding undertakings name:
 
-        $ docker exec fcs.app bash -c "./manage.py sync sync_collections_title"
+        $ docker exec ecr.app bash -c "./manage.py sync sync_collections_title"
 
 * For syncing bdr without SSL verification, set the following switch in settings:
 
@@ -182,10 +182,10 @@ matching link like the algorithm does:
 ### Testing
 1. Run tests:
 
-        $ docker exec -it fcs.app sh
+        $ docker exec -it ecr.app sh
         # pip install -r requirements-dev.txt
-        # py.test --cov=fcs testsuite
+        # py.test --cov=cache_registry testsuite
 
 * Generate a coverage report:
 
-        py.test --cov-report html --cov=fcs testsuite
+        py.test --cov-report html --cov=cache_registry testsuite
