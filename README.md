@@ -127,6 +127,43 @@ be alike):
 
         FUZZ_LIMIT = 75
 
+* List domains, separated by commas, on which matching should be run:
+ 
+        INTERESTING_OBLIGATIONS = ODS
+
+* List domains, separated by commas, on which matching shouldn't be run
+
+        AUTO_VERIFY_ALL_COMPANIES = FGAS
+
+* Specify if companies with no match found by the algorithm should be auto-verified:
+
+        AUTO_VERIFY_NEW_COMPANIES = False
+
+* Run matching algorithm:
+
+        $ docker exec ecr.app bash -c "python ./manage.py run"
+
+* Cleanup all existing links made by the matching command, verified or not:
+
+        $ docker exec ecr.app bash -c "python ./manage.py flush"
+
+* Verify link made by the matching algorithm:
+
+        $ docker exec ecr.app bash -c
+            "python ./manage.py verify {undertaking_id} {oldcompany_id}"
+
+* Unverify link made by the matching algorithm and already verified:
+
+        $ docker exec ecr.app bash -c
+            "python ./manage.py unverify {undertaking_id} {domain}"
+
+* Manualy connect undertaking and old company on a certain domain, without creating a
+matching link like the algorithm does:
+
+        $ docker exec ecr.app bash -c
+            "python ./manage.py manual {undertaking_id} {domain} {oldcompany_id}"
+
+
 ### Testing
 1. Run tests:
 

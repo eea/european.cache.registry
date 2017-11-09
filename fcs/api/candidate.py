@@ -8,8 +8,8 @@ from fcs.match import (
     verify_none,
     verify_link,
     unverify_link,
-    get_all_non_candidates
-)
+    get_all_non_candidates,
+    verify_manual)
 
 
 class CandidateList(ApiView):
@@ -58,17 +58,6 @@ class CandidateVerify(ApiView):
         return self.serialize(link, pop_id=False)
 
 
-class CandidateVerifyNone(CandidateVerify):
-    def post(self, domain, undertaking_id):
-        user = request.form['user']
-        undertaking = verify_none(undertaking_id, domain, user) or abort(404)
-        data = ApiView.serialize(undertaking)
-        return {
-            'verified': data['oldcompany_verified'],
-            'company_id': data['company_id'],
-        }
-
-
 class CandidateUnverify(ApiView):
     def post(self, domain, undertaking_id):
         user = request.form['user']
@@ -76,3 +65,19 @@ class CandidateUnverify(ApiView):
                              user=user,
                              domain=domain) or abort(404)
         return ApiView.serialize(link)
+
+
+class CandidateVerifyManual(ApiView):
+    @classmethod
+    def serialize(cls, obj, pop_id=True):
+        data = {
+            'undertaking_id': obj.id,
+            'oldcompany_account': obj.oldcompany_account,
+            'verified': obj.oldcompany_verified,
+        }
+        return data
+
+    def post(self, domain, undertaking_id, oldcompany_account):
+        user = request.form['user']
+        undertaking = verify_manual(undertaking_id, domain, oldcompany_account, user)
+        return ApiView.serialize(undertaking)
