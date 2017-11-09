@@ -76,8 +76,9 @@ def update_undertaking(data):
         parsers.update_obj(undertaking, data)
         if undertaking.name != u_name:
             if update_bdr_col_name(undertaking):
-                print "Updated collection title for: {0}"\
-                      .format(undertaking.external_id)
+                print("Updated collection title for: {0}".format(
+                    undertaking.external_id
+                ))
 
     if not undertaking.address:
         addr = Address(**address)

@@ -1,7 +1,9 @@
 import ast
 import json
-import StringIO
 import sys
+
+from io import StringIO
+from contextlib import redirect_stdout
 from datetime import datetime, timedelta
 
 from cache_registry import models
@@ -62,11 +64,12 @@ def test_parse_company(client):
 def test_print_all_undertakings(client):
     with open('testsuite/fixtures/companies-fgas.json') as file:
         undertakings = json.load(file)
-    capturedOutput = StringIO.StringIO()
-    sys.stdout = capturedOutput
-    print_all_undertakings(undertakings)
-    sys.stdout = sys.__stdout__
-    assert len(capturedOutput.getvalue()) > 100
+    capturedOutput = StringIO()
+
+    with redirect_stdout(capturedOutput):
+        print_all_undertakings(undertakings)
+    output = capturedOutput.getvalue()
+    assert len(output) > 100
 
 
 def test_get_last_update(client):
@@ -93,7 +96,7 @@ def test_get_last_update(client):
 def test_manager(client):
     user1 = UserFactory(username='test1', email='test@mail.com')
     user2 = UserFactory(username='test2', email='test@mail.com')
-    capturedOutput = StringIO.StringIO()
+    capturedOutput = StringIO()
     sys.stdout = capturedOutput
     check_integrity()
     sys.stdout = sys.__stdout__

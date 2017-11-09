@@ -244,9 +244,9 @@ def run():
     oldcompanies = get_oldcompanies_for_matching()
 
     links, new_companies = match_all(companies, oldcompanies)
-    print len(links), "matching links"
+    print(len(links), "matching links")
     if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
-        print "Autoverifying companies without candidates"
+        print("Autoverifying companies without candidates")
         for c in new_companies:
             verify_none(c['company_id'], c['domain'], 'SYSTEM')
     return True
@@ -256,9 +256,9 @@ def run():
 def verify(undertaking_id, oldcompany_id):
     result = verify_link(undertaking_id, oldcompany_id, "None  Mgmt Command")
     if result:
-        print result.verified
+        print(result.verified)
     else:
-        print "No such link"
+        print("No such link")
     return True
 
 
@@ -275,22 +275,22 @@ def flush():
 def unverify(undertaking_external_id, domain):
     """ Remove a link from the matching database """
     u = unverify_link(undertaking_external_id, domain, 'SYSTEM')
-    print u and u.oldcompany_verified
+    print(u and u.oldcompany_verified)
     return True
 
 
 @match_manager.command
 def test(new, old):
     """ Show fuzzy match for two words"""
-    print "'{}' and '{}' match by {} (LIMIT: {})".format(new, old,
+    print("'{}' and '{}' match by {} (LIMIT: {})".format(new, old,
                                                          fuzz.ratio(new, old),
-                                                         get_fuzz_limit())
+                                                         get_fuzz_limit()))
     return True
 
 
 @match_manager.command
 def manual(undertaking_id, domain, oldcompany_account):
-    print "Verifying company: {} with old company account: {}".format(
-        undertaking_id, oldcompany_account)
-    print verify_manual(undertaking_id, domain, oldcompany_account, 'SYSTEM')
+    print("Verifying company: {} with old company account: {}".format(
+        undertaking_id, oldcompany_account))
+    print(verify_manual(undertaking_id, domain, oldcompany_account, 'SYSTEM'))
     return True

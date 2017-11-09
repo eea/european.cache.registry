@@ -316,7 +316,7 @@ def loaddata(fixture, session=None):
     if not session:
         session = db.session
     if not os.path.isfile(fixture):
-        print "Please provide a fixture file name"
+        print("Please provide a fixture file name")
     else:
         objects = get_fixture_objects(fixture)
     session.commit()

@@ -37,7 +37,7 @@ def get_last_update(days, updated_since, domain):
         try:
             last_update = datetime.strptime(updated_since, '%d/%m/%Y')
         except ValueError:
-            print 'Invalid date format. Please use DD/MM/YYYY'
+            print('Invalid date format. Please use DD/MM/YYYY')
             return False
     else:
         days = int(days)
@@ -51,7 +51,7 @@ def get_last_update(days, updated_since, domain):
             last_update = last.date_updated - timedelta(
                 days=1) if last else None
 
-    print "Using last_update {}".format(last_update)
+    print("Using last_update {}".format(last_update))
     return last_update
 
 
@@ -95,9 +95,9 @@ def print_all_undertakings(undertakings):
                     undertaking_country_type = undertaking_country.get('type', None)
                     if undertaking_country_type == 'NONEU_TYPE':
                         undertakings_count += 1
-                        print undertaking
+                        print(undertaking)
 
-    print undertakings_count, "values"
+    print(undertakings_count, "values")
 
 
 @sync_manager.command
@@ -113,7 +113,7 @@ def fgases(days=7, updated_since=None):
                                              eea_double_check_fgases)
     cleanup_unused_users()
     log_changes(last_update, undertakings_count, domain=FGAS)
-    print undertakings_count, "values"
+    print(undertakings_count, "values")
     db.session.commit()
     return True
 
@@ -131,7 +131,7 @@ def ods(days=7, updated_since=None):
                                              eea_double_check_ods)
     cleanup_unused_users()
     log_changes(last_update, undertakings_count, domain=ODS)
-    print undertakings_count, "values"
+    print(undertakings_count, "values")
     db.session.commit()
     return True
 
@@ -161,8 +161,8 @@ def sync_collections_title():
                 if not colls.get(c_id):
                     colls[c_id] = collection
                 else:
-                    print 'Duplicate collection for company_id: {0} have {1}'\
-                          ' and found {2}'.format(c_id, colls[c_id], collection)
+                    print('Duplicate collection for company_id: {0} have {1}'\
+                          ' and found {2}'.format(c_id, colls[c_id], collection))
         undertakings = Undertaking.query
         for undertaking in undertakings:
             ext_id = str(undertaking.external_id)
@@ -170,8 +170,7 @@ def sync_collections_title():
             coll = colls.get(ext_id)
             if coll and coll.get('title') != title:
                 if update_bdr_col_name(undertaking):
-                    print "Updated collection title for: {0}"\
-                          .format(ext_id)
+                    print("Updated collection title for: {0}".format(ext_id))
     return True
 
 
@@ -179,8 +178,8 @@ def sync_collections_title():
 def bdr():
     obligations = current_app.config.get('INTERESTING_OBLIGATIONS', [])
     for obl in obligations:
-        print "Getting obligation: ", obl
+        print("Getting obligation: ", obl)
         companies = get_old_companies(obl)
-        print len([parse_company(c, obl) for c in companies]), "values"
+        print(len([parse_company(c, obl) for c in companies]), "values")
     db.session.commit()
     return True

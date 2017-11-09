@@ -337,5 +337,5 @@ def test_update_status_undertaking(client):
                        domain=undertaking.domain,
                        pk=undertaking.external_id),
                        dict(status='VALID'))
-    assert json.loads(resp.body)
+    assert json.loads(resp.body.decode())
     assert undertaking.status == 'VALID'

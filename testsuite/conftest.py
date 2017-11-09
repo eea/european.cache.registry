@@ -1,8 +1,10 @@
 from pytest import fixture
-from flask.ext.webtest import TestApp
+from flask_webtest import TestApp
+
 from cache_registry.app import create_app
 from cache_registry.models import db
 from cache_registry.models import loaddata
+
 from instance.settings import FGAS, ODS
 TEST_CONFIG = {
     'DEBUG': True,

@@ -19,7 +19,7 @@ def test_export_companies(client):
     assert resp.status_code == 200
     assert resp.content_type == MIMETYPE
     fn = 'test_file.xlsx'
-    with open(fn, 'w') as f:
+    with open(fn, 'wb') as f:
         f.write(resp.body)
         f.close()
     wb = load_workbook(fn)
@@ -49,7 +49,7 @@ def test_export_companies_domain_filter(client):
     assert resp.status_code == 200
     assert resp.content_type == MIMETYPE
     fn = 'test_file.xlsx'
-    with open(fn, 'w') as f:
+    with open(fn, 'wb') as f:
         f.write(resp.body)
         f.close()
     wb = load_workbook(fn)
@@ -85,7 +85,7 @@ def test_user_list_export(client):
     assert resp.status_code == 200
     assert resp.content_type == MIMETYPE
     fn = 'test_file.xlsx'
-    with open(fn, 'w') as f:
+    with open(fn, 'wb') as f:
         f.write(resp.body)
         f.close()
     wb = load_workbook(fn)

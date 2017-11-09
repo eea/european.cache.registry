@@ -3,7 +3,7 @@ import contextlib
 import sys
 
 from flask import request
-import StringIO
+from io import StringIO
 
 from cache_registry.api.views import ApiView
 from cache_registry.sync.commands import (
@@ -31,7 +31,7 @@ class MgmtCommand(ApiView):
 
     def get(self, **kwargs):
         kwargs = kwargs or request.args.to_dict()
-        with stdout_redirect(StringIO.StringIO()) as output:
+        with stdout_redirect(StringIO()) as output:
             try:
                 success = self.command_func(**kwargs)
                 message = ''
