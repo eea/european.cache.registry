@@ -17,7 +17,7 @@ def update_obj(obj, d):
     if not d:
         obj = None
     else:
-        for name, value in d.iteritems():
+        for name, value in d.items():
             setattr(obj, name, value)
     return obj
 

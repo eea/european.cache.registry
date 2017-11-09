@@ -19,18 +19,18 @@ class MailsAdd(ApiView):
     def post(self):
         mail = request.form['mail']
         if MailAddress.query.filter_by(mail=mail).all():
-            return json.dumps({
+            return {
                 'success': False,
                 'message': 'This email address already exists'
-            })
+            }
         contact = MailAddress(mail=mail,
                               first_name=request.form['first_name'],
                               last_name=request.form['last_name'])
         db.session.add(contact)
         db.session.commit()
-        return json.dumps({
+        return {
             'success': True
-        })
+        }
 
 
 class MailsDelete(ApiView):

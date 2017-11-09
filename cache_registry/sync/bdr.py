@@ -23,7 +23,7 @@ def do_bdr_request(url, params=None):
     except requests.ConnectionError:
         error_message = 'BDR was unreachable - {}'.format(datetime.now())
         current_app.logger.warning(error_message)
-        print error_message
+        print(error_message)
         if 'sentry' in current_app.extensions:
             current_app.extensions['sentry'].captureMessage(error_message)
 
@@ -113,7 +113,7 @@ def update_bdr_col_name(undertaking):
 
     if error_message:
         current_app.logger.warning(error_message)
-        print error_message
+        print(error_message)
         if 'sentry' in current_app.extensions:
             current_app.extensions['sentry'].captureMessage(error_message)
 

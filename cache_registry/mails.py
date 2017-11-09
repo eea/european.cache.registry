@@ -15,8 +15,8 @@ def send_mail(subject, html, recipients):
         mail.send(message)
         return True
     except smtplib.SMTPAuthenticationError:
-        print 'Wrong username/password. ' + \
-            'Please review their values in settings.py'
+        print('Wrong username/password. ' \
+              'Please review their values in settings.py')
         return False
 
 

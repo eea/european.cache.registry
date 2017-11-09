@@ -123,7 +123,7 @@ class UndertakingFilterCountView(ListView):
             qs = qs.join(EuLegalRepresentativeCompany)
         qs = qs.filter(Undertaking.oldcompany_verified == True)
 
-        for k, v in request.args.iteritems():
+        for k, v in request.args.items():
             if k not in self.FILTERS:
                 abort(400)
             if k == 'OR_vat':

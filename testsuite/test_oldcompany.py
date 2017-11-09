@@ -27,7 +27,7 @@ def test_oldcompany_set_valid(client):
     resp = client.post(url_for('api.oldcompany-set-valid',
                                pk=oldcompany.external_id))
     data = resp.body
-    assert data == 'true'
+    assert data.decode() == 'true'
     assert oldcompany.valid is True
 
 
@@ -36,5 +36,5 @@ def test_oldcompany_set_invalid(client):
     resp = client.post(url_for('api.oldcompany-set-invalid',
                                pk=oldcompany.external_id))
     data = resp.body
-    assert data == 'true'
+    assert data.decode() == 'true'
     assert oldcompany.valid is False

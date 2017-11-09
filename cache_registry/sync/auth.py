@@ -34,7 +34,7 @@ def cleanup_unused_users():
     """ Remove users that do not have a company attached """
     unused_users = User.query.filter_by(undertakings=None)
 
-    print "Removing", unused_users.count(), "unused users"
+    print("Removing", unused_users.count(), "unused users")
     for u in unused_users:
         db.session.delete(u)
         current_app.logger.info(
