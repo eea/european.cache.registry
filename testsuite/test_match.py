@@ -42,28 +42,6 @@ def test_verify_link(client, monkeypatch):
     assert data['oldcompany_account'] == oldcompany.account
 
 
-def test_verify_none(client, monkeypatch):
-    monkeypatch.setattr(requests, 'get', mockreturn)
-    undertaking = factories.UndertakingFactory(oldcompany=None)
-    oldcompany = factories.OldCompanyFactory()
-    factories.OldCompanyLinkFactory(undertaking=undertaking,
-                                    oldcompany=oldcompany
-                                    )
-    client.post(url_for('api.candidate-verify_none',
-                        domain=undertaking.domain,
-                        undertaking_id=undertaking.external_id),
-                dict(user='test_user'))
-    resp = client.get(url_for('misc.log-matching', domain=undertaking.domain))
-    data = resp.json
-
-    assert len(data) == 1
-    data = data[0]
-    assert data['verified'] is True
-    assert data['user'] == 'test_user'
-    assert data['oldcompany_id'] is None
-    assert data['company_id'] == 10
-
-
 def test_auto_verify_companies(client, monkeypatch):
     monkeypatch.setattr(requests, 'get', mockreturn)
     old_company = factories.OldCompanyFactory(country_code='FR')
