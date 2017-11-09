@@ -29,8 +29,16 @@ Overview
 
 * `/candidate/[domain]/list` -  all matching candidates from domain
 * `/candidate/[domain]/list/verified` - list verified undertakings from domain
-* `/candidate/[domain]/verify/[company_id]/` - mark an undertaking as linked, without a matching company, from domain
-* `/candidate/[domain]/unverify/[company_id]/` - unlink undertaking from domain
+* `/candidate/[domain]/verify/[undertaking_id]/[oldcompany_id]/` - mark an
+undertaking-company link as verified from domain
+* `/candidate/[domain]/unverify/[undertaking_id]/` - unverify undertaking-company link
+after prior verfication from domain
+* `/candidate/[domain]/manual/[undertaking_id]/[oldcompany_account]` - manualy link
+undertaking with company account
+
+* `/match/run` - run matching algorithm
+* `/match/flush` - remove all matching links created by the matching algorithm,
+verified or not
 
 **Export calls:**
 
@@ -382,21 +390,23 @@ Lists all possible Company candidates for matching with existing Undertakings fr
     ]
 
 
-/candidate/[domain]/verify/[company_id]/ - POST
+/candidate/[domain]/verify/[undertaking_id]/[oldcompany_id]/ - POST
 -----------------------------------------------
 
-Verifies a company from a certain domain is unlinked with any old companies.
+Verifies the link created by the matching algorithm between an Undertaking (from a
+domain) and a Company from BDR.
 
     {
       "verified": true,
-      "company_id": 10085
+      "company_id": 10085,
+      "collection_id": 3934
     }
 
 
-/candidate/[domain]/unverify/[company_id]/ - POST
+/candidate/[domain]/unverify/[undertaking_id]/ - POST
 -------------------------------------------------
 
-Removes any link between an Undertaking (from a domain) and a Company.
+Unverify any link between an Undertaking (from a domain) and a Company.
 
     {
       "website": "WEBSITE--10085",
@@ -419,9 +429,20 @@ Removes any link between an Undertaking (from a domain) and a Company.
       "businessprofile_id": 1
     }
 
+/candidate/[domain]/manual/[undertaking_id]/[oldcompany_account] - POST
+-----------------------------------------------------------------------
 
-/candidate/[domain]/list/verified
----------------------------------
+Manualy link an Undertaking and a Company account, without previous linking by the
+matching algorithm.
+
+    {
+        "undertaking_id": 234,
+        "oldcompany_account": "fgas22331",
+        "verified": true,
+    }
+
+/candidate/[domain]/list/verified - GET
+---------------------------------------
 
 Lists the already verified undertakings from a domain.
 
@@ -447,6 +468,28 @@ Lists the already verified undertakings from a domain.
         "businessprofile_id": 1
       }
     ]
+
+/match/run - GET
+----------------
+
+Run the matching algorithm. This creates a link between a matching Undertaking and a
+Company. These links must be manualy verified, using the verified routes explained above.
+
+    {
+        'success': True/False,
+        'message': 'Success/Error message'
+    }
+
+/match/flush - GET
+------------------
+
+Clean-up all matching links created by the algorithm, **including** those that were
+verified by a user.
+
+    {
+        'success': True/False,
+        'message': 'Success/Error message'
+    }
 
 Export calls
 ============
@@ -642,7 +685,6 @@ Optional parameters:
 * days (integer, default = 7)
 * updated_since (string, datetime format DD/MM/YYYY)
 
-    ]
 
 Settings calls
 ==============

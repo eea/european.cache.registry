@@ -18,6 +18,7 @@ def register_url(prefix, url, view, name, view_name):
         view_func=view.as_view(name + '-' + view_name)
     )
 
+
 # Undertaking
 
 undertaking_prefix = '/undertaking/<domain>'
@@ -97,10 +98,13 @@ register_url(prefix=candidate_prefix, name=candidate_name,
              url='/unverify/<undertaking_id>/',
              view=CandidateUnverify,
              view_name='unverify')
+
 register_url(prefix=candidate_prefix, name=candidate_name,
-             view=CandidateVerifyNone,
-             url='/verify-none/<undertaking_id>',
-             view_name='verify_none')
+             url='/manual/<undertaking_id>/<oldcompany_account>',
+             view=CandidateVerifyManual,
+             view_name='manual')
+
+
 # Commands
 
 command_prefix = '/sync'
@@ -168,23 +172,3 @@ register_url(prefix=command_prefix, name=command_name,
              url='/flush',
              view=MatchFlush,
              view_name='flush')
-
-register_url(prefix=command_prefix, name=command_name,
-             url='/verify/<int:undertaking_id>/<int:oldcompany_id>',
-             view=MatchVerify,
-             view_name='verify')
-
-register_url(prefix=command_prefix, name=command_name,
-             url='/unverify/<int:undertaking_external_id>',
-             view=MatchUnverify,
-             view_name='unverify')
-
-register_url(prefix=command_prefix, name=command_name,
-             url='/test/<new>/<old>',
-             view=MatchTest,
-             view_name='test')
-
-register_url(prefix=command_prefix, name=command_name,
-             url='/manual/<int:undertaking_id>/<oldcompany_account>',
-             view=MatchManual,
-             view_name='manual')
