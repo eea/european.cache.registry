@@ -1,7 +1,22 @@
 fgas-cache-server
 =================
 
-A middleware between F-Gas and ODS Registries and BDR
+A middleware between FGAS and ODS Registries and BDR.
+
+This application fetches data from FGAS/ODS and BDR, runs a fuzzy matching algorithm
+between the new companies (called Undertakings) that were imported from the
+specific registries and the old companies (called Companies) that used BDR for reporting
+before switching to FGAS/ODS registries.
+
+Matching is a two-step process, since the fuzzy matching algorithm results have to be
+verified by a authenticated user.
+* A matching **command** is run which creates link objects for matching Undertaking -
+Company pairs - this command can also be configured to verify all undertakings from
+a domain or undertakings for which the algorithm cannot find a match.
+* An authenticated user can **verify** the link created by the matching algorithm. If a
+mistake was made, the link can be unverified.
+* An authenticated user can make a **manual** connection between an Undertaking and a
+Company, without a prior matching link.
 
 [![Travis](https://travis-ci.org/eea/eea.docker.fcs.svg?branch=master)](
 https://travis-ci.org/eea/eea.docker.fcs)
