@@ -3,7 +3,6 @@ down_revision = '100ea8b4b4e3'
 import sqlalchemy as sa
 
 from alembic import op
-from sqlalchemy.dialects import mysql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -17,7 +16,7 @@ class BusinessProfile(Base):
     __tablename__ = 'businessprofile'
 
     id = sa.Column(sa.Integer, primary_key=True)
-    highleveluses = sa.Column(sa.String(255))
+    highleveluses = sa.Column(sa.String(900))
 
 
 class Undertaking(Base):
@@ -31,7 +30,6 @@ class Undertaking(Base):
 
 class UndertakingBusinessProfile(Base):
     __tablename__ = 'undertaking_businessprofile'
-    __table_args__ = ({'mysql_engine': 'MyISAM'},)
 
     undertaking_id = sa.Column(sa.ForeignKey('undertaking.id'),
                                primary_key=True)
@@ -51,7 +49,7 @@ def upgrade():
             continue
         profiles = undertaking.businessprofile.highleveluses.split(',')
         undertaking_businessprofiles[undertaking.id] = profiles
-    op.drop_constraint('undertaking_ibfk_3', 'undertaking', 'foreignkey')
+    op.drop_column(u'undertaking', 'businessprofile_id')
     session.query(BusinessProfile).delete()
 
     op.add_column(
@@ -85,7 +83,7 @@ def downgrade():
         u'undertaking',
         sa.Column(
             'businessprofile_id',
-            mysql.INTEGER(display_width=11),
+            sa.Integer(),
             autoincrement=False,
             nullable=True
             )
@@ -120,7 +118,6 @@ def downgrade():
         old_format_businessprofile_id += 1
 
     op.drop_column(u'businessprofile', 'domain')
+    op.drop_table('undertaking_businessprofile')
     session.query(BusinessProfile).delete()
     op.bulk_insert(BusinessProfile.__table__, old_format_businessprofile_values)
-
-    op.drop_table('undertaking_businessprofile')

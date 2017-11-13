@@ -4,12 +4,11 @@ down_revision = '32903473e4ba'
 from alembic import op
 import sqlalchemy as sa
 
+from cache_registry.models import db
+
 
 def upgrade():
-    try:
-        op.drop_constraint(u'email', 'user', type_='unique')
-    except:
-        pass
+    op.drop_constraint('email', 'user', type_='unique')
 
 
 def downgrade():

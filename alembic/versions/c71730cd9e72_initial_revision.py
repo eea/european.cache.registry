@@ -42,7 +42,7 @@ def upgrade():
                     sa.Column('last_name', sa.String(length=255),
                               nullable=True),
                     sa.Column('email', sa.String(length=255), nullable=True),
-                    sa.PrimaryKeyConstraint('id')
+                    sa.PrimaryKeyConstraint('id'),
                     )
     op.create_table('address',
                     sa.Column('id', sa.Integer(), nullable=False),
@@ -117,6 +117,7 @@ def upgrade():
                                             ['undertaking.id'], ),
                     sa.ForeignKeyConstraint(['user_id'], ['user.id'], )
                     )
+    op.create_unique_constraint(u'email', 'user', ['email'])
 
 
 def downgrade():

@@ -5,8 +5,8 @@ from alembic import op
 
 
 def upgrade():
-    op.create_unique_constraint(None, 'mail_address', ['mail'])
+    op.create_unique_constraint('uniq_mail_const', 'mail_address', ['mail'])
 
 
 def downgrade():
-    op.drop_constraint(None, 'mail_address')
+    op.drop_constraint('uniq_mail_const', 'mail_address')
