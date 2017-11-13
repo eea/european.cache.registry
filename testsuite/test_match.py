@@ -1,12 +1,10 @@
 # coding=utf8
-import unittest
 
 import requests
 
 from flask import url_for
 from . import factories
 
-from instance.settings import INTERESTING_OBLIGATIONS
 from cache_registry.match import run
 from cache_registry.models import OldCompanyLink
 

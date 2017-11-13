@@ -176,7 +176,7 @@ def sync_collections_title():
 
 @sync_manager.command
 def bdr():
-    obligations = current_app.config.get('INTERESTING_OBLIGATIONS', [])
+    obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES', [])
     for obl in obligations:
         print("Getting obligation: ", obl)
         companies = get_old_companies(obl)

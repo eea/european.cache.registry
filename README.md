@@ -139,7 +139,7 @@ a company. Use the company external id as a key.
 
 * List domains, separated by commas, on which matching should be run:
 
-        INTERESTING_OBLIGATIONS = ODS
+        MANUAL_VERIFY_ALL_COMPANIES = ODS
 
 * List domains, separated by commas, on which matching shouldn't be run
 

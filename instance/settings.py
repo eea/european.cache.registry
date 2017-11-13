@@ -16,6 +16,7 @@ SQLALCHEMY_DATABASE_URI = '{schema}://{user}:{pwd}@{host}/{dbname}'.format(
   pwd=os.environ.get('DB_PASS', ''),
   host=os.environ.get('DB_HOST', ''),
   dbname=os.environ.get('DB_NAME', ''))
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 BASE_URL = os.environ.get('BASE_URL', 'http://localhost')
 API_URL = BASE_URL + '/rest/api'
@@ -67,8 +68,8 @@ AUTO_VERIFY_ALL_COMPANIES = (
 )
 
 # Retrieve organisations with the following domains
-INTERESTING_OBLIGATIONS = (
-    os.environ.get('INTERESTING_OBLIGATIONS', 'ODS,FGAS').split(',')
+MANUAL_VERIFY_ALL_COMPANIES = (
+    os.environ.get('MANUAL_VERIFY_ALL_COMPANIES', 'ODS,FGAS').split(',')
 )
 
 # specify if notifications mails are sent

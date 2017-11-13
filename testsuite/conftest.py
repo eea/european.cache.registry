@@ -17,7 +17,7 @@ TEST_CONFIG = {
     'SENTRY_DSN': '',
     'BDR_HELP_DESK_MAIL': 'test-mail',
     'LOG_FILE': 'test.log',
-    'INTERESTING_OBLIGATIONS': [FGAS, ODS],
+    'MANUAL_VERIFY_ALL_COMPANIES': [FGAS, ODS],
     'MAIL_SERVER': 'localhost',
     'MAIL_PORT': 25,
     'TESTING': True,
