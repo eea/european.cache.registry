@@ -22,6 +22,7 @@ Company, without a prior matching link.
 https://travis-ci.org/eea/european.cache.registry)
 [![Coverage](https://coveralls.io/repos/github/eea/european.cache.registry/badge.svg?branch=master)](
 https://coveralls.io/github/eea/european.cache.registry)
+[![Docker]( https://dockerbuildbadges.quelltext.eu/status.svg?organization=eeacms&repository=european.cache.registry)](https://hub.docker.com/r/eeacms/european.cache.registry/builds)
 
 ### Prerequisites
 
