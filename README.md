@@ -36,6 +36,8 @@ https://coveralls.io/github/eea/european.cache.registry)
 
         cp .secret.example .secret
         vim .secret
+        cp docker/init.sql.example docker/init.sql
+        vim docker/init.sql
 
 1. Start application stack:
 
@@ -103,11 +105,11 @@ the ports directive (e.g. "5000:5000" instead of "5000").
 
 ## Data import
 
-* Copy the test database in ecr.db container and import into mysql:
+* Copy the test database in ecr.db container and import into postgres:
 
-        docker cp ecr.sql ecr.db:/var/lib/mysql/ecr.sql
+        docker cp ecr.sql ecr.db:ecr.sql
         docker exec -it ecr.db bash
-        mysql -uroot -p ecr < /var/lib/mysql/ecr.sql
+        psql ecr -U ecr < ecr.sql
 
 ## Syncronise with FGAS/ODS Portal
 
