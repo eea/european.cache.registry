@@ -5,23 +5,21 @@ services:
     image: eeacms/european.cache.registry
     container_name: ecr.app
     depends_on:
-    - mysql
+    - postgres
     env_file:
     - .secret
     volumes:
     - /etc/localtime:/etc/localtime:ro
 
-  mysql:
-    image: mysql:5.5
+  postgres:
+    image: postgres:9
     container_name: ecr.db
     environment:
-    - MYSQL_DATABASE=ecr
-    - MYSQL_USER=ecr
-    - MYSQL_PASSWORD=ecr
-    - MYSQL_ROOT_PASSWORD=ecr
+    - POSTGRES_PASSWORD=ecr
     volumes:
     - /etc/localtime:/etc/localtime:ro
-    - data:/var/lib/mysql
+    - data:/var/lib/postgresql/data
+    - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   data:

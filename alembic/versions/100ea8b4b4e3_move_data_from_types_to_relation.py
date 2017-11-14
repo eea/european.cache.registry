@@ -61,8 +61,6 @@ def upgrade():
                     sa.ForeignKeyConstraint(['undertaking_id'],
                                             ['undertaking.id'], ),
                     sa.PrimaryKeyConstraint('undertaking_id', 'type_id'),
-                    mysql_default_charset=u'utf8',
-                    mysql_engine=u'MyISAM'
                     )
 
     bind = op.get_bind()
