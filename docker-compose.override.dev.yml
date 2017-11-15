@@ -10,4 +10,3 @@ services:
     - "5000"
     volumes:
     - .:/var/local/european.cache.registry
-    entrypoint: ["./docker-entrypoint.sh", "runserver"]

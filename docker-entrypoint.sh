@@ -18,6 +18,10 @@ if [ ! -e .skip-db-init ]; then
   python manage.py db alembic upgrade head
 fi
 
+if [ "$DEBUG" = 'True' ]; then
+    python manage.py runserver -h 0.0.0.0 -p 5000
+fi
+
 if [ -z "$1" ]; then
   echo "Serving on port 5000"
   exec gunicorn manage:app \
