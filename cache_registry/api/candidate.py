@@ -58,6 +58,21 @@ class CandidateVerify(ApiView):
         return self.serialize(link, pop_id=False)
 
 
+class CandidateVerifyNone(ApiView):
+
+    @classmethod
+    def serialize(cls, obj, pop_id=True):
+        data = ApiView.serialize(obj, pop_id=pop_id)
+        if data:
+            data.pop('undertaking_id')
+        return data
+
+    def post(self, domain, undertaking_id):
+        user = request.form['user']
+        link = verify_none(undertaking_id, domain, user) or abort(404)
+        return self.serialize(link, pop_id=False)
+
+
 class CandidateUnverify(ApiView):
     def post(self, domain, undertaking_id):
         user = request.form['user']
