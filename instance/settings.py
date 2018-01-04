@@ -86,6 +86,6 @@ fuzzy matching algorithm percent value
 FUZZ_LIMIT = int(os.environ.get('FUZZ_LIMIT', '75'))
 
 try:
-    from instance.localsettings import *
+    from instance.extra.localsettings import *
 except ImportError:
     pass

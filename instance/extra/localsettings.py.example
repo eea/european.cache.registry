@@ -1,0 +1,20 @@
+PATCH_USERS = {
+    '26880': [
+        {
+            'username': 'userName',
+            'first_name': 'firstName',
+            'last_name': 'lastName',
+            'email': 'emailAddress',
+        },
+    ],
+}
+
+PATCH_COMPANIES = {
+    '26880': {
+        'company_id': 10085,
+        'undertaking_type': 'FGASUndertaking',
+        'website': 'WEBSITE--10085',
+        'status': 'VALID',
+        'domain': 'ODS',
+    }
+}
