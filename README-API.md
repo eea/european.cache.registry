@@ -31,6 +31,8 @@ Overview
 * `/candidate/[domain]/list/verified` - list verified undertakings from domain
 * `/candidate/[domain]/verify/[undertaking_id]/[oldcompany_id]/` - mark an
 undertaking-company link as verified from domain
+* `/candidate/[domain]/verify-none/[undertaking_id]/` - mark an
+undertaking as verified from domain
 * `/candidate/[domain]/unverify/[undertaking_id]/` - unverify undertaking-company link
 after prior verfication from domain
 * `/candidate/[domain]/manual/[undertaking_id]/[oldcompany_account]` - manualy link
@@ -395,6 +397,18 @@ Lists all possible Company candidates for matching with existing Undertakings fr
 
 Verifies the link created by the matching algorithm between an Undertaking (from a
 domain) and a Company from BDR.
+
+    {
+      "verified": true,
+      "company_id": 10085,
+      "collection_id": 3934
+    }
+
+
+/candidate/[domain]/verify-none/[undertaking_id]/ - POST
+-----------------------------------------------
+
+Verifies the Undertaking without a Company link.
 
     {
       "verified": true,

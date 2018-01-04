@@ -64,7 +64,7 @@ class CandidateVerifyNone(ApiView):
     def serialize(cls, obj, pop_id=True):
         data = ApiView.serialize(obj, pop_id=pop_id)
         if data:
-            data.pop('undertaking_id')
+            data.pop('id')
         return data
 
     def post(self, domain, undertaking_id):
