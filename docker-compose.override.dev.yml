@@ -10,3 +10,8 @@ services:
     - "5000"
     volumes:
     - .:/var/local/european.cache.registry
+
+  postgres:
+    image: postgres:9-alpine
+    ports:
+      - "5432:5432"
