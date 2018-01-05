@@ -192,7 +192,7 @@ class UndertakingStatusUpdate(ApiView):
     model = Undertaking
 
     def post(self, domain, pk):
-        status = request.form['status']
+        status = request.form.to_dict()['status']
         if status:
             company = self.model.query.filter_by(
                 domain=domain,
