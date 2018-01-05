@@ -95,7 +95,7 @@ register_url(prefix=candidate_prefix, name=candidate_name,
              view_name='verify')
 
 register_url(prefix=candidate_prefix, name=candidate_name,
-             url='/verify-none/<undertaking_id>/',
+             url='/verify-none/<undertaking_id>',
              view=CandidateVerifyNone,
              view_name='verify-none')
 

@@ -31,7 +31,7 @@ Overview
 * `/candidate/[domain]/list/verified` - list verified undertakings from domain
 * `/candidate/[domain]/verify/[undertaking_id]/[oldcompany_id]/` - mark an
 undertaking-company link as verified from domain
-* `/candidate/[domain]/verify-none/[undertaking_id]/` - mark an
+* `/candidate/[domain]/verify-none/[undertaking_id]` - mark an
 undertaking as verified from domain
 * `/candidate/[domain]/unverify/[undertaking_id]/` - unverify undertaking-company link
 after prior verfication from domain
