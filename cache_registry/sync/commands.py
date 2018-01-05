@@ -64,10 +64,6 @@ def update_undertakings(undertakings, check_function):
         if check_function(undertaking):
             update_undertaking(undertaking)
             undertakings_count += 1
-            # automatically approve undertaking
-            current_app.logger.info(
-                'Automatically approve {}'.format(
-                    undertaking['external_id']))
     return undertakings_count
 
 
