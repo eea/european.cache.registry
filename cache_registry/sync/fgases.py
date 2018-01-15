@@ -21,8 +21,8 @@ def eea_double_check_fgases(data):
     if all([manufacturer, len(data['types']) == 1,
             data['address']['country']['type'] == 'NONEU_TYPE']) and \
        not has_eu_legal_rep:
-       message = 'NONEU_TYPE Equipment manufacturers only, with no EU Legal '\
-                 'Representative Company, have no reporting obligations'
+        message = 'NONEU_TYPE Equipment manufacturers only, with no EU Legal '\
+                  'Representative Company, have no reporting obligations'
         current_app.logger.error(message + identifier)
         remove_undertaking(data, domain=FGAS)
         ok = False
