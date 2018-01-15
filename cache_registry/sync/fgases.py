@@ -16,12 +16,13 @@ def eea_double_check_fgases(data):
                data['businessProfile']['highLevelUses'], data['types'],
                data['contactPersons'], data['domain'])
     ok = True
-
+    has_eu_legal_rep = data.get('euLegalRepresentativeCompany')
     manufacturer = 'FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS' in data['types']
     if all([manufacturer, len(data['types']) == 1,
-            data['address']['country']['type'] == 'NONEU_TYPE']):
-        message = 'NONEU_TYPE Equipment manufacturers only, have no reporting'\
-                  ' obligations'
+            data['address']['country']['type'] == 'NONEU_TYPE']) and \
+       not has_eu_legal_rep:
+       message = 'NONEU_TYPE Equipment manufacturers only, with no EU Legal '\
+                 'Representative Company, have no reporting obligations'
         current_app.logger.error(message + identifier)
         remove_undertaking(data, domain=FGAS)
         ok = False
