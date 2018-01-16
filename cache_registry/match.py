@@ -168,7 +168,7 @@ def verify_none(undertaking_id, domain, user):
 def verify_manual(undertaking_id, domain, oldcompany_account, user):
     u = models.Undertaking.query.filter_by(
         external_id=undertaking_id,
-        domain=domain
+        domain=domain.upper()
     ).first()
     if not u:
         return None
