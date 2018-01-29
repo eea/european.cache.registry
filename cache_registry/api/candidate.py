@@ -23,6 +23,7 @@ class CandidateList(ApiView):
             company_data = {
                 'company_id': company.external_id,
                 'name': company.name,
+                'date_updated': str(company.date_updated),
                 'status': company.status,
                 'country': company.address.country.name
             }
