@@ -62,8 +62,8 @@ def get_unverified_companies(domains):
 
 def get_oldcompanies_for_matching():
     qs = models.OldCompany.query.filter_by(undertaking=None, valid=True)
-    obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES', [FGAS,
-                                                                     ODS])
+    obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES',
+                                         [FGAS, ODS])
     qs = qs.filter(models.OldCompany.obligation.in_(obligations))
     return qs
 
@@ -238,8 +238,8 @@ def run():
     companies = get_unverified_companies(auto_verify_domains)
     for company in companies:
         verify_none(company.external_id, company.domain, 'SYSTEM')
-    interesting_obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES',
-                                                     [])
+    interesting_obligations = current_app.config.get(
+        'MANUAL_VERIFY_ALL_COMPANIES', [])
     companies = get_unverified_companies(interesting_obligations)
     oldcompanies = get_oldcompanies_for_matching()
 

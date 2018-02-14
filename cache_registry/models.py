@@ -323,11 +323,10 @@ def loaddata(fixture, session=None):
     for object in objects:
         database_object = eval(object['model']).query.filter_by(
             id=object['fields']['id']
-        )
-        if database_object:
-            database_object.delete()
-        session.add(eval(object['model'])(**object['fields']))
-    session.commit()
+        ).first()
+        if not database_object:
+            session.add(eval(object['model'])(**object['fields']))
+            session.commit()
 
 
 def get_fixture_objects(file):

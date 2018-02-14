@@ -96,5 +96,6 @@ class CandidateVerifyManual(ApiView):
 
     def post(self, domain, undertaking_id, oldcompany_account):
         user = request.form['user']
-        undertaking = verify_manual(undertaking_id, domain, oldcompany_account, user)
+        undertaking = verify_manual(undertaking_id, domain, oldcompany_account,
+                                    user)
         return ApiView.serialize(undertaking)

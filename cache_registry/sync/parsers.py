@@ -72,7 +72,9 @@ def parse_company(company, obligation):
         company.pop(f)
     company['country_code'] = country['code']
     company['external_id'] = company.pop('pk')
-    company['date_registered'] = parse_date_for_company(company['date_registered'])
+    company['date_registered'] = parse_date_for_company(
+        company['date_registered']
+    )
     company['obligation'] = obligation
 
     oldcompany = (
@@ -84,4 +86,3 @@ def parse_company(company, obligation):
         oldcompany = OldCompany(**company)
         db.session.add(oldcompany)
     return company
-
