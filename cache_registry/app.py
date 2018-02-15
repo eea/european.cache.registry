@@ -9,6 +9,7 @@ from cache_registry.sync import sync_manager
 from cache_registry.match import match_manager
 from cache_registry.manager import utils_manager
 from cache_registry.admin import admin
+from cache_registry.debug_sql import sql_debug
 
 DEFAULT_CONFIG = {
     'API_URL': 'http://example.com/rest/api',
@@ -37,6 +38,8 @@ def create_app(config={}):
         Sentry(app, dsn=app.config.get('SENTRY_DSN'),
                logging=True, level=logging.ERROR)
 
+    if app.config.get('DEBUG'):
+        app.after_request(sql_debug)
     return app
 
 
