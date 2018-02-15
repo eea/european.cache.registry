@@ -141,15 +141,18 @@ a company. Use the company external id as a key.
 
 * List domains, separated by commas, on which matching should be run:
 
-        MANUAL_VERIFY_ALL_COMPANIES = ODS
+        MANUAL_VERIFY_ALL_COMPANIES = ODS,FGAS
 
 * List domains, separated by commas, on which matching shouldn't be run
 
         AUTO_VERIFY_ALL_COMPANIES = FGAS
 
-* Specify if companies with no match found by the algorithm should be auto-verified:
+* Specify if on companies with a certain domain and no match found 
+by the algorithm should be auto-verified(!This company should also be declared in MANUAL_VERIFY_ALL_COMPANIES):
 
-        AUTO_VERIFY_NEW_COMPANIES = False
+        AUTO_VERIFY_NEW_COMPANIES = FGAS,ODS
+        
+**! Make sure you don't live a comma between the domains (FGAS,ODS not ~~FGAS, ODS~~)**
 
 * Run matching algorithm:
 

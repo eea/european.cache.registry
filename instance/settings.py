@@ -58,8 +58,7 @@ HTTPS_VERIFY = (
 # this switch tells if companies with no matching candidates are automatically
 # verified as being so by the system or not
 AUTO_VERIFY_NEW_COMPANIES = (
-    True if os.environ.get('AUTO_VERIFY_NEW_COMPANIES', '')
-    in ('True', 'true') else False
+    os.environ.get('AUTO_VERIFY_NEW_COMPANIES', '').split(',')
 )
 
 # this list of domains skips matching for all companies with the given domains

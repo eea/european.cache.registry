@@ -12,7 +12,7 @@ TEST_CONFIG = {
     'BDR_ENDPOINT_URL': '',
     'BDR_ENDPOINT_USER': 'user',
     'BDR_ENDPOINT_PASSWORD': 'password',
-    'AUTO_VERIFY_NEW_COMPANIES': True,
+    'AUTO_VERIFY_NEW_COMPANIES': [FGAS],
     'AUTO_VERIFY_ALL_COMPANIES': [],
     'SENTRY_DSN': '',
     'BDR_HELP_DESK_MAIL': 'test-mail',

@@ -233,7 +233,7 @@ def match_all(companies, oldcompanies):
 @match_manager.command
 def run():
     auto_verify_domains = current_app.config.get(
-        'AUTO_VERIFY_ALL_COMPANIES', [FGAS, ODS]
+        'AUTO_VERIFY_ALL_COMPANIES', []
     )
     companies = get_unverified_companies(auto_verify_domains)
     for company in companies:
@@ -245,10 +245,13 @@ def run():
 
     links, new_companies = match_all(companies, oldcompanies)
     print(len(links), "matching links")
-    if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
+    verify_new_companies = current_app.config.get('AUTO_VERIFY_NEW_COMPANIES')
+    if verify_new_companies:
         print("Autoverifying companies without candidates")
-        for c in new_companies:
-            verify_none(c['company_id'], c['domain'], 'SYSTEM')
+        for new_company in new_companies:
+            if new_company['domain'] in verify_new_companies:
+                verify_none(new_company['company_id'], new_company['domain'],
+                            'SYSTEM')
     return True
 
 
