@@ -77,13 +77,26 @@ SEND_MATCHING_MAILS = (
     True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True', 'true') else False
 )
 
-
-
 """
 fuzzy matching algorithm percent value
 (how much should old and new be alike). ex: 75
 """
 FUZZ_LIMIT = int(os.environ.get('FUZZ_LIMIT', '75'))
+
+NOT_OBLIGED_TO_REPORT = [
+    'import.of.products.or.equipment.for.laboratory.or.analytical.use',
+    'import.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts',
+    'export.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts',
+    'import.of.products.or.equipment.for.destruction',
+    'import.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts',
+    'export.of.products.or.equipment.covered.by.an.exemption.decision',
+    'export.of.products.or.equipment.for.laboratory.or.analytical.use',
+    'import.of.methyl.bromide.for.repackaging.and.re-export',
+    'export.of.methyl.bromide.for.quarantine.and.pre-shipment.use',
+    'import.of.products.or.equipment.covered.by.an.exemption.decision',
+    'export.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts',
+    'export.of.metered.dose.inhalers'
+]
 
 try:
     from instance.extra.localsettings import *
