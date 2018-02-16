@@ -1,5 +1,5 @@
 from flask import current_app
-from instance.settings import ODS
+from instance.settings import ODS, NOT_OBLIGED_TO_REPORT
 
 from cache_registry.models import Type, BusinessProfile
 
@@ -83,6 +83,7 @@ def eea_double_check_ods(data):
 
     businessprofiles = [object.highleveluses for object in
                         BusinessProfile.query.filter_by(domain=ODS)]
+    obliged_to_report = False
     for high_level_use in data['businessProfile']['highLevelUses']:
         if high_level_use not in businessprofiles:
             message = "Organisation highlevel use {0} is not accepted.".format(
@@ -90,5 +91,14 @@ def eea_double_check_ods(data):
             )
             current_app.logger.error(message + identifier)
             ok = False
+        elif high_level_use not in NOT_OBLIGED_TO_REPORT:
+            obliged_to_report = True
+
+    if not obliged_to_report:
+        message = "Organisations with highlevel use {0} should not be reported.".format(
+            high_level_use
+        )
+        current_app.logger.error(message + identifier)
+        ok = False
 
     return ok
