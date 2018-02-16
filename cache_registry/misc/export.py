@@ -33,7 +33,8 @@ class UndertakingListExport(MethodView):
     ]
 
     def get_data(self, domain):
-        return [UndertakingListView.serialize(c) for c in get_all_non_candidates(domain)]
+        return [UndertakingListView.serialize(c) for c
+                in get_all_non_candidates(domain)]
 
     def parse_column(self, qs, column):
         def _parse_address(qs, column):
@@ -120,4 +121,3 @@ class UserListExportJSON(MethodView):
                             'contact_email': cp.email
                           })
         return Response(json.dumps(resp, indent=2), mimetype='application/json')
-

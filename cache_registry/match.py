@@ -62,8 +62,8 @@ def get_unverified_companies(domains):
 
 def get_oldcompanies_for_matching():
     qs = models.OldCompany.query.filter_by(undertaking=None, valid=True)
-    obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES', [FGAS,
-                                                                     ODS])
+    obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES',
+                                         [FGAS, ODS])
     qs = qs.filter(models.OldCompany.obligation.in_(obligations))
     return qs
 
@@ -233,22 +233,25 @@ def match_all(companies, oldcompanies):
 @match_manager.command
 def run():
     auto_verify_domains = current_app.config.get(
-        'AUTO_VERIFY_ALL_COMPANIES', [FGAS, ODS]
+        'AUTO_VERIFY_ALL_COMPANIES', []
     )
     companies = get_unverified_companies(auto_verify_domains)
     for company in companies:
         verify_none(company.external_id, company.domain, 'SYSTEM')
-    interesting_obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES',
-                                                     [])
+    interesting_obligations = current_app.config.get(
+        'MANUAL_VERIFY_ALL_COMPANIES', [])
     companies = get_unverified_companies(interesting_obligations)
     oldcompanies = get_oldcompanies_for_matching()
 
     links, new_companies = match_all(companies, oldcompanies)
     print(len(links), "matching links")
-    if current_app.config.get('AUTO_VERIFY_NEW_COMPANIES'):
+    verify_new_companies = current_app.config.get('AUTO_VERIFY_NEW_COMPANIES')
+    if verify_new_companies:
         print("Autoverifying companies without candidates")
-        for c in new_companies:
-            verify_none(c['company_id'], c['domain'], 'SYSTEM')
+        for new_company in new_companies:
+            if new_company['domain'] in verify_new_companies:
+                verify_none(new_company['company_id'], new_company['domain'],
+                            'SYSTEM')
     return True
 
 

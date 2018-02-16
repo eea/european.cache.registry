@@ -134,5 +134,53 @@
             "domain": "ODS",
             "type":"PRODUCER"
         }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 18,
+            "domain": "ODS",
+            "type":"ODS_DESTROYER"
+        }
+    },
+        {
+        "model":"Type",
+        "fields":{
+            "id": 19,
+            "domain": "ODS",
+            "type":"ODS_FEEDSTOCK_USER"
+        }
+    },
+        {
+        "model":"Type",
+        "fields":{
+            "id": 20,
+            "domain": "ODS",
+            "type":"ODS_PROCESS_AGENT_USER"
+        }
+    },
+        {
+        "model":"Type",
+        "fields":{
+            "id": 21,
+            "domain": "ODS",
+            "type":"ODS_STOCKS_HOLDER"
+        }
+    },
+        {
+        "model":"Type",
+        "fields":{
+            "id": 22,
+            "domain": "ODS",
+            "type":"ODS_NEW_SUBSTANCES_PRODUCER_IMP_EXP"
+        }
+    },
+        {
+        "model":"Type",
+        "fields":{
+            "id": 23,
+            "domain": "ODS",
+            "type":"ODS_PRODUCER_IN_EU"
+        }
     }
 ]

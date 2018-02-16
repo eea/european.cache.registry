@@ -1,5 +1,6 @@
 import logging
 
+import sys
 import flask
 from flask.ext.script import Manager
 from cache_registry.models import db, db_manager
@@ -9,6 +10,7 @@ from cache_registry.sync import sync_manager
 from cache_registry.match import match_manager
 from cache_registry.manager import utils_manager
 from cache_registry.admin import admin
+from cache_registry.debug_sql import sql_debug
 
 DEFAULT_CONFIG = {
     'API_URL': 'http://example.com/rest/api',
@@ -30,13 +32,14 @@ def create_app(config={}):
     app.register_blueprint(misc)
     admin.init_app(app)
     create_logger(app)
-
     if app.config.get('SENTRY_DSN'):
         from raven.contrib.flask import Sentry
 
         Sentry(app, dsn=app.config.get('SENTRY_DSN'),
                logging=True, level=logging.ERROR)
 
+    if app.config.get('DEBUG') and 'testsuite' not in sys.argv:
+        app.after_request(sql_debug)
     return app
 
 

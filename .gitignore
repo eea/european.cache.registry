@@ -96,3 +96,5 @@ log_file.log
 docker-compose.override.yml
 .skip-db-init
 init.sql
+
+instance/extra/localsettings.py

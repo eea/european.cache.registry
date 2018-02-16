@@ -3,7 +3,7 @@
 import os
 
 # Turn this off on production
-DEBUG = True if os.environ.get('DEBUG', '') in ('True','true') else False
+DEBUG = True if os.environ.get('DEBUG', '') in ('True', 'true') else False
 
 ODS = 'ODS'
 FGAS = 'FGAS'
@@ -58,7 +58,7 @@ HTTPS_VERIFY = (
 # this switch tells if companies with no matching candidates are automatically
 # verified as being so by the system or not
 AUTO_VERIFY_NEW_COMPANIES = (
-    True if os.environ.get('AUTO_VERIFY_NEW_COMPANIES', '') in ('True', 'true') else False
+    os.environ.get('AUTO_VERIFY_NEW_COMPANIES', '').split(',')
 )
 
 # this list of domains skips matching for all companies with the given domains
@@ -74,7 +74,8 @@ MANUAL_VERIFY_ALL_COMPANIES = (
 
 # specify if notifications mails are sent
 SEND_MATCHING_MAILS = (
-    True if os.environ.get('SEND_MATCHING_MAILS', '') in ('True', 'true') else False
+    True if os.environ.get('SEND_MATCHING_MAILS', '')
+    in ('True', 'true') else False
 )
 
 """
