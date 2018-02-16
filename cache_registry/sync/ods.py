@@ -84,6 +84,14 @@ def eea_double_check_ods(data):
     businessprofiles = [object.highleveluses for object in
                         BusinessProfile.query.filter_by(domain=ODS)]
     obliged_to_report = False
+
+    high_level_uses_set = set(data['businessProfile']['highLevelUses'])
+
+    if not high_level_uses_set:
+        message = "Organisation high level uses are missing."
+        current_app.logger.error(message + identifier)
+        ok = False
+
     for high_level_use in data['businessProfile']['highLevelUses']:
         if high_level_use not in businessprofiles:
             message = "Organisation highlevel use {0} is not accepted.".format(
@@ -92,11 +100,12 @@ def eea_double_check_ods(data):
             current_app.logger.error(message + identifier)
             ok = False
         elif high_level_use not in NOT_OBLIGED_TO_REPORT:
+            high_level_uses_set.remove(high_level_use)
             obliged_to_report = True
 
-    if not obliged_to_report:
-        message = "Organisations with highlevel use {0} should not be reported.".format(
-            high_level_use
+    if not obliged_to_report and high_level_uses_set:
+        message = "Organisations with highlevel uses {0} should not be reported.".format(
+            ', '.join(high_level_uses_set)
         )
         current_app.logger.error(message + identifier)
         ok = False
