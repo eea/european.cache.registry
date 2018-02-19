@@ -1,5 +1,5 @@
 from flask import current_app
-from instance.settings import ODS, NOT_OBLIGED_TO_REPORT
+from instance.settings import ODS, NOT_OBLIGED_TO_REPORT, NO_HIGHLEVEL_TYPES
 
 from cache_registry.models import Type, BusinessProfile
 
@@ -87,7 +87,7 @@ def eea_double_check_ods(data):
 
     high_level_uses_set = set(data['businessProfile']['highLevelUses'])
 
-    if not high_level_uses_set:
+    if not (high_level_uses_set or set(data['types']) & NO_HIGHLEVEL_TYPES):
         message = "Organisation high level uses are missing."
         current_app.logger.error(message + identifier)
         ok = False

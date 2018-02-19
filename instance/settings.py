@@ -98,6 +98,16 @@ NOT_OBLIGED_TO_REPORT = [
     'export.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts',
     'export.of.metered.dose.inhalers'
 ]
+# Undertaking objects with any of the above high level uses should be ignored
+# during sync.
+
+NO_HIGHLEVEL_TYPES = {
+    'REPACKAGER', 'PRODUCER', 'ODS_DESTROYER', 'ODS_FEEDSTOCK_USER',
+    'ODS_PROCESS_AGENT_USER', 'ODS_STOCKS_HOLDER',
+    'ODS_NEW_SUBSTANCES_PRODUCER_IMP_EXP', 'ODS_PRODUCER_IN_EU'
+}
+# Undertaking objects with any of the types above are allowed to have
+# empty high level uses.
 
 try:
     from instance.extra.localsettings import *
