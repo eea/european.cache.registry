@@ -123,7 +123,7 @@ def verify_link(undertaking_id, oldcompany_id, user):
         log_match(undertaking_id, oldcompany_id, True, user,
                   domain=undertaking.domain,
                   oldcompany_account=undertaking.oldcompany_account
-        )
+                  )
         models.db.session.commit()
         send_match_mail(match=True, user=user,
                         company_name=undertaking.name,
@@ -203,7 +203,7 @@ def has_match(company, old):
     if c_code != o_code:
         return False
     c_vat = company['vat'] or ''
-    o_vat = old['vat_number'] or ''
+    o_vat = old['eori'] or ''
     if all((c_vat, o_vat)) and c_vat == o_vat:
         return True
     c_name = company['name'].lower()
