@@ -29,13 +29,9 @@
         "euLegalRepresentativeCompany" : null,
         "vat" : null,
         "businessProfile" : {
-            "highLevelUses" : [ "fgas.imports.for.destruction",
-                "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs" ]
+            "highLevelUses" : []
         },
-        "types" : [ "FGAS_EXPORTER_HFCS", "FGAS_PRODUCER_IMPORTER_EXPORTER_NON_HFCS",
-            "FGAS_RECEIVER_EXEMPTED_HFCS", "FGAS_DESTROYER_HFCS",
-            "FGAS_IMPORTER_OF_EQUIPMENT_HFCS", "FGAS_PRODUCER_IMPORTER_HFCS",
-            "FGAS_FEEDSTOCK_USER_HFCS" ]
+        "types" : ["FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS"]
     },
     {
         "@type" : "FGASUndertaking",
@@ -93,9 +89,9 @@
             "zipCode" : "1234",
             "city" : "asdfsafsaf",
             "country" : {
-                "code" : "CN",
-                "name" : "China (excluding Hong Kong and Macao)",
-                "type" : "NONEU_TYPE"
+                "code" : "IE",
+                "name" : "Ireland",
+                "type" : "EU_TYPE"
             }
         },
         "website" : null,
