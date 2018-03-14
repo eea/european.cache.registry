@@ -61,7 +61,7 @@ def test_find_company_link(client, monkeypatch):
                                                oldcompany_verified=False)
     old_company = factories.OldCompanyFactory(
         country_code=undertaking.country_code,
-        vat_number=undertaking.vat
+        eori=undertaking.vat
     )
     run()
     links = OldCompanyLink.query.all()
