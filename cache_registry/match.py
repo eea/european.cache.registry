@@ -63,7 +63,7 @@ def get_unverified_companies(domains):
 def get_oldcompanies_for_matching():
     qs = models.OldCompany.query.filter_by(undertaking=None, valid=True)
     obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES',
-                                         [FGAS, ODS])
+                                         [ODS])
     qs = qs.filter(models.OldCompany.obligation.in_(obligations))
     return qs
 
@@ -189,6 +189,8 @@ def verify_manual(undertaking_id, domain, oldcompany_account, user):
 
 
 def get_country(country_code):
+    if not country_code:
+        return
     cc = country_code.lower()
     if cc == 'gb':
         cc = 'uk'
