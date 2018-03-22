@@ -30,6 +30,7 @@ class UserCompaniesView(DetailView):
                 'name': company.name,
                 'domain': company.domain,
                 'country': company.country_code,
+                'representative_country': None if not company.represent else
+                company.represent.address.country.code
             }
-
         return [_serialize(c) for c in obj.verified_undertakings]
