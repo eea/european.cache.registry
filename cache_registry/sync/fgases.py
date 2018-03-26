@@ -45,7 +45,8 @@ def eea_double_check_fgases(data):
         current_app.logger.error(message + identifier)
         ok = False
 
-    if all([data['status'] == 'DISABLED', len(data['contactPersons']) > 0]):
+    if all([data['status'] == 'DISABLED',
+            len(data.get('contactPersons', {})) > 0]):
         message = "Contact Persons available for DISABLED company"
         current_app.logger.error(message + identifier)
         ok = False
