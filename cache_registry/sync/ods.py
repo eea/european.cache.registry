@@ -17,7 +17,7 @@ def eea_double_check_ods(data):
                data['contactPersons'], data['domain'])
 
     required_fields = ['@type', 'id', 'name', 'address', 'phone', 'domain',
-                       'contactPersons', 'dateCreated', 'dateUpdated',
+                       'dateCreated', 'dateUpdated',
                        'status', 'eoriNumber', 'types',
                        'businessProfile']
     required_fields_country = ['code', 'name', 'type']
@@ -45,7 +45,8 @@ def eea_double_check_ods(data):
         current_app.logger.error(message + identifier)
         ok = False
 
-    if all([data['status'] == 'DISABLED', len(data['contactPersons']) > 0]):
+    if all([data['status'] == 'DISABLED',
+            len(data.get('contactPersons', {})) > 0]):
         message = "Contact Persons available for DISABLED company."
         current_app.logger.error(message + identifier)
         ok = False
