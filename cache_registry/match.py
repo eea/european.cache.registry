@@ -62,7 +62,7 @@ def get_unverified_companies(domains):
 
 def get_unverified_non_eu_no_represent_companies():
     return [company for company in
-            get_unverified_companies([FGAS, ODS]).filter_by(represent_id=None).all()
+            get_unverified_companies([FGAS]).filter_by(represent_id=None).all()
             if company.address.country.type == 'NONEU_TYPE']
 
 

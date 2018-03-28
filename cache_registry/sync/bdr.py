@@ -14,7 +14,7 @@ def get_absolute_url(base_url, url):
 
 def check_no_represent(undertaking):
     if (not undertaking.represent_id and
-            undertaking.address.country.type == 'NON_EUTYPE'):
+            undertaking.address.country.type == 'NONEU_TYPE'):
         return True
 
 
