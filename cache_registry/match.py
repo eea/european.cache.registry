@@ -60,6 +60,12 @@ def get_unverified_companies(domains):
     )
 
 
+def get_unverified_non_eu_no_represent_companies():
+    return [company for company in
+            get_unverified_companies([FGAS, ODS]).filter_by(represent_id=None).all()
+            if company.address.country.type == 'NONEU_TYPE']
+
+
 def get_oldcompanies_for_matching():
     qs = models.OldCompany.query.filter_by(undertaking=None, valid=True)
     obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES',
@@ -234,10 +240,16 @@ def match_all(companies, oldcompanies):
 
 @match_manager.command
 def run():
+    no_represent_companies = get_unverified_non_eu_no_represent_companies()
+
+    for company in no_represent_companies:
+        verify_none(company.external_id, company.domain, 'SYSTEM')
+
     auto_verify_domains = current_app.config.get(
         'AUTO_VERIFY_ALL_COMPANIES', []
     )
     companies = get_unverified_companies(auto_verify_domains)
+
     for company in companies:
         verify_none(company.external_id, company.domain, 'SYSTEM')
     interesting_obligations = current_app.config.get(

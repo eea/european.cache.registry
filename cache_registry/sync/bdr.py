@@ -12,6 +12,12 @@ def get_absolute_url(base_url, url):
     return current_app.config[base_url] + url
 
 
+def check_no_represent(undertaking):
+    if (not undertaking.represent_id and
+            undertaking.address.country.type == 'NON_EUTYPE'):
+        return True
+
+
 def do_bdr_request(url, params=None):
     auth = get_auth('BDR_ENDPOINT_USER', 'BDR_ENDPOINT_PASSWORD')
     ssl_verify = current_app.config['HTTPS_VERIFY']
@@ -58,10 +64,14 @@ def call_bdr(undertaking, old_collection=False):
     if not current_app.config.get('BDR_ENDPOINT_URL'):
         current_app.logger.warning('No bdr endpoint. No bdr call.')
         return True
+
+    country_code = undertaking.country_code
+    if check_no_represent(undertaking):
+        country_code = 'NON_EU'
     params = {
         'company_id': undertaking.external_id,
         'domain': undertaking.domain,
-        'country': undertaking.country_code,
+        'country': country_code,
         'name': undertaking.name
     }
     if old_collection:
@@ -87,8 +97,12 @@ def update_bdr_col_name(undertaking):
         current_app.logger.warning('No bdr endpoint. No bdr call.')
         return True
 
+    country_code = undertaking.country_code.lower()
+    if check_no_represent(undertaking):
+        country_code = 'non_eu'
+
     params = {
-        'country_code': undertaking.country_code.lower(),
+        'country_code': country_code,
         'obligation_folder_name': DOMAIN_TO_ZOPE_FOLDER.get(undertaking.domain),
         'account_uid': str(undertaking.external_id),
         'organisation_name': undertaking.name,
