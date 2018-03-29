@@ -188,7 +188,7 @@ class Undertaking(SerializableModel, db.Model):
             return self.address.country.code
         elif (len(self.types) >= 1 and
                         self.types[0].type == 'FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS'):
-            return self.address.country.code
+            return 'NON_EU'
         elif (self.represent and self.represent.address and
                 self.represent.address.country):
             return self.represent.address.country.code
