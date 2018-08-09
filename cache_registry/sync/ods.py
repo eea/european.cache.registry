@@ -40,14 +40,8 @@ def eea_double_check_ods(data):
         current_app.logger.error(message + identifier)
         ok = False
 
-    if not data['status'] in ['VALID', 'DISABLED']:
-        message = 'Organisation status differs from VALID or DISABLED.'
-        current_app.logger.error(message + identifier)
-        ok = False
-
-    if all([data['status'] == 'DISABLED',
-            len(data.get('contactPersons', {})) > 0]):
-        message = "Contact Persons available for DISABLED company."
+    if data['status'] not in ['VALID']:
+        message = 'Organisation status differs from VALID.'
         current_app.logger.error(message + identifier)
         ok = False
 

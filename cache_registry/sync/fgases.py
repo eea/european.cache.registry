@@ -29,8 +29,8 @@ def eea_double_check_fgases(data):
         remove_undertaking(data, domain=FGAS)
         ok = False
 
-    if not all(('status' in data, data['status'] in ['VALID', 'DISABLED'])):
-        message = 'Organisation status differs from VALID or DISABLED.'
+    if not all(('status' in data, data['status'] in ['VALID'])):
+        message = 'Organisation status differs from VALID.'
         current_app.logger.error(message + identifier)
         ok = False
 
@@ -42,12 +42,6 @@ def eea_double_check_fgases(data):
     if not all([l.startswith('fgas.')
                 for l in data['businessProfile']['highLevelUses']]):
         message = "Organisation highLevelUses elements don't start with 'fgas.'"
-        current_app.logger.error(message + identifier)
-        ok = False
-
-    if all([data['status'] == 'DISABLED',
-            len(data.get('contactPersons', {})) > 0]):
-        message = "Contact Persons available for DISABLED company"
         current_app.logger.error(message + identifier)
         ok = False
 
