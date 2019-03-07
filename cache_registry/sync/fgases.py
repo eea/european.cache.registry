@@ -26,7 +26,6 @@ def eea_double_check_fgases(data):
                          {'highLevelUses': []})['highLevelUses']) == 0]):
         message = 'NONEU_TYPE Companies must have a representative.'
         current_app.logger.warning(message + identifier)
-        remove_undertaking(data, domain=FGAS)
         ok = False
 
     if not all(('status' in data, data['status'] in ['VALID'])):

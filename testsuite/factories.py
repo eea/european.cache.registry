@@ -124,6 +124,15 @@ class UndertakingFactory(SQLAlchemyModelFactory):
                 self.types.add(type)
 
     @post_generation
+    def represent_history(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for represent in extracted:
+                self.represent_history.add(represent)
+
+    @post_generation
     def businessprofiles(self, create, extracted, **kwargs):
         if not create:
             return

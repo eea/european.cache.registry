@@ -164,6 +164,11 @@ class Undertaking(SerializableModel, db.Model):
                            default=None)
     address = relationship(Address)
     represent = relationship(EuLegalRepresentativeCompany)
+    represent_history = relationship(
+        'EuLegalRepresentativeCompany',
+        secondary='undertaking_represent_history',
+        backref=db.backref('undertakings', lazy='dynamic')
+    )
     businessprofiles = relationship(
         'BusinessProfile',
         secondary='undertaking_businessprofile',
@@ -256,6 +261,15 @@ class UndertakingBusinessProfile(SerializableModel, db.Model):
                                backref=db.backref('businessprofiles_link'))
     businessprofile = relationship('BusinessProfile')
 
+class UndertakingRepresentHistory(SerializableModel, db.Model):
+    __tablename__ = 'undertaking_represent_history'
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
+    represent_id = Column(ForeignKey('represent.id'),
+                                primary_key=True)
+    undertaking = relationship('Undertaking', cascade="all",
+                               backref=db.backref('represent_history_link'))
+    represent = relationship('EuLegalRepresentativeCompany', cascade="all")
 
 class OrganizationLog(SerializableModel, db.Model):
     __tablename__ = 'organization_log'
