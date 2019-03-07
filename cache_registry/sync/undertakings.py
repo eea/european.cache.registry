@@ -97,7 +97,6 @@ def update_undertaking(data, check_failed=False):
                 print("Updated collection title for: {0}".format(
                     undertaking.external_id
                 ))
-
     if not undertaking.address:
         addr = Address(**address)
         db.session.add(addr)
@@ -115,7 +114,7 @@ def update_undertaking(data, check_failed=False):
         old_represent = undertaking.represent
         undertaking.represent = None
         if old_represent:
-            db.session.delete(old_represent)
+            undertaking.represent_history.append(old_represent)
     else:
         address = represent.pop('address')
         if not undertaking.represent:
@@ -123,12 +122,20 @@ def update_undertaking(data, check_failed=False):
             db.session.add(addr)
             r = EuLegalRepresentativeCompany(**represent)
             db.session.add(r)
-
             undertaking.represent = r
             undertaking.represent.address = addr
         else:
-            parsers.update_obj(undertaking.represent.address, address)
-            parsers.update_obj(undertaking.represent, represent)
+            if represent['vatnumber'] != undertaking.represent.vatnumber:
+                undertaking.represent_history.append(undertaking.represent)
+                addr = Address(**address)
+                db.session.add(addr)
+                r = EuLegalRepresentativeCompany(**represent)
+                db.session.add(r)
+                undertaking.represent = r
+                undertaking.represent.address = addr
+            else:
+                parsers.update_obj(undertaking.represent.address, address)
+                parsers.update_obj(undertaking.represent, represent)
 
     # Update or create types
     UndertakingTypes.query.filter_by(undertaking=undertaking).delete()
@@ -198,6 +205,10 @@ def remove_undertaking(data, domain):
         msg = 'Removing undertaking name: {}'\
               ' with id: {}'.format(undertaking.name, undertaking.id)
         current_app.logger.warning(msg)
+        undertaking.represent_history = []
+        undertaking.types = []
+        undertaking.business_profiles = []
+        db.session.commit()
         db.session.delete(undertaking)
     else:
         msg = 'No company with id: {} found in the db'.format(data.get('id'))

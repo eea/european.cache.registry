@@ -3,6 +3,10 @@ import json
 
 from flask import abort, request
 
+from cache_registry.api.serializers import (
+    AddressDetail,
+    EuLegalRepresentativeCompanyDetail
+)
 from cache_registry.api.views import DetailView, ListView, ApiView
 from cache_registry.api.old_company import OldCompanyDetail
 from cache_registry.api.user import UserListView
@@ -10,37 +14,12 @@ from cache_registry.models import (
     Undertaking, EuLegalRepresentativeCompany,
     Address, db
 )
+
 from cache_registry.match import (
     get_all_non_candidates,
     str_matches,
     get_candidates
 )
-
-
-class AddressDetail(DetailView):
-    model = Address
-
-    @classmethod
-    def serialize(cls, obj, **kwargs):
-        addr = ApiView.serialize(obj)
-        if not addr:
-            return None
-        addr['country'] = ApiView.serialize(obj.country)
-        addr.pop('country_id')
-        return addr
-
-
-class EuLegalRepresentativeCompanyDetail(DetailView):
-    model = EuLegalRepresentativeCompany
-
-    @classmethod
-    def serialize(cls, obj, **kwargs):
-        rep = ApiView.serialize(obj)
-        if not rep:
-            return None
-        rep['address'] = AddressDetail.serialize(obj.address)
-        rep.pop('address_id')
-        return rep
 
 
 class UndertakingListView(ListView):
@@ -64,6 +43,10 @@ class UndertakingListView(ListView):
             'types': ",".join([type.type for type in obj.types]),
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
+            'represent_history': [
+                EuLegalRepresentativeCompanyDetail.serialize(representative_hist)
+                for representative_hist in obj.represent_history
+            ],
             'businessprofile': ",".join(
                 [businessprofiles.highleveluses for
                  businessprofiles in obj.businessprofiles]
@@ -185,6 +168,10 @@ class UndertakingDetailView(DetailView):
             ),
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
+            'represent_history': [
+                EuLegalRepresentativeCompanyDetail.serialize(representative_hist)
+                for representative_hist in obj.represent_history
+            ],
             'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
             'candidates': [OldCompanyDetail.serialize(c.oldcompany) for c in
                            candidates],
