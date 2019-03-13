@@ -66,6 +66,7 @@ def patch_undertaking(external_id, data):
 
 def update_undertaking(data, check_failed=False):
     """ Create or update undertaking from received data """
+    represent_changed = False
     data = patch_undertaking(data['id'], data)
     address = parsers.parse_address(data.pop('address'))
     business_profiles = data.pop('businessProfile')
@@ -115,6 +116,7 @@ def update_undertaking(data, check_failed=False):
         undertaking.represent = None
         if old_represent:
             undertaking.represent_history.append(old_represent)
+            represent_changed = True
     else:
         address = represent.pop('address')
         if not undertaking.represent:
@@ -124,6 +126,7 @@ def update_undertaking(data, check_failed=False):
             db.session.add(r)
             undertaking.represent = r
             undertaking.represent.address = addr
+            represent_changed = True
         else:
             if represent['vatnumber'] != undertaking.represent.vatnumber:
                 undertaking.represent_history.append(undertaking.represent)
@@ -133,6 +136,7 @@ def update_undertaking(data, check_failed=False):
                 db.session.add(r)
                 undertaking.represent = r
                 undertaking.represent.address = addr
+                represent_changed = True
             else:
                 parsers.update_obj(undertaking.represent.address, address)
                 parsers.update_obj(undertaking.represent, represent)
@@ -190,7 +194,7 @@ def update_undertaking(data, check_failed=False):
     undertaking.country_code = undertaking.get_country_code()
     undertaking.country_code_orig = undertaking.get_country_code_orig()
     db.session.add(undertaking)
-    return undertaking
+    return (undertaking, represent_changed)
 
 
 def remove_undertaking(data, domain):

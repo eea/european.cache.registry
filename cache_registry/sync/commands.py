@@ -9,7 +9,7 @@ from cache_registry.models import Undertaking, db, OrganizationLog
 from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
-from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url
+from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url, call_bdr
 from .undertakings import update_undertaking, get_latest_undertakings
 
 from .fgases import eea_double_check_fgases
@@ -62,15 +62,20 @@ def update_undertakings(undertakings, check_function):
     # due to a circular import between cache_registry.match and cache_registry.sync.fgases
     from cache_registry.match import verify_none
     undertakings_count = 0
+    undertakings_with_changed_represent = []
     for undertaking in undertakings:
         if check_function(undertaking):
-            update_undertaking(undertaking)
+            (_, represent) = update_undertaking(undertaking)
             undertakings_count += 1
+            if represent:
+                undertakings_with_changed_represent.append(undertaking)
         else:
             undertaking_exists = Undertaking.query.filter_by(external_id=undertaking['id']).first()
             if undertaking_exists:
-                update_undertaking(undertaking, check_failed=True)
-    return undertakings_count
+                 (_, represent) = update_undertaking(undertaking, check_failed=True)
+                 if represent:
+                    undertakings_with_changed_represent.append(undertaking, check_failed=True)
+    return undertakings_with_changed_represent, undertakings_count
 
 
 def log_changes(last_update, undertakings_count, domain):
@@ -114,12 +119,14 @@ def fgases(days=7, updated_since=None, page_size=None):
         updated_since=last_update,
         page_size=page_size
     )
-    undertakings_count = update_undertakings(undertakings,
+    (undertakings_with_changed_repr,undertakings_count) = update_undertakings(undertakings,
                                              eea_double_check_fgases)
     cleanup_unused_users()
     log_changes(last_update, undertakings_count, domain=FGAS)
     print(undertakings_count, "values")
     db.session.commit()
+    for undertaking in undertakings_with_changed_repr:
+        call_bdr(undertaking)
     return True
 
 
@@ -135,12 +142,14 @@ def ods(days=7, updated_since=None, page_size=None):
         updated_since=last_update,
         page_size=page_size
     )
-    undertakings_count = update_undertakings(undertakings,
+    (undertakings_with_changed_repr,undertakings_count) = update_undertakings(undertakings,
                                              eea_double_check_ods)
     cleanup_unused_users()
     log_changes(last_update, undertakings_count, domain=ODS)
     print(undertakings_count, "values")
     db.session.commit()
+    for undertaking in undertakings_with_changed_repr:
+        call_bdr(undertaking)
     return True
 
 
