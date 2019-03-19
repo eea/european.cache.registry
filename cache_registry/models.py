@@ -186,12 +186,12 @@ class Undertaking(SerializableModel, db.Model):
         if (self.address and self.address.country and
                 self.address.country.type == 'EU_TYPE'):
             return self.address.country.code
-        elif (len(self.types) >= 1 and
-                        self.types[0].type == 'FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS'):
-            return 'NON_EU'
         elif (self.represent and self.represent.address and
                 self.represent.address.country):
             return self.represent.address.country.code
+        elif (len(self.types) >= 1 and
+                        self.types[0].type == 'FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS'):
+            return 'NON_EU'
         else:
             return None
 
