@@ -40,8 +40,8 @@ def eea_double_check_ods(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
-    if data['status'] not in ['VALID']:
-        message = 'Organisation status differs from VALID.'
+    if data['status'] not in ['VALID', 'REVISION']:
+        message = 'Organisation status differs from VALID or REVISION.'
         current_app.logger.warning(message + identifier)
         ok = False
 

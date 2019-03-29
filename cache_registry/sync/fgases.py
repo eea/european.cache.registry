@@ -29,8 +29,8 @@ def eea_double_check_fgases(data):
         remove_undertaking(data, domain=FGAS)
         ok = False
 
-    if not all(('status' in data, data['status'] in ['VALID'])):
-        message = 'Organisation status differs from VALID.'
+    if not all(('status' in data, data['status'] in ['VALID', 'REVISION'])):
+        message = 'Organisation status differs from VALID or REVISION.'
         current_app.logger.warning(message + identifier)
         ok = False
 
