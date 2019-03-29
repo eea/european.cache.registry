@@ -119,6 +119,15 @@ the ports directive (e.g. "5000:5000" instead of "5000").
         python ./manage.py sync fgases [-d 30]
         python ./manage.py sync ods [-d 30]
 
+
+* In order to sync from a long time ago, it is advised to use pagination. To use pagination, you must give -p parameter, containing the
+* number of companies that are brought in one request.
+
+        docker exec ecr.app bash -c "python ./manage.py sync fgases -d 500 -p 400"
+        python ./manage.py sync fgases [-d 30] [-p 100]
+        python ./manage.py sync ods [-d 30] [-p 100]
+
+
 * In order to sync BDR collections title with the cache server's corresponding undertakings name:
 
         docker exec ecr.app bash -c "./manage.py sync sync_collections_title"

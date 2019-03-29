@@ -101,11 +101,14 @@ def print_all_undertakings(undertakings):
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
-def fgases(days=7, updated_since=None):
+@sync_manager.option('-p', '--page_size', dest='page_size',
+                     help="Page size")
+def fgases(days=7, updated_since=None, page_size=None):
     last_update = get_last_update(days, updated_since, domain=FGAS)
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
-        updated_since=last_update
+        updated_since=last_update,
+        page_size=page_size
     )
     undertakings_count = update_undertakings(undertakings,
                                              eea_double_check_fgases)
@@ -119,11 +122,14 @@ def fgases(days=7, updated_since=None):
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
-def ods(days=7, updated_since=None):
+@sync_manager.option('-p', '--page_size', dest='page_size',
+                     help="Page size")
+def ods(days=7, updated_since=None, page_size=None):
     last_update = get_last_update(days, updated_since, domain=ODS)
     undertakings = get_latest_undertakings(
         type_url='/latest/odsundertakings/',
-        updated_since=last_update
+        updated_since=last_update,
+        page_size=page_size
     )
     undertakings_count = update_undertakings(undertakings,
                                              eea_double_check_ods)
@@ -137,12 +143,15 @@ def ods(days=7, updated_since=None):
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
-def fgases_debug_noneu(days=7, updated_since=None):
+@sync_manager.option('-p', '--page_size', dest='page_size',
+                     help="Page size")
+def fgases_debug_noneu(days=7, updated_since=None, page_size=None):
     # returns a list with all NON EU companies without a legal representative
     last_update = get_last_update(days, updated_since, domain=FGAS)
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
-        updated_since=last_update
+        updated_since=last_update,
+        page_size=page_size
     )
     print_all_undertakings(undertakings)
     return True

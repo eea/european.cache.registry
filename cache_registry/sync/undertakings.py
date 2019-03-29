@@ -13,7 +13,7 @@ from .bdr import update_bdr_col_name, get_absolute_url
 from .auth import get_auth, Unauthorized, InvalidResponse, patch_users
 
 
-def get_latest_undertakings(type_url, updated_since=None):
+def get_latest_undertakings(type_url, updated_since=None, page_size=None):
     """ Get latest undertakings from specific API url """
     auth = get_auth('API_USER', 'API_PASSWORD')
     url = get_absolute_url('API_URL', type_url)
@@ -25,6 +25,11 @@ def get_latest_undertakings(type_url, updated_since=None):
 
     headers = dict(zip(('user', 'password'), auth))
     ssl_verify = current_app.config['HTTPS_VERIFY']
+
+    if page_size:
+        params['pageSize'] = page_size
+        params['pageNumber'] = 1
+
     response = requests.get(url, params=params, headers=headers,
                             verify=ssl_verify)
 
@@ -34,8 +39,21 @@ def get_latest_undertakings(type_url, updated_since=None):
     if response.status_code != 200:
         raise InvalidResponse()
 
-    return response.json()
+    if not page_size:
+        return response.json()
 
+    no_of_pages = int(response.headers['numberOfPages'])
+    response_json = response.json()
+
+    for page_number in range(2, no_of_pages + 1):
+        params['pageNumber'] = page_number
+        response = requests.get(url, params=params,
+                                headers=headers, verify=ssl_verify)
+        if response.status_code != 200:
+            raise InvalidResponse()
+        response_json += response.json()
+
+    return response_json
 
 def patch_undertaking(external_id, data):
     external_id = str(external_id)
