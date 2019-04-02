@@ -66,6 +66,10 @@ def update_undertakings(undertakings, check_function):
         if check_function(undertaking):
             update_undertaking(undertaking)
             undertakings_count += 1
+        else:
+            undertaking_exists = Undertaking.query.filter_by(external_id=undertaking['id']).first()
+            if undertaking_exists:
+                update_undertaking(undertaking)
     return undertakings_count
 
 
