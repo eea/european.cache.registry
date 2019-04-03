@@ -126,7 +126,8 @@ def fgases(days=7, updated_since=None, page_size=None):
     print(undertakings_count, "values")
     db.session.commit()
     for undertaking in undertakings_with_changed_repr:
-        call_bdr(undertaking)
+        undertaking_obj = Undertaking.query.filter_by(undertaking['external_id']).first()
+        call_bdr(undertaking_obj)
     return True
 
 
@@ -149,7 +150,8 @@ def ods(days=7, updated_since=None, page_size=None):
     print(undertakings_count, "values")
     db.session.commit()
     for undertaking in undertakings_with_changed_repr:
-        call_bdr(undertaking)
+        undertaking_obj = Undertaking.query.filter_by(undertaking['external_id']).first()
+        call_bdr(undertaking_obj)
     return True
 
 
