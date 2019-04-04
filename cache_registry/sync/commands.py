@@ -150,7 +150,7 @@ def ods(days=7, updated_since=None, page_size=None):
     print(undertakings_count, "values")
     db.session.commit()
     for undertaking in undertakings_with_changed_repr:
-        undertaking_obj = Undertaking.query.filter_by(external_id=undertaking['external_id']]).first()
+        undertaking_obj = Undertaking.query.filter_by(external_id=undertaking['external_id']).first()
         call_bdr(undertaking_obj)
     return True
 
