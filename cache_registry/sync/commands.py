@@ -78,7 +78,6 @@ def log_changes(last_update, undertakings_count, domain):
         last_update = last_update.date()
     log = OrganizationLog(
         organizations=undertakings_count,
-        execution_time=last_update,
         using_last_update=last_update,
         domain=domain)
     db.session.add(log)
