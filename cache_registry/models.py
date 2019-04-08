@@ -285,7 +285,7 @@ class MailAddress(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     mail = Column(String(255), unique=True)
-    timestamp = Column(DateTime(timezone=True), default=datetime.now))
+    timestamp = Column(DateTime(timezone=True), default=datetime.now)
     first_name = Column(String(255))
     last_name = Column(String(255))
 
