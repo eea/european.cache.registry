@@ -262,7 +262,7 @@ class OrganizationLog(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     domain = Column(String(32), default="FGAS")
-    execution_time = Column(DateTime, default=datetime.utcnow)
+    execution_time = Column(DateTime(timezone=True), default=datetime.now)
     using_last_update = Column(Date)
     organizations = Column(Integer)
 
@@ -271,7 +271,7 @@ class MatchingLog(SerializableModel, db.Model):
     __tablename__ = 'matching_log'
 
     id = Column(Integer, primary_key=True)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime(timezone=True), default=datetime.now)
     user = Column(String(255))
     domain = Column(String(32), default="FGAS")
     company_id = Column(Integer)
@@ -285,7 +285,7 @@ class MailAddress(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     mail = Column(String(255), unique=True)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime(timezone=True), default=datetime.now))
     first_name = Column(String(255))
     last_name = Column(String(255))
 

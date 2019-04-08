@@ -6,6 +6,8 @@ services:
     container_name: ecr.app
     depends_on:
     - postgres
+    environment:
+    - TZ=Europe/Copenhagen
     env_file:
     - .secret
     volumes:
@@ -16,6 +18,7 @@ services:
     container_name: ecr.db
     environment:
     - POSTGRES_PASSWORD=ecr
+    - TZ=Europe/Copenhagen
     volumes:
     - /etc/localtime:/etc/localtime:ro
     - data:/var/lib/postgresql/data
