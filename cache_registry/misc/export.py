@@ -29,7 +29,8 @@ class UndertakingListExport(MethodView):
         'representative_address_street', 'representative_address_city',
         'representative_address_country_code',
         'representative_address_country_type',
-        'representative_address_country_name'
+        'representative_address_country_name',
+        'represent_history'
     ]
 
     def get_data(self, domain):
@@ -63,6 +64,7 @@ class UndertakingListExport(MethodView):
         ws.append(self.COLUMNS)
         for qs in queryset:
             qs['users'] = ', '.join([user['username'] for user in qs['users']])
+            qs['represent_history'] = ', '.join([repr['name'] for repr in qs['represent_history']])
             values = [self.parse_column(qs, column) for column in self.COLUMNS]
             ws.append(values)
         response = Response(save_virtual_workbook(wb), mimetype=MIME_TYPE)

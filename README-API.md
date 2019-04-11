@@ -114,6 +114,25 @@ Returns the list of all verified undertakings in the system, as fetched from dom
             "number": "nrstreet--7954",
             "street": "street--7954"
         },
+        "represent_history": [
+          {
+          "name": "EULEGALNAME44 OLD",
+          "contact_last_name": "lname--9853",
+          "vatnumber": "EUVAT45",
+          "contact_email": "9853email@climaOds2010.yyy",
+          "contact_first_name": "fname--9853",
+          "address": {
+            "city": "city--7954",
+            "country": {
+              "code": "IE",
+              "type": "EU_TYPE",
+              "name": "Ireland"
+            },
+            "zipcode": "zipcode--7954",
+            "number": "nrstreet--7954",
+            "street": "street--7954"
+        }
+        ],
         "date_updated": "10/10/2014",
         "phone": "+3212310085",
         "country_code": "CN",
@@ -213,6 +232,25 @@ Returns a list of all undertakings in the system (verified or not), as fetched f
             "number": "nrstreet--7954",
             "street": "street--7954"
         },
+        "represent_history": [
+          {
+          "name": "EULEGALNAME44 OLD",
+          "contact_last_name": "lname--9853",
+          "vatnumber": "EUVAT45",
+          "contact_email": "9853email@climaOds2010.yyy",
+          "contact_first_name": "fname--9853",
+          "address": {
+            "city": "city--7954",
+            "country": {
+              "code": "IE",
+              "type": "EU_TYPE",
+              "name": "Ireland"
+            },
+            "zipcode": "zipcode--7954",
+            "number": "nrstreet--7954",
+            "street": "street--7954"
+        }
+        ],
         "date_updated": "10/10/2014",
         "phone": "+3212310085",
         "country_code": "CN",
@@ -307,6 +345,25 @@ Returns an undertakings details from the system, as fetched from domain registry
           "street": "street--7954"
         }
       },
+      "represent_history": [
+          {
+          "name": "EULEGALNAME44 OLD",
+          "contact_last_name": "lname--9853",
+          "vatnumber": "EUVAT45",
+          "contact_email": "9853email@climaOds2010.yyy",
+          "contact_first_name": "fname--9853",
+          "address": {
+            "city": "city--7954",
+            "country": {
+              "code": "IE",
+              "type": "EU_TYPE",
+              "name": "Ireland"
+            },
+            "zipcode": "zipcode--7954",
+            "number": "nrstreet--7954",
+            "street": "street--7954"
+        }
+      ],
       "address": {
         "city": "city--7953",
         "country": {
@@ -367,7 +424,27 @@ Returns the list of undertakings for a user given by its unique username.
         "domain": "FGAS",
         "country": "CN",
         "company_id": 10085,
-        "name": "FGAS-NMORGANIZATION--10085"
+        "name": "FGAS-NMORGANIZATION--10085",
+        "respresentative_country": "DE",
+        "represent_history": [
+          {
+          "name": "EULEGALNAME44 OLD",
+          "contact_last_name": "lname--9853",
+          "vatnumber": "EUVAT45",
+          "contact_email": "9853email@climaOds2010.yyy",
+          "contact_first_name": "fname--9853",
+          "address": {
+            "city": "city--7954",
+            "country": {
+              "code": "IE",
+              "type": "EU_TYPE",
+              "name": "Ireland"
+            },
+            "zipcode": "zipcode--7954",
+            "number": "nrstreet--7954",
+            "street": "street--7954"
+        }
+      ],
       }
     ]
 

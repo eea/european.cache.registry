@@ -97,6 +97,7 @@ def get_all_non_candidates(domain='FGAS', vat=None):
         models.db.session.query(models.Undertaking)
         .options(joinedload(models.Undertaking.address))
         .options(joinedload(models.Undertaking.represent))
+        .options(joinedload(models.Undertaking.represent_history))
         .options(joinedload(models.Undertaking.businessprofiles))
         .options(joinedload(models.Undertaking.contact_persons))
         .options(joinedload(models.Undertaking.types))
