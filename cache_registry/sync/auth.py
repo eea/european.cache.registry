@@ -26,7 +26,8 @@ def patch_users(external_id, users):
     patch = current_app.config.get('PATCH_USERS', {})
     if external_id in patch:
         print("Patching company: {}".format(external_id))
-        users.extend(patch[external_id]), True
+        users.extend(patch[external_id])
+        return users, True
     return users, False
 
 
