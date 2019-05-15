@@ -74,7 +74,7 @@ def update_undertaking(data, check_failed=False):
     types = data.pop('types')
     if not data['domain'] == ODS:
         represent = parsers.parse_rc(data.pop('euLegalRepresentativeCompany'))
-    contact_persons = patch_users(data['id'], contact_persons)
+    contact_persons, is_patched = patch_users(data['id'], contact_persons)
     data['external_id'] = data.pop('id')
     data['date_created'] = parsers.parse_date(data.pop('dateCreated'))
     data['date_updated'] = parsers.parse_date(data.pop('dateUpdated'))
@@ -149,7 +149,7 @@ def update_undertaking(data, check_failed=False):
         if type_object not in undertaking.types:
             undertaking.types.append(type_object)
 
-    if check_failed:
+    if check_failed and not is_patched:
         undertaking.contact_persons[:] = []
     else:
         unique_emails = set([cp.get('email') for cp in contact_persons])
