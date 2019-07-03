@@ -26,7 +26,24 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : null,
+        "euLegalRepresentativeCompany" : {
+            "name": "Test OR",
+            "vatNumber": "TESTVAT123",
+            "contactPersonFirstName": "test f",
+            "contactPersonLastName": "test l",
+            "contactPersonEmailAddress": "test@test.ec.europa.eu",
+            "address": {
+                "street": "test s",
+                "number": null,
+                "zipCode": "test cp",
+                "city": "test city",
+                "country": {
+                    "code": "BE",
+                    "name": "Belgium",
+                    "type": "EU_TYPE"
+                }
+            }
+        },
         "vat" : null,
         "businessProfile" : {
             "highLevelUses" : []
@@ -68,7 +85,24 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : {},
+        "euLegalRepresentativeCompany" : {
+            "name": "Test OR",
+            "vatNumber": "TESTVAT123",
+            "contactPersonFirstName": "test f",
+            "contactPersonLastName": "test l",
+            "contactPersonEmailAddress": "test@test.ec.europa.eu",
+            "address": {
+                "street": "test s",
+                "number": null,
+                "zipCode": "test cp",
+                "city": "test city",
+                "country": {
+                    "code": "BE",
+                    "name": "Belgium",
+                    "type": "EU_TYPE"
+                }
+            }
+        },
         "vat" : null,
         "businessProfile" : {
             "highLevelUses" : [ "fgas.imports.for.destruction",
@@ -114,7 +148,24 @@
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
-        "euLegalRepresentativeCompany" : null,
+        "euLegalRepresentativeCompany" : {
+            "name": "Test OR",
+            "vatNumber": "TESTVAT123",
+            "contactPersonFirstName": "test f",
+            "contactPersonLastName": "test l",
+            "contactPersonEmailAddress": "test@test.ec.europa.eu",
+            "address": {
+                "street": "test s",
+                "number": null,
+                "zipCode": "test cp",
+                "city": "test city",
+                "country": {
+                    "code": "BE",
+                    "name": "Belgium",
+                    "type": "EU_TYPE"
+                }
+            }
+        },
         "vat" : null,
         "businessProfile" : {
             "highLevelUses" : [ "fgas.imports.for.destruction",
@@ -124,5 +175,48 @@
             "FGAS_RECEIVER_EXEMPTED_HFCS", "FGAS_DESTROYER_HFCS",
             "FGAS_IMPORTER_OF_EQUIPMENT_HFCS", "FGAS_PRODUCER_IMPORTER_HFCS",
             "FGAS_FEEDSTOCK_USER_HFCS" ]
+    },
+{
+        "@type" : "FGASUndertaking",
+        "id" : 10009,
+        "name" : "AAAAA",
+        "address" : {
+            "street" : "street",
+            "number" : null,
+            "zipCode" : "1234",
+            "city" : "asdfsafsaf",
+            "country" : {
+                "code" : "CN",
+                "name" : "China (excluding Hong Kong and Macao)",
+                "type" : "NONEU_TYPE"
+            }
+        },
+        "website" : null,
+        "phone" : "+3234343",
+        "domain" : "FGAS",
+        "contactPersons" : [
+            {
+                "userName" : "user1",
+                "firstName" : "User 1",
+                "lastName" : "User 1",
+                "emailAddress" : "user1@mock.ec.europa.eu"
+            },
+            {
+                "userName" : "user2",
+                "firstName" : "User 2",
+                "lastName" : "User 2",
+                "emailAddress" : "user2@mock.ec.europa.eu"
+            }
+        ],
+        "dateCreated" : "20/10/2014",
+        "dateUpdated" : "06/11/2014",
+        "status" : "VALID",
+        "euLegalRepresentativeCompany" : null,
+        "vat" : null,
+        "businessProfile" : {
+            "highLevelUses" : [ "fgas.imports.for.destruction",
+                "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs" ]
+        },
+        "types" : ["FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS"]
     }
 ]
