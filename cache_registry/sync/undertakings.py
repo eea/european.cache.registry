@@ -64,7 +64,7 @@ def patch_undertaking(external_id, data):
     return data
 
 
-def update_undertaking(data, check_failed=False):
+def update_undertaking(data, check_passed=False):
     """ Create or update undertaking from received data """
     represent_changed = False
     data = patch_undertaking(data['id'], data)
@@ -83,6 +83,9 @@ def update_undertaking(data, check_failed=False):
     if data['domain'] == ODS:
         represent = None
         data['vat'] = data.pop('eoriNumber')
+
+    data['check_passed'] = check_passed
+
     undertaking = (
         Undertaking.query
         .filter_by(external_id=data['external_id'])
@@ -149,7 +152,7 @@ def update_undertaking(data, check_failed=False):
         if type_object not in undertaking.types:
             undertaking.types.append(type_object)
 
-    if check_failed and not is_patched:
+    if not check_passed and not is_patched:
         undertaking.contact_persons[:] = []
     else:
         unique_emails = set([cp.get('email') for cp in contact_persons])
