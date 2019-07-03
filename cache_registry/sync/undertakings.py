@@ -64,7 +64,7 @@ def patch_undertaking(external_id, data):
     return data
 
 
-def update_undertaking(data, check_passed=False):
+def update_undertaking(data, check_passed=True):
     """ Create or update undertaking from received data """
     represent_changed = False
     data = patch_undertaking(data['id'], data)
