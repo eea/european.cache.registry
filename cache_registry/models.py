@@ -187,6 +187,8 @@ class Undertaking(SerializableModel, db.Model):
         lazy='dynamic',
     )
 
+    check_passed = Column(Boolean)
+
     def get_country_code(self):
         if (self.address and self.address.country and
                 self.address.country.type == 'EU_TYPE'):
