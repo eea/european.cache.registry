@@ -5,6 +5,7 @@ from flask.ext.script import Manager
 
 from cache_registry.models import db, User, Undertaking
 from cache_registry.sync.fgases import eea_double_check_fgases
+from cache_registry.sync.ods import eea_double_check_ods
 
 
 utils_manager = Manager()
@@ -41,8 +42,15 @@ def check_passed():
                 "lastName": contact_person.last_name,
                 "emailAddress": contact_person.email
             })
+        eori = None
+        if undertaking.oldcompany:
+            eori = undertaking.oldcompany.eori
         data = {
             'id': undertaking.id,
+            'name': undertaking.name,
+            'phone': undertaking.phone,
+            'dateCreated': undertaking.date_created,
+            'dateUpdated': undertaking.date_updated,
             'status': undertaking.status,
             'businessProfile': {
                 'highLevelUses': highleveluses
@@ -51,11 +59,18 @@ def check_passed():
             'contactPersons': contact_persons,
             'address': {
                 'country': {
+                    'code':undertaking.address.country.code,
+                    'name': undertaking.address.country.name,
                     'type': undertaking.address.country.type
                 }
             },
             'euLegalRepresentativeCompany': undertaking.represent,
-            'domain': undertaking.domain
+            'domain': undertaking.domain,
+            '@type': undertaking.undertaking_type,
+            'eoriNumber': eori
         }
-        undertaking.check_passed = eea_double_check_fgases(data)
+        if undertaking.domain == 'FGAS':
+            undertaking.check_passed = eea_double_check_fgases(data)
+        elif undertaking.domain == 'ODS':
+            undertaking.check_passed = eea_double_check_ods(data)
         db.session.commit()
