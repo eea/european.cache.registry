@@ -126,7 +126,10 @@ def verify_link(undertaking_id, oldcompany_id, user):
     link.undertaking.oldcompany_account = link.oldcompany.account
     link.undertaking.oldcompany_verified = True
     link.undertaking.oldcompany_extid = link.oldcompany.external_id
-    if call_bdr(undertaking, old_collection=True):
+    commit = True
+    if not link.undertaking.check_passed:
+        commit = call_bdr(undertaking, old_collection=True)
+    if commit:
         log_match(undertaking_id, oldcompany_id, True, user,
                   domain=undertaking.domain,
                   oldcompany_account=undertaking.oldcompany_account
@@ -183,7 +186,10 @@ def verify_manual(undertaking_id, domain, oldcompany_account, user):
     u.oldcompany_verified = True
     u.oldcompany_account = oldcompany_account
     u.oldcompany_extid = None
-    if call_bdr(u, old_collection=oldcompany_account):
+    commit = True
+    if not u.check_passed:
+        commit = call_bdr(u, old_collection=oldcompany_account)
+    if commit:
         log_match(undertaking_id, None, True, user,
                   domain=domain,
                   oldcompany_account=oldcompany_account)

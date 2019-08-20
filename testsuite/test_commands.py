@@ -32,9 +32,14 @@ from .factories import (
 def test_update_undertakings_fgas(client):
     with open('testsuite/fixtures/companies-fgas.json') as file:
         data = json.load(file)
-    (_, undertakings_count) = update_undertakings(data, eea_double_check_fgases)
-    assert undertakings_count == 2
-    assert models.Undertaking.query.fgases().count() == 2
+
+    (undertakings_with_changed_represent, undertakings_count) = update_undertakings(
+        data, eea_double_check_fgases
+    )
+
+    assert undertakings_count == 4
+    assert models.Undertaking.query.fgases().count() == 4
+    assert len(undertakings_with_changed_represent) == 3
 
 
 def test_update_undertakings_ods(client):
