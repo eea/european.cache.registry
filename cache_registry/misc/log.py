@@ -53,5 +53,5 @@ class CheckSyncLogsView(MethodView):
         now = datetime.now().replace(tzinfo=latest_log.execution_time.tzinfo)
         time = now - latest_log.execution_time
         if 3600 - time.seconds < 0:
-            return Response("failed", status=500, mimetype="plain/text")
-        return Response("success", status=200, mimetype="plain/text")
+            return Response("failed", status=500)
+        return Response("success", status=200)
