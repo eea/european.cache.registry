@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask import Response
+from flask.views import MethodView
 
 from sqlalchemy import desc
 
@@ -43,7 +44,8 @@ class MatchingLogsView(ListView):
         return [self.serialize(u)
                 for u in self.get_queryset(**kwargs)]
 
-class CheckSyncLogsView(ApiView):
+
+class CheckSyncLogsView(MethodView):
 
     def get(self, **kwargs):
         latest_log = OrganizationLog.query.filter_by(
