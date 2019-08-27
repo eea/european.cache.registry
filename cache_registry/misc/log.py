@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from flask import Response
+
 from sqlalchemy import desc
 
 from cache_registry.models import OrganizationLog, MatchingLog, Undertaking
@@ -38,3 +42,13 @@ class MatchingLogsView(ListView):
     def get(self, **kwargs):
         return [self.serialize(u)
                 for u in self.get_queryset(**kwargs)]
+
+class CheckSyncLogsView(ApiView):
+
+    def get(self, **kwargs):
+        latest_log = OrganizationLog.query.filter_by(
+            domain=kwargs['domain']).order_by(desc(OrganizationLog.execution_time)).first()
+        time = datetime.now() - latest_log.execution_time
+        if 3600 - time.seconds < 0:
+            return Response("failed", status=500, mimetype="plain/text")
+        return Response("success", status=200, mimetype="plain/text")

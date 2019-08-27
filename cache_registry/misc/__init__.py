@@ -88,6 +88,11 @@ register_url(prefix=log_prefix, name=log_name,
              view=MatchingLogsView,
              view_name='matching')
 
+register_url(prefix=log_prefix, name=log_name,
+             url='/check_sync/<domain>',
+             view=CheckSyncLogsView,
+             view_name='check_sync')
+
 
 class SettingsOverview(MethodView):
     def get(self, **kwargs):
