@@ -4,3 +4,4 @@ Flask-WebTest==0.0.9
 pytest-cov==2.5.1
 coveralls==0.5
 factory-boy==2.4.1
+ipdb
