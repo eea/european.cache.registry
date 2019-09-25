@@ -39,19 +39,34 @@ https://coveralls.io/github/eea/european.cache.registry)
         cp docker/init.sql.example docker/init.sql
         vim docker/init.sql
 
+    *NOTE: You will need to manually add the values to `.secret` in order to be
+    able to run and use the application locally.*
+
 1. Start application stack:
 
         docker-compose pull
         docker-compose up -d
         docker-compose logs
 
-1. Run tests:
+1. Attach to the container:
 
         docker exec -it ecr.app sh
-        pip install -r requirements-dev.txt
+
+1. Run the tests:
+
         py.test --cov=cache_registry testsuite
 
-1. Type: <http://localhost:5000>
+1. Run the server:
+
+        python manage.py runserver -h 0.0.0.0 -p 5000
+
+1. On Postman, you can access the application at http://localhost:5000, using
+the following header:
+
+        Authorization: <token>
+
+    Where `<token>` is the value of the `API_TOKEN` variable in the `.secret`
+    file.
 
 ## Upgrading the application
 
@@ -91,18 +106,6 @@ the ports directive (e.g. "5000:5000" instead of "5000").
         docker-compose down -v #optional step for droping all containers and volumes
         docker-compose up -d --build
 
-## DEBUGING
-
-* Please make sure that `DEBUG=True` in `.secret`
-* Update `docker-compose.override.yml` file `app` section with the following so that `docker-entrypoint.sh` is not executed:
-
-        entrypoint: ["/usr/bin/tail", "-f", "/dev/null"]
-
-* Attach to docker container and start the server in debug mode:
-
-        docker exec -it ecr.app sh
-        python ./manage.py runserver -h 0.0.0.0 -p 5000
-
 ## Data import
 
 * Copy the test database in ecr.db container and import into postgres:
@@ -115,7 +118,6 @@ the ports directive (e.g. "5000:5000" instead of "5000").
 
 * Fetch the latest data from a test server:
 
-        docker exec ecr.app bash -c "python ./manage.py sync fgases -d 500"
         python ./manage.py sync fgases [-d 30]
         python ./manage.py sync ods [-d 30]
 
@@ -123,14 +125,13 @@ the ports directive (e.g. "5000:5000" instead of "5000").
 * In order to sync from a long time ago, it is advised to use pagination. To use pagination, you must give -p parameter, containing the
 * number of companies that are brought in one request.
 
-        docker exec ecr.app bash -c "python ./manage.py sync fgases -d 500 -p 400"
         python ./manage.py sync fgases [-d 30] [-p 100]
         python ./manage.py sync ods [-d 30] [-p 100]
 
 
 * In order to sync BDR collections title with the cache server's corresponding undertakings name:
 
-        docker exec ecr.app bash -c "./manage.py sync sync_collections_title"
+        python manage.py sync sync_collections_title
 
 * For syncing bdr without SSL verification, set the following switch in settings:
 
@@ -156,12 +157,12 @@ a company. Use the company external id as a key.
 
         AUTO_VERIFY_ALL_COMPANIES = FGAS
 
-* Specify if on companies with a certain domain and no match found 
+* Specify if on companies with a certain domain and no match found
 by the algorithm should be auto-verified(!This company should also be declared in MANUAL_VERIFY_ALL_COMPANIES):
 
         AUTO_VERIFY_NEW_COMPANIES = FGAS,ODS
-        
-**! Make sure you don't live a comma between the domains (FGAS,ODS not ~~FGAS, ODS~~)**
+
+**! Make sure you don't leave a space between the domains (FGAS,ODS not ~~FGAS, ODS~~)**
 
 * Run matching algorithm:
 
@@ -191,7 +192,6 @@ by the algorithm should be auto-verified(!This company should also be declared i
 1. Run tests:
 
         docker exec -it ecr.app sh
-        pip install -r requirements-dev.txt
         py.test --cov=cache_registry testsuite
 
 1. Generate a coverage report:

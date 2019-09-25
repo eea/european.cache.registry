@@ -1,7 +1,9 @@
+ARG REQFILE=requirements-prod.txt
+
 FROM python:3.6-slim
 MAINTAINER "EEA: IDM2 C-TEAM" <eea-edw-c-team-alerts@googlegroups.com>
 
-ARG REQFILE=requirements-prod.txt
+ARG REQFILE
 
 ENV WORK_DIR=/var/local/european.cache.registry
 
