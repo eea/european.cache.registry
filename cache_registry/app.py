@@ -2,7 +2,7 @@ import logging
 
 import sys
 import flask
-from flask.ext.script import Manager
+from flask_script import Manager
 from cache_registry.models import db, db_manager
 from cache_registry.api import api, api_manager
 from cache_registry.misc import misc

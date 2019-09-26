@@ -1,5 +1,5 @@
-from flask.ext.admin import Admin
-from flask.ext.admin.contrib.sqla import ModelView
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 from cache_registry import models
 

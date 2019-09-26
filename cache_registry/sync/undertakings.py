@@ -107,6 +107,7 @@ def update_undertaking(data, check_passed=True):
         undertaking.address = addr
     else:
         parsers.update_obj(undertaking.address, address)
+    db.session.add(undertaking)
     UndertakingBusinessProfile.query.filter_by(undertaking=undertaking).delete()
     for business_profile in business_profiles['highLevelUses']:
         business_profile_object = BusinessProfile.query.filter_by(

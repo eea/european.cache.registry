@@ -24,7 +24,7 @@ def test_export_companies(client):
         f.close()
     wb = load_workbook(fn)
     assert len(wb.worksheets) == 1
-    rows = wb.worksheets[0].rows
+    rows = [row for row in wb.worksheets[0].rows]
     assert len(rows) == 2
     assert rows[0][0].value == 'company_id'
     assert rows[1][0].value == undertaking.external_id
@@ -54,7 +54,7 @@ def test_export_companies_domain_filter(client):
         f.close()
     wb = load_workbook(fn)
     assert len(wb.worksheets) == 1
-    rows = wb.worksheets[0].rows
+    rows = [row for row in wb.worksheets[0].rows]
     assert len(rows) == 2
     assert rows[0][0].value == 'company_id'
     assert rows[1][0].value == undertaking.external_id
@@ -90,7 +90,7 @@ def test_user_list_export(client):
         f.close()
     wb = load_workbook(fn)
     assert len(wb.worksheets) == 1
-    rows = wb.worksheets[0].rows
+    rows =  [row for row in wb.worksheets[0].rows]
     assert rows[0][0].value == 'username'
     assert rows[1][0].value == user.username
     assert rows[0][1].value == 'companyname'

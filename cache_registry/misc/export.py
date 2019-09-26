@@ -3,8 +3,9 @@ import json
 from flask import Response
 from flask.views import MethodView
 
+from io import BytesIO
 from openpyxl import Workbook
-from openpyxl.writer.excel import save_virtual_workbook
+from tempfile import NamedTemporaryFile
 
 from cache_registry.api.undertaking import UndertakingListView
 from cache_registry.match import get_all_non_candidates
@@ -67,10 +68,12 @@ class UndertakingListExport(MethodView):
             qs['represent_history'] = ', '.join([repr['name'] for repr in qs['represent_history']])
             values = [self.parse_column(qs, column) for column in self.COLUMNS]
             ws.append(values)
-        response = Response(save_virtual_workbook(wb), mimetype=MIME_TYPE)
-        response.headers.add('Content-Disposition',
-                             'attachment; filename=companies_list.xlsx')
-        return response
+        with NamedTemporaryFile() as tmp:
+            wb.save(tmp.name)
+            response = Response(BytesIO(tmp.read()), mimetype=MIME_TYPE)
+            response.headers.add('Content-Disposition',
+                                 'attachment; filename=companies_list.xlsx')
+            return response
 
 
 class UserListExport(MethodView):
@@ -96,10 +99,13 @@ class UserListExport(MethodView):
                                   company.address.country.name, cp.first_name,
                                   cp.last_name, cp.email]
                         ws.append(values)
-        response = Response(save_virtual_workbook(wb), mimetype=MIME_TYPE)
-        response.headers.add('Content-Disposition',
-                             'attachment; filename=users_list.xlsx')
-        return response
+
+        with NamedTemporaryFile() as tmp:
+            wb.save(tmp.name)
+            response = Response(BytesIO(tmp.read()), mimetype=MIME_TYPE)
+            response.headers.add('Content-Disposition',
+                                 'attachment; filename=users_list.xlsx')
+            return response
 
 
 class UserListExportJSON(MethodView):

@@ -20,6 +20,8 @@ TEST_CONFIG = {
     'MANUAL_VERIFY_ALL_COMPANIES': [FGAS, ODS],
     'MAIL_SERVER': 'localhost',
     'MAIL_PORT': 25,
+    'SQLALCHEMY_DATABASE_URI': "sqlite:///:memory:",
+    'SQLALCHEMY_TRACK_MODIFICATIONS': False,
     'TESTING': True,
 }
 
