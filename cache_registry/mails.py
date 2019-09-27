@@ -1,6 +1,6 @@
 import smtplib
 
-from flask.ext.mail import Mail, Message
+from flask_mail import Mail, Message
 from flask import current_app as app, render_template
 
 from cache_registry.models import (

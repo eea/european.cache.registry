@@ -1,7 +1,7 @@
 import collections
 import pprint
 
-from flask.ext.script import Manager
+from flask_script import Manager
 
 from cache_registry.models import db, User, Undertaking
 from cache_registry.sync.fgases import eea_double_check_fgases
