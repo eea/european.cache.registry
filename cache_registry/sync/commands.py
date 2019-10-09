@@ -65,12 +65,16 @@ def update_undertakings(undertakings, check_function):
     undertakings_with_changed_represent = []
     for undertaking in undertakings:
         undertaking_exists = Undertaking.query.filter_by(external_id=undertaking['id']).first()
+        check_passed_exists = None
+        if undertaking_exists:
+            check_passed_exists = undertaking_exists.check_passed
         check_passed = check_function(undertaking)
         (_, represent) = update_undertaking(undertaking, check_passed=check_passed)
         undertakings_count += 1
         if (
             represent and check_passed
             or represent and undertaking_exists and not check_passed
+            or check_passed_exists != check_passed
         ):
             undertakings_with_changed_represent.append(undertaking)
 

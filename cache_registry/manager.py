@@ -4,6 +4,7 @@ import pprint
 from flask_script import Manager
 
 from cache_registry.models import db, User, Undertaking
+from cache_registry.sync.bdr import call_bdr
 from cache_registry.sync.fgases import eea_double_check_fgases
 from cache_registry.sync.ods import eea_double_check_ods
 
@@ -74,3 +75,5 @@ def check_passed():
         elif undertaking.domain == 'ODS':
             undertaking.check_passed = eea_double_check_ods(data)
         db.session.commit()
+        if undertaking.check_passed:
+            call_bdr(undertaking)
