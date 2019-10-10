@@ -39,7 +39,7 @@ def test_update_undertakings_fgas(client):
 
     assert undertakings_count == 4
     assert models.Undertaking.query.fgases().count() == 4
-    assert len(undertakings_with_changed_represent) == 4
+    assert len(undertakings_with_changed_represent) == 3
 
 
 def test_update_undertakings_ods(client):
