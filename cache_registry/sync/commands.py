@@ -74,7 +74,7 @@ def update_undertakings(undertakings, check_function):
         if (
             represent and check_passed
             or represent and undertaking_exists and not check_passed
-            or check_passed_exists != check_passed
+            or check_passed_exists != check_passed and check_passed
         ):
             undertakings_with_changed_represent.append(undertaking)
 

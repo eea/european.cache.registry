@@ -153,40 +153,38 @@ def update_undertaking(data, check_passed=True):
         if type_object not in undertaking.types:
             undertaking.types.append(type_object)
 
-    if not check_passed and not is_patched:
-        undertaking.contact_persons[:] = []
-    else:
-        unique_emails = set([cp.get('email') for cp in contact_persons])
-        existing_persons = undertaking.contact_persons
-        for contact_person in contact_persons:
-            user = None
-            username = contact_person['username']
-            # Check if we have a user with that username
-            by_username = User.query.filter_by(username=username).first()
-            if not by_username:
-                email = contact_person['email']
-                # Check if we have a user with that email
-                by_email = User.query.filter_by(email=email).first()
-                # If we have an email as username, check for duplicate emails
-                if '@' in username:
-                    if len(unique_emails) != len(contact_persons):
-                        # If we have duplicate emails, don't match any
-                        by_email = None
 
-            user = by_username or by_email
+    unique_emails = set([cp.get('email') for cp in contact_persons])
+    existing_persons = undertaking.contact_persons
+    for contact_person in contact_persons:
+        user = None
+        username = contact_person['username']
+        # Check if we have a user with that username
+        by_username = User.query.filter_by(username=username).first()
+        if not by_username:
+            email = contact_person['email']
+            # Check if we have a user with that email
+            by_email = User.query.filter_by(email=email).first()
+            # If we have an email as username, check for duplicate emails
+            if '@' in username:
+                if len(unique_emails) != len(contact_persons):
+                    # If we have duplicate emails, don't match any
+                    by_email = None
 
-            if user:
-                do_update = False
-                for key, value in contact_person.items():
-                    if value != getattr(user, key):
-                        do_update = True
-                if do_update:
-                    parsers.update_obj(user, contact_person)
-            else:
-                user = User(**contact_person)
-                db.session.add(user)
-            if user not in existing_persons:
-                undertaking.contact_persons.append(user)
+        user = by_username or by_email
+
+        if user:
+            do_update = False
+            for key, value in contact_person.items():
+                if value != getattr(user, key):
+                    do_update = True
+            if do_update:
+                parsers.update_obj(user, contact_person)
+        else:
+            user = User(**contact_person)
+            db.session.add(user)
+        if user not in existing_persons:
+            undertaking.contact_persons.append(user)
 
         current_emails = [p.get('email') for p in contact_persons]
         current_usernames = [p.get('username') for p in contact_persons]

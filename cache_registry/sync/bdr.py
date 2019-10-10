@@ -55,6 +55,8 @@ def check_bdr_request(params, relative_url):
             error_message = json_data.get('message')
         elif response.status_code != 200:
             error_message = 'Invalid status code: ' + response.status_code
+        else:
+            print(json_data.get('message'))
     else:
         error_message = 'Invalid response: ' + str(response)
     return not error_message
