@@ -69,14 +69,15 @@ def update_undertakings(undertakings, check_function):
         if undertaking_exists:
             check_passed_exists = undertaking_exists.check_passed
         check_passed = check_function(undertaking)
-        (_, represent) = update_undertaking(undertaking, check_passed=check_passed)
-        undertakings_count += 1
-        if (
-            represent and check_passed
-            or represent and undertaking_exists and not check_passed
-            or check_passed_exists != check_passed and check_passed
-        ):
-            undertakings_with_changed_represent.append(undertaking)
+        if (not undertaking['@type'] == 'ODSUndertaking') or check_passed or undertaking_exists:
+            (_, represent) = update_undertaking(undertaking, check_passed=check_passed)
+            undertakings_count += 1
+            if (
+                represent and check_passed
+                or represent and undertaking_exists and not check_passed
+                or check_passed_exists != check_passed and check_passed
+            ):
+                undertakings_with_changed_represent.append(undertaking)
 
     return undertakings_with_changed_represent, undertakings_count
 
