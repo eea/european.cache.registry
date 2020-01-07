@@ -265,6 +265,7 @@ class UndertakingBusinessProfile(SerializableModel, db.Model):
                                backref=db.backref('businessprofiles_link'))
     businessprofile = relationship('BusinessProfile')
 
+
 class UndertakingRepresentHistory(SerializableModel, db.Model):
     __tablename__ = 'undertaking_represent_history'
 
@@ -274,6 +275,7 @@ class UndertakingRepresentHistory(SerializableModel, db.Model):
     undertaking = relationship('Undertaking', cascade="all",
                                backref=db.backref('represent_history_link'))
     represent = relationship('EuLegalRepresentativeCompany', cascade="all")
+
 
 class OrganizationLog(SerializableModel, db.Model):
     __tablename__ = 'organization_log'
@@ -306,6 +308,54 @@ class MailAddress(SerializableModel, db.Model):
     timestamp = Column(DateTime(timezone=True), default=datetime.now)
     first_name = Column(String(255))
     last_name = Column(String(255))
+
+
+class Licence(SerializableModel, db.Model):
+    __tablename__ = 'licence'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    year =  Column(Integer)
+    date_created = Column(Date, server_default=db.func.now())
+    date_updated = Column(Date, onupdate=db.func.now())
+
+    licence_id = Column(Integer)
+    chemical_name = Column(String(100))
+    custom_procedure_name = Column(String(100))
+    international_party_country_name = Column(String(100))
+    qty_qdp_percentage = Column(String(50))
+    qty_percentage = Column(String(50))
+    licence_state = Column(String(50))
+    long_licence_number = Column(String(50))
+    template_detailed_use_code = Column(String(255))
+    licence_type = Column(String(50))
+    mixture_nature_type = Column(String(50))
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), nullable=True,
+                           default=None)
+    undertaking = relationship('Undertaking',
+                              backref=db.backref('licences'))
+
+    history_licence_id = Column(ForeignKey('history_licence.id'), nullable=True,
+                           default=None)
+    history_licence = relationship('HistoryLicence',
+                              backref=db.backref('licences'))
+
+
+class HistoryLicence(SerializableModel, db.Model):
+    __tablename__ = 'history_licence'
+
+    id = Column(Integer, primary_key=True)
+    order = Column(Integer)
+    name = Column(String(50))
+    year = Column(Integer)
+    date_created = Column(Date, server_default=db.func.now())
+    date_updated = Column(Date, onupdate=db.func.now())
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), nullable=True,
+                           default=None)
+    undertaking = relationship('Undertaking',
+                              backref=db.backref('historylicences'))
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)

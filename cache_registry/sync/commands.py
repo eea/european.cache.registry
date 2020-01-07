@@ -10,6 +10,7 @@ from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
 from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url, call_bdr
+from .licences import get_licences, move_licence_history, parse_licence
 from .undertakings import update_undertaking, get_latest_undertakings
 
 from .fgases import eea_double_check_fgases
@@ -157,6 +158,33 @@ def ods(days=7, updated_since=None, page_size=None):
         undertaking_obj = Undertaking.query.filter_by(external_id=undertaking['external_id']).first()
         call_bdr(undertaking_obj)
     return True
+
+
+@sync_manager.command
+@sync_manager.option('-y', '--year', dest='year',
+                     help="Licences from year x")
+@sync_manager.option('-d', '--delivery_name', dest='delivery_name',
+                     help="Delivery name")
+@sync_manager.option('-p', '--page_size', dest='page_size',
+                     help="Page size")
+
+def licences(year, delivery_name, page_size=200):
+    licences = get_licences(year=year, page_size=page_size)
+    updated_companies = []
+    not_found_undertakings = []
+    for licence in licences:
+        undertaking = Undertaking.query.filter_by(name=licence['organizationName']).first()
+        if not undertaking:
+            if licence['organizationName'] not in not_found_undertakings:
+                message = 'Undertaking {} is not present in the application.'.format(licence['organizationName'])
+                current_app.logger.warning(message)
+                not_found_undertakings.append(licence['organizationName'])
+            continue
+
+        if undertaking.id not in updated_companies:
+            move_licence_history(undertaking)
+            updated_companies.append(undertaking.id)
+        parse_licence(licence, undertaking.id, delivery_name, year)
 
 
 @sync_manager.command
