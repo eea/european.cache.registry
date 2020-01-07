@@ -69,8 +69,8 @@ def parse_licence(licence, undertaking_id, delivery_name, year):
 def move_licence_history(undertaking):
     licences = undertaking.licences
     for licence in licences:
-        history_licence = HistoryLicence.query.filter_by(name=licence.name, year=licence.year).first()
-        history_order = HistoryLicence.query.filter_by(year=licence.year).order_by(HistoryLicence.order.desc()).first()
+        history_licence = HistoryLicence.query.filter_by(name=licence.name, year=licence.year, undertaking_id=licence.undertaking_id).first()
+        history_order = HistoryLicence.query.filter_by(year=licence.year, undertaking_id=licence.undertaking_id).order_by(HistoryLicence.order.desc()).first()
         if not history_order:
             order = 1
         else:

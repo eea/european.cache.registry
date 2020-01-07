@@ -143,6 +143,18 @@ containing values to be updated. Use the company external id as a key.
 For patching user access, set `PATCH_USERS` to a list of users to be added to
 a company. Use the company external id as a key.
 
+## Syncronise with Licence Portal
+
+* The licences for ODS are now taken from DG Clima and exposed:
+        python ./manage.py sync licence 2017 2017-1
+        python ./manage.py sync licence 2017 2017-1
+
+* The first parameter [2017], represents the year from which those deliveries are taken.
+* The second parameter [2017-1], represents the name of the delivery.
+
+* The licences are taken for each company. When a new delivery arrives, all old deliveries of the company are moved to
+the history object that contains that delivery and for that company.
+
 ### Matching
 
 * Modify the fuzzy matching algorithm percent value (how much should old and new be alike):
