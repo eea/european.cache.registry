@@ -4,6 +4,7 @@ from flask_script import Manager
 
 from .candidate import *
 from .commands import *
+from .licence import *
 from .old_company import *
 from .undertaking import *
 from .user import *
@@ -58,6 +59,26 @@ register_url(prefix=undertaking_prefix, name=undertaking_name,
              url='/<pk>/statusupdate',
              view=UndertakingStatusUpdate,
              view_name='statusupdate')
+
+# Licence
+
+licence_prefix = '/undertaking/<domain>/<pk>'
+licence_name = 'licence'
+
+register_url(prefix=licence_prefix, name=licence_name,
+             url='/licences/<year>',
+             view=LicenceYearListView,
+             view_name='licence')
+
+register_url(prefix=licence_prefix, name=licence_name,
+             url='/deliveries/<year>',
+             view=LicenceYearAllDeliveriesListView,
+             view_name='deliveries')
+
+register_url(prefix=licence_prefix, name=licence_name,
+             url='/deliveries/<year>/<delivery_name>/licences',
+             view=LicencesOfOneDeliveryListView,
+             view_name='licences_per_delivery')
 
 # User
 

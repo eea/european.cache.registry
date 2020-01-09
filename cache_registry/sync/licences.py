@@ -5,7 +5,46 @@ from sqlalchemy import func
 
 from .auth import get_auth
 from .bdr import get_absolute_url
-from cache_registry.models import HistoryLicence, Licence, db
+from cache_registry.models import DeliveryLicence, Licence, db
+
+
+def check_if_delivery_exists(year, delivery_name):
+    delivery =  DeliveryLicence.query.filter_by(year=year, name=delivery_name).first()
+    if delivery:
+        return True
+
+def get_new_delivery_order(year, undertaking_id):
+    delivery_order = DeliveryLicence.query.filter_by(
+    year=year,
+    undertaking_id=undertaking_id).order_by(DeliveryLicence.order.desc()).first()
+    if not delivery_order:
+        return 1
+    return delivery_order.order + 1
+
+def get_or_create_delivery(year, delivery_name, undertaking_id):
+    delivery = DeliveryLicence.query.filter_by(year=year, name=delivery_name).first()
+    if delivery:
+        return delivery
+
+    histories =  DeliveryLicence.query.filter_by(
+        year=year, undertaking_id=undertaking_id, current=True)
+    for delivery in histories:
+        delivery.current = False
+        db.session.add(delivery)
+        db.session.commit()
+
+    delivery = DeliveryLicence(
+        order=get_new_delivery_order(year, undertaking_id),
+        current=True,
+        name=delivery_name,
+        year=year,
+        undertaking_id=undertaking_id
+    )
+
+    db.session.add(delivery)
+    db.session.commit()
+    return delivery
+
 
 
 def get_licences(year=2017, page_size=20):
@@ -44,7 +83,7 @@ def get_licences(year=2017, page_size=20):
     return response_json
 
 
-def parse_licence(licence, undertaking_id, delivery_name, year):
+def parse_licence(licence, undertaking_id, delivery_licence):
     licence = {
         'chemical_name': licence['chemicalName'],
         'custom_procedure_name': licence['customProcedureName'],
@@ -57,33 +96,9 @@ def parse_licence(licence, undertaking_id, delivery_name, year):
         'template_detailed_use_code': licence['templateDetailedUseCode'],
         'licence_type': licence['licenceType'],
         'mixture_nature_type': licence['mixtureNatureType'],
-        'undertaking_id': undertaking_id,
-        'name': delivery_name,
-        'year': year
+        'delivery_id': delivery_licence.id,
+        'year': delivery_licence.year
     }
     licence_object = Licence(**licence)
     db.session.add(licence_object)
-    db.session.commit()
-
-
-def move_licence_history(undertaking):
-    licences = undertaking.licences
-    for licence in licences:
-        history_licence = HistoryLicence.query.filter_by(name=licence.name, year=licence.year, undertaking_id=licence.undertaking_id).first()
-        history_order = HistoryLicence.query.filter_by(year=licence.year, undertaking_id=licence.undertaking_id).order_by(HistoryLicence.order.desc()).first()
-        if not history_order:
-            order = 1
-        else:
-            order = history_order.order + 1
-        if not history_licence:
-            history_licence = HistoryLicence(
-                name=licence.name, year=licence.year,
-                order=order, undertaking_id=licence.undertaking_id
-            )
-            db.session.add(history_licence)
-            db.session.commit()
-        licence.history_licence_id = history_licence.id
-        licence.undertaking = None
-        licence.undertaking_id = None
-        db.session.add(licence)
     db.session.commit()

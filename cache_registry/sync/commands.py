@@ -1,5 +1,6 @@
 import requests
 
+from flask_script.commands import InvalidCommand
 from datetime import datetime, timedelta
 
 from cache_registry.sync.parsers import parse_company
@@ -10,8 +11,13 @@ from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
 from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url, call_bdr
-from .licences import get_licences, move_licence_history, parse_licence
-from .undertakings import update_undertaking, get_latest_undertakings
+from .licences import (
+    check_if_delivery_exists,
+    get_licences,
+    get_or_create_delivery,
+    parse_licence
+)
+from .undertakings import get_latest_undertakings, update_undertaking
 
 from .fgases import eea_double_check_fgases
 from .ods import eea_double_check_ods
@@ -169,8 +175,11 @@ def ods(days=7, updated_since=None, page_size=None):
                      help="Page size")
 
 def licences(year, delivery_name, page_size=200):
+    if check_if_delivery_exists(year, delivery_name):
+        raise InvalidCommand("Delivery name '{}' is already used for year {}".format(delivery_name, year))
+
     licences = get_licences(year=year, page_size=page_size)
-    updated_companies = []
+
     not_found_undertakings = []
     for licence in licences:
         undertaking = Undertaking.query.filter_by(name=licence['organizationName']).first()
@@ -181,10 +190,8 @@ def licences(year, delivery_name, page_size=200):
                 not_found_undertakings.append(licence['organizationName'])
             continue
 
-        if undertaking.id not in updated_companies:
-            move_licence_history(undertaking)
-            updated_companies.append(undertaking.id)
-        parse_licence(licence, undertaking.id, delivery_name, year)
+        delivery_licence = get_or_create_delivery(year, delivery_name, undertaking.id)
+        parse_licence(licence, undertaking.id, delivery_licence)
 
 
 @sync_manager.command

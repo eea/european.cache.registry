@@ -314,11 +314,7 @@ class Licence(SerializableModel, db.Model):
     __tablename__ = 'licence'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(50))
     year =  Column(Integer)
-    date_created = Column(Date, server_default=db.func.now())
-    date_updated = Column(Date, onupdate=db.func.now())
-
     licence_id = Column(Integer)
     chemical_name = Column(String(100))
     custom_procedure_name = Column(String(100))
@@ -330,23 +326,21 @@ class Licence(SerializableModel, db.Model):
     template_detailed_use_code = Column(String(255))
     licence_type = Column(String(50))
     mixture_nature_type = Column(String(50))
+    date_created = Column(Date, server_default=db.func.now())
+    date_updated = Column(Date, onupdate=db.func.now())
 
-    undertaking_id = Column(ForeignKey('undertaking.id'), nullable=True,
+    delivery_id = Column(ForeignKey('delivery_licence.id'), nullable=True,
                            default=None)
-    undertaking = relationship('Undertaking',
-                              backref=db.backref('licences'))
-
-    history_licence_id = Column(ForeignKey('history_licence.id'), nullable=True,
-                           default=None)
-    history_licence = relationship('HistoryLicence',
-                              backref=db.backref('licences'))
+    deliverylicence = relationship('DeliveryLicence', 
+                                    backref=db.backref('licences', lazy='dynamic'))
 
 
-class HistoryLicence(SerializableModel, db.Model):
-    __tablename__ = 'history_licence'
+class DeliveryLicence(SerializableModel, db.Model):
+    __tablename__ = 'delivery_licence'
 
     id = Column(Integer, primary_key=True)
     order = Column(Integer)
+    current = Column(Boolean, default=False)
     name = Column(String(50))
     year = Column(Integer)
     date_created = Column(Date, server_default=db.func.now())
@@ -355,7 +349,7 @@ class HistoryLicence(SerializableModel, db.Model):
     undertaking_id = Column(ForeignKey('undertaking.id'), nullable=True,
                            default=None)
     undertaking = relationship('Undertaking',
-                              backref=db.backref('historylicences'))
+                              backref=db.backref('deliveries', lazy='dynamic'))
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
