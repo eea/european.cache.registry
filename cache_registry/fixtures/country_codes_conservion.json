@@ -1,0 +1,2098 @@
+[
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 1,
+            "country_name_short_en": "AFGHANISTAN",
+            "country_code_alpha2": "AF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 2,
+            "country_name_short_en": "ÅLAND ISLANDS",
+            "country_code_alpha2": "AX"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 3,
+            "country_name_short_en": "ALBANIA",
+            "country_code_alpha2": "AL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 4,
+            "country_name_short_en": "ALGERIA",
+            "country_code_alpha2": "DZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 5,
+            "country_name_short_en": "AMERICAN SAMOA",
+            "country_code_alpha2": "AS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 6,
+            "country_name_short_en": "ANDORRA",
+            "country_code_alpha2": "AD"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 7,
+            "country_name_short_en": "ANGOLA",
+            "country_code_alpha2": "AO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 8,
+            "country_name_short_en": "ANGUILLA",
+            "country_code_alpha2": "AI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 9,
+            "country_name_short_en": "ANTARCTICA",
+            "country_code_alpha2": "AQ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 10,
+            "country_name_short_en": "ANTIGUA AND BARBUDA",
+            "country_code_alpha2": "AG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 11,
+            "country_name_short_en": "ARGENTINA",
+            "country_code_alpha2": "AR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 12,
+            "country_name_short_en": "ARMENIA",
+            "country_code_alpha2": "AM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 13,
+            "country_name_short_en": "ARUBA",
+            "country_code_alpha2": "AW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 14,
+            "country_name_short_en": "AUSTRALIA",
+            "country_code_alpha2": "AU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 15,
+            "country_name_short_en": "Austria",
+            "country_code_alpha2": "AT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 16,
+            "country_name_short_en": "AZERBAIJAN",
+            "country_code_alpha2": "AZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 17,
+            "country_name_short_en": "BAHAMAS",
+            "country_code_alpha2": "BS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 18,
+            "country_name_short_en": "BAHRAIN",
+            "country_code_alpha2": "BH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 19,
+            "country_name_short_en": "BANGLADESH",
+            "country_code_alpha2": "BD"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 20,
+            "country_name_short_en": "BARBADOS",
+            "country_code_alpha2": "BB"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 21,
+            "country_name_short_en": "BELARUS",
+            "country_code_alpha2": "BY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 22,
+            "country_name_short_en": "Belgium",
+            "country_code_alpha2": "BE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 23,
+            "country_name_short_en": "BELIZE",
+            "country_code_alpha2": "BZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 24,
+            "country_name_short_en": "BENIN",
+            "country_code_alpha2": "BJ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 25,
+            "country_name_short_en": "BERMUDA",
+            "country_code_alpha2": "BM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 26,
+            "country_name_short_en": "BHUTAN",
+            "country_code_alpha2": "BT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 27,
+            "country_name_short_en": "BOLIVIA, PLURINATIONAL STATE OF",
+            "country_code_alpha2": "BO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 28,
+            "country_name_short_en": "BONAIRE, SINT EUSTATIUS AND SABA",
+            "country_code_alpha2": "BQ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 29,
+            "country_name_short_en": "BOSNIA AND HERZEGOVINA",
+            "country_code_alpha2": "BA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 30,
+            "country_name_short_en": "BOTSWANA",
+            "country_code_alpha2": "BW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 31,
+            "country_name_short_en": "BOUVET ISLAND",
+            "country_code_alpha2": "BV"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 32,
+            "country_name_short_en": "BRAZIL",
+            "country_code_alpha2": "BR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 33,
+            "country_name_short_en": "BRITISH INDIAN OCEAN TERRITORY",
+            "country_code_alpha2": "IO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 34,
+            "country_name_short_en": "BRUNEI DARUSSALAM",
+            "country_code_alpha2": "BN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 35,
+            "country_name_short_en": "Bulgaria",
+            "country_code_alpha2": "BG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 36,
+            "country_name_short_en": "BURKINA FASO",
+            "country_code_alpha2": "BF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 37,
+            "country_name_short_en": "BURUNDI",
+            "country_code_alpha2": "BI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 38,
+            "country_name_short_en": "CAMBODIA",
+            "country_code_alpha2": "KH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 39,
+            "country_name_short_en": "CAMEROON",
+            "country_code_alpha2": "CM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 40,
+            "country_name_short_en": "CANADA",
+            "country_code_alpha2": "CA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 41,
+            "country_name_short_en": "CAPE VERDE",
+            "country_code_alpha2": "CV"
+        }
+    }, 
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 42,
+            "country_name_short_en": "CAYMAN ISLANDS",
+            "country_code_alpha2": "KY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 43,
+            "country_name_short_en": "CENTRAL AFRICAN REPUBLIC",
+            "country_code_alpha2": "CF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 44,
+            "country_name_short_en": "CHAD",
+            "country_code_alpha2": "TD"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 45,
+            "country_name_short_en": "CHILE",
+            "country_code_alpha2": "CL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 46,
+            "country_name_short_en": "CHINA",
+            "country_code_alpha2": "CN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 47,
+            "country_name_short_en": "CHRISTMAS ISLAND",
+            "country_code_alpha2": "CX"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 48,
+            "country_name_short_en": "COCOS (KEELING) ISLANDS",
+            "country_code_alpha2": "CC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 49,
+            "country_name_short_en": "COLOMBIA",
+            "country_code_alpha2": "CO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 50,
+            "country_name_short_en": "COMOROS",
+            "country_code_alpha2": "KM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 51,
+            "country_name_short_en": "CONGO",
+            "country_code_alpha2": "CG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 52,
+            "country_name_short_en": "CONGO, THE DEMOCRATIC REPUBLIC OF THE",
+            "country_code_alpha2": "CD"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 53,
+            "country_name_short_en": "COOK ISLANDS",
+            "country_code_alpha2": "CK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 54,
+            "country_name_short_en": "COSTA RICA",
+            "country_code_alpha2": "CR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 55,
+            "country_name_short_en": "CÔTE D'IVOIRE",
+            "country_code_alpha2": "CI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 56,
+            "country_name_short_en": "Croatia",
+            "country_code_alpha2": "HR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 57,
+            "country_name_short_en": "CUBA",
+            "country_code_alpha2": "CU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 58,
+            "country_name_short_en": "CURAÇAO",
+            "country_code_alpha2": "CW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 59,
+            "country_name_short_en": "Cyprus",
+            "country_code_alpha2": "CY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 60,
+            "country_name_short_en": "Czech Republic",
+            "country_code_alpha2": "CZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 61,
+            "country_name_short_en": "Denmark",
+            "country_code_alpha2": "DK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 62,
+            "country_name_short_en": "DJIBOUTI",
+            "country_code_alpha2": "DJ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 63,
+            "country_name_short_en": "DOMINICA",
+            "country_code_alpha2": "DM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 64,
+            "country_name_short_en": "DOMINICAN REPUBLIC",
+            "country_code_alpha2": "DO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 65,
+            "country_name_short_en": "ECUADOR",
+            "country_code_alpha2": "EC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 66,
+            "country_name_short_en": "EGYPT",
+            "country_code_alpha2": "EG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 67,
+            "country_name_short_en": "EL SALVADOR",
+            "country_code_alpha2": "SV"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 68,
+            "country_name_short_en": "EQUATORIAL GUINEA",
+            "country_code_alpha2": "GQ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 69,
+            "country_name_short_en": "ERITREA",
+            "country_code_alpha2": "ER"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 70,
+            "country_name_short_en": "Estonia",
+            "country_code_alpha2": "EE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 71,
+            "country_name_short_en": "ETHIOPIA",
+            "country_code_alpha2": "ET"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 72,
+            "country_name_short_en": "FALKLAND ISLANDS (MALVINAS)",
+            "country_code_alpha2": "FK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 73,
+            "country_name_short_en": "FAROE ISLANDS",
+            "country_code_alpha2": "FO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 74,
+            "country_name_short_en": "FIJI",
+            "country_code_alpha2": "FJ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 75,
+            "country_name_short_en": "Finland ",
+            "country_code_alpha2": "FI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 76,
+            "country_name_short_en": "France",
+            "country_code_alpha2": "FR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 77,
+            "country_name_short_en": "FRENCH GUIANA",
+            "country_code_alpha2": "GF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 78,
+            "country_name_short_en": "FRENCH POLYNESIA",
+            "country_code_alpha2": "PF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 79,
+            "country_name_short_en": "FRENCH SOUTHERN TERRITORIES",
+            "country_code_alpha2": "TF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 80,
+            "country_name_short_en": "GABON",
+            "country_code_alpha2": "GA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 81,
+            "country_name_short_en": "GAMBIA",
+            "country_code_alpha2": "GM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 82,
+            "country_name_short_en": "GEORGIA",
+            "country_code_alpha2": "GE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 83,
+            "country_name_short_en": "Germany",
+            "country_code_alpha2": "DE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 84,
+            "country_name_short_en": "GHANA",
+            "country_code_alpha2": "GH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 85,
+            "country_name_short_en": "GIBRALTAR",
+            "country_code_alpha2": "GI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 86,
+            "country_name_short_en": "Greece",
+            "country_code_alpha2": "GR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 87,
+            "country_name_short_en": "GREENLAND",
+            "country_code_alpha2": "GL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 88,
+            "country_name_short_en": "GRENADA",
+            "country_code_alpha2": "GD"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 89,
+            "country_name_short_en": "GUADELOUPE",
+            "country_code_alpha2": "GP"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 90,
+            "country_name_short_en": "GUAM",
+            "country_code_alpha2": "GU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 91,
+            "country_name_short_en": "GUATEMALA",
+            "country_code_alpha2": "GT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 92,
+            "country_name_short_en": "GUERNSEY",
+            "country_code_alpha2": "GG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 93,
+            "country_name_short_en": "GUINEA",
+            "country_code_alpha2": "GN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 94,
+            "country_name_short_en": "GUINEA-BISSAU",
+            "country_code_alpha2": "GW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 95,
+            "country_name_short_en": "GUYANA",
+            "country_code_alpha2": "GY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 96,
+            "country_name_short_en": "HAITI",
+            "country_code_alpha2": "HT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 97,
+            "country_name_short_en": "HEARD ISLAND AND MCDONALD ISLANDS",
+            "country_code_alpha2": "HM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 98,
+            "country_name_short_en": "HOLY SEE (VATICAN CITY STATE)",
+            "country_code_alpha2": "VA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 99,
+            "country_name_short_en": "HONDURAS",
+            "country_code_alpha2": "HN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 100,
+            "country_name_short_en": "HONG KONG",
+            "country_code_alpha2": "HK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 101,
+            "country_name_short_en": "Hungary",
+            "country_code_alpha2": "HU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 102,
+            "country_name_short_en": "ICELAND",
+            "country_code_alpha2": "IS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 103,
+            "country_name_short_en": "INDIA",
+            "country_code_alpha2": "IN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 104,
+            "country_name_short_en": "INDONESIA",
+            "country_code_alpha2": "ID"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 105,
+            "country_name_short_en": "IRAN, ISLAMIC REPUBLIC OF",
+            "country_code_alpha2": "IR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 106,
+            "country_name_short_en": "IRAQ",
+            "country_code_alpha2": "IQ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 107,
+            "country_name_short_en": "Ireland",
+            "country_code_alpha2": "IE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 108,
+            "country_name_short_en": "ISLE OF MAN",
+            "country_code_alpha2": "IM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 109,
+            "country_name_short_en": "ISRAEL",
+            "country_code_alpha2": "IL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 110,
+            "country_name_short_en": "Italy",
+            "country_code_alpha2": "IT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 111,
+            "country_name_short_en": "JAMAICA",
+            "country_code_alpha2": "JM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 112,
+            "country_name_short_en": "JAPAN",
+            "country_code_alpha2": "JP"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 113,
+            "country_name_short_en": "JERSEY",
+            "country_code_alpha2": "JE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 114,
+            "country_name_short_en": "JORDAN",
+            "country_code_alpha2": "JO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 115,
+            "country_name_short_en": "KAZAKHSTAN",
+            "country_code_alpha2": "KZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 116,
+            "country_name_short_en": "KENYA",
+            "country_code_alpha2": "KE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 117,
+            "country_name_short_en": "KIRIBATI",
+            "country_code_alpha2": "KI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 118,
+            "country_name_short_en": "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF",
+            "country_code_alpha2": "KP"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 119,
+            "country_name_short_en": "KOREA, REPUBLIC OF",
+            "country_code_alpha2": "KR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 120,
+            "country_name_short_en": "KUWAIT",
+            "country_code_alpha2": "KW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 121,
+            "country_name_short_en": "KYRGYZSTAN",
+            "country_code_alpha2": "KG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 122,
+            "country_name_short_en": "LAO PEOPLE'S DEMOCRATIC REPUBLIC",
+            "country_code_alpha2": "LA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 123,
+            "country_name_short_en": "Latvia",
+            "country_code_alpha2": "LV"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 124,
+            "country_name_short_en": "LEBANON",
+            "country_code_alpha2": "LB"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 125,
+            "country_name_short_en": "LESOTHO",
+            "country_code_alpha2": "LS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 126,
+            "country_name_short_en": "LIBERIA",
+            "country_code_alpha2": "LR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 127,
+            "country_name_short_en": "LIBYA",
+            "country_code_alpha2": "LY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 128,
+            "country_name_short_en": "LIECHTENSTEIN",
+            "country_code_alpha2": "LI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 129,
+            "country_name_short_en": "Lithuania",
+            "country_code_alpha2": "LT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 130,
+            "country_name_short_en": "Luxembourg",
+            "country_code_alpha2": "LU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 131,
+            "country_name_short_en": "MACAO",
+            "country_code_alpha2": "MO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 132,
+            "country_name_short_en": "MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF",
+            "country_code_alpha2": "MK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 133,
+            "country_name_short_en": "MADAGASCAR",
+            "country_code_alpha2": "MG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 134,
+            "country_name_short_en": "MALAWI",
+            "country_code_alpha2": "MW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 135,
+            "country_name_short_en": "MALAYSIA",
+            "country_code_alpha2": "MY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 136,
+            "country_name_short_en": "MALDIVES",
+            "country_code_alpha2": "MV"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 137,
+            "country_name_short_en": "MALI",
+            "country_code_alpha2": "ML"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 138,
+            "country_name_short_en": "Malta",
+            "country_code_alpha2": "MT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 139,
+            "country_name_short_en": "MARSHALL ISLANDS",
+            "country_code_alpha2": "MH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 140,
+            "country_name_short_en": "MARTINIQUE",
+            "country_code_alpha2": "MQ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 141,
+            "country_name_short_en": "MAURITANIA",
+            "country_code_alpha2": "MR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 142,
+            "country_name_short_en": "MAURITIUS",
+            "country_code_alpha2": "MU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 143,
+            "country_name_short_en": "MAYOTTE",
+            "country_code_alpha2": "YT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 144,
+            "country_name_short_en": "MEXICO",
+            "country_code_alpha2": "MX"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 145,
+            "country_name_short_en": "MICRONESIA, FEDERATED STATES OF",
+            "country_code_alpha2": "FM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 146,
+            "country_name_short_en": "MOLDOVA, REPUBLIC OF",
+            "country_code_alpha2": "MD"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 147,
+            "country_name_short_en": "MONACO",
+            "country_code_alpha2": "MC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 148,
+            "country_name_short_en": "MONGOLIA",
+            "country_code_alpha2": "MN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 149,
+            "country_name_short_en": "MONTENEGRO",
+            "country_code_alpha2": "ME"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 150,
+            "country_name_short_en": "MONTSERRAT",
+            "country_code_alpha2": "MS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 151,
+            "country_name_short_en": "MOROCCO",
+            "country_code_alpha2": "MA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 152,
+            "country_name_short_en": "MOZAMBIQUE",
+            "country_code_alpha2": "MZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 153,
+            "country_name_short_en": "MYANMAR",
+            "country_code_alpha2": "MM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 154,
+            "country_name_short_en": "NAMIBIA",
+            "country_code_alpha2": "NA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 155,
+            "country_name_short_en": "NAURU",
+            "country_code_alpha2": "NR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 156,
+            "country_name_short_en": "NEPAL",
+            "country_code_alpha2": "NP"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 157,
+            "country_name_short_en": "NETHERLAND ANTILLES",
+            "country_code_alpha2": ""
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 158,
+            "country_name_short_en": "Netherlands",
+            "country_code_alpha2": "NL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 159,
+            "country_name_short_en": "NEW CALEDONIA",
+            "country_code_alpha2": "NC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 160,
+            "country_name_short_en": "NEW ZEALAND",
+            "country_code_alpha2": "NZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 161,
+            "country_name_short_en": "NICARAGUA",
+            "country_code_alpha2": "NI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 162,
+            "country_name_short_en": "NIGER",
+            "country_code_alpha2": "NE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 163,
+            "country_name_short_en": "NIGERIA",
+            "country_code_alpha2": "NG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 164,
+            "country_name_short_en": "NIUE",
+            "country_code_alpha2": "NU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 165,
+            "country_name_short_en": "NORFOLK ISLAND",
+            "country_code_alpha2": "NF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 166,
+            "country_name_short_en": "NORTHERN MARIANA ISLANDS",
+            "country_code_alpha2": "MP"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 167,
+            "country_name_short_en": "NORWAY",
+            "country_code_alpha2": "NO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 168,
+            "country_name_short_en": "OMAN",
+            "country_code_alpha2": "OM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 169,
+            "country_name_short_en": "PAKISTAN",
+            "country_code_alpha2": "PK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 170,
+            "country_name_short_en": "PALAU",
+            "country_code_alpha2": "PW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 171,
+            "country_name_short_en": "PALESTINIAN TERRITORY, OCCUPIED",
+            "country_code_alpha2": "PS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 172,
+            "country_name_short_en": "PANAMA",
+            "country_code_alpha2": "PA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 173,
+            "country_name_short_en": "PAPUA NEW GUINEA",
+            "country_code_alpha2": "PG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 174,
+            "country_name_short_en": "PARAGUAY",
+            "country_code_alpha2": "PY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 175,
+            "country_name_short_en": "PERU",
+            "country_code_alpha2": "PE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 176,
+            "country_name_short_en": "PHILIPPINES",
+            "country_code_alpha2": "PH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 177,
+            "country_name_short_en": "PITCAIRN",
+            "country_code_alpha2": "PN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 178,
+            "country_name_short_en": "Poland",
+            "country_code_alpha2": "PL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 179,
+            "country_name_short_en": "Portugal",
+            "country_code_alpha2": "PT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 180,
+            "country_name_short_en": "PUERTO RICO",
+            "country_code_alpha2": "PR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 181,
+            "country_name_short_en": "QATAR",
+            "country_code_alpha2": "QA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 182,
+            "country_name_short_en": "RÉUNION",
+            "country_code_alpha2": "RE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 183,
+            "country_name_short_en": "Romania",
+            "country_code_alpha2": "RO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 184,
+            "country_name_short_en": "RUSSIAN FEDERATION",
+            "country_code_alpha2": "RU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 185,
+            "country_name_short_en": "RWANDA",
+            "country_code_alpha2": "RW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 186,
+            "country_name_short_en": "SAINT BARTHÉLEMY",
+            "country_code_alpha2": "BL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 187,
+            "country_name_short_en": "SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA",
+            "country_code_alpha2": "SH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 188,
+            "country_name_short_en": "SAINT KITTS AND NEVIS",
+            "country_code_alpha2": "KN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 189,
+            "country_name_short_en": "SAINT LUCIA",
+            "country_code_alpha2": "LC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 190,
+            "country_name_short_en": "SAINT MARTIN (FRENCH PART)",
+            "country_code_alpha2": "MF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 191,
+            "country_name_short_en": "SAINT PIERRE AND MIQUELON",
+            "country_code_alpha2": "PM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 192,
+            "country_name_short_en": "SAINT VINCENT AND THE GRENADINES",
+            "country_code_alpha2": "VC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 193,
+            "country_name_short_en": "SAMOA",
+            "country_code_alpha2": "WS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 194,
+            "country_name_short_en": "SAN MARINO",
+            "country_code_alpha2": "SM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 195,
+            "country_name_short_en": "SAO TOME AND PRINCIPE",
+            "country_code_alpha2": "ST"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 196,
+            "country_name_short_en": "SAUDI ARABIA",
+            "country_code_alpha2": "SA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 197,
+            "country_name_short_en": "SENEGAL",
+            "country_code_alpha2": "SN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 198,
+            "country_name_short_en": "SERBIA",
+            "country_code_alpha2": "RS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 199,
+            "country_name_short_en": "SEYCHELLES",
+            "country_code_alpha2": "SC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 200,
+            "country_name_short_en": "SIERRA LEONE",
+            "country_code_alpha2": "SL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 201,
+            "country_name_short_en": "SINGAPORE",
+            "country_code_alpha2": "SG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 202,
+            "country_name_short_en": "SINT MAARTEN (DUTCH PART)",
+            "country_code_alpha2": "SX"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 203,
+            "country_name_short_en": "Slovakia",
+            "country_code_alpha2": "SK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 204,
+            "country_name_short_en": "Slovenia",
+            "country_code_alpha2": "SI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 205,
+            "country_name_short_en": "SOLOMON ISLANDS",
+            "country_code_alpha2": "SB"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 206,
+            "country_name_short_en": "SOMALIA",
+            "country_code_alpha2": "SO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 207,
+            "country_name_short_en": "SOUTH AFRICA",
+            "country_code_alpha2": "ZA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 208,
+            "country_name_short_en": "SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS",
+            "country_code_alpha2": "GS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 209,
+            "country_name_short_en": "SOUTH SUDAN",
+            "country_code_alpha2": "SS"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 210,
+            "country_name_short_en": "Spain",
+            "country_code_alpha2": "ES"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 211,
+            "country_name_short_en": "SRI LANKA",
+            "country_code_alpha2": "LK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 212,
+            "country_name_short_en": "SUDAN",
+            "country_code_alpha2": "SD"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 213,
+            "country_name_short_en": "SURINAME",
+            "country_code_alpha2": "SR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 214,
+            "country_name_short_en": "SVALBARD AND JAN MAYEN",
+            "country_code_alpha2": "SJ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 215,
+            "country_name_short_en": "SWAZILAND",
+            "country_code_alpha2": "SZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 216,
+            "country_name_short_en": "Sweden",
+            "country_code_alpha2": "SE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 217,
+            "country_name_short_en": "SWITZERLAND",
+            "country_code_alpha2": "CH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 218,
+            "country_name_short_en": "SYRIAN ARAB REPUBLIC",
+            "country_code_alpha2": "SY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 219,
+            "country_name_short_en": "TAIWAN, PROVINCE OF CHINA",
+            "country_code_alpha2": "TW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 220,
+            "country_name_short_en": "TAJIKISTAN",
+            "country_code_alpha2": "TJ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 221,
+            "country_name_short_en": "TANZANIA, UNITED REPUBLIC OF",
+            "country_code_alpha2": "TZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 222,
+            "country_name_short_en": "THAILAND",
+            "country_code_alpha2": "TH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 223,
+            "country_name_short_en": "TIMOR-LESTE",
+            "country_code_alpha2": "TL"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 224,
+            "country_name_short_en": "TOGO",
+            "country_code_alpha2": "TG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 225,
+            "country_name_short_en": "TOKELAU",
+            "country_code_alpha2": "TK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 226,
+            "country_name_short_en": "TONGA",
+            "country_code_alpha2": "TO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 227,
+            "country_name_short_en": "TRINIDAD AND TOBAGO",
+            "country_code_alpha2": "TT"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 228,
+            "country_name_short_en": "TUNISIA",
+            "country_code_alpha2": "TN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 229,
+            "country_name_short_en": "TURKEY",
+            "country_code_alpha2": "TR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 230,
+            "country_name_short_en": "TURKMENISTAN",
+            "country_code_alpha2": "TM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 231,
+            "country_name_short_en": "TURKS AND CAICOS ISLANDS",
+            "country_code_alpha2": "TC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 232,
+            "country_name_short_en": "TUVALU",
+            "country_code_alpha2": "TV"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 233,
+            "country_name_short_en": "UGANDA",
+            "country_code_alpha2": "UG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 234,
+            "country_name_short_en": "UKRAINE",
+            "country_code_alpha2": "UA"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 235,
+            "country_name_short_en": "UNITED ARAB EMIRATES",
+            "country_code_alpha2": "AE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 236,
+            "country_name_short_en": "United Kingdom",
+            "country_code_alpha2": "GB"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 237,
+            "country_name_short_en": "UNITED STATES",
+            "country_code_alpha2": "US"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 238,
+            "country_name_short_en": "UNITED STATES MINOR OUTLYING ISLANDS",
+            "country_code_alpha2": "UM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 239,
+            "country_name_short_en": "URUGUAY",
+            "country_code_alpha2": "UY"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 240,
+            "country_name_short_en": "UZBEKISTAN",
+            "country_code_alpha2": "UZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 241,
+            "country_name_short_en": "VANUATU",
+            "country_code_alpha2": "VU"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 242,
+            "country_name_short_en": "VENEZUELA, BOLIVARIAN REPUBLIC OF",
+            "country_code_alpha2": "VE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 243,
+            "country_name_short_en": "VIET NAM",
+            "country_code_alpha2": "VN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 244,
+            "country_name_short_en": "VIRGIN ISLANDS, BRITISH",
+            "country_code_alpha2": "VG"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 245,
+            "country_name_short_en": "VIRGIN ISLANDS, U.S.",
+            "country_code_alpha2": "VI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 246,
+            "country_name_short_en": "WALLIS AND FUTUNA",
+            "country_code_alpha2": "WF"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 247,
+            "country_name_short_en": "WESTERN SAHARA",
+            "country_code_alpha2": "EH"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 248,
+            "country_name_short_en": "YEMEN",
+            "country_code_alpha2": "YE"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 249,
+            "country_name_short_en": "ZAMBIA",
+            "country_code_alpha2": "ZM"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 250,
+            "country_name_short_en": "ZIMBABWE",
+            "country_code_alpha2": "ZW"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 251,
+            "country_name_short_en": "China (excluding Hong Kong and Macao)",
+            "country_code_alpha2": "CN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 252,
+            "country_name_short_en": "Cote d'Ivoire",
+            "country_code_alpha2": "CI"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 253,
+            "country_name_short_en": "United States of America",
+            "country_code_alpha2": "US"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 254,
+            "country_name_short_en": "Korea (Republic of)",
+            "country_code_alpha2": "KR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 255,
+            "country_name_short_en": "St Kitts and Nevis",
+            "country_code_alpha2": "KN"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 256,
+            "country_name_short_en": "Hong Kong  (China, Hong Kong Special Administrative Region)",
+            "country_code_alpha2": "HK"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 257,
+            "country_name_short_en": "Tanzania (United Republic of)",
+            "country_code_alpha2": "TZ"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 258,
+            "country_name_short_en": "Iran (Islamic Republic of)",
+            "country_code_alpha2": "IR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 259,
+            "country_name_short_en": "Macao (China, Macao Special Administrative Region)",
+            "country_code_alpha2": "MO"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 260,
+            "country_name_short_en": "St Vincent and the Grenadines",
+            "country_code_alpha2": "VC"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 261,
+            "country_name_short_en": "Congo (Democratic Republic of)",
+            "country_code_alpha2": "CD"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 262,
+            "country_name_short_en": "Taiwan (Province of China)",
+            "country_code_alpha2": "TW"
+        }
+    }
+]

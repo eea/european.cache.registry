@@ -182,6 +182,34 @@ class UndertakingDetailView(DetailView):
         return data
 
 
+class UndertakingDetailShortView(DetailView):
+    model = Undertaking
+
+    def get_object(self, pk, **kwargs):
+        domain = kwargs.get('domain')
+        return self.model.query.filter_by(domain=domain,
+                                          external_id=pk).first_or_404()
+
+    @classmethod
+    def serialize(cls, obj, **kwargs):
+        data = {
+            "company_id": obj.external_id,
+            "company_name": obj.name,
+            "address": obj.address.street + ", " + obj.address.number,
+            "postal_code": obj.address.zipcode,
+            "city": obj.address.city,
+            "region": "",
+            "country": obj.address.country.name,
+            "eori_code": obj.vat,
+            "vat_code": "",
+            "contact_persons": [{
+                "first_name":  cp.first_name,
+                "last_name": cp.last_name,
+                "email": cp.email,
+            } for cp in obj.contact_persons],
+        }
+        return data
+
 class UndertakingStatusUpdate(ApiView):
     model = Undertaking
 

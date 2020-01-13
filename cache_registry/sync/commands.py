@@ -12,10 +12,12 @@ from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
 from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url, call_bdr
 from .licences import (
+    aggregate_licence_to_substance,
     check_if_delivery_exists,
     get_licences,
+    get_substance,
     get_or_create_delivery,
-    parse_licence
+    parse_licence,
 )
 from .undertakings import get_latest_undertakings, update_undertaking
 
@@ -191,7 +193,14 @@ def licences(year, delivery_name, page_size=200):
             continue
 
         delivery_licence = get_or_create_delivery(year, delivery_name, undertaking.id)
-        parse_licence(licence, undertaking.id, delivery_licence)
+        substance = get_substance(delivery_licence, licence)
+        if not substance:
+            message = 'Substance {} could not be translated.'.format(
+                "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower()))
+            current_app.logger.warning(message)
+            continue
+        licence_object = parse_licence(licence, undertaking.id, substance)
+        aggregate_licence_to_substance(substance, licence_object)
 
 
 @sync_manager.command

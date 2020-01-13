@@ -56,6 +56,11 @@ register_url(prefix=undertaking_prefix, name=undertaking_name,
              view_name='detail')
 
 register_url(prefix=undertaking_prefix, name=undertaking_name,
+             url='/<pk>/detail/',
+             view=UndertakingDetailShortView,
+             view_name='detail_short')
+
+register_url(prefix=undertaking_prefix, name=undertaking_name,
              url='/<pk>/statusupdate',
              view=UndertakingStatusUpdate,
              view_name='statusupdate')
@@ -66,9 +71,9 @@ licence_prefix = '/undertaking/<domain>/<pk>'
 licence_name = 'licence'
 
 register_url(prefix=licence_prefix, name=licence_name,
-             url='/licences/<year>',
-             view=LicenceYearListView,
-             view_name='licence')
+             url='/licences/<year>/aggregated',
+             view=SubstanceYearListView,
+             view_name='current_substances_per_undertaking')
 
 register_url(prefix=licence_prefix, name=licence_name,
              url='/deliveries/<year>',
@@ -79,6 +84,11 @@ register_url(prefix=licence_prefix, name=licence_name,
              url='/deliveries/<year>/<delivery_name>/licences',
              view=LicencesOfOneDeliveryListView,
              view_name='licences_per_delivery')
+
+register_url(prefix=licence_prefix, name=licence_name,
+             url='/deliveries/<year>/<delivery_name>/substances',
+             view=SubstancesOfOneDeliveryListView,
+             view_name='substances_per_delivery')
 
 # User
 
