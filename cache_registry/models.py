@@ -143,6 +143,8 @@ class Undertaking(SerializableModel, db.Model):
     domain = Column(String(32), default="FGAS")
     date_created = Column(Date)
     date_updated = Column(Date)
+    date_created_in_ecr = Column(Date, server_default=db.func.now())
+    date_updated_in_ecr = Column(Date, onupdate=db.func.now())
     status = Column(String(64))
     country_code = Column(String(10), default="")
     country_code_orig = Column(String(10), default="")

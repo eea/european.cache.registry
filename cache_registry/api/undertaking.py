@@ -155,7 +155,7 @@ class UndertakingDetailView(DetailView):
         candidates = get_candidates(obj.external_id, obj.domain)
         data = ApiView.serialize(obj)
         _strip_fields = (
-            'date_updated', 'address_id',
+            'address_id',
             'represent_id',
         )
         for field in _strip_fields:
