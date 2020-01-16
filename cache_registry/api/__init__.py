@@ -56,7 +56,7 @@ register_url(prefix=undertaking_prefix, name=undertaking_name,
              view_name='detail')
 
 register_url(prefix=undertaking_prefix, name=undertaking_name,
-             url='/<pk>/detail/',
+             url='/<pk>/details-short/',
              view=UndertakingDetailShortView,
              view_name='detail_short')
 

@@ -198,10 +198,8 @@ class UndertakingDetailShortView(DetailView):
             "address": obj.address.street + ", " + obj.address.number,
             "postal_code": obj.address.zipcode,
             "city": obj.address.city,
-            "region": "",
             "country": obj.address.country.name,
             "eori_code": obj.vat,
-            "vat_code": "",
             "contact_persons": [{
                 "first_name":  cp.first_name,
                 "last_name": cp.last_name,

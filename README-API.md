@@ -18,7 +18,15 @@ Overview
 * `/undertaking/[domain]/list_by_vat/[vat]` - filter by vat undertakings from domain
 * `/undertaking/[domain]/filter` - count of undertakings from domain, given field filters
 * `/undertaking/[domain]/[company_id]/details` - details about an undertaking from a domain
+* `/undertaking/[domain]/[company_id]/details-short` - short details about an undertaking from a domain
 * `/undertaking/[domain]/[company_id]/statusupdate` - change the status of a company from a domain
+
+**Licences calls**
+
+* `/undertaking/[domain]/[company_id]/licences/[year]/aggregated` - all substances(licences data aggregated) for one undertaking delivered in a year
+* `/undertaking/[domain]/[company_id]/deliveries/[year]` - all deliveries for one undertaking delivered in one year
+* `/undertaking/[domain]/[company_id]/deliveries/[year]/[delivery_name]/licences` - all licences for one undertaking for a certain delivery
+* `/undertaking/[domain]/[company_id]/deliveries/[year]/[delivery_name]/substances` - all substances for one undertaking for a certain delivery
 
 **User calls:**
 
@@ -386,10 +394,182 @@ Returns an undertakings details from the system, as fetched from domain registry
       ]
     }
 
+/undertaking/[domain]/[company_id]/details-short
+-------------------------------------------------
+
+This url is used to retrive details of a certain company and the contact persons of that company.
+
+{
+    "company_id": 324,
+    "company_name": "NMORGANIZATION--324",
+    "address": "str--567, 1",
+    "postal_code": "cp567",
+    "city": "Darmstadt",
+    "country": "Germany",
+    "eori_code": "NREORI324",
+    "contact_persons": [
+      {
+        "first_name": "fname25716",
+        "last_name": "lname25716",
+        "email": "25716email@test.yyy"
+      },
+      {
+        "first_name": "fname--25717",
+        "last_name": "lname--25717",
+        "email": "25717email@test.yyy"
+      }
+    ]
+}
+
 /undertaking/[domain]/[company_id]/statusupdate - POST
 ------------------------------------------------------
 
 This url is used to update the status of a company from a certain domain by POST method with the new status
+
+Licences calls
+==============
+
+/undertaking/[domain]/[company_id]/licences/[year]/aggregated - POST
+-------------------------------------------------------------
+
+This url is used to retrive the current delivery of substances for one undertaking in a certain year.
+The substances can be also filtered by substance name or types(actions), by suppling a JSON of the form:
+
+    {
+      "substances": ["Substance name1", "Substance name 2" ],
+      "actions": ["action1", "action2"]
+    }
+
+Response example:
+
+    [
+      {
+        "year": 2019,
+        "substance": "HCFC-142b (virgin)",
+        "quantity": 1234,
+        "company_id": 234,
+        "use_kind": "",
+        "use_desc": "feedstock",
+        "type": "export"
+      },
+      {
+        "year": 2019,
+        "substance": "Halon 2402 (non-virgin)",
+        "quantity": 23,
+        "company_id": 234,
+        "use_kind": "",
+        "use_desc": "critical uses",
+        "type": "export"
+      }
+    ]
+
+/undertaking/[domain]/[pk]/deliveries/[year] - GET
+---------------------------------------------------
+
+Provides a list with all the deliveries for one undertaking delivered in one year
+
+    [
+      {
+        "order": 1,
+        "current": false,
+        "name": "2018-p1",
+        "year": 2018,
+        "date_created": "16/01/2020",
+        "date_updated": "16/01/2020",
+        "undertaking_id": 123
+      },
+      {
+        "order": 2,
+        "current": true,
+        "name": "2018-p2",
+        "year": 2018,
+        "date_created": "16/01/2020",
+        "date_updated": null,
+        "undertaking_id": 123
+      }
+    ]
+
+
+/undertaking/[domain>/[pk]/deliveries/[year]/[delivery_name]/licences - GET
+---------------------------------------------------------------------------
+
+Provies a list with all the licences for one undertaking for a certain delivery
+
+
+    [
+      {
+        "year": 2018,
+        "licence_id": 1234,
+        "chemical_name": "HBFC-31 B1",
+        "organization_country_name": "IT",
+        "organization_country_name_orig": "Italy",
+        "custom_procedure_name": "Name",
+        "international_party_country_name": "US",
+        "international_party_country_name_orig": "United States of America",
+        "qty_qdp_percentage": 20,
+        "qty_percentage": 4,
+        "licence_state": "CLOSED",
+        "long_licence_number": "NUMBER2342",
+        "template_detailed_use_code": "import.of.substance.for.feedstock.use.detailed.use",
+        "licence_type": "IFDS",
+        "mixture_nature_type": "VIRGIN",
+        "date_created": "16/01/2020",
+        "date_updated": null,
+        "substance_id": 2
+      },
+      {
+        "year": 2018,
+        "licence_id": 1235,
+        "chemical_name": "HBFC-31 B1",
+        "organization_country_name": "IT",
+        "organization_country_name_orig": "Italy",
+        "custom_procedure_name": "Release for free circulation",
+        "international_party_country_name": "US",
+        "international_party_country_name_orig": "United States of America",
+        "qty_qdp_percentage": 43,
+        "qty_percentage": 32,
+        "licence_state": "CLOSED",
+        "long_licence_number": "NUMBER23131",
+        "template_detailed_use_code": "import.of.substance.for.feedstock.use.detailed.use",
+        "licence_type": "IFDS",
+        "mixture_nature_type": "VIRGIN",
+        "date_created": "16/01/2020",
+        "date_updated": null,
+        "substance_id": 2
+      }
+    ]
+
+
+/undertaking/[domain]/[pk]/deliveries/[year]/[delivery_name]/substances - GET
+-----------------------------------------------------------------------------
+
+Provies a list with all the substances for one undertaking for a certain delivery
+
+
+  [
+    {
+      "year": 2018,
+      "substance": "HBFC-31 B1 (virgin)",
+      "lic_use_kind": "free circulation",
+      "lic_use_desc": "feedstock",
+      "lic_type": "import",
+      "quantity": 2342,
+      "date_created": "16/01/2020",
+      "date_updated": "16/01/2020",
+      "delivery_id": 2
+    },
+    {
+      "year": 2018,
+      "substance": "HCFC-22 (virgin)",
+      "lic_use_kind": "",
+      "lic_use_desc": "refrigeration",
+      "lic_type": "export",
+      "quantity": 5433,
+      "date_created": "16/01/2020",
+      "date_updated": "16/01/2020",
+      "delivery_id": 2
+    }
+  ]
 
 
 User calls
