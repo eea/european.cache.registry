@@ -21,9 +21,9 @@ class SubstanceYearListView(ApiView):
             return []
         substances = substances.substances
         data = json.loads(request.data)
-        if data['substances']:
+        if data.get('substances'):
             substances = self.filter_substances(data['substances'], substances)
-        if data['actions']:
+        if data.get('actions'):
             substances = self.filter_type(data['actions'], substances)
         return substances.all()
 
