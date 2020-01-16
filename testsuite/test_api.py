@@ -58,7 +58,7 @@ def test_undertaking_detail_short_view(client):
                               domain=undertaking.domain, pk=undertaking.external_id))
 
     resp_data = resp.json
-    assert len(resp_data) == 10
+    assert len(resp_data) == 8
     data = resp_data
     assert data['company_id'] == undertaking.external_id
     assert data['company_name'] == undertaking.name
@@ -116,7 +116,7 @@ def test_undertaking_list_all(client):
 def test_undertaking_list_all_domain_filter(client):
     factories.UndertakingFactory(domain=FGAS)
     undertaking = factories.UndertakingFactory(domain=ODS)
-    undertaking.oldcompany_verified = False
+    undertaking.oldcompany_verified = False 
     resp = client.get(url_for('api.company-list-all',
                               domain=ODS))
     resp_data = resp.json
