@@ -136,7 +136,10 @@ def parse_licence(licence, undertaking_id, substance):
     return licence_object
 
 def get_substance(delivery_licence, licence):
-    ec_substance_name = "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower())
+    if licence['mixtureNatureType'].lower() != 'virgin':
+        ec_substance_name = "{} (non-virgin)".format(licence['chemicalName'])
+    else:
+        ec_substance_name = "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower())
     substance_conversion = SubstanceNameConversion.query.filter_by(ec_substance_name=ec_substance_name).first()
     if not substance_conversion:
         return None
