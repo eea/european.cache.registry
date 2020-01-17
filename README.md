@@ -128,6 +128,11 @@ the ports directive (e.g. "5000:5000" instead of "5000").
         python ./manage.py sync fgases [-d 30] [-p 100]
         python ./manage.py sync ods [-d 30] [-p 100]
 
+* Fetch a specific company by providing the external id:
+
+        python ./manage.py sync fgases [-i 12345]
+        python ./manage.py sync ods [-i 12345]
+
 
 * In order to sync BDR collections title with the cache server's corresponding undertakings name:
 

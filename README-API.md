@@ -880,6 +880,7 @@ Optional parameters:
 
 * days (integer, default = 7)
 * updated_since (string, datetime format DD/MM/YYYY)
+* id (integer, the external id of the company) 
 
 /sync/ods - GET
 ---------------
@@ -888,6 +889,7 @@ Optional parameters:
 
 * days (integer, default = 7)
 * updated_since (string, datetime format DD/MM/YYYY)
+* id (integer, the external id of the company)
 
 
 

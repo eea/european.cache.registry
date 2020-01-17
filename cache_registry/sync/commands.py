@@ -125,18 +125,27 @@ def print_all_undertakings(undertakings):
                      help="Date in DD/MM/YYYY format")
 @sync_manager.option('-p', '--page_size', dest='page_size',
                      help="Page size")
-def fgases(days=7, updated_since=None, page_size=None):
-    last_update = get_last_update(days, updated_since, domain=FGAS)
+@sync_manager.option('-i', '--external_id', dest='external_id',
+                     help="External id of a company")
+def fgases(days=7, updated_since=None, page_size=None, id=None):
+    if not id:
+        last_update = get_last_update(days, updated_since, domain=FGAS)
+    else:
+        last_update = None
+        print("Fetching data for company {}".format(id))
+
     undertakings = get_latest_undertakings(
         type_url='/latest/fgasundertakings/',
         updated_since=last_update,
-        page_size=page_size
+        page_size=page_size,
+        id=id
     )
     (undertakings_with_changed_repr,undertakings_count) = update_undertakings(undertakings,
                                              eea_double_check_fgases)
     cleanup_unused_users()
-    log_changes(last_update, undertakings_count, domain=FGAS)
-    print(undertakings_count, "values")
+    if not id:
+        log_changes(last_update, undertakings_count, domain=FGAS)
+        print(undertakings_count, "values")
     db.session.commit()
     for undertaking in undertakings_with_changed_repr:
         undertaking_obj = Undertaking.query.filter_by(external_id=undertaking['external_id']).first()
@@ -149,18 +158,28 @@ def fgases(days=7, updated_since=None, page_size=None):
                      help="Date in DD/MM/YYYY format")
 @sync_manager.option('-p', '--page_size', dest='page_size',
                      help="Page size")
-def ods(days=7, updated_since=None, page_size=None):
-    last_update = get_last_update(days, updated_since, domain=ODS)
+@sync_manager.option('-i', '--external_id', dest='external_id',
+                     help="External id of a company")
+def ods(days=7, updated_since=None, page_size=None, id=None):
+    if not id:
+        last_update = get_last_update(days, updated_since, domain=ODS)
+    else:
+        last_update = None
+        print("Fetching data for company {}".format(id))
+
     undertakings = get_latest_undertakings(
         type_url='/latest/odsundertakings/',
         updated_since=last_update,
-        page_size=page_size
+        page_size=page_size,
+        id=id
     )
+
     (undertakings_with_changed_repr,undertakings_count) = update_undertakings(undertakings,
                                              eea_double_check_ods)
     cleanup_unused_users()
-    log_changes(last_update, undertakings_count, domain=ODS)
-    print(undertakings_count, "values")
+    if not id:
+        log_changes(last_update, undertakings_count, domain=ODS)
+        print(undertakings_count, "values")
     db.session.commit()
     for undertaking in undertakings_with_changed_repr:
         undertaking_obj = Undertaking.query.filter_by(external_id=undertaking['external_id']).first()
