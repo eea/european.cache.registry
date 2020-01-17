@@ -13,7 +13,7 @@ from .bdr import update_bdr_col_name, get_absolute_url
 from .auth import get_auth, Unauthorized, InvalidResponse, patch_users
 
 
-def get_latest_undertakings(type_url, updated_since=None, page_size=None):
+def get_latest_undertakings(type_url, updated_since=None, page_size=None, id=None):
     """ Get latest undertakings from specific API url """
     auth = get_auth('API_USER', 'API_PASSWORD')
     url = get_absolute_url('API_URL', type_url)
@@ -22,6 +22,9 @@ def get_latest_undertakings(type_url, updated_since=None, page_size=None):
         params = {'updatedSince': updated_since}
     else:
         params = {}
+
+    if id:
+        params['organizationId'] = id
 
     headers = dict(zip(('user', 'password'), auth))
     ssl_verify = current_app.config['HTTPS_VERIFY']

@@ -1,5 +1,6 @@
 import os
 import json
+import pytest
 
 from flask import url_for
 from openpyxl import load_workbook
@@ -11,6 +12,20 @@ from flask_mail import Mail
 
 MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
+
+def test_export_companies_empty(client):
+    resp = client.get(url_for('misc.export-company-list',
+                            domain='FGAS'))
+    assert resp.status_code == 200
+    assert resp.content_type == MIMETYPE
+    fn = 'test_file.xlsx'
+    with open(fn, 'wb') as f:
+        f.write(resp.body)
+        f.close()
+    wb = load_workbook(fn)
+    assert len(wb.worksheets) == 1
+    rows = [row for row in wb.worksheets[0].rows]
+    assert len(rows) == 1
 
 def test_export_companies(client):
     undertaking = factories.UndertakingFactory()
@@ -230,3 +245,12 @@ def test_organization_log(client):
     assert len(data) == 1
     assert data[0]['domain'] == FGAS
     assert data[0]['organizations'] == 2
+
+def test_check_sync_log(client):
+    factories.OrganizationLog(organizations=2)
+    resp = client.get(url_for('misc.log-check_sync', domain=FGAS))
+    assert resp.status_code == 200
+
+@pytest.mark.xfail(raises=RuntimeError)
+def test_crash_me(client):
+    resp = client.get(url_for('misc.crashme'), expect_errors=True)

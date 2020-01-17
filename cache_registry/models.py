@@ -6,7 +6,7 @@ import sys
 from alembic import op
 from datetime import date, datetime
 from sqlalchemy import (
-    Column, Date, DateTime, ForeignKey, Integer, String, Boolean
+    Column, Date, DateTime, ForeignKey, Integer, String, Boolean, Float
 )
 from sqlalchemy.orm import relationship
 
@@ -265,6 +265,7 @@ class UndertakingBusinessProfile(SerializableModel, db.Model):
                                backref=db.backref('businessprofiles_link'))
     businessprofile = relationship('BusinessProfile')
 
+
 class UndertakingRepresentHistory(SerializableModel, db.Model):
     __tablename__ = 'undertaking_represent_history'
 
@@ -274,6 +275,7 @@ class UndertakingRepresentHistory(SerializableModel, db.Model):
     undertaking = relationship('Undertaking', cascade="all",
                                backref=db.backref('represent_history_link'))
     represent = relationship('EuLegalRepresentativeCompany', cascade="all")
+
 
 class OrganizationLog(SerializableModel, db.Model):
     __tablename__ = 'organization_log'
@@ -306,6 +308,96 @@ class MailAddress(SerializableModel, db.Model):
     timestamp = Column(DateTime(timezone=True), default=datetime.now)
     first_name = Column(String(255))
     last_name = Column(String(255))
+
+
+class Licence(SerializableModel, db.Model):
+    __tablename__ = 'licence'
+
+    id = Column(Integer, primary_key=True)
+    year =  Column(Integer)
+    licence_id = Column(Integer)
+    chemical_name = Column(String(100))
+    organization_country_name = Column(String(4))
+    organization_country_name_orig = Column(String(100))
+    custom_procedure_name = Column(String(100))
+    international_party_country_name = Column(String(100))
+    international_party_country_name_orig = Column(String(100))
+    qty_qdp_percentage = Column(Float(7))
+    qty_percentage = Column(Float(7))
+    licence_state = Column(String(50))
+    long_licence_number = Column(String(50))
+    template_detailed_use_code = Column(String(255))
+    licence_type = Column(String(50))
+    mixture_nature_type = Column(String(50))
+    date_created = Column(Date, server_default=db.func.now())
+    date_updated = Column(Date, onupdate=db.func.now())
+
+    substance_id = Column(ForeignKey('substance.id'), nullable=True,
+                           default=None)
+    substance = relationship('Substance', backref=db.backref('licences', lazy='dynamic'))
+
+
+class Substance(SerializableModel, db.Model):
+    __tablename__ = 'substance'
+
+    id = Column(Integer, primary_key=True)
+    year = Column(Integer)
+    substance = Column(String(100))
+    lic_use_kind = Column(String(100))
+    lic_use_desc = Column(String(100))
+    lic_type = Column(String(50))
+    quantity = Column(Float(7))
+
+    date_created = Column(Date, server_default=db.func.now())
+    date_updated = Column(Date, onupdate=db.func.now())
+
+    delivery_id = Column(ForeignKey('delivery_licence.id'), nullable=True,
+                         default=None)
+    deliverylicence = relationship('DeliveryLicence',
+                                    backref=db.backref('substances', lazy='dynamic'))
+
+
+class DeliveryLicence(SerializableModel, db.Model):
+    __tablename__ = 'delivery_licence'
+
+    id = Column(Integer, primary_key=True)
+    order = Column(Integer)
+    current = Column(Boolean, default=False)
+    name = Column(String(50))
+    year = Column(Integer)
+    date_created = Column(Date, server_default=db.func.now())
+    date_updated = Column(Date, onupdate=db.func.now())
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), nullable=True,
+                           default=None)
+    undertaking = relationship('Undertaking',
+                              backref=db.backref('deliveries', lazy='dynamic'))
+
+
+class SubstanceNameConversion(SerializableModel, db.Model):
+    __tablename__ = 'substance_name_conversion'
+
+    id = Column(Integer, primary_key=True)
+    ec_substance_name = Column(String(100))
+    corrected_name = Column(String(100))
+
+
+class CountryCodesConversion(SerializableModel, db.Model):
+    __tablename__ = 'country_codes_conversion'
+
+    id = Column(Integer, primary_key=True)
+    country_name_short_en = Column(String(100))
+    country_code_alpha2 = Column(String(4))
+
+
+class LicenceDetailsConverstion(SerializableModel, db.Model):
+    __tablename__ = 'licence_details_conversion'
+
+    id = Column(Integer, primary_key=True)
+    template_detailed_use_code = Column(String(250))
+    lic_use_kind = Column(String(100))
+    lic_use_desc = Column(String(100))
+    lic_type = Column(String(100))
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)

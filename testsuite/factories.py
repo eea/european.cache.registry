@@ -182,3 +182,87 @@ class MailAddress(SQLAlchemyModelFactory):
     mail = 'test@test.com'
     first_name = 'first_name'
     last_name = 'last_name'
+
+
+class DeliveryLicenceFactory(SQLAlchemyModelFactory):
+
+    name = '2019-p1'
+    year = 2019
+    undertaking = SubFactory(UndertakingFactory)
+
+    class Meta:
+        model = models.DeliveryLicence
+        sqlalchemy_session = models.db.session
+
+
+class SubstanceFactory(SQLAlchemyModelFactory):
+
+    year = 2019
+    substance = 'Substance name (virgin)'
+    lic_use_kind = 'Kind'
+    lic_use_desc = 'Desc'
+    lic_type = 'Export'
+    quantity = 0.2
+    deliverylicence = SubFactory(DeliveryLicenceFactory)
+
+    class Meta:
+        model = models.Substance
+        sqlalchemy_session = models.db.session
+
+
+class LicenceFactory(SQLAlchemyModelFactory):
+
+    year =  2019
+    chemical_name = 'Substance name'
+    organization_country_name = 'US'
+    organization_country_name_orig = 'USA'
+    custom_procedure_name = 'substance'
+    international_party_country_name = 'IT'
+    international_party_country_name_orig = 'Italy'
+    qty_qdp_percentage = 12
+    qty_percentage = 3
+    licence_state = 'VALID'
+    long_licence_number = 4325
+    template_detailed_use_code = 'substance'
+    licence_type = '32'
+    mixture_nature_type = 'virgin'
+    substance = SubFactory(DeliveryLicenceFactory)
+
+
+    class Meta:
+        model = models.Licence
+        sqlalchemy_session = models.db.session
+
+
+class SubstanceNameConversionFactory(SQLAlchemyModelFactory):
+
+    ec_substance_name = 'Substance name (virgin)'
+    corrected_name = 'Substance name (virgin)'
+
+    class Meta:
+        model = models.SubstanceNameConversion
+        sqlalchemy_session = models.db.session
+
+
+class CountryCodesConversionFactory(SQLAlchemyModelFactory):
+    __tablename__ = 'country_codes_conversion'
+
+    country_name_short_en = 'USA'
+    country_code_alpha2 = 'US'
+
+    class Meta:
+        model = models.CountryCodesConversion
+        sqlalchemy_session = models.db.session
+
+
+class LicenceDetailsConverstionFactory(SQLAlchemyModelFactory):
+    __tablename__ = 'licence_details_conversion'
+
+    template_detailed_use_code = 'substance'
+    lic_use_kind = 'Kind'
+    lic_use_desc = 'Desc'
+    lic_type = 'Export'
+
+    class Meta:
+        model = models.LicenceDetailsConverstion
+        sqlalchemy_session = models.db.session

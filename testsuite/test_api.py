@@ -6,6 +6,13 @@ from instance.settings import FGAS, ODS
 from . import factories
 
 
+def test_authorization_failed(client):
+    resp = client.get(url_for('api.company-list', domain='FGAS'),
+                      headers={"Authorization": "test"} ,expect_errors=True)
+    assert resp.status_code == 401
+    assert resp.json['status'] == 'Unauthorized'
+
+
 def test_undertaking_list(client):
     undertaking = factories.UndertakingFactory()
     type = factories.TypeFactory(
@@ -45,6 +52,29 @@ def test_undertaking_list_small(client):
     assert data['date_created'] == getattr(undertaking,
                                            'date_created').strftime('%d/%m/%Y')
 
+def test_undertaking_detail_short_view(client):
+    undertaking = factories.UndertakingFactory()
+    resp = client.get(url_for('api.company-detail_short',
+                              domain=undertaking.domain, pk=undertaking.external_id))
+
+    resp_data = resp.json
+    assert len(resp_data) == 8
+    data = resp_data
+    assert data['company_id'] == undertaking.external_id
+    assert data['company_name'] == undertaking.name
+    assert data['address'] == undertaking.address.street + ", " + undertaking.address.number
+    assert data['postal_code'] == undertaking.address.zipcode
+    assert data['city'] == undertaking.address.city
+    assert data['country'] == undertaking.address.country.name
+    assert data['eori_code'] == undertaking.vat
+
+
+def test_undertaking_list_small_none(client):
+    resp = client.get(url_for('api.company-list-small',
+                              domain='FGAS'))
+
+    resp_data = resp.json
+    assert len(resp_data) == 0
 
 def test_undertaking_list_domain_filter(client):
     factories.UndertakingFactory(domain=FGAS)
@@ -86,7 +116,7 @@ def test_undertaking_list_all(client):
 def test_undertaking_list_all_domain_filter(client):
     factories.UndertakingFactory(domain=FGAS)
     undertaking = factories.UndertakingFactory(domain=ODS)
-    undertaking.oldcompany_verified = False
+    undertaking.oldcompany_verified = False 
     resp = client.get(url_for('api.company-list-all',
                               domain=ODS))
     resp_data = resp.json
@@ -142,6 +172,13 @@ def test_undertaking_details(client):
     assert data['address']['zipcode'] == undertaking.address.zipcode
     assert data['candidates'][0]['company_id'] == oldcompany.external_id
     assert data['types'] == type.type
+
+
+def test_undertaking_details_404(client):
+    resp = client.get(
+        url_for('api.company-detail',
+                domain='ODS',pk=1), expect_errors=True)
+    assert resp.status_code == 404
 
 
 def test_undertaking_details_domain_filter(client):
@@ -284,6 +321,9 @@ def test_user_companies_by_username(client):
     data = data[0]
     assert data['company_id'] == undertaking.external_id
 
+def test_user_companies_404(client):
+    resp = client.get(url_for('api.user-companies', pk=20), expect_errors=True)
+    assert resp.status_code == 404
 
 def test_user_companies_by_email(client):
     undertaking = factories.UndertakingFactory()
@@ -331,6 +371,36 @@ def test_unverify_link(client):
     assert data['company_id'] == undertaking.external_id
 
 
+def test_verify_none_link(client):
+    undertaking = factories.UndertakingFactory(oldcompany_verified=True)
+    factories.OldCompanyLinkFactory(oldcompany=undertaking.oldcompany,
+                                    undertaking=undertaking)
+
+    resp = client.post(url_for('api.candidate-verify-none',
+                               domain=undertaking.domain,
+                               undertaking_id=undertaking.external_id),
+                       dict(user='test_user', id=1, verified=True))
+    assert undertaking.oldcompany == None
+    assert undertaking.oldcompany_verified == True
+    assert undertaking.oldcompany_extid == None
+
+
+def test_verify_manual(client):
+
+    oldcompany = factories.OldCompanyFactory(account='test_account')
+    undertaking = factories.UndertakingFactory()
+
+    resp = client.post(url_for('api.candidate-manual',
+                               domain=undertaking.domain,
+                               undertaking_id=undertaking.external_id,
+                               oldcompany_account=oldcompany.account),
+                       dict(user='test_user'))
+    assert undertaking.oldcompany == None
+    assert undertaking.oldcompany_verified == True
+    assert undertaking.oldcompany_extid == None
+    assert undertaking.oldcompany_account == oldcompany.account
+
+
 def test_update_status_undertaking(client):
     undertaking = factories.UndertakingFactory(status='DISABLED')
     resp = client.post(url_for('api.company-statusupdate',
@@ -339,3 +409,12 @@ def test_update_status_undertaking(client):
                        dict(status='VALID'))
     assert json.loads(resp.body.decode())
     assert undertaking.status == 'VALID'
+
+
+def test_update_status_undertaking_no_status(client):
+    undertaking = factories.UndertakingFactory(status='DISABLED')
+    resp = client.post(url_for('api.company-statusupdate',
+                       domain=undertaking.domain,
+                       pk=undertaking.external_id),
+                       dict(status=''))
+    assert resp.body.decode() == 'false'

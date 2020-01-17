@@ -128,6 +128,11 @@ the ports directive (e.g. "5000:5000" instead of "5000").
         python ./manage.py sync fgases [-d 30] [-p 100]
         python ./manage.py sync ods [-d 30] [-p 100]
 
+* Fetch a specific company by providing the external id:
+
+        python ./manage.py sync fgases [-i 12345]
+        python ./manage.py sync ods [-i 12345]
+
 
 * In order to sync BDR collections title with the cache server's corresponding undertakings name:
 
@@ -142,6 +147,18 @@ containing values to be updated. Use the company external id as a key.
 
 For patching user access, set `PATCH_USERS` to a list of users to be added to
 a company. Use the company external id as a key.
+
+## Syncronise with Licence Portal
+
+* The licences for ODS are now taken from DG Clima and exposed:
+        python ./manage.py sync licence 2017 2017-1
+        python ./manage.py sync licence 2017 2017-1
+
+* The first parameter [2017], represents the year from which those deliveries are taken.
+* The second parameter [2017-1], represents the name of the delivery.
+
+* The licences are taken for each company. When a new delivery arrives, all old deliveries of the company are moved to
+the history object that contains that delivery and for that company.
 
 ### Matching
 

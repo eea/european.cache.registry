@@ -60,3 +60,8 @@ def test_remove_undertaking(client):
     undertaking = UndertakingFactory(external_id=data[0]['id'])
     remove_undertaking(data[0], domain=undertaking.domain)
     assert models.Undertaking.query.count() == 0
+
+def test_remove_undertaking_not_found(client):
+    with open('testsuite/fixtures/companies.json') as f:
+        data = json.load(f)
+    remove_undertaking(data[0], domain='FGAS')

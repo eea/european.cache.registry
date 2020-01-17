@@ -1,0 +1,1810 @@
+[
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 1,
+            "ec_substance_name": "CFC-11 (non-virgin)",
+            "corrected_name": "CFC-11 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 2,
+            "ec_substance_name": "CFC-11 (virgin)",
+            "corrected_name": "CFC-11 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 3,
+            "ec_substance_name": "CFC-12 (non-virgin)",
+            "corrected_name": "CFC-12 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 4,
+            "ec_substance_name": "CFC-12 (virgin)",
+            "corrected_name": "CFC-12 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 5,
+            "ec_substance_name": "CFC-13 (non-virgin)",
+            "corrected_name": "CFC-13 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 6,
+            "ec_substance_name": "CFC-13 (virgin)",
+            "corrected_name": "CFC-13 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 7,
+            "ec_substance_name": "CFC-111 (non-virgin)",
+            "corrected_name": "CFC-111 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 8,
+            "ec_substance_name": "CFC-111 (virgin)",
+            "corrected_name": "CFC-111 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 9,
+            "ec_substance_name": "CFC-112 (non-virgin)",
+            "corrected_name": "CFC-112 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 10,
+            "ec_substance_name": "CFC-112 (virgin)",
+            "corrected_name": "CFC-112 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 11,
+            "ec_substance_name": "CFC-113 (non-virgin)",
+            "corrected_name": "CFC-113 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 12,
+            "ec_substance_name": "CFC-113 (virgin)",
+            "corrected_name": "CFC-113 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 13,
+            "ec_substance_name": "CFC-113a (non-virgin)",
+            "corrected_name": "CFC-113a (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 14,
+            "ec_substance_name": "CFC-113a (virgin)",
+            "corrected_name": "CFC-113a (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 15,
+            "ec_substance_name": "CFC-114 (non-virgin)",
+            "corrected_name": "CFC-114 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 16,
+            "ec_substance_name": "CFC-114 (virgin)",
+            "corrected_name": "CFC-114 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 17,
+            "ec_substance_name": "CFC-115 (non-virgin)",
+            "corrected_name": "CFC-115 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 18,
+            "ec_substance_name": "CFC-115 (virgin)",
+            "corrected_name": "CFC-115 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 19,
+            "ec_substance_name": "CFC-211 (non-virgin)",
+            "corrected_name": "CFC-211 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 20,
+            "ec_substance_name": "CFC-211 (virgin)",
+            "corrected_name": "CFC-211 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 21,
+            "ec_substance_name": "CFC-212 (non-virgin)",
+            "corrected_name": "CFC-212 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 22,
+            "ec_substance_name": "CFC-212 (virgin)",
+            "corrected_name": "CFC-212 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 23,
+            "ec_substance_name": "CFC-213 (non-virgin)",
+            "corrected_name": "CFC-213 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 24,
+            "ec_substance_name": "CFC-213 (virgin)",
+            "corrected_name": "CFC-213 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 25,
+            "ec_substance_name": "CFC-214 (non-virgin)",
+            "corrected_name": "CFC-214 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 26,
+            "ec_substance_name": "CFC-214 (virgin)",
+            "corrected_name": "CFC-214 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 27,
+            "ec_substance_name": "CFC-215 (non-virgin)",
+            "corrected_name": "CFC-215 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 28,
+            "ec_substance_name": "CFC-215 (virgin)",
+            "corrected_name": "CFC-215 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 29,
+            "ec_substance_name": "CFC-216 (non-virgin)",
+            "corrected_name": "CFC-216 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 30,
+            "ec_substance_name": "CFC-216 (virgin)",
+            "corrected_name": "CFC-216 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 31,
+            "ec_substance_name": "CFC-217 (non-virgin)",
+            "corrected_name": "CFC-217 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 32,
+            "ec_substance_name": "CFC-217 (virgin)",
+            "corrected_name": "CFC-217 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 33,
+            "ec_substance_name": "Halon 1202 (non-virgin)",
+            "corrected_name": "Halon 1202 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 34,
+            "ec_substance_name": "Halon 1202 (virgin)",
+            "corrected_name": "Halon 1202 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 35,
+            "ec_substance_name": "Halon 1211 (non-virgin)",
+            "corrected_name": "Halon 1211 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 36,
+            "ec_substance_name": "Halon 1211 (virgin)",
+            "corrected_name": "Halon 1211 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 37,
+            "ec_substance_name": "Halon 1301 (non-virgin)",
+            "corrected_name": "Halon 1301 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 38,
+            "ec_substance_name": "Halon 1301 (virgin)",
+            "corrected_name": "Halon 1301 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 39,
+            "ec_substance_name": "Halon 2402 (non-virgin)",
+            "corrected_name": "Halon 2402 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 40,
+            "ec_substance_name": "Halon 2402 (virgin)",
+            "corrected_name": "Halon 2402 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 41,
+            "ec_substance_name": "CTC (non-virgin)",
+            "corrected_name": "CTC (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 42,
+            "ec_substance_name": "CTC (virgin)",
+            "corrected_name": "CTC (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 43,
+            "ec_substance_name": "TCA (non-virgin)",
+            "corrected_name": "TCA (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 44,
+            "ec_substance_name": "TCA (virgin)",
+            "corrected_name": "TCA (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 45,
+            "ec_substance_name": "MB (non-virgin)",
+            "corrected_name": "MB (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 46,
+            "ec_substance_name": "MB (virgin)",
+            "corrected_name": "MB (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 47,
+            "ec_substance_name": "BCM (non-virgin)",
+            "corrected_name": "BCM (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 48,
+            "ec_substance_name": "BCM (virgin)",
+            "corrected_name": "BCM (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 49,
+            "ec_substance_name": "HBFC-21 B2 (non-virgin)",
+            "corrected_name": "HBFC-21 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 50,
+            "ec_substance_name": "HBFC-21 B2 (virgin)",
+            "corrected_name": "HBFC-21 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 51,
+            "ec_substance_name": "HBFC-22 B1 (non-virgin)",
+            "corrected_name": "HBFC-22 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 52,
+            "ec_substance_name": "HBFC-22 B1 (virgin)",
+            "corrected_name": "HBFC-22 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 53,
+            "ec_substance_name": "HBFC-31 B1 (non-virgin)",
+            "corrected_name": "HBFC-31 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 54,
+            "ec_substance_name": "HBFC-31 B1 (virgin)",
+            "corrected_name": "HBFC-31 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 55,
+            "ec_substance_name": "HBFC-121 B4 (non-virgin)",
+            "corrected_name": "HBFC-121 B4 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 56,
+            "ec_substance_name": "HBFC-121 B4 (virgin)",
+            "corrected_name": "HBFC-121 B4 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 57,
+            "ec_substance_name": "HBFC-122 B3 (non-virgin)",
+            "corrected_name": "HBFC-122 B3 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 58,
+            "ec_substance_name": "HBFC-122 B3 (virgin)",
+            "corrected_name": "HBFC-122 B3 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 59,
+            "ec_substance_name": "HBFC-123 B2 (non-virgin)",
+            "corrected_name": "HBFC-123 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 60,
+            "ec_substance_name": "HBFC-123 B2 (virgin)",
+            "corrected_name": "HBFC-123 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 61,
+            "ec_substance_name": "HBFC-124 B1 (non-virgin)",
+            "corrected_name": "HBFC-124 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 62,
+            "ec_substance_name": "HBFC-124 B1 (virgin)",
+            "corrected_name": "HBFC-124 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 63,
+            "ec_substance_name": "HBFC-131 B3 (non-virgin)",
+            "corrected_name": "HBFC-131 B3 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 64,
+            "ec_substance_name": "HBFC-131 B3 (virgin)",
+            "corrected_name": "HBFC-131 B3 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 65,
+            "ec_substance_name": "HBFC-132 B2 (non-virgin)",
+            "corrected_name": "HBFC-132 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 66,
+            "ec_substance_name": "HBFC-132 B2 (virgin)",
+            "corrected_name": "HBFC-132 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 67,
+            "ec_substance_name": "HBFC-133 B1 (non-virgin)",
+            "corrected_name": "HBFC-133 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 68,
+            "ec_substance_name": "HBFC-133 B1 (virgin)",
+            "corrected_name": "HBFC-133 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 69,
+            "ec_substance_name": "HBFC-141 B2 (non-virgin)",
+            "corrected_name": "HBFC-141 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 70,
+            "ec_substance_name": "HBFC-141 B2 (virgin)",
+            "corrected_name": "HBFC-141 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 71,
+            "ec_substance_name": "HBFC-142 B1 (non-virgin)",
+            "corrected_name": "HBFC-142 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 72,
+            "ec_substance_name": "HBFC-142 B1 (virgin)",
+            "corrected_name": "HBFC-142 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 73,
+            "ec_substance_name": "HBFC-151 B1 (non-virgin)",
+            "corrected_name": "HBFC-151 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 74,
+            "ec_substance_name": "HBFC-151 B1 (virgin)",
+            "corrected_name": "HBFC-151 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 75,
+            "ec_substance_name": "HBFC-221 B6 (non-virgin)",
+            "corrected_name": "HBFC-221 B6 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 76,
+            "ec_substance_name": "HBFC-221 B6 (virgin)",
+            "corrected_name": "HBFC-221 B6 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 77,
+            "ec_substance_name": "HBFC-222 B5 (non-virgin)",
+            "corrected_name": "HBFC-222 B5 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 78,
+            "ec_substance_name": "HBFC-222 B5 (virgin)",
+            "corrected_name": "HBFC-222 B5 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 79,
+            "ec_substance_name": "HBFC-223 B4 (non-virgin)",
+            "corrected_name": "HBFC-223 B4 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 80,
+            "ec_substance_name": "HBFC-223 B4 (virgin)",
+            "corrected_name": "HBFC-223 B4 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 81,
+            "ec_substance_name": "HBFC-224 B3 (non-virgin)",
+            "corrected_name": "HBFC-224 B3 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 82,
+            "ec_substance_name": "HBFC-224 B3 (virgin)",
+            "corrected_name": "HBFC-224 B3 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 83,
+            "ec_substance_name": "HBFC-225 B2 (non-virgin)",
+            "corrected_name": "HBFC-225 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 84,
+            "ec_substance_name": "HBFC-225 B2 (virgin)",
+            "corrected_name": "HBFC-225 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 85,
+            "ec_substance_name": "HBFC-226 B1 (non-virgin)",
+            "corrected_name": "HBFC-226 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 86,
+            "ec_substance_name": "HBFC-226 B1 (virgin)",
+            "corrected_name": "HBFC-226 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 87,
+            "ec_substance_name": "HBFC-232 B4 (non-virgin)",
+            "corrected_name": "HBFC-232 B4 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 88,
+            "ec_substance_name": "HBFC-232 B4 (virgin)",
+            "corrected_name": "HBFC-232 B4 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 89,
+            "ec_substance_name": "HBFC-231 B5 (non-virgin)",
+            "corrected_name": "HBFC-231 B5 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 90,
+            "ec_substance_name": "HBFC-231 B5 (virgin)",
+            "corrected_name": "HBFC-231 B5 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 91,
+            "ec_substance_name": "HBFC-233 B3 (non-virgin)",
+            "corrected_name": "HBFC-233 B3 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 92,
+            "ec_substance_name": "HBFC-233 B3 (virgin)",
+            "corrected_name": "HBFC-233 B3 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 93,
+            "ec_substance_name": "HBFC-234 B2 (non-virgin)",
+            "corrected_name": "HBFC-234 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 94,
+            "ec_substance_name": "HBFC-234 B2 (virgin)",
+            "corrected_name": "HBFC-234 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 95,
+            "ec_substance_name": "HBFC-235 B1 (non-virgin)",
+            "corrected_name": "HBFC-235 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 96,
+            "ec_substance_name": "HBFC-235 B1 (virgin)",
+            "corrected_name": "HBFC-235 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 97,
+            "ec_substance_name": "HBFC-241 B4 (non-virgin)",
+            "corrected_name": "HBFC-241 B4 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 98,
+            "ec_substance_name": "HBFC-241 B4 (virgin)",
+            "corrected_name": "HBFC-241 B4 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 99,
+            "ec_substance_name": "HBFC-242 B3 (non-virgin)",
+            "corrected_name": "HBFC-242 B3 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 100,
+            "ec_substance_name": "HBFC-242 B3 (virgin)",
+            "corrected_name": "HBFC-242 B3 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 101,
+            "ec_substance_name": "HBFC-243 B2 (non-virgin)",
+            "corrected_name": "HBFC-243 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 102,
+            "ec_substance_name": "HBFC-243 B2 (virgin)",
+            "corrected_name": "HBFC-243 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 103,
+            "ec_substance_name": "HBFC-244 B1 (non-virgin)",
+            "corrected_name": "HBFC-244 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 104,
+            "ec_substance_name": "HBFC-244 B1 (virgin)",
+            "corrected_name": "HBFC-244 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 105,
+            "ec_substance_name": "HBFC-251 B1 (non-virgin)",
+            "corrected_name": "HBFC-251 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 106,
+            "ec_substance_name": "HBFC-251 B1 (virgin)",
+            "corrected_name": "HBFC-251 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 107,
+            "ec_substance_name": "HBFC-252 B2 (non-virgin)",
+            "corrected_name": "HBFC-252 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 108,
+            "ec_substance_name": "HBFC-252 B2 (virgin)",
+            "corrected_name": "HBFC-252 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 109,
+            "ec_substance_name": "HBFC-253 B1 (non-virgin)",
+            "corrected_name": "HBFC-253 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 110,
+            "ec_substance_name": "HBFC-253 B1 (virgin)",
+            "corrected_name": "HBFC-253 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 111,
+            "ec_substance_name": "HBFC-261 B2 (non-virgin)",
+            "corrected_name": "HBFC-261 B2 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 112,
+            "ec_substance_name": "HBFC-261 B2 (virgin)",
+            "corrected_name": "HBFC-261 B2 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 113,
+            "ec_substance_name": "HBFC-262 B1 (non-virgin)",
+            "corrected_name": "HBFC-262 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 114,
+            "ec_substance_name": "HBFC-262 B1 (virgin)",
+            "corrected_name": "HBFC-262 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 115,
+            "ec_substance_name": "HBFC-271 B1 (non-virgin)",
+            "corrected_name": "HBFC-271 B1 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 116,
+            "ec_substance_name": "HBFC-271 B1 (virgin)",
+            "corrected_name": "HBFC-271 B1 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 117,
+            "ec_substance_name": "HCFC-21 (non-virgin)",
+            "corrected_name": "HCFC-21 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 118,
+            "ec_substance_name": "HCFC-21 (virgin)",
+            "corrected_name": "HCFC-21 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 119,
+            "ec_substance_name": "HCFC-22 (non-virgin)",
+            "corrected_name": "HCFC-22 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 120,
+            "ec_substance_name": "HCFC-22 (virgin)",
+            "corrected_name": "HCFC-22 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 121,
+            "ec_substance_name": "HCFC-31 (non-virgin)",
+            "corrected_name": "HCFC-31 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 122,
+            "ec_substance_name": "HCFC-31 (virgin)",
+            "corrected_name": "HCFC-31 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 123,
+            "ec_substance_name": "HCFC-121 (non-virgin)",
+            "corrected_name": "HCFC-121 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 124,
+            "ec_substance_name": "HCFC-121 (virgin)",
+            "corrected_name": "HCFC-121 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 125,
+            "ec_substance_name": "HCFC-122 (non-virgin)",
+            "corrected_name": "HCFC-122 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 126,
+            "ec_substance_name": "HCFC-122 (virgin)",
+            "corrected_name": "HCFC-122 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 127,
+            "ec_substance_name": "HCFC-123 (non-virgin)",
+            "corrected_name": "HCFC-123 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 128,
+            "ec_substance_name": "HCFC-123 (virgin)",
+            "corrected_name": "HCFC-123 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 129,
+            "ec_substance_name": "HCFC-124 (non-virgin)",
+            "corrected_name": "HCFC-124 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 130,
+            "ec_substance_name": "HCFC-124 (virgin)",
+            "corrected_name": "HCFC-124 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 131,
+            "ec_substance_name": "HCFC-131 (non-virgin)",
+            "corrected_name": "HCFC-131 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 132,
+            "ec_substance_name": "HCFC-131 (virgin)",
+            "corrected_name": "HCFC-131 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 133,
+            "ec_substance_name": "HCFC-132 (non-virgin)",
+            "corrected_name": "HCFC-132 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 134,
+            "ec_substance_name": "HCFC-132 (virgin)",
+            "corrected_name": "HCFC-132 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 135,
+            "ec_substance_name": "HCFC-133a (non-virgin)",
+            "corrected_name": "HCFC-133a (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 136,
+            "ec_substance_name": "HCFC-133a (virgin)",
+            "corrected_name": "HCFC-133a (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 137,
+            "ec_substance_name": "HCFC-141 (non-virgin)",
+            "corrected_name": "HCFC-141 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 138,
+            "ec_substance_name": "HCFC-141 (virgin)",
+            "corrected_name": "HCFC-141 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 139,
+            "ec_substance_name": "HCFC-141b (non-virgin)",
+            "corrected_name": "HCFC-141b (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 140,
+            "ec_substance_name": "HCFC-141b (virgin)",
+            "corrected_name": "HCFC-141b (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 141,
+            "ec_substance_name": "HCFC-142 (non-virgin)",
+            "corrected_name": "HCFC-142 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 142,
+            "ec_substance_name": "HCFC-142 (virgin)",
+            "corrected_name": "HCFC-142 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 143,
+            "ec_substance_name": "HCFC-142b (non-virgin)",
+            "corrected_name": "HCFC-142b (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 144,
+            "ec_substance_name": "HCFC-142b (virgin)",
+            "corrected_name": "HCFC-142b (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 145,
+            "ec_substance_name": "HCFC-151 (non-virgin)",
+            "corrected_name": "HCFC-151 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 146,
+            "ec_substance_name": "HCFC-151 (virgin)",
+            "corrected_name": "HCFC-151 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 147,
+            "ec_substance_name": "HCFC-221 (non-virgin)",
+            "corrected_name": "HCFC-221 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 148,
+            "ec_substance_name": "HCFC-221 (virgin)",
+            "corrected_name": "HCFC-221 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 149,
+            "ec_substance_name": "HCFC-222c (non-virgin)",
+            "corrected_name": "HCFC-222c (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 150,
+            "ec_substance_name": "HCFC-222c (virgin)",
+            "corrected_name": "HCFC-222c (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 151,
+            "ec_substance_name": "HCFC-223ca (non-virgin)",
+            "corrected_name": "HCFC-223ca (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 152,
+            "ec_substance_name": "HCFC-223ca (virgin)",
+            "corrected_name": "HCFC-223ca (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 153,
+            "ec_substance_name": "HCFC-224ca (non-virgin)",
+            "corrected_name": "HCFC-224ca (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 154,
+            "ec_substance_name": "HCFC-224ca (virgin)",
+            "corrected_name": "HCFC-224ca (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 155,
+            "ec_substance_name": "HCFC-225ca (non-virgin)",
+            "corrected_name": "HCFC-225ca (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 156,
+            "ec_substance_name": "HCFC-225ca (virgin)",
+            "corrected_name": "HCFC-225ca (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 157,
+            "ec_substance_name": "HCFC-225cb (non-virgin)",
+            "corrected_name": "HCFC-225cb (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 158,
+            "ec_substance_name": "HCFC-225cb (virgin)",
+            "corrected_name": "HCFC-225cb (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 159,
+            "ec_substance_name": "HCFC-226cb (non-virgin)",
+            "corrected_name": "HCFC-226cb (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 160,
+            "ec_substance_name": "HCFC-226cb (virgin)",
+            "corrected_name": "HCFC-226cb (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 161,
+            "ec_substance_name": "HCFC-226da (non-virgin)",
+            "corrected_name": "HCFC-226da (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 162,
+            "ec_substance_name": "HCFC-226da (virgin)",
+            "corrected_name": "HCFC-226da (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 163,
+            "ec_substance_name": "HCFC-231 (non-virgin)",
+            "corrected_name": "HCFC-231 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 164,
+            "ec_substance_name": "HCFC-231 (virgin)",
+            "corrected_name": "HCFC-231 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 165,
+            "ec_substance_name": "HCFC-232ca (non-virgin)",
+            "corrected_name": "HCFC-232ca (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 166,
+            "ec_substance_name": "HCFC-232ca (virgin)",
+            "corrected_name": "HCFC-232ca (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 167,
+            "ec_substance_name": "HCFC-233cb (non-virgin)",
+            "corrected_name": "HCFC-233cb (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 168,
+            "ec_substance_name": "HCFC-233cb (virgin)",
+            "corrected_name": "HCFC-233cb (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 169,
+            "ec_substance_name": "HCFC-234 (non-virgin)",
+            "corrected_name": "HCFC-234 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 170,
+            "ec_substance_name": "HCFC-234 (virgin)",
+            "corrected_name": "HCFC-234 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 171,
+            "ec_substance_name": "HCFC-235ca (non-virgin)",
+            "corrected_name": "HCFC-235ca (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 172,
+            "ec_substance_name": "HCFC-235ca (virgin)",
+            "corrected_name": "HCFC-235ca (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 173,
+            "ec_substance_name": "HCFC-241 (non-virgin)",
+            "corrected_name": "HCFC-241 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 174,
+            "ec_substance_name": "HCFC-241 (virgin)",
+            "corrected_name": "HCFC-241 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 175,
+            "ec_substance_name": "HCFC-242 (non-virgin)",
+            "corrected_name": "HCFC-242 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 176,
+            "ec_substance_name": "HCFC-242 (virgin)",
+            "corrected_name": "HCFC-242 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 177,
+            "ec_substance_name": "HCFC-243 (non-virgin)",
+            "corrected_name": "HCFC-243 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 178,
+            "ec_substance_name": "HCFC-243 (virgin)",
+            "corrected_name": "HCFC-243 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 179,
+            "ec_substance_name": "HCFC-244 (non-virgin)",
+            "corrected_name": "HCFC-244 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 180,
+            "ec_substance_name": "HCFC-244 (virgin)",
+            "corrected_name": "HCFC-244 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 181,
+            "ec_substance_name": "HCFC-251 (non-virgin)",
+            "corrected_name": "HCFC-251 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 182,
+            "ec_substance_name": "HCFC-251 (virgin)",
+            "corrected_name": "HCFC-251 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 183,
+            "ec_substance_name": "HCFC-252 (non-virgin)",
+            "corrected_name": "HCFC-252 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 184,
+            "ec_substance_name": "HCFC-252 (virgin)",
+            "corrected_name": "HCFC-252 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 185,
+            "ec_substance_name": "HCFC-253fb (non-virgin)",
+            "corrected_name": "HCFC-253fb (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 186,
+            "ec_substance_name": "HCFC-253fb (virgin)",
+            "corrected_name": "HCFC-253fb (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 187,
+            "ec_substance_name": "HCFC-261 (non-virgin)",
+            "corrected_name": "HCFC-261 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 188,
+            "ec_substance_name": "HCFC-261 (virgin)",
+            "corrected_name": "HCFC-261 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 189,
+            "ec_substance_name": "HCFC-262ca (non-virgin)",
+            "corrected_name": "HCFC-262ca (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 190,
+            "ec_substance_name": "HCFC-262ca (virgin)",
+            "corrected_name": "HCFC-262ca (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 191,
+            "ec_substance_name": "HCFC-271b (non-virgin)",
+            "corrected_name": "HCFC-271b (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 192,
+            "ec_substance_name": "HCFC-271b (virgin)",
+            "corrected_name": "HCFC-271b (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 193,
+            "ec_substance_name": "EB (non-virgin)",
+            "corrected_name": "EB (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 194,
+            "ec_substance_name": "EB (virgin)",
+            "corrected_name": "EB (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 195,
+            "ec_substance_name": "MC (non-virgin)",
+            "corrected_name": "MC (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 196,
+            "ec_substance_name": "MC (virgin)",
+            "corrected_name": "MC (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 197,
+            "ec_substance_name": "n-PB (non-virgin)",
+            "corrected_name": "n-PB (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 198,
+            "ec_substance_name": "n-PB (virgin)",
+            "corrected_name": "n-PB (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 199,
+            "ec_substance_name": "TFIM (non-virgin)",
+            "corrected_name": "TFIM (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 200,
+            "ec_substance_name": "TFIM (virgin)",
+            "corrected_name": "TFIM (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 201,
+            "ec_substance_name": "Halon-mix (non-virgin)",
+            "corrected_name": "Halon-mix (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 202,
+            "ec_substance_name": "HCFC-mix (non-virgin)",
+            "corrected_name": "HCFC-mix (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 203,
+            "ec_substance_name": "CFC-mix (non-virgin)",
+            "corrected_name": "CFC-mix (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 204,
+            "ec_substance_name": "HBFC-mix (non-virgin)",
+            "corrected_name": "HBFC-mix (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 205,
+            "ec_substance_name": "Complex and inconsistent mixture of fluorinated hydrocarbons (non-virgin)",
+            "corrected_name": "Complex and inconsistent mixture of fluorinated hydrocarbons (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 206,
+            "ec_substance_name": "HCFC-222 (virgin)",
+            "corrected_name": "HCFC-222c (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 207,
+            "ec_substance_name": "Carbon tetrachloride (virgin)",
+            "corrected_name": "CTC (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 208,
+            "ec_substance_name": "Methyl bromide (virgin)",
+            "corrected_name": "MB (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 209,
+            "ec_substance_name": "Bromochloromethane (virgin)",
+            "corrected_name": "BCM (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 210,
+            "ec_substance_name": "Carbon tetrachloride (non-virgin)",
+            "corrected_name": "CTC (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 211,
+            "ec_substance_name": "1,1,1-trichloroethane (virgin)",
+            "corrected_name": "TCA (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 212,
+            "ec_substance_name": "HCFC-244bb (virgin)",
+            "corrected_name": "HCFC-244 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 213,
+            "ec_substance_name": "HCFC-235 (virgin)",
+            "corrected_name": "HCFC-235ca (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 214,
+            "ec_substance_name": "Halon-1301 (non-virgin)",
+            "corrected_name": "Halon 1301 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 215,
+            "ec_substance_name": "Halon-2402 (non-virgin)",
+            "corrected_name": "Halon 2402 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 216,
+            "ec_substance_name": "Halon-1211 (non-virgin)",
+            "corrected_name": "Halon 1211 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 217,
+            "ec_substance_name": "HCFC-233 (virgin)",
+            "corrected_name": "HCFC-233 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 218,
+            "ec_substance_name": "HCFC-233 (non-virgin)",
+            "corrected_name": "HCFC-233 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 219,
+            "ec_substance_name": "Halon-1211 (virgin)",
+            "corrected_name": "Halon 1211 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 220,
+            "ec_substance_name": "Halon-1301 (non-virgin)",
+            "corrected_name": "Halon 1301 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 221,
+            "ec_substance_name": "Halon-1301 (virgin)",
+            "corrected_name": "Halon 1301 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 222,
+            "ec_substance_name": "HCFC-151a (non-virgin)",
+            "corrected_name": "HCFC-151a (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 223,
+            "ec_substance_name": "HCFC-151a (virgin)",
+            "corrected_name": "HCFC-151a (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 224,
+            "ec_substance_name": "Halon-2402 (non-virgin)",
+            "corrected_name": "Halon 2402 (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 225,
+            "ec_substance_name": "Halon-2402 (virgin)",
+            "corrected_name": "Halon 2402 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 226,
+            "ec_substance_name": "Methyl bromide (non-virgin)",
+            "corrected_name": "MB (non-virgin)"
+        }
+    }
+]

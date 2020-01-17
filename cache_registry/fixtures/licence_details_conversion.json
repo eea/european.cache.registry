@@ -1,0 +1,1064 @@
+[
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 1,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.carrier.solvent.during.instrumental.analysis.e.g..spectroscopy.chromatography",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 2,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.carrier.solvent.during.volumetric.analysis.e.g..titrations",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 3,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.reference.material.in.chemical.analysis.e.g..for.calibration",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 4,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.reference.material.for.product.testing.e.g..material.resistance",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 5,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.reference.material.for.toxicological.studies",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 6,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.miscellaneous.ods.as.component.of.samples.to.be.tested",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 7,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.research.and.development.solvent.inert.in.chemical.synthesis",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 8,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.research.and.development.feedstock.reagent.in.chemical.synthesis",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 9,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.research.and.development.ctc.as.chain.transfer.agent.in.free-radical.polymerisation",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 10,
+            "template_detailed_use_code": "export.of.substance.for.laboratory.or.analytical.use.research.and.development.ctc.as.a.solvent.for.bromination.reactions.involving.n-bromosussineimide",
+            "lic_use_kind": "",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 11,
+            "template_detailed_use_code": "export.of.substance.for.feedstock.use",
+            "lic_use_kind": "",
+            "lic_use_desc": "feedstock",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 12,
+            "template_detailed_use_code": "export.of.substance.for.process.agent.use.ctc.to.eliminate.ncl3.in.production.of.chlorine.and.causic.soda",
+            "lic_use_kind": "",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 13,
+            "template_detailed_use_code": "export.of.substance.for.process.agent.use.ctc.in.manufacture.of.chlorinated.rubber",
+            "lic_use_kind": "",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 14,
+            "template_detailed_use_code": "export.of.substance.for.process.agent.use.ctc.in.manufacture.of.poly-phenylene-terephthalamide",
+            "lic_use_kind": "",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 15,
+            "template_detailed_use_code": "export.of.substance.for.process.agent.use.ctc.in.production.of.cyclodime",
+            "lic_use_kind": "",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 16,
+            "template_detailed_use_code": "export.of.substance.for.process.agent.use.cfc-12.in.photochemical.synthesis.of.perfluoropolyetherpolyperoxide.precursors",
+            "lic_use_kind": "",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 17,
+            "template_detailed_use_code": "export.of.substance.for.process.agent.use.cfc-113.in.in.the.preparation.of.perfluoropolyether.diols.with.high.functionality",
+            "lic_use_kind": "",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 18,
+            "template_detailed_use_code": "export.of.substance.for.process.agent.use.HCFC.to.replace.CTC.or.CFC.in.permitted.process.agent.uses",
+            "lic_use_kind": "",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 19,
+            "template_detailed_use_code": "export.of.substance.fire-fighting",
+            "lic_use_kind": "",
+            "lic_use_desc": "other (specify)",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 20,
+            "template_detailed_use_code": "export.of.substance.foam.blowing",
+            "lic_use_kind": "",
+            "lic_use_desc": "foam blowing",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 21,
+            "template_detailed_use_code": "export.of.substance.refrigeration",
+            "lic_use_kind": "",
+            "lic_use_desc": "refrigeration",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 22,
+            "template_detailed_use_code": "export.of.substance.solvent.use",
+            "lic_use_kind": "",
+            "lic_use_desc": "solvent",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 23,
+            "template_detailed_use_code": "export.of.substance.refrigerant.supplied.in.EU.to.non-EU.ships.aircrafts",
+            "lic_use_kind": "",
+            "lic_use_desc": "refrigeration (supply to non-EU vessels in EU ports)",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 24,
+            "template_detailed_use_code": "ehcp.export.of.substance.fire-fighting",
+            "lic_use_kind": "",
+            "lic_use_desc": "other (specify)",
+            "lic_type": "export"
+        }
+    },
+
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 25,
+            "template_detailed_use_code": "ehcp.export.of.substance.foam.blowing",
+            "lic_use_kind": "",
+            "lic_use_desc": "foam blowing",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 26,
+            "template_detailed_use_code": "ehcp.export.of.substance.refrigeration",
+            "lic_use_kind": "",
+            "lic_use_desc": "refrigeration",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 27,
+            "template_detailed_use_code": "ehcp.export.of.substance.solvent.use",
+            "lic_use_kind": "",
+            "lic_use_desc": "solvent",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 28,
+            "template_detailed_use_code": "ehcp.export.of.substance.refrigerant.supplied.in.EU.to.non-EU.ships.aircrafts",
+            "lic_use_kind": "",
+            "lic_use_desc": "refrigeration (supply to non-EU vessels in EU ports)",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 29,
+            "template_detailed_use_code": "ehco.export.of.substance.fire-fighting",
+            "lic_use_kind": "",
+            "lic_use_desc": "other (specify)",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 30,
+            "template_detailed_use_code": "ehco.export.of.substance.foam.blowing",
+            "lic_use_kind": "",
+            "lic_use_desc": "foam blowing",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 31,
+            "template_detailed_use_code": "ehco.export.of.substance.refrigeration",
+            "lic_use_kind": "",
+            "lic_use_desc": "refrigeration",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 32,
+            "template_detailed_use_code": "ehco.export.of.substance.solvent.use",
+            "lic_use_kind": "",
+            "lic_use_desc": "solvent",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 33,
+            "template_detailed_use_code": "ehco.export.of.substance.refrigerant.supplied.in.EU.to.non-EU.ships.aircrafts",
+            "lic_use_kind": "",
+            "lic_use_desc": "refrigeration (supply to non-EU vessels in EU ports)",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 34,
+            "template_detailed_use_code": "export.of.substance.aircrafts.protection.of.normally.unoccupied.cargo.compartments.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 35,
+            "template_detailed_use_code": "export.of.substance.airfields.and.airports.protection.of.aircraft.in.hangars.and.maintenance.areas.portable.extinguishers",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 36,
+            "template_detailed_use_code": "export.of.substance.aircrafts.protection.of.cabins.and.crew.compartments.portable.extinguishers",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 37,
+            "template_detailed_use_code": "export.of.substance.aircrafts.protection.of.engine.nacelles.and.auxiliary.power.units.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 38,
+            "template_detailed_use_code": "export.of.substance.aircrafts.inerting.of.fuel.tanks.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 39,
+            "template_detailed_use_code": "export.of.substance.aircrafts.protection.of.lavatory.waste.receptacles.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 40,
+            "template_detailed_use_code": "export.of.substance.aircrafts.protection.of.dry.bays.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 41,
+            "template_detailed_use_code": "export.of.substance.military.ground.vehicles.protection.of.engine.compartments.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 42,
+            "template_detailed_use_code": "export.of.substance.military.ground.vehicles.protection.of.crew.compartments.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 43,
+            "template_detailed_use_code": "export.of.substance.military.ground.vehicles.protection.of.crew.compartments.portable.extinguishers",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 44,
+            "template_detailed_use_code": "export.of.substance.military.surface.ships.protection.of.normally.occupied.machinery.spaces.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 45,
+            "template_detailed_use_code": "export.of.substance.military.surface.ships.protection.of.normally.unoccupied.engine.spaces.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 46,
+            "template_detailed_use_code": "export.of.substance.military.surface.ships.protection.of.normally.unoccupied.electrical.compartments.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 47,
+            "template_detailed_use_code": "export.of.substance.military.surface.ships.protection.of.command.centres.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 48,
+            "template_detailed_use_code": "export.of.substance.military.surface.ships.protection.of.fuel.pump.rooms.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 49,
+            "template_detailed_use_code": "export.of.substance.military.surface.ships.protection.of.flammable.liquid.storage.compartments.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 50,
+            "template_detailed_use_code": "export.of.substance.military.submarines.protection.of.machinery.spaces.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 51,
+            "template_detailed_use_code": "export.of.substance.military.submarines.protection.of.command.centres.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 52,
+            "template_detailed_use_code": "export.of.substance.military.submarines.protection.of.diesel.generator.spaces.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 53,
+            "template_detailed_use_code": "export.of.substance.military.submarines.protection.of.electrical.compartments.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 54,
+            "template_detailed_use_code": "export.of.substance.oil.gas.and.petrochemical.facilities.protection.of.spaces.where.risk.of.flammable.liquid.gas.release.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 55,
+            "template_detailed_use_code": "export.of.substance.land-based.command.and.communications.facilities.protection.of.normally.occupied.spaces.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 56,
+            "template_detailed_use_code": "export.of.substance.land-based.command.and.communications.facilities.protection.of.normally.unoccupied.spaces.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 57,
+            "template_detailed_use_code": "export.of.substance.nuclear.power.and.research.facilities.minimise.risk.of.dispersion.of.radioactive.matter.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 58,
+            "template_detailed_use_code": "export.of.substance.channel.tunnel.protection.of.power.cars.and.shuttle.wagons.of.trains.fixed.systems",
+            "lic_use_kind": "",
+            "lic_use_desc": "critical uses",
+            "lic_type": "export"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 59,
+            "template_detailed_use_code": "import.of.substance.for.feedstock.use.detailed.use",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "feedstock",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 60,
+            "template_detailed_use_code": "import.of.substance.for.process.agent.use.ctc.to.eliminate.ncl3.in.production.of.chlorine.and.causic.soda",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 61,
+            "template_detailed_use_code": "import.of.substance.for.process.agent.use.ctc.in.manufacture.of.chlorinated.rubber",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 62,
+            "template_detailed_use_code": "import.of.substance.for.process.agent.use.ctc.in.manufacture.of.poly-phenylene-terephthalamide",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 63,
+            "template_detailed_use_code": "import.of.substance.for.process.agent.use.ctc.in.production.of.cyclodime",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 64,
+            "template_detailed_use_code": "import.of.substance.for.process.agent.use.cfc-12.in.photochemical.synthesis.of.perfluoropolyetherpolyperoxide.precursors",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 65,
+            "template_detailed_use_code": "import.of.substance.for.process.agent.use.cfc-113.in.in.the.preparation.of.perfluoropolyether.diols.with.high.functionality",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 66,
+            "template_detailed_use_code": "import.of.substance.for.process.agent.use.HCFC.to.replace.CTC.or.CFC.in.permitted.process.agent.uses",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "process agent uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 67,
+            "template_detailed_use_code": "import.of.substance.for.destruction",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "desctruction",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 68,
+            "template_detailed_use_code": "import.of.substance.for.repackaging.and.re-export.fire-fighting",
+            "lic_use_kind": "re-export",
+            "lic_use_desc": "other (specify)",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 69,
+            "template_detailed_use_code": "import.of.substance.for.repackaging.and.re-export.foam.blowing",
+            "lic_use_kind": "re-export",
+            "lic_use_desc": "foam blowing (for re-export)",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 70,
+            "template_detailed_use_code": "import.of.substance.for.repackaging.and.re-export.refrigeration",
+            "lic_use_kind": "re-export",
+            "lic_use_desc": "refrigeration (for re-export)",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 71,
+            "template_detailed_use_code": "import.of.substance.for.repackaging.and.re-export.solvent.use",
+            "lic_use_kind": "re-export",
+            "lic_use_desc": "solvent (for re-export)",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 72,
+            "template_detailed_use_code": "import.of.substance.for.emergency.uses",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 73,
+            "template_detailed_use_code": "import.of.substance.aircrafts.protection.of.normally.unoccupied.cargo.compartments.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 74,
+            "template_detailed_use_code": "import.of.substance.aircrafts.protection.of.cabins.and.crew.compartments.portable.extinguishers",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 75,
+            "template_detailed_use_code": "import.of.substance.aircrafts.protection.of.engine.nacelles.and.auxiliary.power.units.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 76,
+            "template_detailed_use_code": "import.of.substance.aircrafts.inerting.of.fuel.tanks.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 77,
+            "template_detailed_use_code": "import.of.substance.aircrafts.protection.of.lavatory.waste.receptacles.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 78,
+            "template_detailed_use_code": "import.of.substance.aircrafts.protection.of.dry.bays.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 79,
+            "template_detailed_use_code": "import.of.substance.military.ground.vehicles.protection.of.engine.compartments.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 80,
+            "template_detailed_use_code": "import.of.substance.military.ground.vehicles.military.ground.vehicles.for.protection.of.crew.compartments.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 81,
+            "template_detailed_use_code": "import.of.substance.military.ground.vehicles.protection.of.crew.compartments.portable.extinguishers",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 82,
+            "template_detailed_use_code": "import.of.substance.military.surface.ships.protection.of.normally.occupied.machinery.spaces.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 83,
+            "template_detailed_use_code": "import.of.substance.military.surface.ships.protection.of.normally.unoccupied.engine.spaces.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 84,
+            "template_detailed_use_code": "import.of.substance.military.surface.ships.protection.of.normally.unoccupied.electrical.compartments.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 85,
+            "template_detailed_use_code": "import.of.substance.military.surface.ships.protection.of.command.centres.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 86,
+            "template_detailed_use_code": "import.of.substance.military.surface.ships.protection.of.fuel.pump.rooms.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 87,
+            "template_detailed_use_code": "import.of.substance.military.surface.ships.protection.of.flammable.liquid.storage.compartments.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 88,
+            "template_detailed_use_code": "import.of.substance.military.submarines.protection.of.machinery.spaces.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 89,
+            "template_detailed_use_code": "import.of.substance.military.submarines.protection.of.command.centres.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 90,
+            "template_detailed_use_code": "import.of.substance.military.submarines.protection.of.diesel.generator.spaces.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 91,
+            "template_detailed_use_code": "import.of.substance.military.submarines.protection.of.electrical.compartments.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 92,
+            "template_detailed_use_code": "import.of.substance.oil.gas.and.petrochemical.facilities.protection.of.spaces.where.risk.of.flammable.liquid.gas.release.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 93,
+            "template_detailed_use_code": "import.of.substance.land-based.command.and.communications.facilities.protection.of.normally.occupied.spaces.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 94,
+            "template_detailed_use_code": "import.of.substance.land-based.command.and.communications.facilities.protection.of.normally.unoccupied.spaces.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 95,
+            "template_detailed_use_code": "import.of.substance.nuclear.power.and.research.facilities.minimise.risk.of.dispersion.of.radioactive.matter.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 96,
+            "template_detailed_use_code": "import.of.substance.channel.tunnel.protection.of.power.cars.and.shuttle.wagons.of.trains.fixed.systems",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "critical uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 97,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.carrier.solvent.during.instrumental.analysis.e.g..spectroscopy.chromatography",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 98,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.carrier.solvent.during.volumetric.analysis.e.g..titrations",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 99,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.reference.material.in.chemical.analysis.e.g..for.calibration",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 100,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.reference.material.for.product.testing.e.g..material.resistance",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 101,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.reference.material.for.toxicological.studies",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 102,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.miscellaneous.ods.as.component.of.samples.to.be.tested",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 103,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.research.and.development.solvent.inert.in.chemical.synthesis",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 104,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.research.and.development.feedstock.reagent.in.chemical.synthesis",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 105,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.research.and.development.ctc.as.chain.transfer.agent.in.free-radical.polymerisation",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    },
+    {
+        "model":"LicenceDetailsConverstion",
+        "fields": {
+            "id": 106,
+            "template_detailed_use_code": "import.or.production.of.substance.for.laboratory.or.analytical.use.research.and.development.ctc.as.a.solvent.for.bromination.reactions.involving.n-bromosussineimide",
+            "lic_use_kind": "free circulation",
+            "lic_use_desc": "laboratory uses",
+            "lic_type": "import"
+        }
+    }
+]
+
