@@ -16,7 +16,7 @@ class SubstanceYearListView(ApiView):
 
     def get_queryset(self, domain, pk, year, **kwargs):
         undertaking = Undertaking.query.filter_by(domain=domain, external_id=pk).first_or_404()
-        substances = undertaking.deliveries.filter_by(year=year, current=True).first_or_404()
+        substances = undertaking.deliveries.filter_by(year=year).first_or_404()
         if not substances:
             return []
         substances = substances.substances
@@ -50,23 +50,15 @@ class SubstanceYearListView(ApiView):
         return data
 
     def post(self, **kwargs):
-        return [self.serialize(u) for u in self.get_queryset(**kwargs)]
-
-
-class LicenceYearAllDeliveriesListView(ListView):
-    model = DeliveryLicence
-
-    def get_queryset(self, domain, pk, year, **kwargs):
-        undertaking = Undertaking.query.filter_by(domain=domain, external_id=pk).first_or_404()
-        return undertaking.deliveries.filter_by(year=year).order_by(DeliveryLicence.order)
+        return {"licences": [self.serialize(u) for u in self.get_queryset(**kwargs)]}
 
 
 class LicencesOfOneDeliveryListView(ListView):
     model = Licence
 
-    def get_queryset(self, domain, pk, year, delivery_name, **kwargs):
+    def get_queryset(self, domain, pk, year, **kwargs):
         undertaking = Undertaking.query.filter_by(domain=domain, external_id=pk).first_or_404()
-        delivery = undertaking.deliveries.filter_by(year=year, name=delivery_name).first_or_404()
+        delivery = undertaking.deliveries.filter_by(year=year).first_or_404()
         substances = delivery.substances.all()
         licences = [substance.licences.all() for substance in substances]
         return reduce(lambda x,y: x+y,licences)
@@ -75,8 +67,8 @@ class LicencesOfOneDeliveryListView(ListView):
 class SubstancesOfOneDeliveryListView(ListView):
     model = Substance
 
-    def get_queryset(self, domain, pk, year, delivery_name, **kwargs):
+    def get_queryset(self, domain, pk, year, **kwargs):
         undertaking = Undertaking.query.filter_by(domain=domain, external_id=pk).first_or_404()
-        delivery = undertaking.deliveries.filter_by(year=year, name=delivery_name).first_or_404()
+        delivery = undertaking.deliveries.filter_by(year=year).first_or_404()
         substances = delivery.substances.all()
         return substances

@@ -76,17 +76,12 @@ register_url(prefix=licence_prefix, name=licence_name,
              view_name='current_substances_per_undertaking')
 
 register_url(prefix=licence_prefix, name=licence_name,
-             url='/deliveries/<year>',
-             view=LicenceYearAllDeliveriesListView,
-             view_name='deliveries')
-
-register_url(prefix=licence_prefix, name=licence_name,
-             url='/deliveries/<year>/<delivery_name>/licences',
+             url='/<year>/licences',
              view=LicencesOfOneDeliveryListView,
              view_name='licences_per_delivery')
 
 register_url(prefix=licence_prefix, name=licence_name,
-             url='/deliveries/<year>/<delivery_name>/substances',
+             url='/<year>/substances',
              view=SubstancesOfOneDeliveryListView,
              view_name='substances_per_delivery')
 

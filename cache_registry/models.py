@@ -334,7 +334,7 @@ class Licence(SerializableModel, db.Model):
 
     substance_id = Column(ForeignKey('substance.id'), nullable=True,
                            default=None)
-    substance = relationship('Substance', backref=db.backref('licences', lazy='dynamic'))
+    substance = relationship('Substance', cascade="all", backref=db.backref('licences', lazy='dynamic'))
 
 
 class Substance(SerializableModel, db.Model):
@@ -347,13 +347,14 @@ class Substance(SerializableModel, db.Model):
     lic_use_desc = Column(String(100))
     lic_type = Column(String(50))
     quantity = Column(Float(7))
+    organization_country_name = Column(String(4))
 
     date_created = Column(Date, server_default=db.func.now())
     date_updated = Column(Date, onupdate=db.func.now())
 
     delivery_id = Column(ForeignKey('delivery_licence.id'), nullable=True,
                          default=None)
-    deliverylicence = relationship('DeliveryLicence',
+    deliverylicence = relationship('DeliveryLicence', cascade="all",
                                     backref=db.backref('substances', lazy='dynamic'))
 
 
@@ -361,9 +362,6 @@ class DeliveryLicence(SerializableModel, db.Model):
     __tablename__ = 'delivery_licence'
 
     id = Column(Integer, primary_key=True)
-    order = Column(Integer)
-    current = Column(Boolean, default=False)
-    name = Column(String(50))
     year = Column(Integer)
     date_created = Column(Date, server_default=db.func.now())
     date_updated = Column(Date, onupdate=db.func.now())
