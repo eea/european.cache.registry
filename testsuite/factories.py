@@ -186,7 +186,6 @@ class MailAddress(SQLAlchemyModelFactory):
 
 class DeliveryLicenceFactory(SQLAlchemyModelFactory):
 
-    name = '2019-p1'
     year = 2019
     undertaking = SubFactory(UndertakingFactory)
 
