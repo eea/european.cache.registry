@@ -162,6 +162,11 @@ register_url(prefix=command_prefix, name=command_name,
              view_name='sync-bdr')
 
 register_url(prefix=command_prefix, name=command_name,
+             url='/licences',
+             view=SyncLicencesView,
+             view_name='sync-licences')
+
+register_url(prefix=command_prefix, name=command_name,
              url='/fgases_debug_noneu',
              view=SyncFgasesDebugNoneuView,
              view_name='fgases-debug-noneu')

@@ -1,4 +1,7 @@
+import hashlib
+import json
 import requests
+
 
 from flask import current_app
 from sqlalchemy import func
@@ -9,6 +12,7 @@ from cache_registry.models import (
     DeliveryLicence,
     Licence,
     CountryCodesConversion,
+    HashLicencesJson,
     SubstanceNameConversion,
     LicenceDetailsConverstion,
     Substance,
@@ -176,3 +180,19 @@ def aggregate_licences_to_undertakings(data):
             undertaking = undertakings[undertaking_obj.external_id]
         undertaking['licences'].append(licence)
     return undertakings
+
+def licences_json_was_updated(data, year):
+    json_data = json.dumps(data, sort_keys=True, indent=2)
+    hash_value = hashlib.md5(json_data.encode("utf-8")).hexdigest()
+    hash_object = HashLicencesJson.query.filter_by(year=year).first()
+    if not hash_object:
+        hash_object = HashLicencesJson(year=year, hash_value=hash_value)
+        db.session.add(hash_object)
+        db.session.commit()
+        return True
+    if hash_object.hash_value != hash_value:
+        hash_object.hash_value =  hash_value
+        db.session.add(hash_object)
+        db.session.commit()
+        return True
+    return False

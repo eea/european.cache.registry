@@ -398,6 +398,14 @@ class LicenceDetailsConverstion(SerializableModel, db.Model):
     lic_type = Column(String(100))
 
 
+class HashLicencesJson(SerializableModel, db.Model):
+    __tablename__ = 'hash_licences_json'
+
+    id =  Column(Integer, primary_key=True)
+    year = Column(Integer)
+    hash_value = Column(String(100))
+
+
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
 def alembic(alembic_args):
     from alembic.config import CommandLine

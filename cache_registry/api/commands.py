@@ -10,6 +10,7 @@ from cache_registry.sync.commands import (
     bdr,
     fgases,
     fgases_debug_noneu,
+    licences,
     ods,
     sync_collections_title
 )
@@ -56,6 +57,9 @@ class SyncFgasesDebugNoneuView(MgmtCommand):
 class SyncODSView(MgmtCommand):
     command_func = staticmethod(ods)
 
+
+class SyncLicencesView(MgmtCommand):
+    command_func = staticmethod(licences)
 
 class SyncCollectionsTitleView(MgmtCommand):
     command_func = staticmethod(sync_collections_title)

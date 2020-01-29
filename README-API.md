@@ -24,9 +24,8 @@ Overview
 **Licences calls**
 
 * `/undertaking/[domain]/[company_id]/licences/[year]/aggregated` - all substances(licences data aggregated) for one undertaking delivered in a year
-* `/undertaking/[domain]/[company_id]/deliveries/[year]` - all deliveries for one undertaking delivered in one year
-* `/undertaking/[domain]/[company_id]/deliveries/[year]/[delivery_name]/licences` - all licences for one undertaking for a certain delivery
-* `/undertaking/[domain]/[company_id]/deliveries/[year]/[delivery_name]/substances` - all substances for one undertaking for a certain delivery
+* `/undertaking/[domain]/[company_id]/deliveries/[year]/licences` - all licences for one undertaking for a certain year
+* `/undertaking/[domain]/[company_id]/deliveries/[year]/substances` - all substances for one undertaking for a certain year
 
 **User calls:**
 
@@ -70,6 +69,7 @@ verified or not
 * `/sync/collections_title`
 * `/sync/fgases`
 * `/sync/ods`
+* `/sync/licences`
 
 **Log calls:**
 * `/log/matching/[domain]` - matching logs
@@ -463,37 +463,11 @@ Response example:
       }
     ]
 
-/undertaking/[domain]/[pk]/deliveries/[year] - GET
----------------------------------------------------
 
-Provides a list with all the deliveries for one undertaking delivered in one year
-
-    [
-      {
-        "order": 1,
-        "current": false,
-        "name": "2018-p1",
-        "year": 2018,
-        "date_created": "16/01/2020",
-        "date_updated": "16/01/2020",
-        "undertaking_id": 123
-      },
-      {
-        "order": 2,
-        "current": true,
-        "name": "2018-p2",
-        "year": 2018,
-        "date_created": "16/01/2020",
-        "date_updated": null,
-        "undertaking_id": 123
-      }
-    ]
-
-
-/undertaking/[domain>/[pk]/deliveries/[year]/[delivery_name]/licences - GET
+/undertaking/[domain>/[pk]/deliveries/[year]/licences - GET
 ---------------------------------------------------------------------------
 
-Provies a list with all the licences for one undertaking for a certain delivery
+Provies a list with all the licences for one undertaking for a certain year
 
 
     [
@@ -540,10 +514,10 @@ Provies a list with all the licences for one undertaking for a certain delivery
     ]
 
 
-/undertaking/[domain]/[pk]/deliveries/[year]/[delivery_name]/substances - GET
+/undertaking/[domain]/[pk]/deliveries/[year]/substances - GET
 -----------------------------------------------------------------------------
 
-Provies a list with all the substances for one undertaking for a certain delivery
+Provies a list with all the substances for one undertaking for a certain year
 
 
   [
@@ -892,6 +866,8 @@ Optional parameters:
 * id (integer, the external id of the company)
 
 
+/sync/licences -  GET
+---------------------
 
 Log calls
 =========
