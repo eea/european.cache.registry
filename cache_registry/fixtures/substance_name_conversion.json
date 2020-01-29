@@ -1806,5 +1806,37 @@
             "ec_substance_name": "Methyl bromide (non-virgin)",
             "corrected_name": "MB (non-virgin)"
         }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 227,
+            "ec_substance_name": "HCFC-132b (virgin)",
+            "corrected_name": "HCFC-132b (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 228,
+            "ec_substance_name": "HCFC-124a (virgin)",
+            "corrected_name": "HCFC-124a (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 229,
+            "ec_substance_name": "HCFC-123a (virgin)",
+            "corrected_name": "HCFC-123a (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 230,
+            "ec_substance_name": "HCFC-132b (virgin)",
+            "corrected_name": "HCFC-132 (virgin)"
+        }
     }
 ]

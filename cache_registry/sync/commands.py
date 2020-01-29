@@ -12,10 +12,12 @@ from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
 from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url, call_bdr
 from .licences import (
+    aggregate_licences_to_undertakings,
     aggregate_licence_to_substance,
-    check_if_delivery_exists,
+    delete_all_substances_and_licences,
+    licences_json_was_updated,
     get_licences,
-    get_substance,
+    get_or_create_substance,
     get_or_create_delivery,
     parse_licence,
 )
@@ -190,36 +192,30 @@ def ods(days=7, updated_since=None, page_size=None, id=None):
 @sync_manager.command
 @sync_manager.option('-y', '--year', dest='year',
                      help="Licences from year x")
-@sync_manager.option('-d', '--delivery_name', dest='delivery_name',
-                     help="Delivery name")
 @sync_manager.option('-p', '--page_size', dest='page_size',
                      help="Page size")
 
-def licences(year, delivery_name, page_size=200):
-    if check_if_delivery_exists(year, delivery_name):
-        raise InvalidCommand("Delivery name '{}' is already used for year {}".format(delivery_name, year))
+def licences(year, page_size=200):
+    data = get_licences(year=year, page_size=page_size)
+    companies = aggregate_licences_to_undertakings(data)
+    if licences_json_was_updated(companies, year):
+        for company, data in companies.items():
+            if data['updated_since'] == None or data['updated_since'] >= date.now():
+                undertaking = Undertaking.query.filter_by(external_id=company).first()
+                delivery_licence = get_or_create_delivery(year, undertaking)
+                delete_all_substances_and_licences(delivery_licence)
 
-    licences = get_licences(year=year, page_size=page_size)
-
-    not_found_undertakings = []
-    for licence in licences:
-        undertaking = Undertaking.query.filter_by(name=licence['organizationName']).first()
-        if not undertaking:
-            if licence['organizationName'] not in not_found_undertakings:
-                message = 'Undertaking {} is not present in the application.'.format(licence['organizationName'])
-                current_app.logger.warning(message)
-                not_found_undertakings.append(licence['organizationName'])
-            continue
-
-        delivery_licence = get_or_create_delivery(year, delivery_name, undertaking.id)
-        substance = get_substance(delivery_licence, licence)
-        if not substance:
-            message = 'Substance {} could not be translated.'.format(
-                "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower()))
-            current_app.logger.warning(message)
-            continue
-        licence_object = parse_licence(licence, undertaking.id, substance)
-        aggregate_licence_to_substance(substance, licence_object)
+                for licence in data['licences']:
+                    substance = get_or_create_substance(delivery_licence, licence)
+                    if not substance:
+                        substance_name =  "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower())
+                        message = 'Substance {} could not be translated or Country code {} could not be translated.'.format(
+                            substance_name, licence['organizationCountryName'])
+                        current_app.logger.error(message)
+                        continue
+                    licence_object = parse_licence(licence, undertaking.id, substance)
+                aggregate_licence_to_substance(delivery_licence, year)
+    return True
 
 
 @sync_manager.command

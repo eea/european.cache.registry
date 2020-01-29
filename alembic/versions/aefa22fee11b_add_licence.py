@@ -38,7 +38,7 @@ def upgrade():
         sa.Column('date_created', sa.Date(), server_default=sa.text('now()'), nullable=True),
         sa.Column('date_updated', sa.Date(), nullable=True),
         sa.Column('undertaking_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['undertaking_id'], ['undertaking.id'], ),
+        sa.ForeignKeyConstraint(['undertaking_id'], ['undertaking.id'], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint('id')
     )
 
@@ -53,7 +53,7 @@ def upgrade():
         sa.Column('date_created', sa.Date(), server_default=sa.text('now()'), nullable=True),
         sa.Column('date_updated', sa.Date(), nullable=True),
         sa.Column('delivery_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['delivery_id'], ['delivery_licence.id'], ),
+        sa.ForeignKeyConstraint(['delivery_id'], ['delivery_licence.id'], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint('id')
     )
 
@@ -77,7 +77,7 @@ def upgrade():
         sa.Column('date_created', sa.Date(), server_default=sa.text('now()'), nullable=True),
         sa.Column('date_updated', sa.Date(), nullable=True),
         sa.Column('substance_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['substance_id'], ['substance.id'], ),
+        sa.ForeignKeyConstraint(['substance_id'], ['substance.id'], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint('id')
     )
 

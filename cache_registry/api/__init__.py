@@ -76,17 +76,12 @@ register_url(prefix=licence_prefix, name=licence_name,
              view_name='current_substances_per_undertaking')
 
 register_url(prefix=licence_prefix, name=licence_name,
-             url='/deliveries/<year>',
-             view=LicenceYearAllDeliveriesListView,
-             view_name='deliveries')
-
-register_url(prefix=licence_prefix, name=licence_name,
-             url='/deliveries/<year>/<delivery_name>/licences',
+             url='/<year>/licences',
              view=LicencesOfOneDeliveryListView,
              view_name='licences_per_delivery')
 
 register_url(prefix=licence_prefix, name=licence_name,
-             url='/deliveries/<year>/<delivery_name>/substances',
+             url='/<year>/substances',
              view=SubstancesOfOneDeliveryListView,
              view_name='substances_per_delivery')
 
@@ -165,6 +160,11 @@ register_url(prefix=command_prefix, name=command_name,
              url='/bdr',
              view=SyncBdr,
              view_name='sync-bdr')
+
+register_url(prefix=command_prefix, name=command_name,
+             url='/licences',
+             view=SyncLicencesView,
+             view_name='sync-licences')
 
 register_url(prefix=command_prefix, name=command_name,
              url='/fgases_debug_noneu',

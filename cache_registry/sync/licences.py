@@ -1,4 +1,7 @@
+import hashlib
+import json
 import requests
+
 
 from flask import current_app
 from sqlalchemy import func
@@ -9,50 +12,27 @@ from cache_registry.models import (
     DeliveryLicence,
     Licence,
     CountryCodesConversion,
+    HashLicencesJson,
     SubstanceNameConversion,
     LicenceDetailsConverstion,
     Substance,
+    Undertaking,
     db,
 )
 
+def delete_all_substances_and_licences(delivery_licence):
+    substances = Substance.query.filter_by(deliverylicence=delivery_licence)
+    substances.delete()
+    db.session.commit()
 
-def check_if_delivery_exists(year, delivery_name):
-    delivery =  DeliveryLicence.query.filter_by(year=year, name=delivery_name).first()
-    if delivery:
-        return True
-
-def get_new_delivery_order(year, undertaking_id):
-    delivery_order = DeliveryLicence.query.filter_by(
-    year=year,
-    undertaking_id=undertaking_id).order_by(DeliveryLicence.order.desc()).first()
-    if not delivery_order:
-        return 1
-    return delivery_order.order + 1
-
-def get_or_create_delivery(year, delivery_name, undertaking_id):
-    delivery = DeliveryLicence.query.filter_by(year=year, name=delivery_name).first()
+def get_or_create_delivery(year, undertaking):
+    delivery = DeliveryLicence.query.filter_by(year=year, undertaking=undertaking).first()
     if delivery:
         return delivery
-
-    histories =  DeliveryLicence.query.filter_by(
-        year=year, undertaking_id=undertaking_id, current=True)
-    for delivery in histories:
-        delivery.current = False
-        db.session.add(delivery)
-        db.session.commit()
-
-    delivery = DeliveryLicence(
-        order=get_new_delivery_order(year, undertaking_id),
-        current=True,
-        name=delivery_name,
-        year=year,
-        undertaking_id=undertaking_id
-    )
-
+    delivery = DeliveryLicence(year=year, undertaking=undertaking)
     db.session.add(delivery)
     db.session.commit()
     return delivery
-
 
 
 def get_licences(year=2017, page_size=20):
@@ -100,14 +80,14 @@ def parse_licence(licence, undertaking_id, substance):
     if not original_country:
         original_country = ''
         message = 'Country {} could not be translated.'.format(licence['organizationCountryName'])
-        current_app.logger.warning(message)
+        current_app.logger.error(message)
     else:
         original_country = original_country.country_code_alpha2
 
     if not international_country:
         international_country = ''
         message = 'Country {} could not be translated.'.format(licence['internationalPartyCountryName'])
-        current_app.logger.warning(message)
+        current_app.logger.error(message)
     else:
         international_country = international_country.country_code_alpha2
 
@@ -129,13 +109,17 @@ def parse_licence(licence, undertaking_id, substance):
         'substance_id': substance.id,
         'year': substance.year
     }
-    licence_object = Licence(**licence)
-    db.session.add(licence_object)
+    licence_object = db.session.query(Licence).filter_by(licence_id=licence['licence_id'],year=substance.year)
+    if licence_object.first():
+        licence_object.update(licence)
+    else:
+        licence_object = Licence(**licence)
+        db.session.add(licence_object)
     db.session.commit()
 
     return licence_object
 
-def get_substance(delivery_licence, licence):
+def get_or_create_substance(delivery_licence, licence):
     if licence['mixtureNatureType'].lower() != 'virgin':
         ec_substance_name = "{} (non-virgin)".format(licence['chemicalName'])
     else:
@@ -143,15 +127,24 @@ def get_substance(delivery_licence, licence):
     substance_conversion = SubstanceNameConversion.query.filter_by(ec_substance_name=ec_substance_name).first()
     if not substance_conversion:
         return None
-    substance = Substance.query.filter_by(substance=substance_conversion.corrected_name,
-                                          deliverylicence=delivery_licence).first()
-    if not substance:
-        licence_details = LicenceDetailsConverstion.query.filter_by(
-            template_detailed_use_code=licence['templateDetailedUseCode']).first()
+    country = CountryCodesConversion.query.filter_by(country_name_short_en=licence['organizationCountryName']).first()
+    if not country:
+        return None
+    licence_details = LicenceDetailsConverstion.query.filter_by(
+        template_detailed_use_code=licence['templateDetailedUseCode']).first()
 
+    substance = Substance.query.filter_by(
+        substance=substance_conversion.corrected_name,
+        organization_country_name=country.country_code_alpha2,
+        lic_use_desc=licence_details.lic_use_desc,
+        deliverylicence=delivery_licence,
+        year=delivery_licence.year,
+        ).first()
+    if not substance:
         substance = Substance(
             substance=substance_conversion.corrected_name,
             deliverylicence=delivery_licence,
+            organization_country_name=country.country_code_alpha2,
             year=delivery_licence.year,
             lic_use_kind=licence_details.lic_use_kind,
             lic_use_desc=licence_details.lic_use_desc,
@@ -163,7 +156,43 @@ def get_substance(delivery_licence, licence):
     return substance
 
 
-def aggregate_licence_to_substance(substance, licence):
-    substance.quantity = substance.quantity + licence.qty_percentage
-    db.session.add(substance)
-    db.session.commit()
+def aggregate_licence_to_substance(delivery_licence, year):
+    substances = Substance.query.filter_by(year=year, deliverylicence=delivery_licence)
+    for substance in substances:
+        substance.quantity = sum([licence.qty_percentage for licence in substance.licences.all()])
+        db.session.add(substance)
+        db.session.commit()
+
+def aggregate_licences_to_undertakings(data):
+    undertakings = {}
+    not_found_undertakings = []
+    for licence in data:
+        undertaking_obj = Undertaking.query.filter_by(name=licence['organizationName']).first()
+        if not undertaking_obj:
+            if licence['organizationName'] not in not_found_undertakings:
+                message = 'Undertaking {} is not present in the application.'.format(licence['organizationName'])
+                current_app.logger.error(message)
+                not_found_undertakings.append(licence['organizationName'])
+            continue
+        undertaking = undertakings.get(undertaking_obj.external_id, None)
+        if not undertaking:
+            undertakings[undertaking_obj.external_id] = {"updated_since": None, "licences": []}
+            undertaking = undertakings[undertaking_obj.external_id]
+        undertaking['licences'].append(licence)
+    return undertakings
+
+def licences_json_was_updated(data, year):
+    json_data = json.dumps(data, sort_keys=True, indent=2)
+    hash_value = hashlib.md5(json_data.encode("utf-8")).hexdigest()
+    hash_object = HashLicencesJson.query.filter_by(year=year).first()
+    if not hash_object:
+        hash_object = HashLicencesJson(year=year, hash_value=hash_value)
+        db.session.add(hash_object)
+        db.session.commit()
+        return True
+    if hash_object.hash_value != hash_value:
+        hash_object.hash_value =  hash_value
+        db.session.add(hash_object)
+        db.session.commit()
+        return True
+    return False
