@@ -201,7 +201,7 @@ def licences(year, page_size=200):
     if licences_json_was_updated(companies, year):
         for company, data in companies.items():
             if data['updated_since'] == None or data['updated_since'] >= date.now():
-                undertaking = Undertaking.query.filter_by(external_id=company).first()
+                undertaking = Undertaking.query.filter_by(external_id=company, domain='ODS').first()
                 delivery_licence = get_or_create_delivery(year, undertaking)
                 delete_all_substances_and_licences(delivery_licence)
 
