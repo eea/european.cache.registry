@@ -1,4 +1,3 @@
-import hashlib
 import json
 import requests
 
@@ -164,6 +163,8 @@ def aggregate_licence_to_substance(delivery_licence, year):
         db.session.commit()
 
 def translate_date(date_string):
+   if not date_string:
+       return date.today()
    date_with_time = datetime.strptime(date_string[0:10], '%Y-%m-%d')
    return date(year=date_with_time.year, month=date_with_time.month, day=date_with_time.day)
 
