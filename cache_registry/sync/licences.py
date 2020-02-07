@@ -2,7 +2,7 @@ import hashlib
 import json
 import requests
 
-
+from datetime import datetime, date
 from flask import current_app
 from sqlalchemy import func
 
@@ -12,7 +12,6 @@ from cache_registry.models import (
     DeliveryLicence,
     Licence,
     CountryCodesConversion,
-    HashLicencesJson,
     SubstanceNameConversion,
     LicenceDetailsConverstion,
     Substance,
@@ -98,8 +97,8 @@ def parse_licence(licence, undertaking_id, substance):
         'organization_country_name_orig': licence['organizationCountryName'],
         'international_party_country_name': international_country,
         'international_party_country_name_orig': licence['internationalPartyCountryName'],
-        'qty_qdp_percentage': licence['qtyQdpPercentage'],
-        'qty_percentage': licence['qtyPercentage'],
+        'total_odp_mass': licence['totalOdpMass'],
+        'net_mass': licence['netMass'],
         'licence_state': licence['licenceState'],
         'licence_id': licence['licenceId'],
         'long_licence_number': licence['longLicenceNumber'],
@@ -107,7 +106,8 @@ def parse_licence(licence, undertaking_id, substance):
         'licence_type': licence['licenceType'],
         'mixture_nature_type': licence['mixtureNatureType'],
         'substance_id': substance.id,
-        'year': substance.year
+        'year': substance.year,
+        'updated_since': licence['licenceUpdateDate'],
     }
     licence_object = db.session.query(Licence).filter_by(licence_id=licence['licence_id'],year=substance.year)
     if licence_object.first():
@@ -159,40 +159,33 @@ def get_or_create_substance(delivery_licence, licence):
 def aggregate_licence_to_substance(delivery_licence, year):
     substances = Substance.query.filter_by(year=year, deliverylicence=delivery_licence)
     for substance in substances:
-        substance.quantity = sum([licence.qty_percentage for licence in substance.licences.all()])
+        substance.quantity = sum([licence.net_mass for licence in substance.licences.all()])
         db.session.add(substance)
         db.session.commit()
+
+def translate_date(date_string):
+   date_with_time = datetime.strptime(date_string[0:10], '%Y-%m-%d')
+   return date(year=date_with_time.year, month=date_with_time.month, day=date_with_time.day)
 
 def aggregate_licences_to_undertakings(data):
     undertakings = {}
     not_found_undertakings = []
     for licence in data:
-        undertaking_obj = Undertaking.query.filter_by(name=licence['organizationName'], domain='ODS').first()
+        undertaking_obj = Undertaking.query.filter_by(external_id=licence['organizationId'], domain='ODS').first()
         if not undertaking_obj:
-            if licence['organizationName'] not in not_found_undertakings:
-                message = 'Undertaking {} is not present in the application.'.format(licence['organizationName'])
+            if licence['organizationId'] not in not_found_undertakings:
+                message = 'Undertaking {} is not present in the application.'.format(licence['organizationId'])
                 current_app.logger.error(message)
-                not_found_undertakings.append(licence['organizationName'])
+                not_found_undertakings.append(licence['organizationId'])
             continue
         undertaking = undertakings.get(undertaking_obj.external_id, None)
         if not undertaking:
-            undertakings[undertaking_obj.external_id] = {"updated_since": None, "licences": []}
+            updated_since = translate_date(licence['licenceUpdateDate'])
+            undertakings[undertaking_obj.external_id] = {"updated_since": updated_since, "licences": []}
             undertaking = undertakings[undertaking_obj.external_id]
+        else:
+            updated_since = translate_date(licence['licenceUpdateDate'])
+            undertaking_updated_since = undertakings[undertaking_obj.external_id]['updated_since']
+            undertakings[undertaking_obj.external_id]['updated_since'] = updated_since if updated_since > undertaking_updated_since else undertaking_updated_since
         undertaking['licences'].append(licence)
     return undertakings
-
-def licences_json_was_updated(data, year):
-    json_data = json.dumps(data, sort_keys=True, indent=2)
-    hash_value = hashlib.md5(json_data.encode("utf-8")).hexdigest()
-    hash_object = HashLicencesJson.query.filter_by(year=year).first()
-    if not hash_object:
-        hash_object = HashLicencesJson(year=year, hash_value=hash_value)
-        db.session.add(hash_object)
-        db.session.commit()
-        return True
-    if hash_object.hash_value != hash_value:
-        hash_object.hash_value =  hash_value
-        db.session.add(hash_object)
-        db.session.commit()
-        return True
-    return False

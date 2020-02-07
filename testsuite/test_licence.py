@@ -80,13 +80,13 @@ def test_licences_of_one_delivery_list_view(client):
     substance2 = factories.SubstanceFactory(deliverylicence=deliverylicence, substance='Substance name 1', quantity=0.3)
     licences = [
         factories.LicenceFactory(year=2019, licence_id=1, chemical_name='Substance name 1',
-                                 qty_percentage=0.2, substance=substance1),
+                                 net_mass=0.2, substance=substance1),
         factories.LicenceFactory(year=2019, licence_id=2, chemical_name='Substance name 1',
-                                 qty_percentage=0.3, substance=substance1),
+                                 net_mass=0.3, substance=substance1),
         factories.LicenceFactory(year=2019, licence_id=3, chemical_name='Substance name 2',
-                                 qty_percentage=0.1, substance=substance2),
+                                 net_mass=0.1, substance=substance2),
         factories.LicenceFactory(year=2019, licence_id=4, chemical_name='Substance name 2',
-                                 qty_percentage=0.2, substance=substance2),
+                                 net_mass=0.2, substance=substance2),
     ]
     licences_ids = [licence.licence_id for licence in licences]
     resp = client.get(url_for('api.licence-licences_per_delivery', domain='ODS', pk=undertaking.external_id,

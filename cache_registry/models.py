@@ -322,8 +322,8 @@ class Licence(SerializableModel, db.Model):
     custom_procedure_name = Column(String(100))
     international_party_country_name = Column(String(100))
     international_party_country_name_orig = Column(String(100))
-    qty_qdp_percentage = Column(Float(7))
-    qty_percentage = Column(Float(7))
+    total_odp_mass = Column(Float(7))
+    net_mass = Column(Float(7))
     licence_state = Column(String(50))
     long_licence_number = Column(String(50))
     template_detailed_use_code = Column(String(255))
@@ -331,7 +331,7 @@ class Licence(SerializableModel, db.Model):
     mixture_nature_type = Column(String(50))
     date_created = Column(Date, server_default=db.func.now())
     date_updated = Column(Date, onupdate=db.func.now())
-
+    updated_since = Column(String(30))
     substance_id = Column(ForeignKey('substance.id'), nullable=True,
                            default=None)
     substance = relationship('Substance', cascade="all", backref=db.backref('licences', lazy='dynamic'))
@@ -365,7 +365,7 @@ class DeliveryLicence(SerializableModel, db.Model):
     year = Column(Integer)
     date_created = Column(Date, server_default=db.func.now())
     date_updated = Column(Date, onupdate=db.func.now())
-
+    updated_since = Column(Date)
     undertaking_id = Column(ForeignKey('undertaking.id'), nullable=True,
                            default=None)
     undertaking = relationship('Undertaking',
