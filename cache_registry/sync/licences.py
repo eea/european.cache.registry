@@ -167,7 +167,7 @@ def aggregate_licences_to_undertakings(data):
     undertakings = {}
     not_found_undertakings = []
     for licence in data:
-        undertaking_obj = Undertaking.query.filter_by(name=licence['organizationName']).first()
+        undertaking_obj = Undertaking.query.filter_by(name=licence['organizationName'], domain='ODS').first()
         if not undertaking_obj:
             if licence['organizationName'] not in not_found_undertakings:
                 message = 'Undertaking {} is not present in the application.'.format(licence['organizationName'])
