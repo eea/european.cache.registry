@@ -70,10 +70,11 @@ def check_passed():
             '@type': undertaking.undertaking_type,
             'eoriNumber': eori
         }
+        check_passed = undertaking.check_passed
         if undertaking.domain == 'FGAS':
             undertaking.check_passed = eea_double_check_fgases(data)
         elif undertaking.domain == 'ODS':
             undertaking.check_passed = eea_double_check_ods(data)
         db.session.commit()
-        if undertaking.check_passed:
+        if check_passed == False and undertaking.check_passed == True:
             call_bdr(undertaking)
