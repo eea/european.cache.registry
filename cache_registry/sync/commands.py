@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from cache_registry.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
-from cache_registry.models import Undertaking, db, OrganizationLog
+from cache_registry.models import Undertaking, db, OrganizationLog, Country
 from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
@@ -151,7 +151,7 @@ def fgases(days=7, updated_since=None, page_size=None, id=None):
     db.session.commit()
     for undertaking in undertakings_with_changed_repr:
         undertaking_obj = Undertaking.query.filter_by(external_id=undertaking['external_id']).first()
-        call_bdr(undertaking_obj)
+        call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
 
 
@@ -185,7 +185,7 @@ def ods(days=7, updated_since=None, page_size=None, id=None):
     db.session.commit()
     for undertaking in undertakings_with_changed_repr:
         undertaking_obj = Undertaking.query.filter_by(external_id=undertaking['external_id']).first()
-        call_bdr(undertaking_obj)
+        call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
 
 

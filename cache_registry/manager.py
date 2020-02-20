@@ -77,4 +77,4 @@ def check_passed():
             undertaking.check_passed = eea_double_check_ods(data)
         db.session.commit()
         if check_passed == False and undertaking.check_passed == True:
-            call_bdr(undertaking)
+            call_bdr(undertaking, undertaking.oldcompany_account)
