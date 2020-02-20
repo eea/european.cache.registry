@@ -1,8 +1,298 @@
 Changelog
 =========
 
-1.4.dev0 - (unreleased)
------------------------
+2.0.5 - (2020-02-20)
+--------------------
+* Fix BDR call for companies collection - missing oldcompany parameter
+  [dianaboiangiu]
+
+2.0.4 - (2020-02-12)
+--------------------
+* Add check_passed field on Excel export
+  [dianaboiangiu]
+
+2.0.3 - (2020-02-07)
+--------------------
+* Remove no representative exception for FGAS
+* Optimize check passed command
+* Fix undertaking domain on licences command
+  [dianaboiangiu]
+
+2.0.2 - (2020-02-07)
+--------------------
+* Add check_passed field on Excel export
+  [dianaboiangiu]
+
+2.0.1 - (2020-01-29)
+--------------------
+* Fix undertaking domain match on licences sync
+  [dianaboiangiu]
+
+2.0.0 - (2020-01-29)
+--------------------
+* Add syncronization and storage for ODS licences 
+* Add aggregation for those licences into substances
+* Add endpoints for exposing those substances, per year delivered
+  [dianaboiangiu]
+
+1.20.10 - (2020-01-15)
+----------------------
+* Add date_created, date_updated from ecr for undertakings
+  [dianaboiangiu]
+
+1.20.9 - (2019-10-18)
+---------------------
+* Allow only ODS companies with check_passed = True in 
+  the application
+  [dianaboiangiu]
+
+1.20.8 - (2019-10-10)
+---------------------
+* Keep reporters for non reporting companies
+  [dianaboiangiu]
+
+1.20.7 - (2019-10-09)
+---------------------
+* Call bdr on check_passed changed
+  [dianaboiangiu]
+
+1.20.6 - (2019-09-27)
+---------------------
+* Upgraded deprecated packages with security issues
+  [dianaboiangiu]
+
+1.20.5 - (2019-09-25)
+---------------------
+* Upgraded deprecated packages with security issues
+* Docker/README fixes
+  [dianaboiangiu]
+
+1.20.4 - (2019-08-27)
+--------------------
+* Return normal response for check sync
+  [dianaboiangiu]
+
+1.20.3 - (2019-08-27)
+---------------------
+* Remove header for check sync
+  [dianaboiangiu]
+
+1.20.2 - (2019-08-27)
+---------------------
+* Fix naive/aware time on check sync
+  [dianaboiangiu]
+
+1.20.1 - (2019-08-27)
+---------------------
+* Add endpoint for healthcheck of sync
+  [dianaboiangiu]
+
+1.20.0 - (2019-08-20)
+---------------------
+* Add check_passed field on Undertaking for checking if the
+  company can report or not
+* Add script for filling the new check_passed field
+  [catalinjitea]
+
+1.19.3 - (2019-07-12)
+---------------------
+* Add timeout to gunicorn
+  [dianaboiangiu]
+
+1.19.2 - (2019-05-15)
+---------------------
+* Fix typo
+  [dianaboiangiu]
+
+1.19.1 - (2019-05-15)
+---------------------
+* Patch users even if the company has no reporting obligation
+  [dianaboiangiu]
+
+1.19.0 - (2019-04-11)
+*  Add back legal representative history
+  [dianaboiangiu]
+
+1.18.21 - (2019-04-08)
+----------------------
+* Set log execution time default
+  [dianaboiangiu]
+
+1.18.20 - (2019-04-08)
+----------------------
+* Fix typo
+  [dianaboiangiu]
+
+1.18.19 - (2019-04-08)
+----------------------
+* Set timezone for logs
+  [dianaboiangiu]
+
+1.18.18 - (2019-04-03)
+----------------------
+* Remove contact persons if company is rejected
+  [dianaboiangiu]
+
+1.18.17 - (2019-04-02)
+----------------------
+* Update rejected company if exists
+  [dianaboiangiu]
+
+1.18.16 - (2019-03-29)
+----------------------
+* Implement pagination for sync
+* Accept Revision companies
+  [dianaboiangiu]
+
+1.18.15 - (2019-03-19)
+----------------------
+* Fix get_country_code Undertaking model
+  [dianaboiangiu]
+
+1.18.14 - (2019-03-13)
+* Update bdr collection if representative has changed
+* Remove legal representative history for now
+  [dianaboiangiu]
+
+1.18.13 - (2019-03-07)
+----------------------
+* Add legal representative history
+  [dianaboiangiu]
+
+1.18.12 - (2018-11-27)
+----------------------
+* Set double checks logging levels to warning
+  [dianaboiangiu]
+
+1.18.11 - (2018-08-09)
+----------------------
+* Stop accepting companies with status DISABLED
+  [dianaboiangiu]
+
+1.18.10 - (2018-03-29)
+----------------------
+* Set country_code 'NON-EU' for non-eu companies with no representative
+  [dianaboiangiu]
+
+1.18.9 - (2018-03-28)
+---------------------
+* Fix NON-EU slug
+  [dianaboiangiu]
+
+1.18.8 - (2018-03-28)
+---------------------
+* Set separate collection folder for NON-EU companies with no represent
+  [dianaboiangiu]
+
+1.18.7 - (2018-03-26)
+---------------------
+* Fix FGAS syncronization double checks
+  [dianaboiangiu]
+
+1.18.6 - (2018-03-26)
+---------------------
+* Fix ODS syncronization double checks
+  [dianaboiangiu]
+
+1.18.5 - (2018-03-22)
+---------------------
+* Add representative field in user companies endpoint
+  [dianaboiangiu]
+
+1.18.4 - (2018-03-15)
+---------------------
+* Fix country_code for MANUFACTURERS
+  [dianaboiangiu]
+
+1.18.3 - (2018-03-15)
+---------------------
+* Fix missing country in match
+  [dianaboiangiu]
+
+1.18.2 - (2018-03-15)
+---------------------
+* Fix fgases sync obligation check
+  [dianaboiangiu]
+
+1.18.1 - (2018-03-14)
+---------------------
+- Fix legal representatives checks for FGAS
+  [dianaboiangiu]
+
+1.18 - (2018-03-14)
+-------------------
+* Fix missing FGAS businessprofiles
+  [dianaboiangiu]
+
+1.17 - (2018-02-02)
+-------------------
+* Match companies agains the EORI number
+  [nico4]
+
+1.16 - (2018-01-19)
+-------------------
+* allow empty high level uses for certain undertakings
+  [dianaboiangiu]
+
+1.15 - (2018-01-16)
+-------------------
+* Handle case of empty list of high level uses
+  [arielpontes]
+
+1.14 - (2018-01-16)
+-------------------
+* Add warning message for companies in the businessprofile exceptions
+  [arielpontes]
+
+1.13 - (2018-01-16)
+-------------------
+* Add businessprofile exceptions to reporting
+  [arielpontes]
+
+1.12 - (2018-01-14)
+------------------
+* Configure matching settings
+  [dianaboiangiu]
+
+1.11 - (2018-01-29)
+------------------
+* Add date updated in candidate listing endpoint
+  [dianaboiangiu]
+
+1.10 - (2018-01-16)
+------------------
+* Fix verify none
+  [dianaboiangiu]
+
+1.9 - (2018-01-15)
+------------------
+* Fixed indentation issue
+* Allow NONEU equirement manufactures that have a representative to report
+  [olimpiurob]
+
+1.8 - (2018-01-05)
+------------------
+* Fix status update
+* Remove automatically approve message
+  [catalinjitea]
+
+1.7 - (2018-01-04)
+------------------
+* Add localsetting for patching companies and users
+  [dianaboiangiu]
+
+1.6 - (2018-01-04)
+------------------
+* Add verify/none endpoint
+  [dianaboiangiu]
+
+1.5 - (2018-01-04)
+------------------
+* Fix matching companies domains
+  [dianaboiangiu]
+
+1.4 - (2017-11-15)
+------------------
 * Equipment manufacturers missing from BDR
   - added API method to print a list with
     all NON EU companies without a legal representative
@@ -11,6 +301,9 @@ Changelog
   middleware and email sending
   - added API method export all users in JSON format
   [chiridra refs #84119]
+* Added support for pulling ODS companies into the cache registry
+  [dianaboiangiu]
+
 
 1.3 - (2017-01-17)
 ------------------
