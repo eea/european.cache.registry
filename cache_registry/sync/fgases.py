@@ -5,6 +5,14 @@ from instance.settings import FGAS
 
 
 def eea_double_check_fgases(data):
+    ok = True
+
+    if not data['businessProfile']:
+        businessprofile = ''
+        ok = False
+    else:
+        businessprofile = data['businessProfile']['highLevelUses']
+
     identifier = """
         Organisation ID: {}
         Organisation status: {}
@@ -13,9 +21,9 @@ def eea_double_check_fgases(data):
         Organisation contact persons: {}
         Organisation domain: {}
     """.format(data['id'], data['status'],
-               data['businessProfile']['highLevelUses'], data['types'],
-               data['contactPersons'], data['domain'])
-    ok = True
+            businessprofile, data['types'],
+            data['contactPersons'], data['domain'])
+
     country_type = data['address']['country']['type']
     has_eu_legal_rep = data.get('euLegalRepresentativeCompany')
 
@@ -34,9 +42,15 @@ def eea_double_check_fgases(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
-    if not all([l.startswith('fgas.')
-                for l in data['businessProfile']['highLevelUses']]):
-        message = "Organisation highLevelUses elements don't start with 'fgas.'"
+    if data['businessProfile']:
+        if not all([l.startswith('fgas.')
+                    for l in data['businessProfile']['highLevelUses']]):
+            message = "Organisation highLevelUses elements don't start with 'fgas.'"
+            current_app.logger.warning(message + identifier)
+            ok = False
+    else:
+        message = "Organisation has no highLevelUses"
+        data['businessProfile'] = {'highLevelUses': []}
         current_app.logger.warning(message + identifier)
         ok = False
 
@@ -44,5 +58,4 @@ def eea_double_check_fgases(data):
         message = "Organisation domain is not FGAS"
         current_app.logger.warning(message + identifier)
         ok = False
-
     return ok
