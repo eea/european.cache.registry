@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.6 - (2020-02-25)
+--------------------
+* Fix sync fgases on missing highLevelUses
+  [dianaboiangiu]
+
 2.0.5 - (2020-02-20)
 --------------------
 * Fix BDR call for companies collection - missing oldcompany parameter
