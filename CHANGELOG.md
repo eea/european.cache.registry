@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0.7 - (2020-02-28)
+--------------------
+* Remove hash table
+* Implement use updated_since for sync with licences
+  [dianaboiangiu]
+
 2.0.6 - (2020-02-25)
 --------------------
 * Fix sync fgases on missing highLevelUses
