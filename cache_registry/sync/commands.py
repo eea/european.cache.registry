@@ -15,7 +15,6 @@ from .licences import (
     aggregate_licences_to_undertakings,
     aggregate_licence_to_substance,
     delete_all_substances_and_licences,
-    licences_json_was_updated,
     get_licences,
     get_or_create_substance,
     get_or_create_delivery,
@@ -198,23 +197,24 @@ def ods(days=7, updated_since=None, page_size=None, id=None):
 def licences(year, page_size=200):
     data = get_licences(year=year, page_size=page_size)
     companies = aggregate_licences_to_undertakings(data)
-    if licences_json_was_updated(companies, year):
-        for company, data in companies.items():
-            if data['updated_since'] == None or data['updated_since'] >= date.now():
-                undertaking = Undertaking.query.filter_by(external_id=company, domain='ODS').first()
-                delivery_licence = get_or_create_delivery(year, undertaking)
-                delete_all_substances_and_licences(delivery_licence)
-
-                for licence in data['licences']:
-                    substance = get_or_create_substance(delivery_licence, licence)
-                    if not substance:
-                        substance_name =  "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower())
-                        message = 'Substance {} could not be translated or Country code {} could not be translated.'.format(
-                            substance_name, licence['organizationCountryName'])
-                        current_app.logger.error(message)
-                        continue
-                    licence_object = parse_licence(licence, undertaking.id, substance)
-                aggregate_licence_to_substance(delivery_licence, year)
+    for company, data in companies.items():
+        undertaking = Undertaking.query.filter_by(external_id=company, domain='ODS').first()
+        delivery_licence = get_or_create_delivery(year, undertaking)
+        if delivery_licence.updated_since == None or data['updated_since'] > delivery_licence.updated_since:
+            delete_all_substances_and_licences(delivery_licence)
+            for licence in data['licences']:
+                substance = get_or_create_substance(delivery_licence, licence)
+                if not substance:
+                    substance_name =  "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower())
+                    message = 'Substance {} could not be translated or Country code {} could not be translated.'.format(
+                        substance_name, licence['organizationCountryName'])
+                    current_app.logger.error(message)
+                    continue
+                licence_object = parse_licence(licence, undertaking.id, substance)
+            aggregate_licence_to_substance(delivery_licence, year)
+            delivery_licence.updated_since = data['updated_since']
+            db.session.add(delivery_licence)
+            db.session.commit()
     return True
 
 

@@ -218,8 +218,8 @@ class LicenceFactory(SQLAlchemyModelFactory):
     custom_procedure_name = 'substance'
     international_party_country_name = 'IT'
     international_party_country_name_orig = 'Italy'
-    qty_qdp_percentage = 12
-    qty_percentage = 3
+    total_odp_mass = 12
+    net_mass = 3
     licence_state = 'VALID'
     long_licence_number = 4325
     template_detailed_use_code = 'substance'

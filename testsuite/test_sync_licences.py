@@ -31,10 +31,10 @@ def test_aggregate_licence_to_substance(client):
     delivery_object = factories.DeliveryLicenceFactory(year=2019)
     substance = factories.SubstanceFactory(quantity=0, deliverylicence=delivery_object)
     licences = [
-        factories.LicenceFactory(substance=substance, qty_percentage=0.1),
-        factories.LicenceFactory(substance=substance, qty_percentage=0.2),
-        factories.LicenceFactory(substance=substance, qty_percentage=0.4),
-        factories.LicenceFactory(substance=substance, qty_percentage=0.5),
+        factories.LicenceFactory(substance=substance, net_mass=0.1),
+        factories.LicenceFactory(substance=substance, net_mass=0.2),
+        factories.LicenceFactory(substance=substance, net_mass=0.4),
+        factories.LicenceFactory(substance=substance, net_mass=0.5),
     ]
 
     aggregate_licence_to_substance(delivery_object, 2019)
