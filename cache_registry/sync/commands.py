@@ -167,14 +167,14 @@ def undertaking_remove(external_id, domain):
     if undertaking:
         msg = 'Removing undertaking name: {}'\
               ' with id: {}'.format(undertaking.name, undertaking.id)
-        current_app.logger.warning(msg)
-        undertaking.represent_history = []
-        undertaking.types = []
-        undertaking.business_profiles = []
+        undertaking.represent_history.clear()
+        undertaking.types.clear()
+        undertaking.businessprofiles.clear()
         db.session.commit()
         db.session.delete(undertaking)
+        db.session.commit()
     else:
-        msg = 'No company with id: {} found in the db'.format(data.get('id'))
+        msg = 'No company with id: {} found in the db'.format(external_id)
         current_app.logger.warning(msg)
 
 
