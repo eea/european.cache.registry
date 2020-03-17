@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.8 - (2020-02-29)
+--------------------
+* Add script command for removing undertakings
+  [dianaboiangiu]
+
 2.0.7 - (2020-02-28)
 --------------------
 * Remove hash table
