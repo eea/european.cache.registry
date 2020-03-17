@@ -1,7 +1,12 @@
 Changelog
 =========
 
-2.0.8 - (2020-02-29)
+2.0.9 - (2020-03-17)
+--------------------
+* Fix undertaking remove script
+  [dianaboiangiu]
+
+2.0.8 - (2020-03-17)
 --------------------
 * Add script command for removing undertakings
   [dianaboiangiu]
