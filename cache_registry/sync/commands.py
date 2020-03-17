@@ -154,6 +154,30 @@ def fgases(days=7, updated_since=None, page_size=None, id=None):
     return True
 
 
+@sync_manager.option('-i', '--external_id', dest='external_id',
+                     help="External id of a company")
+@sync_manager.option('-d', '--domain', dest='domain',
+                     help="Domain")
+def undertaking_remove(external_id, domain):
+    undertaking = (
+        Undertaking.query
+        .filter_by(external_id=external_id, domain=domain)
+        .first()
+    )
+    if undertaking:
+        msg = 'Removing undertaking name: {}'\
+              ' with id: {}'.format(undertaking.name, undertaking.id)
+        current_app.logger.warning(msg)
+        undertaking.represent_history = []
+        undertaking.types = []
+        undertaking.business_profiles = []
+        db.session.commit()
+        db.session.delete(undertaking)
+    else:
+        msg = 'No company with id: {} found in the db'.format(data.get('id'))
+        current_app.logger.warning(msg)
+
+
 @sync_manager.command
 @sync_manager.option('-u', '--updated', dest='updated_since',
                      help="Date in DD/MM/YYYY format")
