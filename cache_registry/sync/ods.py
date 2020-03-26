@@ -1,5 +1,11 @@
 from flask import current_app
-from instance.settings import ODS, NOT_OBLIGED_TO_REPORT, NO_HIGHLEVEL_TYPES
+from instance.settings import (
+    ODS,
+    NOT_OBLIGED_TO_REPORT,
+    NO_HIGHLEVEL_TYPES,
+    NOT_OBLIGED_TO_REPORT_ODS_TYPES,
+)
+
 
 from cache_registry.models import Type, BusinessProfile
 
@@ -71,7 +77,7 @@ def eea_double_check_ods(data):
 
     types = [object.type for object in Type.query.filter_by(domain=ODS)]
     for type in data['types']:
-        if type not in types:
+        if type not in types or type in NOT_OBLIGED_TO_REPORT_ODS_TYPES:
             message = "Organisation type {0} is not accepted.".format(type)
             current_app.logger.warning(message + identifier)
             ok = False

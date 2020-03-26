@@ -109,6 +109,13 @@ NO_HIGHLEVEL_TYPES = {
 # Undertaking objects with any of the types above are allowed to have
 # empty high level uses.
 
+NOT_OBLIGED_TO_REPORT_ODS_TYPES = [
+    'IMPORTER',
+    'IMPORTER_ODS',
+    'EXPORTER',
+    'EXPORTER_ODS',
+]
+
 try:
     from instance.extra.localsettings import *
 except ImportError:
