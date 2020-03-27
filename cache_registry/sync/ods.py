@@ -88,6 +88,11 @@ def eea_double_check_ods(data):
 
     high_level_uses_set = set(data['businessProfile']['highLevelUses'])
 
+    if set(data['types']).issubset(NOT_OBLIGED_TO_REPORT_ODS_TYPES):
+        message="Organization types {} should not report.".format(data['types'])
+        current_app.logger.warning(message + identifier)
+        ok = False
+
     if not (high_level_uses_set or set(data['types']) & NO_HIGHLEVEL_TYPES):
         message = "Organisation high level uses are missing."
         current_app.logger.warning(message + identifier)
