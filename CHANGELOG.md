@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.10 - (2020-04-02)
+--------------------
+* Update accepted types for ODS
+  [dianaboiangiu]
+
 2.0.10 - (2020-03-26)
 --------------------
 * Update accepted types for ODS
