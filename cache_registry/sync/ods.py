@@ -77,7 +77,7 @@ def eea_double_check_ods(data):
 
     types = [object.type for object in Type.query.filter_by(domain=ODS)]
     for type in data['types']:
-        if type not in types or type in NOT_OBLIGED_TO_REPORT_ODS_TYPES:
+        if type not in types:
             message = "Organisation type {0} is not accepted.".format(type)
             current_app.logger.warning(message + identifier)
             ok = False
