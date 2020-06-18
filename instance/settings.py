@@ -53,7 +53,7 @@ MAILS_SENDER_NAME = os.environ.get('MAILS_SENDER_NAME', 'Help Desk')
 HTTPS_VERIFY = (
     True if os.environ.get('HTTPS_VERIFY', '') in ('True', 'true') else False
 )
-
+REQUESTS_CA_BUNDLE=os.environ.get('REQUESTS_CA_BUNDLE', '')
 
 # this switch tells if companies with no matching candidates are automatically
 # verified as being so by the system or not

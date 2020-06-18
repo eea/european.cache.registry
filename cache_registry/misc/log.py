@@ -48,8 +48,16 @@ class MatchingLogsView(ListView):
 class CheckSyncLogsView(MethodView):
 
     def get(self, **kwargs):
+        DOMAIN_TRANSLATION = {
+            "ods": "ODS",
+            "ODS": "ODS",
+            "FGAS": "FGAS",
+            "fgases": "FGAS",
+            "fgas": "FGAS"
+        }
+        domain = DOMAIN_TRANSLATION.get(kwargs.get('domain', 'FGAS'))
         latest_log = OrganizationLog.query.filter_by(
-            domain=kwargs['domain']).order_by(desc(OrganizationLog.execution_time)).first()
+            domain=domain).order_by(desc(OrganizationLog.execution_time)).first()
         now = datetime.now().replace(tzinfo=latest_log.execution_time.tzinfo)
         time = now - latest_log.execution_time
         if 3600 - time.seconds < 0:
