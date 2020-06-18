@@ -27,7 +27,7 @@
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
         "eoriNumber": "BE123456789",
-        "types" : ["IMPORTER"],
+        "types" : ["IMPORTER_MIXTURES_SUBSTANCES"],
         "businessProfile" : {
             "highLevelUses" : [
                 "import.of.halon.for.critical.use",
@@ -72,7 +72,7 @@
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
         "eoriNumber": "BE1423424543",
-        "types" :  ["IMPORTER", "EXPORTER_ODS"],
+        "types" :  ["IMPORTER_MIXTURES_SUBSTANCES", "EXPORTER_MIXTURES_SUBSTANCES"],
         "businessProfile" : {
             "highLevelUses" : ["import.of.halon.for.critical.use"]
         }
@@ -113,7 +113,7 @@
         "dateUpdated" : "06/11/2014",
         "status" : "VALID",
         "eoriNumber": "BE123456789",
-        "types" : ["IMPORTER", "EXPORTER_ODS"],
+        "types" : ["IMPORTER_MIXTURES_SUBSTANCES", "EXPORTER_MIXTURES_SUBSTANCES"],
         "businessProfile" : {
             "highLevelUses" : ["import.of.halon.for.critical.use"]
         }
