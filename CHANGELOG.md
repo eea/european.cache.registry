@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0.11 - (2020-06-18)
+--------------------
+* Fix healthcheck for syncs
+* Add certificates path for https in environment
+  [dianaboiangiu]
+
 2.0.10 - (2020-04-02)
 --------------------
 * Update accepted types for ODS
