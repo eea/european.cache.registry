@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.12 - (2020-07-28)
+--------------------
+* Fix URL to application in email template
+  [dianaboiangiu]
+
 2.0.11 - (2020-06-18)
 --------------------
 * Fix healthcheck for syncs
