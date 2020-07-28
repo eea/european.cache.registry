@@ -28,9 +28,9 @@ def send_mail(subject, html, recipients):
 def send_match_mail(match, **kwargs):
     if not app.config.get('SEND_MATCHING_MAILS'):
         return
-    host = app.config.get('BDR_HOST')
+    host = app.config.get('BDR_ENDPOINT_URL')
     if not host:
-        message = 'No BDR_HOST was set in order to send notification emails. ' \
+        message = 'No BDR_ENDPOINT_URL was set in order to send notification emails. ' \
                   'Please set this value or disable mails sending.'
         app.logger.warning(message)
         if 'sentry' in app.extensions:
