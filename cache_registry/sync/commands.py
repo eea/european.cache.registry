@@ -1,4 +1,5 @@
 import requests
+from os import environ
 
 from flask_script.commands import InvalidCommand
 from datetime import datetime, timedelta
@@ -286,8 +287,9 @@ def sync_collections_title():
 def bdr():
     obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES', [])
     for obl in obligations:
-        print("Getting obligation: ", obl)
-        companies = get_old_companies(obl.lower())
-        print(len([parse_company(c, obl) for c in companies]), "values")
+        if obl:
+            print("Getting obligation: ", obl)
+            companies = get_old_companies(obl.lower())
+            print(len([parse_company(c, obl) for c in companies]), "values")
     db.session.commit()
     return True
