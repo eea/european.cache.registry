@@ -27,15 +27,14 @@ from .ods import eea_double_check_ods
 
 
 def get_old_companies(obligation):
-    auth = current_app.config.get('BDR_API_KEY', '')
+    token = current_app.config.get('BDR_API_KEY', '')
     if obligation.lower() == 'fgas':
         obligation = 'fgases'
     url = get_absolute_url('BDR_API_URL',
                            '/company/obligation/{0}/'.format(obligation))
-    params = {'apikey': auth}
+    headers = {'Authorization': token}
     ssl_verify = current_app.config['HTTPS_VERIFY']
-
-    response = requests.get(url, params=params, verify=ssl_verify)
+    response = requests.get(url, headers=headers, verify=ssl_verify)
     if response.status_code in (401, 403):
         raise Unauthorized()
     if response.status_code != 200:
