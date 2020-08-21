@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.13 - (2020-08-21)
+---------------------
+* Switch to header token authorization for fetching BDR API data
+  [dianaboiangiu]
+
 2.0.12 - (2020-07-28)
 --------------------
 * Fix URL to application in email template
