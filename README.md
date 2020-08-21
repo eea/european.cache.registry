@@ -1,5 +1,11 @@
 # European Cache Registry
 
+[![Travis](https://travis-ci.org/eea/european.cache.registry.svg?branch=master)](
+https://travis-ci.org/eea/european.cache.registry)
+[![Coverage](https://coveralls.io/repos/github/eea/european.cache.registry/badge.svg?branch=master)](
+https://coveralls.io/github/eea/european.cache.registry)
+[![Docker](https://img.shields.io/docker/build/eeacms/european.cache.registry)](https://hub.docker.com/r/eeacms/european.cache.registry/builds)
+
 A middleware between FGAS and ODS Registries and BDR.
 
 This application fetches data from FGAS/ODS and BDR, runs a fuzzy matching algorithm
@@ -13,12 +19,6 @@ verified by a authenticated user.
 * A matching **command** is run which creates link objects for matching Undertaking - Company pairs - this command can also be configured to verify all undertakings from a domain or undertakings for which the algorithm cannot find a match.
 * An authenticated user can **verify** the link created by the matching algorithm. If a mistake was made, the link can be unverified.
 * An authenticated user can make a **manual** connection between an Undertaking and a Company, without a prior matching link.
-
-[![Travis](https://travis-ci.org/eea/european.cache.registry.svg?branch=master)](
-https://travis-ci.org/eea/european.cache.registry)
-[![Coverage](https://coveralls.io/repos/github/eea/european.cache.registry/badge.svg?branch=master)](
-https://coveralls.io/github/eea/european.cache.registry)
-[![Docker](https://img.shields.io/docker/build/eeacms/european.cache.registry)](https://hub.docker.com/r/eeacms/european.cache.registry/builds)
 
 ## Prerequisites
 

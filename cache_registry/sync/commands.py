@@ -1,4 +1,5 @@
 import requests
+from os import environ
 
 from flask_script.commands import InvalidCommand
 from datetime import datetime, timedelta
@@ -27,15 +28,14 @@ from .ods import eea_double_check_ods
 
 
 def get_old_companies(obligation):
-    auth = current_app.config.get('BDR_API_KEY', '')
+    token = current_app.config.get('BDR_API_KEY', '')
     if obligation.lower() == 'fgas':
         obligation = 'fgases'
     url = get_absolute_url('BDR_API_URL',
                            '/company/obligation/{0}/'.format(obligation))
-    params = {'apikey': auth}
+    headers = {'Authorization': token}
     ssl_verify = current_app.config['HTTPS_VERIFY']
-
-    response = requests.get(url, params=params, verify=ssl_verify)
+    response = requests.get(url, headers=headers, verify=ssl_verify)
     if response.status_code in (401, 403):
         raise Unauthorized()
     if response.status_code != 200:
@@ -287,8 +287,9 @@ def sync_collections_title():
 def bdr():
     obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES', [])
     for obl in obligations:
-        print("Getting obligation: ", obl)
-        companies = get_old_companies(obl.lower())
-        print(len([parse_company(c, obl) for c in companies]), "values")
+        if obl:
+            print("Getting obligation: ", obl)
+            companies = get_old_companies(obl.lower())
+            print(len([parse_company(c, obl) for c in companies]), "values")
     db.session.commit()
     return True
