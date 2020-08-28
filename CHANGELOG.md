@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.14 - (2020-08-28)
+---------------------
+* Add substance country name to substance
+  [dianaboiangiu]
+
 2.0.13 - (2020-08-21)
 ---------------------
 * Switch to header token authorization for fetching BDR API data
