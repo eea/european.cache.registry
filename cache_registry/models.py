@@ -346,7 +346,7 @@ class Substance(SerializableModel, db.Model):
     lic_use_kind = Column(String(100))
     lic_use_desc = Column(String(100))
     lic_type = Column(String(50))
-    s_organization_country_name = Column(String(100))
+    s_orig_country_name = Column(String(100))
     quantity = Column(Float(7))
     organization_country_name = Column(String(4))
 

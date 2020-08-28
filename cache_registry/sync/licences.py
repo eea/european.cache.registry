@@ -141,7 +141,7 @@ def get_or_create_substance(delivery_licence, licence):
         lic_use_desc=licence_details.lic_use_desc,
         deliverylicence=delivery_licence,
         year=delivery_licence.year,
-        s_organization_country_name=s_country.country_code_alpha2,
+        s_orig_country_name=s_country.country_code_alpha2,
         ).first()
     if not substance:
         substance = Substance(
@@ -151,7 +151,7 @@ def get_or_create_substance(delivery_licence, licence):
             year=delivery_licence.year,
             lic_use_kind=licence_details.lic_use_kind,
             lic_use_desc=licence_details.lic_use_desc,
-            s_organization_country_name=s_country.country_code_alpha2,
+            s_orig_country_name=s_country.country_code_alpha2,
             lic_type=licence_details.lic_type,
             quantity=0,
             )
