@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.15 - (2020-08-28)
+---------------------
+* Fix substance column country name
+  [dianaboiangiu]
+
 2.0.14 - (2020-08-28)
 ---------------------
 * Add substance country name to substance
