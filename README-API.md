@@ -464,7 +464,7 @@ Response example:
     ]
 
 
-/undertaking/[domain>/[pk]/deliveries/[year]/licences - GET
+/undertaking/[domain]/[pk]/deliveries/[year]/licences - GET
 ---------------------------------------------------------------------------
 
 Provies a list with all the licences for one undertaking for a certain year

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from cache_registry.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
-from cache_registry.models import Undertaking, db, OrganizationLog, Country
+from cache_registry.models import Undertaking, db, OrganizationLog, Country, DeliveryLicence
 from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
@@ -230,8 +230,8 @@ def licences(year, page_size=200):
                 substance = get_or_create_substance(delivery_licence, licence)
                 if not substance:
                     substance_name =  "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower())
-                    message = 'Substance {} could not be translated or Country code {} could not be translated.'.format(
-                        substance_name, licence['organizationCountryName'])
+                    message = 'Substance {} could not be translated or Country code {} or Substance country code {} could not be translated.'.format(
+                        substance_name, licence['organizationCountryName'], licence['internationalPartyCountryName'])
                     current_app.logger.error(message)
                     continue
                 licence_object = parse_licence(licence, undertaking.id, substance)
@@ -292,4 +292,16 @@ def bdr():
             companies = get_old_companies(obl.lower())
             print(len([parse_company(c, obl) for c in companies]), "values")
     db.session.commit()
+    return True
+
+
+@sync_manager.command
+
+def remove_all_licences_substances():
+    deliveries = DeliveryLicence.query.all()
+    for delivery in deliveries:
+        delete_all_substances_and_licences(delivery)
+        delivery.updated_since = None
+        db.session.add(delivery)
+        db.session.commit()
     return True

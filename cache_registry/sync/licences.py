@@ -126,8 +126,11 @@ def get_or_create_substance(delivery_licence, licence):
     substance_conversion = SubstanceNameConversion.query.filter_by(ec_substance_name=ec_substance_name).first()
     if not substance_conversion:
         return None
-    country = CountryCodesConversion.query.filter_by(country_name_short_en=licence['organizationCountryName']).first()
+    country = CountryCodesConversion.query.filter(func.lower(CountryCodesConversion.country_name_short_en) == func.lower(licence['organizationCountryName'])).first()
     if not country:
+        return None
+    s_country = CountryCodesConversion.query.filter(func.lower(CountryCodesConversion.country_name_short_en) == func.lower(licence['internationalPartyCountryName'])).first()
+    if not s_country:
         return None
     licence_details = LicenceDetailsConverstion.query.filter_by(
         template_detailed_use_code=licence['templateDetailedUseCode']).first()
@@ -138,6 +141,7 @@ def get_or_create_substance(delivery_licence, licence):
         lic_use_desc=licence_details.lic_use_desc,
         deliverylicence=delivery_licence,
         year=delivery_licence.year,
+        s_organization_country_name=s_country.country_code_alpha2,
         ).first()
     if not substance:
         substance = Substance(
@@ -147,6 +151,7 @@ def get_or_create_substance(delivery_licence, licence):
             year=delivery_licence.year,
             lic_use_kind=licence_details.lic_use_kind,
             lic_use_desc=licence_details.lic_use_desc,
+            s_organization_country_name=s_country.country_code_alpha2,
             lic_type=licence_details.lic_type,
             quantity=0,
             )
