@@ -65,7 +65,8 @@ def test_get_or_create_substance(client):
         "chemicalName": "Substance",
         "mixtureNatureType": "virgin",
         "templateDetailedUseCode": "code.for.use",
-        "organizationCountryName": "USA"
+        "organizationCountryName": "USA",
+        "internationalPartyCountryName": "USA",
     }
 
     substance = get_or_create_substance(delivery_licence, licence)
@@ -74,3 +75,4 @@ def test_get_or_create_substance(client):
     assert substance.lic_type == 'export'
     assert substance.substance == 'Substance (virgin)'
     assert substance.organization_country_name == 'US'
+    assert substance.s_organization_country_name == 'US'
