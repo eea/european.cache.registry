@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.16 - (2020-12-16)
+---------------------
+* Add stocks
+  [dianaboiangiu]
+
 2.0.15 - (2020-08-28)
 ---------------------
 * Fix substance column country name
