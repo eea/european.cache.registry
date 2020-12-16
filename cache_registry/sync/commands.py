@@ -1,4 +1,5 @@
 import requests
+import json
 from os import environ
 
 from flask_script.commands import InvalidCommand
@@ -7,7 +8,7 @@ from datetime import datetime, timedelta
 from cache_registry.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
-from cache_registry.models import Undertaking, db, OrganizationLog, Country, DeliveryLicence
+from cache_registry.models import Undertaking, db, OrganizationLog, Country, DeliveryLicence, Stock, OldCompany
 from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
@@ -305,3 +306,61 @@ def remove_all_licences_substances():
         db.session.add(delivery)
         db.session.commit()
     return True
+
+@sync_manager.command
+@sync_manager.option('-f', '--file', dest='file',
+                     help="Json file with stocks")
+def import_stocks_json(file):
+    with open(file) as f:
+        json_data = f.read()
+        data = json.loads(json_data)
+
+    for stock in data:
+        code = stock['code']
+        from sqlalchemy import or_
+        try:
+            int(code)
+            undertaking = Undertaking.query.filter_by(external_id=code).first()
+        except:
+            undertaking = Undertaking.query.filter_by(oldcompany_account=code).first()
+        if not undertaking:
+            print('Stock {} - {} - {} was not imported as undertaking does not exist.'.format(
+                stock['year'], stock['substance_name_form'], stock['code']))
+            continue
+        stock_object = Stock.query.filter_by(
+            year=stock['year'],
+            substance_name_form=stock['substance_name_form'],
+            code=stock['code']
+        ).first()
+        if not stock_object:
+            stock_object = Stock(
+                year=stock['year'],
+                substance_name_form=stock['substance_name_form'],
+                code=stock['code'],
+                is_virgin=bool(stock['is_virgin']),
+                result=stock['result'],
+                type=stock['type'],
+                undertaking=undertaking
+            )
+            db.session.add(stock_object)
+            db.session.commit()
+        else:
+            stock_object.is_virgin = bool(stock['is_virgin'])
+            stock_object.result = stock['result']
+            stock_object.type = stock['type']
+            db.session.add(stock_object)
+            db.session.commit()
+
+@sync_manager.command
+@sync_manager.option('-f', '--file', dest='file',
+                     help="Json file with stocks")
+def import_oldcompany(file):
+    import csv
+    with open(file, newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in spamreader:
+            undertaking = Undertaking.query.filter_by(external_id=row[1]).first()
+            if undertaking:
+                undertaking.oldcompany_account = row[0]
+                db.session.add(undertaking)
+                db.session.commit()

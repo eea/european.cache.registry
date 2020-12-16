@@ -6,6 +6,7 @@ from .candidate import *
 from .commands import *
 from .licence import *
 from .old_company import *
+from .stocks import *
 from .undertaking import *
 from .user import *
 
@@ -85,6 +86,24 @@ register_url(prefix=licence_prefix, name=licence_name,
              view=SubstancesOfOneDeliveryListView,
              view_name='substances_per_delivery')
 
+# Stock
+stock_prefix = '/stocks'
+stock_name = 'stock'
+register_url(prefix=stock_prefix, name=stock_name,
+             url='', view=StockListing,
+             view_name='stock_listing')
+
+register_url(prefix=stock_prefix, name=stock_name,
+             url='/<external_id>', view=StocksUndertakingListView,
+             view_name='undertaking_stocks')
+
+register_url(prefix=stock_prefix, name=stock_name,
+             url='/years/<year>', view=StocksYearListView,
+             view_name='year_stocks')
+
+register_url(prefix=stock_prefix, name=stock_name,
+            url='/import', view=LoadStocksJson,
+            view_name='import_stocks')
 # User
 
 user_prefix = '/user'
