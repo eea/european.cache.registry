@@ -25,9 +25,7 @@ class StocksUndertakingListView(ApiView):
         return data
 
     def post(self, **kwargs):
-        code = kwargs['external_id']
-        external_id = code.replace('ods', '')
-        undertaking = Undertaking.query.filter_by(external_id=external_id, domain='ODS').first_or_404()
+        undertaking = Undertaking.query.filter_by(external_id=kwargs['external_id'], domain='ODS').first_or_404()
         years = [stock.year for stock in Stock.query.filter_by(undertaking=undertaking).distinct(Stock.year).all()]
         context = {}
         context[code] = {}
@@ -89,7 +87,7 @@ class LoadStocksJson(ApiView):
             stock_object = Stock.query.filter_by(
                 year=stock['year'],
                 substance_name_form=stock['substance_name_form'],
-                code=str(stock['company_id']),
+                undertaking_id=stock['company_id'],
                 type=stock['type']).first()
             if not stock_object:
                 undertaking = Undertaking.query.filter_by(external_id=stock['company_id'], domain='ODS').first()
@@ -107,6 +105,7 @@ class LoadStocksJson(ApiView):
                     result=stock['result'],
                     is_virgin=stock['is_virgin'],
                     undertaking=undertaking,
+                    undertaking_id=undertaking.id,
                 )
                 db.session.add(stock_object)
                 db.session.commit()
