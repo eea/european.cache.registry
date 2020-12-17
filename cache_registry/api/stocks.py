@@ -87,7 +87,10 @@ class LoadStocksJson(ApiView):
         data = json.loads(json_data)
         for stock in data:
             stock_object = Stock.query.filter_by(
-                year=stock['year'], substance_name_form=stock['substance_name_form'], code=str(stock['company_id'])).first()
+                year=stock['year'],
+                substance_name_form=stock['substance_name_form'],
+                code=str(stock['company_id']),
+                type=stock['type']).first()
             if not stock_object:
                 undertaking = Undertaking.query.filter_by(external_id=stock['company_id'], domain='ODS').first()
                 if not undertaking:
@@ -98,6 +101,7 @@ class LoadStocksJson(ApiView):
                     continue
                 stock_object = Stock(
                     year=stock['year'],
+                    type=stock['type'],
                     substance_name_form=stock['substance_name_form'],
                     code=str(stock['company_id']),
                     result=stock['result'],
