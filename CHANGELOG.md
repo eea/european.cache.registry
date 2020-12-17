@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.19 - (2020-12-17)
+---------------------
+* Add fixes to stocks
+  [dianaboiangiu]
+
 2.0.18 - (2020-12-17)
 ---------------------
 * Add type primary key to stock
