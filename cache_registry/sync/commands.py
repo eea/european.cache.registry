@@ -330,7 +330,8 @@ def import_stocks_json(file):
         stock_object = Stock.query.filter_by(
             year=stock['year'],
             substance_name_form=stock['substance_name_form'],
-            code=stock['code']
+            code=stock['code'],
+            type=stock['type'],
         ).first()
         if not stock_object:
             stock_object = Stock(
