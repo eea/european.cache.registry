@@ -25,12 +25,13 @@ class StocksUndertakingListView(ApiView):
         return data
 
     def post(self, **kwargs):
-        undertaking = Undertaking.query.filter_by(external_id=kwargs['external_id'], domain='ODS').first_or_404()
+        external_id = kwargs['external_id']
+        undertaking = Undertaking.query.filter_by(external_id=external_id, domain='ODS').first_or_404()
         years = [stock.year for stock in Stock.query.filter_by(undertaking=undertaking).distinct(Stock.year).all()]
         context = {}
-        context[code] = {}
+        context[external_id] = {}
         for year in years:
-            context[code][year] = [self.serialize(u) for u in undertaking.stocks.filter_by(year=year).all()]
+            context[external_id][year] = [self.serialize(u) for u in undertaking.stocks.filter_by(year=year).all()]
         return context
 
 
