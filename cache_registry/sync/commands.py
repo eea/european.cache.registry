@@ -324,8 +324,8 @@ def import_stocks_json(file):
         except:
             undertaking = Undertaking.query.filter_by(oldcompany_account=code).first()
         if not undertaking:
-            print('Stock {} - {} - {} was not imported as undertaking does not exist.'.format(
-                stock['year'], stock['substance_name_form'], stock['code']))
+            print('Stock {} - {} - {} - {} was not imported as undertaking does not exist.'.format(
+                stock['year'], stock['substance_name_form'], stock['code'], stock['type']))
             continue
         stock_object = Stock.query.filter_by(
             year=stock['year'],

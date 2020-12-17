@@ -15,7 +15,7 @@ def upgrade():
     sa.Column('result', sa.Integer(), nullable=True),
     sa.Column('undertaking_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['undertaking_id'], ['undertaking.id'], ),
-    sa.PrimaryKeyConstraint('year', 'substance_name_form', 'code')
+    sa.PrimaryKeyConstraint('year', 'substance_name_form', 'code', 'type')
     )
 
 def downgrade():

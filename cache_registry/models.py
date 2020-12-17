@@ -211,7 +211,7 @@ class Undertaking(SerializableModel, db.Model):
 
 class Stock(SerializableModel, db.Model):
     year = Column(Integer, primary_key=True)
-    type = Column(String(255))
+    type = Column(String(255), primary_key=True)
     substance_name_form = Column(String(255), primary_key=True)
     is_virgin = Column(Boolean)
     code = Column(String(50), primary_key=True)
