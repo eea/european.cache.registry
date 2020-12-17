@@ -84,19 +84,19 @@ class LoadStocksJson(ApiView):
         json_data = file.read()
         data = json.loads(json_data)
         for stock in data:
+            undertaking = Undertaking.query.filter_by(external_id=stock['company_id'], domain='ODS').first()
+            if not undertaking:
+                context['message'] = "\n".join(
+                    [context['message'],
+                    "Company {} does not exist.".format(stock['company_id'])]
+                )
+                continue
             stock_object = Stock.query.filter_by(
                 year=stock['year'],
                 substance_name_form=stock['substance_name_form'],
-                undertaking_id=stock['company_id'],
+                undertaking_id=undertaking.id,
                 type=stock['type']).first()
             if not stock_object:
-                undertaking = Undertaking.query.filter_by(external_id=stock['company_id'], domain='ODS').first()
-                if not undertaking:
-                    context['message'] = "\n".join(
-                        [context['message'],
-                        "Company {} does not exist.".format(stock['company_id'])]
-                    )
-                    continue
                 stock_object = Stock(
                     year=stock['year'],
                     type=stock['type'],
