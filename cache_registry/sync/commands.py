@@ -341,6 +341,7 @@ def import_stocks_json(file):
                 is_virgin=bool(stock['is_virgin']),
                 result=stock['result'],
                 type=stock['type'],
+                undertaking_id=undertaking.id,
                 undertaking=undertaking
             )
             db.session.add(stock_object)
