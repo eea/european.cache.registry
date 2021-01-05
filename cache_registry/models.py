@@ -193,6 +193,9 @@ class Undertaking(SerializableModel, db.Model):
 
     def get_country_code(self):
         if (self.address and self.address.country and
+            self.address.country.type == 'AMBIGUOUS_TYPE'):
+                return self.address.country.code
+        if (self.address and self.address.country and
                 self.address.country.type == 'EU_TYPE'):
             return self.address.country.code
         elif (self.represent and self.represent.address and
