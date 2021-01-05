@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.20 - (2021-01-05)
+---------------------
+* Fix display for UK GB companies
+  [dianaboiangiu]
+
 2.0.19 - (2020-12-17)
 ---------------------
 * Add fixes to stocks
