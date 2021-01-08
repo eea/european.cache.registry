@@ -148,6 +148,11 @@ class Undertaking(SerializableModel, db.Model):
     status = Column(String(64))
     country_code = Column(String(10), default="")
     country_code_orig = Column(String(10), default="")
+    country_history = relationship(
+        'Country',
+        secondary='undertaking_country_history',
+        backref=db.backref('undertakings', lazy='dynamic')
+    )
     # Undertaking:
     undertaking_type = Column(String(32), default='FGASUndertaking')
     vat = Column(String(255))
@@ -287,6 +292,16 @@ class UndertakingRepresentHistory(SerializableModel, db.Model):
     undertaking = relationship('Undertaking', cascade="all",
                                backref=db.backref('represent_history_link'))
     represent = relationship('EuLegalRepresentativeCompany', cascade="all")
+
+class UndertakingCountryHistory(SerializableModel, db.Model):
+    __tablename__ = 'undertaking_country_history'
+
+    undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
+    country_id = Column(ForeignKey('country.id'),
+                                primary_key=True)
+    undertaking = relationship('Undertaking', cascade="all",
+                               backref=db.backref('undertaking_country_history_link'))
+    country = relationship('Country', cascade="all")
 
 
 class OrganizationLog(SerializableModel, db.Model):

@@ -3,7 +3,7 @@ import pprint
 
 from flask_script import Manager
 
-from cache_registry.models import db, User, Undertaking
+from cache_registry.models import Country, db, User, Undertaking
 from cache_registry.sync.bdr import call_bdr
 from cache_registry.sync.fgases import eea_double_check_fgases
 from cache_registry.sync.ods import eea_double_check_ods
@@ -78,3 +78,12 @@ def check_passed():
         db.session.commit()
         if check_passed == False and undertaking.check_passed == True:
             call_bdr(undertaking, undertaking.oldcompany_account)
+
+@utils_manager.command
+def set_ni_previous_reporting_folder():
+    country = Country.query.filter_by(code='UK')[0]
+    undertakings = Undertaking.query.filter_by(country_code='UK_NI')
+    for undertaking in undertakings:
+        undertaking.country_history.append(country)
+        db.session.add(undertaking)
+        db.session.commit()

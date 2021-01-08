@@ -1,5 +1,5 @@
-revision = '32903473e4ba'
-down_revision = '576264dfff3f'
+revision = '0012'
+down_revision = '0011'
 
 from alembic import op
 

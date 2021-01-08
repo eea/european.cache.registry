@@ -1,5 +1,5 @@
-revision = '2272bad32576'
-down_revision = '3ff1a3f68171'
+revision = '0006'
+down_revision = '0005'
 
 from alembic import op
 import sqlalchemy as sa

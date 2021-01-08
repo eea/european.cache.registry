@@ -1,5 +1,5 @@
-revision = '100ea8b4b4e3'
-down_revision = '3b6b91477843'
+revision = '0018'
+down_revision = '0017'
 
 """
  This migration takes data from undertaking types field which right now look

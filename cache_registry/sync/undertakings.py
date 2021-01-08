@@ -109,6 +109,8 @@ def update_undertaking(data, check_passed=True):
         db.session.add(addr)
         undertaking.address = addr
     else:
+        if undertaking.address.country.code != address['country'].code:
+            undertaking.country_history.append(undertaking.address.country)
         parsers.update_obj(undertaking.address, address)
     db.session.add(undertaking)
     UndertakingBusinessProfile.query.filter_by(undertaking=undertaking).delete()

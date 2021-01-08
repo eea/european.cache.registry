@@ -41,6 +41,7 @@ class UndertakingListView(ListView):
             'address': AddressDetail.serialize(obj.address),
             'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
             'types': ",".join([type.type for type in obj.types]),
+            'country_history': [country_hist.code for country_hist in obj.country_history],
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'represent_history': [
@@ -166,6 +167,7 @@ class UndertakingDetailView(DetailView):
                 [businessprofile.highleveluses for
                  businessprofile in obj.businessprofiles]
             ),
+            'country_history': [country_hist.code for country_hist in obj.country_history],
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'represent_history': [

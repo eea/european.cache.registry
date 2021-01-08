@@ -63,7 +63,7 @@ def eea_double_check_ods(data):
             current_app.logger.warning(message + identifier)
             ok = False
 
-    if country['type'] != 'EU_TYPE':
+    if country['type'] not in ['EU_TYPE', 'AMBIGUOUS_TYPE']:
         message = "Organisation country type is not EU_TYPE."
         current_app.logger.warning(message + identifier)
         ok = False
