@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0.21 - (2021-01-08)
+---------------------
+* Split UK into separate entities for ODS
+* Split UK into two separate for FGAS
+* Rearange migrations
+  [dianaboiangiu]
+
 2.0.20 - (2021-01-05)
 ---------------------
 * Fix display for UK GB companies
