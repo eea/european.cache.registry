@@ -27,7 +27,7 @@ def eea_double_check_fgases(data):
     country_type = data['address']['country']['type']
     has_eu_legal_rep = data.get('euLegalRepresentativeCompany')
 
-    if all([country_type == 'NONEU_TYPE', not has_eu_legal_rep]):
+    if all([country_type =='NONEU_TYPE' or country_type=='AMBIGUOUS_TYPE', not has_eu_legal_rep]):
         message = 'NONEU_TYPE Companies must have a representative.'
         current_app.logger.warning(message + identifier)
         ok = False
