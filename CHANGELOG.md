@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.22 - (2021-01-11)
+---------------------
+* Add country history to user companies
+  [dianaboiangiu]
+
 2.0.21 - (2021-01-08)
 ---------------------
 * Split UK into separate entities for ODS
