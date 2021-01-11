@@ -35,6 +35,7 @@ class UserCompaniesView(DetailView):
                 'name': company.name,
                 'domain': company.domain,
                 'country': company.country_code,
+                'country_history': [country_hist.code for country_hist in company.country_history],
                 'representative_country': None if not company.represent else
                 company.represent.address.country.code,
                 'represent_history': [
