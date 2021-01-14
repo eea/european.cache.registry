@@ -2,6 +2,7 @@
 from functools import reduce
 import json
 
+from flask import current_app
 from flask import request
 
 from cache_registry.api.views import ListView, ApiView
@@ -16,7 +17,7 @@ class SubstanceYearListView(ApiView):
 
     def get_queryset(self, domain, pk, year, **kwargs):
         undertaking = Undertaking.query.filter_by(domain=domain, external_id=pk).first_or_404()
-        substances = undertaking.deliveries.filter_by(year=year).first_or_404()
+        substances = undertaking.deliveries.filter_by(year=year).first()
         if not substances:
             return []
         substances = substances.substances
@@ -49,8 +50,20 @@ class SubstanceYearListView(ApiView):
         data['quantity'] = int(data['quantity'])
         return data
 
+    def patch_licences(self, **kwargs):
+        data = []
+        year = int(kwargs['year'])
+        pk = int(kwargs['pk'])
+        patch = current_app.config.get('PATCH_LICENCES', [])
+        for element in patch:
+            if element.get('year') == year and element.get('company_id') == pk:
+                data.append(element)
+        return data
+
     def post(self, **kwargs):
-        return {"licences": [self.serialize(u) for u in self.get_queryset(**kwargs)]}
+        data = [self.serialize(u) for u in self.get_queryset(**kwargs)]
+        data.extend(self.patch_licences(**kwargs))
+        return {"licences": data}
 
 
 class LicencesOfOneDeliveryListView(ListView):

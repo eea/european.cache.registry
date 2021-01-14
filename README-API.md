@@ -27,6 +27,13 @@ Overview
 * `/undertaking/[domain]/[company_id]/deliveries/[year]/licences` - all licences for one undertaking for a certain year
 * `/undertaking/[domain]/[company_id]/deliveries/[year]/substances` - all substances for one undertaking for a certain year
 
+**Stocks calls**
+
+* `/stocks` - all stocks in the database
+* `/stocks/[company_id]` - all stocks for one company per years
+* `/stocks/years/[years]` - all stocks for one selected year
+* `/stocks/import` - import new stocks
+
 **User calls:**
 
 * `/user/list` - all users
@@ -122,6 +129,7 @@ Returns the list of all verified undertakings in the system, as fetched from dom
             "number": "nrstreet--7954",
             "street": "street--7954"
         },
+        "country_history": [],
         "represent_history": [
           {
           "name": "EULEGALNAME44 OLD",
@@ -353,6 +361,7 @@ Returns an undertakings details from the system, as fetched from domain registry
           "street": "street--7954"
         }
       },
+      "country_history": [],
       "represent_history": [
           {
           "name": "EULEGALNAME44 OLD",
@@ -545,7 +554,64 @@ Provies a list with all the substances for one undertaking for a certain year
     }
   ]
 
+Stocks calls
+============
 
+/stocks - GET
+--------------
+
+This url is used to retrive all the stocks in the database:
+
+Response example:
+
+    [
+        {
+          "year": 2019,
+          "type": "fr",
+          "substance_name_form": "cfd",
+          "is_virgin": true,
+          "code": "12412",
+          "result": 1234,
+          "company_id": 12412,
+          "company_name": "NMORGANIZATION--12412"
+        },
+        {
+          "year": 2019,
+          "type": "fr",
+          "substance_name_form": "cdf",
+          "is_virgin": true,
+          "code": "43523",
+          "result": 54354,
+          "company_id": 1243,
+          "company_name": "NMORGANIZATION--43523"
+        }
+    ]
+
+/stocks/years/2019 - GET
+
+[
+  {
+    "type": "cb",
+    "substance_name_form": "Cdf",
+    "is_virgin": true,
+    "code": "ods12345",
+    "result": 12345
+  },
+  {
+    "type": "d",
+    "substance_name_form": "Cdf",
+    "is_virgin": true,
+    "code": "ods12345",
+    "result": 12345
+  },
+]
+
+/stocks/12345 - POST
+{
+  "12345": {
+    "2019":
+  }
+}
 User calls
 ==========
 
@@ -580,6 +646,7 @@ Returns the list of undertakings for a user given by its unique username.
         "company_id": 10085,
         "name": "FGAS-NMORGANIZATION--10085",
         "respresentative_country": "DE",
+        "country_history": [],
         "represent_history": [
           {
           "name": "EULEGALNAME44 OLD",

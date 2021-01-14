@@ -148,6 +148,10 @@ containing values to be updated. Use the company external id as a key.
 For patching user access, set `PATCH_USERS` to a list of users to be added to
 a company. Use the company external id as a key.
 
+For patching licences, set `PATCH_LICENCES` to a list of licences to be added to
+a licences/aggregated endpoint. Only the data for the company_id and the given year will
+be patched.
+
 ## Syncronise with Licence Portal
 
 * The licences for ODS are now taken from DG Clima and exposed:
