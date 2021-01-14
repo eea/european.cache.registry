@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.23 - (2021-01-14)
+---------------------
+* Add patching for licences aggregated endpoint
+  [dianaboiangiu]
+
 2.0.22 - (2021-01-11)
 ---------------------
 * Add country history to user companies
