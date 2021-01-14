@@ -87,3 +87,10 @@ def set_ni_previous_reporting_folder():
         undertaking.country_history.append(country)
         db.session.add(undertaking)
         db.session.commit()
+
+@utils_manager.command
+def call_bdr_ni():
+    country = Country.query.filter_by(code='UK')[0]
+    undertakings = Undertaking.query.filter_by(country_code='UK_NI')
+    for undertaking in undertakings:
+        call_bdr(undertaking)
