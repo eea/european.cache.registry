@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.24 - (2021-01-18)
+---------------------
+* Add command for creating collection for NI companies
+  [dianaboiangiu]
+
 2.0.23 - (2021-01-14)
 ---------------------
 * Add patching for licences aggregated endpoint
