@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.25 - (2021-01-19)
+---------------------
+* Fix UK repr in FGAS check
+  [dianaboiangiu]
+
 2.0.24 - (2021-01-18)
 ---------------------
 * Add command for creating collection for NI companies
