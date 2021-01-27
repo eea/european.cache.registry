@@ -85,3 +85,27 @@ class SubstancesOfOneDeliveryListView(ListView):
         delivery = undertaking.deliveries.filter_by(year=year).first_or_404()
         substances = delivery.substances.all()
         return substances
+
+
+class ProcessAgentUseView(ApiView):
+
+    @classmethod
+    def serialize(cls, obj, **kwargs):
+        data = ApiView.serialize(obj)
+        _strip_fields = (
+            'undertaking_id',
+        )
+        for field in _strip_fields:
+            data.pop(field)
+        return data
+
+    def get_queryset(self, domain, pk, year, **kwargs):
+        undertaking = Undertaking.query.filter_by(domain=domain, external_id=pk).first_or_404()
+        paus = undertaking.processagentuses.filter_by(year=year)
+        if not paus:
+            return []
+        return paus
+
+    def post(self, **kwargs):
+        data = [self.serialize(u) for u in self.get_queryset(**kwargs)]
+        return {"process_agent_uses": data}

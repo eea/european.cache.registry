@@ -86,6 +86,11 @@ register_url(prefix=licence_prefix, name=licence_name,
              view=SubstancesOfOneDeliveryListView,
              view_name='substances_per_delivery')
 
+register_url(prefix=licence_prefix, name='pau',
+            url='/<year>/pau',
+            view=ProcessAgentUseView,
+            view_name='process_agent_use')
+
 # Stock
 stock_prefix = '/stocks'
 stock_name = 'stock'

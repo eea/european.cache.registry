@@ -1,9 +1,11 @@
 import collections
+import json
 import pprint
 
 from flask_script import Manager
+from flask import current_app
 
-from cache_registry.models import Country, db, User, Undertaking
+from cache_registry.models import Country, db, User, Undertaking, ProcessAgentUse
 from cache_registry.sync.bdr import call_bdr
 from cache_registry.sync.fgases import eea_double_check_fgases
 from cache_registry.sync.ods import eea_double_check_ods
@@ -94,3 +96,34 @@ def call_bdr_ni():
     undertakings = Undertaking.query.filter_by(country_code='UK_NI')
     for undertaking in undertakings:
         call_bdr(undertaking)
+
+
+@utils_manager.command
+@utils_manager.option('-f', '--file', dest='file',
+                     help="file_path")
+def import_pau(file=None):
+    import csv
+
+    with open(file) as f:
+        count = 0
+        for row in csv.reader(f, delimiter=','):
+            if count == 0:
+                count = 1
+                continue
+            undertaking = Undertaking.query.filter_by(external_id=row[0]).first()
+            if not undertaking:
+                current_app.logger.warning("{} company does not exists".format(row[0]))
+                continue
+            process_agent_use = ProcessAgentUse(
+                type = row[1],
+                substance = row[4],
+                member_state = row[3],
+                pau_use = row[5],
+                value = row[6],
+                process_name = row[7],
+                year = row[8],
+                undertaking_id = undertaking.id,
+                undertaking = undertaking,
+            )
+            db.session.add(process_agent_use)
+            db.session.commit()
