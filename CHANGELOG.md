@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.26 - (2021-01-29)
+---------------------
+* Modify aggregation for licences
+  [dianaboiangiu]
+
 2.0.25 - (2021-01-19)
 ---------------------
 * Fix UK repr in FGAS check
