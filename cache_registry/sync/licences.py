@@ -3,6 +3,7 @@ import requests
 
 from datetime import datetime, date
 from flask import current_app
+from math import ceil
 from sqlalchemy import func
 
 from .auth import get_auth
@@ -18,10 +19,21 @@ from cache_registry.models import (
     db,
 )
 
+CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION = {
+    "Release for free circulation": "free circulation",
+    "Release for free circulation - VAT exempt": "free circulation",
+    "Re-import - with release for free circulation": "free circulation",
+    "Re-export": "re-export",
+    "Transit - non-community goods": "transit",
+    "Release for free circulation - redispatched": "free circulation",
+    "Inward processing - suspension system": "",
+    "Inward processing - drawback procedure": "",
+}
+
 def delete_all_substances_and_licences(delivery_licence):
-    substances = Substance.query.filter_by(deliverylicence=delivery_licence)
-    substances.delete()
-    db.session.commit()
+    substances = Substance.query.filter_by(deliverylicence=delivery_licence).all()
+    for substance in substances:
+        db.session.delete(substance)
 
 def get_or_create_delivery(year, undertaking):
     delivery = DeliveryLicence.query.filter_by(year=year, undertaking=undertaking).first()
@@ -108,17 +120,22 @@ def parse_licence(licence, undertaking_id, substance):
         'year': substance.year,
         'updated_since': licence['licenceUpdateDate'],
     }
-    licence_object = db.session.query(Licence).filter_by(licence_id=licence['licence_id'],year=substance.year)
+    licence_object = db.session.query(Licence).filter_by(licence_id=licence['licence_id'],year=substance.year,
+                                                         chemical_name=licence['chemical_name'])
     if licence_object.first():
         licence_object.update(licence)
+        licence_object.first().substance = substance
+        db.session.add(licence_object.first())
     else:
-        licence_object = Licence(**licence)
+        licence_object = Licence(**licence, substance=substance)
         db.session.add(licence_object)
     db.session.commit()
 
     return licence_object
 
 def get_or_create_substance(delivery_licence, licence):
+    if licence['licenceState'].lower() not in ['expired', 'closed']:
+        return None
     if licence['mixtureNatureType'].lower() != 'virgin':
         ec_substance_name = "{} (non-virgin)".format(licence['chemicalName'])
     else:
@@ -135,6 +152,7 @@ def get_or_create_substance(delivery_licence, licence):
     licence_details = LicenceDetailsConverstion.query.filter_by(
         template_detailed_use_code=licence['templateDetailedUseCode']).first()
 
+    lic_use_kind = CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION.get(licence['customProcedureName'], '')
     substance = Substance.query.filter_by(
         substance=substance_conversion.corrected_name,
         organization_country_name=country.country_code_alpha2,
@@ -149,7 +167,7 @@ def get_or_create_substance(delivery_licence, licence):
             deliverylicence=delivery_licence,
             organization_country_name=country.country_code_alpha2,
             year=delivery_licence.year,
-            lic_use_kind=licence_details.lic_use_kind,
+            lic_use_kind=lic_use_kind,
             lic_use_desc=licence_details.lic_use_desc,
             s_orig_country_name=s_country.country_code_alpha2,
             lic_type=licence_details.lic_type,
@@ -164,6 +182,7 @@ def aggregate_licence_to_substance(delivery_licence, year):
     substances = Substance.query.filter_by(year=year, deliverylicence=delivery_licence)
     for substance in substances:
         substance.quantity = sum([licence.net_mass for licence in substance.licences.all()])
+        substance.quantity = int(ceil(substance.quantity))
         db.session.add(substance)
         db.session.commit()
 

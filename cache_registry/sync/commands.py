@@ -231,7 +231,8 @@ def licences(year, page_size=200):
                 substance = get_or_create_substance(delivery_licence, licence)
                 if not substance:
                     substance_name =  "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower())
-                    message = 'Substance {} could not be translated or Country code {} or Substance country code {} could not be translated.'.format(
+                    message = 'Substance {} could not be translated or Country code {} or Substance country code {} \
+                               could not be translated or licence does not have an approved state.'.format(
                         substance_name, licence['organizationCountryName'], licence['internationalPartyCountryName'])
                     current_app.logger.error(message)
                     continue
@@ -297,9 +298,13 @@ def bdr():
 
 
 @sync_manager.command
+@sync_manager.option('-y', '--year', dest='year')
 
-def remove_all_licences_substances():
-    deliveries = DeliveryLicence.query.all()
+def remove_all_licences_substances(year=None):
+    if year:
+        deliveries = DeliveryLicence.query.filter_by(year=year)
+    else:
+        deliveries = DeliveryLicence.query.all()
     for delivery in deliveries:
         delete_all_substances_and_licences(delivery)
         delivery.updated_since = None
