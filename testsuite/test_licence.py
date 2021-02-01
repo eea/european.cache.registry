@@ -61,7 +61,7 @@ def test_substance_year_list_view_filter_types(client):
 def test_substance_of_one_delivery_list_view(client):
     undertaking = factories.UndertakingFactory(domain='ODS')
     deliverylicence = factories.DeliveryLicenceFactory(undertaking=undertaking, year=2019)
-    substance = factories.SubstanceFactory(deliverylicence=deliverylicence, substance='Substance name 2', quantity=0.5)
+    substance = factories.SubstanceFactory(deliverylicence=deliverylicence, substance='Substance name 2', quantity=1)
     substance = factories.SubstanceFactory()
 
     resp = client.get(url_for('api.licence-substances_per_delivery', domain='ODS', pk=undertaking.external_id,
@@ -70,7 +70,7 @@ def test_substance_of_one_delivery_list_view(client):
 
     assert len(data) == 1
     assert data[0]['substance'] == 'Substance name 2'
-    assert data[0]['quantity'] == 0.5
+    assert data[0]['quantity'] == 1
 
 
 def test_licences_of_one_delivery_list_view(client):

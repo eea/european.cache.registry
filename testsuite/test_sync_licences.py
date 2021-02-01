@@ -39,7 +39,7 @@ def test_aggregate_licence_to_substance(client):
 
     aggregate_licence_to_substance(delivery_object, 2019)
 
-    assert round(substance.quantity, 1) == 1.2
+    assert round(substance.quantity, 1) == 2
 
 
 def test_get_or_create_substance(client):
@@ -63,6 +63,8 @@ def test_get_or_create_substance(client):
 
     licence = {
         "chemicalName": "Substance",
+        "licenceState": "EXPIRED",
+        "customProcedureName": "Re-export",
         "mixtureNatureType": "virgin",
         "templateDetailedUseCode": "code.for.use",
         "organizationCountryName": "USA",
@@ -70,7 +72,7 @@ def test_get_or_create_substance(client):
     }
 
     substance = get_or_create_substance(delivery_licence, licence)
-    assert substance.lic_use_kind == 'kind'
+    assert substance.lic_use_kind == 're-export'
     assert substance.lic_use_desc == 'desc'
     assert substance.lic_type == 'export'
     assert substance.substance == 'Substance (virgin)'
