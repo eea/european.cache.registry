@@ -2102,5 +2102,13 @@
             "country_name_short_en": "Great Britain",
             "country_code_alpha2": "GB"
         }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 264,
+            "country_name_short_en": "Northern Ireland",
+            "country_code_alpha2": "NI"
+        }
     }
 ]

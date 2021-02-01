@@ -388,7 +388,7 @@ class Substance(SerializableModel, db.Model):
     lic_use_desc = Column(String(100))
     lic_type = Column(String(50))
     s_orig_country_name = Column(String(100))
-    quantity = Column(Float(7))
+    quantity = Column(Integer)
     organization_country_name = Column(String(4))
 
     date_created = Column(Date, server_default=db.func.now())

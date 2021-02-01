@@ -181,8 +181,8 @@ def get_or_create_substance(delivery_licence, licence):
 def aggregate_licence_to_substance(delivery_licence, year):
     substances = Substance.query.filter_by(year=year, deliverylicence=delivery_licence)
     for substance in substances:
-        substance.quantity = sum([licence.net_mass for licence in substance.licences.all()])
-        substance.quantity = int(ceil(substance.quantity))
+        quantity = sum([licence.net_mass for licence in substance.licences.all()])
+        substance.quantity = int(ceil(quantity))
         db.session.add(substance)
         db.session.commit()
 
