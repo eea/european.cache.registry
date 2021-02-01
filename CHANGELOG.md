@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.27 - (2021-02-01)
+---------------------
+* Fix substances quantity integer on aggregation
+  [dianaboiangiu]
+
 2.0.26 - (2021-01-29)
 ---------------------
 * Modify aggregation for licences
