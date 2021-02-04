@@ -159,6 +159,7 @@ def get_or_create_substance(delivery_licence, licence):
         lic_use_desc=licence_details.lic_use_desc,
         deliverylicence=delivery_licence,
         year=delivery_licence.year,
+        lic_type=licence_details.lic_type,
         s_orig_country_name=s_country.country_code_alpha2,
         ).first()
     if not substance:

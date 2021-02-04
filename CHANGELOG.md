@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.28 - (2021-02-04)
+---------------------
+* Fix import/export quantities  on licences aggregation
+  [dianaboiangiu]
+
 2.0.27 - (2021-02-01)
 ---------------------
 * Fix substances quantity integer on aggregation
