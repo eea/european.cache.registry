@@ -1690,6 +1690,14 @@
     {
         "model":"SubstanceNameConversion",
         "fields": {
+            "id": 231,
+            "ec_substance_name": "1,1,1-trichloroethane (non-virgin)",
+            "corrected_name": "TCA (non-virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
             "id": 212,
             "ec_substance_name": "HCFC-244bb (virgin)",
             "corrected_name": "HCFC-244 (virgin)"
