@@ -4,7 +4,8 @@
 https://travis-ci.org/eea/european.cache.registry)
 [![Coverage](https://coveralls.io/repos/github/eea/european.cache.registry/badge.svg?branch=master)](
 https://coveralls.io/github/eea/european.cache.registry)
-[![Docker](https://img.shields.io/docker/build/eeacms/european.cache.registry)](https://hub.docker.com/r/eeacms/european.cache.registry/builds)
+[![Docker build](https://img.shields.io/docker/automated/eeacms/european.cache.registry)](https://hub.docker.com/r/eeacms/european.cache.registry)
+[![Docker latest version](https://img.shields.io/docker/v/eeacms/european.cache.registry)]()
 
 A middleware between FGAS and ODS Registries and BDR.
 
