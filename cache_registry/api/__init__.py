@@ -87,7 +87,7 @@ register_url(prefix=licence_prefix, name=licence_name,
              view_name='substances_per_delivery')
 
 register_url(prefix=licence_prefix, name='pau',
-            url='/<year>/pau',
+            url='/pau',
             view=ProcessAgentUseView,
             view_name='process_agent_use')
 

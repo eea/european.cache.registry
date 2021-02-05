@@ -8,7 +8,8 @@ from flask import request
 from cache_registry.api.views import ListView, ApiView
 from cache_registry.models import (
     DeliveryLicence, Licence,
-    Substance, Undertaking,
+    ProcessAgentUse, Substance,
+    Undertaking,
 )
 
 
@@ -94,18 +95,17 @@ class ProcessAgentUseView(ApiView):
         data = ApiView.serialize(obj)
         _strip_fields = (
             'undertaking_id',
+            'year'
         )
         for field in _strip_fields:
             data.pop(field)
         return data
 
-    def get_queryset(self, domain, pk, year, **kwargs):
+    def post(self, domain, pk, **kwargs):
         undertaking = Undertaking.query.filter_by(domain=domain, external_id=pk).first_or_404()
-        paus = undertaking.processagentuses.filter_by(year=year)
-        if not paus:
-            return []
-        return paus
-
-    def post(self, **kwargs):
-        data = [self.serialize(u) for u in self.get_queryset(**kwargs)]
-        return {"process_agent_uses": data}
+        years = [pau.year for pau in ProcessAgentUse.query.filter_by(undertaking=undertaking).distinct(ProcessAgentUse.year).all()]
+        context = {}
+        context[pk] = {}
+        for year in years:
+            context[pk][year] = [self.serialize(u) for u in undertaking.processagentuses.filter_by(year=year).all()]
+        return context
