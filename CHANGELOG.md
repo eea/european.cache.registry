@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.29 - (2021-02-05)
+---------------------
+* Show all years in pau endpoint
+  [dianaboiangiu]
+
 2.0.28 - (2021-02-04)
 ---------------------
 * Fix import/export quantities  on licences aggregation
