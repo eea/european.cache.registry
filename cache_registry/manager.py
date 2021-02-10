@@ -97,6 +97,22 @@ def call_bdr_ni():
     for undertaking in undertakings:
         call_bdr(undertaking)
 
+@utils_manager.command
+def call_bdr_fgas_uk():
+    country = Country.query.filter_by(code='UK')[0]
+    undertakings = Undertaking.query.filter_by(country_code='UK_GB', domain='FGAS')
+    for undertaking in undertakings:
+        call_bdr(undertaking)
+
+@utils_manager.command
+def set_previous_reporting_folder_uk():
+    country = Country.query.filter_by(code='UK')[0]
+    undertakings = Undertaking.query.filter_by(country_code='UK_GB', domain='FGAS')
+    for undertaking in undertakings:
+        if undertaking.represent and country not in undertaking.country_history:
+            undertaking.country_history.append(country)
+            db.session.add(undertaking)
+            db.session.commit()
 
 @utils_manager.command
 @utils_manager.option('-f', '--file', dest='file',
