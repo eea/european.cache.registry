@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.30 - (2021-02-10)
+---------------------
+* Fix GB representative folder
+  [dianaboiangiu]
+
 2.0.29 - (2021-02-05)
 ---------------------
 * Show all years in pau endpoint
