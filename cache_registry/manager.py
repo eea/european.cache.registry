@@ -100,7 +100,7 @@ def call_bdr_ni():
 @utils_manager.command
 def call_bdr_fgas_uk():
     country = Country.query.filter_by(code='UK')[0]
-    undertakings = Undertaking.query.filter_by(country_code='UK_GB', domain='FGAS')
+    undertakings = Undertaking.query.filter(Undertaking.country_code_orig.in_(('UK_GB', 'UK'))).filter_by(domain='FGAS')
     for undertaking in undertakings:
         call_bdr(undertaking)
 
