@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.31 - (2021-02-11)
+---------------------
+* Set correct representative folder for UK code
+  [dianaboiangiu]
+
 2.0.30 - (2021-02-10)
 ---------------------
 * Fix GB representative folder
