@@ -1,4 +1,5 @@
 import collections
+import csv
 import json
 import pprint
 
@@ -102,7 +103,10 @@ def call_bdr_fgas_uk():
     country = Country.query.filter_by(code='UK')[0]
     undertakings = Undertaking.query.filter(Undertaking.country_code_orig.in_(('UK_GB', 'UK'))).filter_by(domain='FGAS')
     for undertaking in undertakings:
-        call_bdr(undertaking)
+        oldcompany_call = False
+        if undertaking.oldcompany_account:
+            oldcompany_call = True
+        call_bdr(undertaking, oldcompany_call)
 
 @utils_manager.command
 def set_previous_reporting_folder_uk():
@@ -118,8 +122,6 @@ def set_previous_reporting_folder_uk():
 @utils_manager.option('-f', '--file', dest='file',
                      help="file_path")
 def import_pau(file=None):
-    import csv
-
     with open(file) as f:
         count = 0
         for row in csv.reader(f, delimiter=','):
@@ -143,3 +145,23 @@ def import_pau(file=None):
             )
             db.session.add(process_agent_use)
             db.session.commit()
+
+
+@utils_manager.command
+@utils_manager.option('-f', '--file', dest='file',
+                     help="file_path")
+def transform_excel_to_json(file=None):
+    json_data = []
+    with open(file) as f:
+        reader = csv.DictReader(f)
+        fieldnames = [
+            'type', 'substance name form', 'is_virgin',
+            'company_name', 'code', 'result', 'year'
+        ]
+        for row in reader:
+            json_object = {}
+            for field in fieldnames:
+                json_object[field] = row[field]
+            json_data.append(json_object)
+    with open('export_json_stocks.json', 'w') as f:
+        f.write(json.dumps(json_data))

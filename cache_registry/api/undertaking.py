@@ -161,6 +161,15 @@ class UndertakingDetailView(DetailView):
         )
         for field in _strip_fields:
             data.pop(field)
+        history = []
+        for representative in obj.represent_history:
+            if representative.address.country.code == obj.country_code:
+                continue
+            if representative.address.country.code in [r.address.country.code for r in history]:
+                continue
+            if representative.address.country.code in [country.code for country in obj.country_history]:
+                continue
+            history.append(representative)
         data.update({
             'address': AddressDetail.serialize(obj.address),
             'businessprofile': ",".join(
@@ -172,7 +181,7 @@ class UndertakingDetailView(DetailView):
                 obj.represent),
             'represent_history': [
                 EuLegalRepresentativeCompanyDetail.serialize(representative_hist)
-                for representative_hist in obj.represent_history
+                for representative_hist in history
             ],
             'users': [UserListView.serialize(cp) for cp in obj.contact_persons],
             'candidates': [OldCompanyDetail.serialize(c.oldcompany) for c in
