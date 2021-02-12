@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.32 - (2021-02-12)
+---------------------
+* Change endpoint to show representative history only once
+  [dianaboiangiu]
+
 2.0.31 - (2021-02-11)
 ---------------------
 * Set correct representative folder for UK code
