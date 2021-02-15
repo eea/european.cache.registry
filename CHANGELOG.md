@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.33 - (2021-02-15)
+---------------------
+* Allow GB to report without representative
+  [dianaboiangiu]
+
 2.0.32 - (2021-02-12)
 ---------------------
 * Change endpoint to show representative history only once
