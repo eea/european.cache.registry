@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.34 - (2021-02-18)
+---------------------
+* Set default value on commands
+  [dianaboiangiu]
+
 2.0.33 - (2021-02-15)
 ---------------------
 * Allow GB to report without representative
