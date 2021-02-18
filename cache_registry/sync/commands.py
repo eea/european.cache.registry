@@ -129,7 +129,7 @@ def print_all_undertakings(undertakings):
                      help="Page size")
 @sync_manager.option('-i', '--external_id', dest='external_id',
                      help="External id of a company")
-def fgases(days=7, updated_since=None, page_size=None, id=None):
+def fgases(days=7, updated_since=None, page_size=200, id=None):
     if not id:
         last_update = get_last_update(days, updated_since, domain=FGAS)
     else:
@@ -186,7 +186,7 @@ def undertaking_remove(external_id, domain):
                      help="Page size")
 @sync_manager.option('-i', '--external_id', dest='external_id',
                      help="External id of a company")
-def ods(days=7, updated_since=None, page_size=None, id=None):
+def ods(days=7, updated_since=None, page_size=200, id=None):
     if not id:
         last_update = get_last_update(days, updated_since, domain=ODS)
     else:
