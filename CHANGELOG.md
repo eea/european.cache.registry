@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.0 - (2021-02-23)
+--------------------
+* Fix pulling one company in sync script
+  [dianaboiangiu]
+
 2.0.34 - (2021-02-18)
 ---------------------
 * Set default value on commands
