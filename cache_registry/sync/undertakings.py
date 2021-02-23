@@ -44,8 +44,10 @@ def get_latest_undertakings(type_url, updated_since=None, page_size=None, id=Non
 
     if not page_size:
         return response.json()
-
-    no_of_pages = int(response.headers['numberOfPages'])
+    try:
+        no_of_pages = int(response.headers['numberOfPages'])
+    except:
+        no_of_pages = 1
     response_json = response.json()
 
     for page_number in range(2, no_of_pages + 1):
