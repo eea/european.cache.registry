@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.1 -(2021-02-24)
+-------------------
+* Add manufacturer of equipment restriction on fgases
+  [dianaboiangiu]
+
 2.1.0 - (2021-02-23)
 --------------------
 * Fix pulling one company in sync script
