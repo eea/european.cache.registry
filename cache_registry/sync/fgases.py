@@ -34,8 +34,7 @@ def eea_double_check_fgases(data):
         ok = False
 
     manufacturer = 'FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS' in data['types']
-    if all([manufacturer, len(data['types']) == 1,
-            data['address']['country']['type'] == 'NONEU_TYPE']):
+    if all([manufacturer, len(data['types']) == 1]):
         message = 'NONEU_TYPE Equipment manufacturers only, have no reporting'\
                   ' obligations'
         current_app.logger.warning(message + identifier)
