@@ -33,6 +33,14 @@ def eea_double_check_fgases(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
+    manufacturer = 'FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS' in data['types']
+    if all([manufacturer, len(data['types']) == 1,
+            data['address']['country']['type'] == 'NONEU_TYPE']):
+        message = 'NONEU_TYPE Equipment manufacturers only, have no reporting'\
+                  ' obligations'
+        current_app.logger.warning(message + identifier)
+        ok = False
+
     if not all(('status' in data, data['status'] in ['VALID', 'REVISION'])):
         message = 'Organisation status differs from VALID or REVISION.'
         current_app.logger.warning(message + identifier)
