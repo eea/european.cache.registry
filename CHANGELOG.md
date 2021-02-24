@@ -1,8 +1,13 @@
 Changelog
 =========
 
-2.1.1 -(2021-02-24)
--------------------
+2.1.2 - (2021-02-24)
+--------------------
+* Fix manufacturer restriction
+  [dianaboiangiu]
+
+2.1.1 - (2021-02-24)
+--------------------
 * Add manufacturer of equipment restriction on fgases
   [dianaboiangiu]
 
