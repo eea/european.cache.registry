@@ -206,7 +206,7 @@ class UndertakingDetailShortView(DetailView):
         data = {
             "company_id": obj.external_id,
             "company_name": obj.name,
-            "address": obj.address.street + ", " + obj.address.number,
+            "address": getattr(obj.address, 'street', '') + ", " + getattr(obj.address, 'number', ''),
             "postal_code": obj.address.zipcode,
             "city": obj.address.city,
             "country": obj.address.country.name,
