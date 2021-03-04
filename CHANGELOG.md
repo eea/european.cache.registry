@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.3 - (2021-03-04)
+--------------------
+* Fix endpoint in case address contains null values
+  [dianaboiangiu]
+
 2.1.2 - (2021-02-24)
 --------------------
 * Fix manufacturer restriction
