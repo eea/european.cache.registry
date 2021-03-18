@@ -170,13 +170,23 @@ class UndertakingDetailView(DetailView):
             if representative.address.country.code in [country.code for country in obj.country_history]:
                 continue
             history.append(representative)
+        country_history = []
+        for country in obj.country_history:
+            if country == obj.country_code:
+                continue
+            if country in [r.address.country.code for r in history]:
+                continue
+            if country in [c.code for c  in country_history]:
+                continue
+            country_history.append(country)
+
         data.update({
             'address': AddressDetail.serialize(obj.address),
             'businessprofile': ",".join(
                 [businessprofile.highleveluses for
                  businessprofile in obj.businessprofiles]
             ),
-            'country_history': [country_hist.code for country_hist in obj.country_history],
+            'country_history': [country_hist.code for country_hist in country_history],
             'representative': EuLegalRepresentativeCompanyDetail.serialize(
                 obj.represent),
             'represent_history': [

@@ -132,6 +132,9 @@ def update_undertaking(data, check_passed=True):
     else:
         address = represent.pop('address')
         if not undertaking.represent:
+            if undertaking.address.country.type == 'AMBIGUOUS_TYPE':
+                if undertaking.address.country not in undertaking.country_history:
+                    undertaking.country_history.append(undertaking.address.country)
             addr = Address(**address)
             db.session.add(addr)
             r = EuLegalRepresentativeCompany(**represent)
