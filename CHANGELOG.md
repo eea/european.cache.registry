@@ -1,5 +1,11 @@
 Changelog
 =========
+
+2.1.5 - (2021-03-18)
+--------------------
+* Fix country history on GB
+  [dianaboiangiu]
+
 2.1.4 - (2021-03-04)
 --------------------
 * Fix error
