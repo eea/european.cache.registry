@@ -48,7 +48,7 @@
         "businessProfile" : {
             "highLevelUses" : []
         },
-        "types" : ["FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS"]
+        "types" : ["FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS", "FGAS_EXPORTER_HFCS"]
     },
     {
         "@type" : "FGASUndertaking",
