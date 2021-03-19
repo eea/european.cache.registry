@@ -99,34 +99,40 @@ def update_bdr_col_name(undertaking):
         current_app.logger.warning('No bdr endpoint. No bdr call.')
         return True
 
-    country_code = undertaking.country_code.lower()
-    if check_no_represent(undertaking):
-        country_code = 'non_eu'
+    country_code = undertaking.country_code
 
-    params = {
-        'country_code': country_code,
-        'obligation_folder_name': DOMAIN_TO_ZOPE_FOLDER.get(undertaking.domain),
-        'account_uid': str(undertaking.external_id),
-        'organisation_name': undertaking.name,
-        'oldcompany_account': undertaking.oldcompany_account
-    }
+    if country_code:
+        country_code = country_code.lower()
 
-    url = endpoint + '/api/update_organisation_name'
-    response = do_bdr_request(url, params)
-    error_message = ''
-    if response is not None:
-        try:
-            res = ast.literal_eval(response.content)
-        except:
-            res = {}
-        if not res.get('updated') is True:
-            error_message = 'Collection for id: {0} not updated'\
-                            .format(undertaking.external_id)
-        elif response.status_code != 200:
-            error_message = 'Invalid status code: ' + response.status_code
+        if check_no_represent(undertaking):
+            country_code = 'non_eu'
+
+        params = {
+            'country_code': country_code,
+            'obligation_folder_name': DOMAIN_TO_ZOPE_FOLDER.get(undertaking.domain),
+            'account_uid': str(undertaking.external_id),
+            'organisation_name': undertaking.name,
+            'oldcompany_account': undertaking.oldcompany_account
+        }
+
+        url = endpoint + '/api/update_organisation_name'
+        response = do_bdr_request(url, params)
+        error_message = ''
+        if response is not None:
+            try:
+                res = ast.literal_eval(response.content)
+            except:
+                res = {}
+            if not res.get('updated') is True:
+                error_message = 'Collection for id: {0} not updated'\
+                                .format(undertaking.external_id)
+            elif response.status_code != 200:
+                error_message = 'Invalid status code: ' + response.status_code
+        else:
+            error_message = 'Invalid response: ' + str(response)
     else:
-        error_message = 'Invalid response: ' + str(response)
-
+        error_message = 'Collection for id: {0} not updated as company country is set to None'.format(
+            undertaking.external_id)
     if error_message:
         current_app.logger.warning(error_message)
         print(error_message)
