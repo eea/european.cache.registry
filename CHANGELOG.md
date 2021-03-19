@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.6 - (2021-03-19)
+--------------------
+* Fix sync error
+  [dianaboiangiu]
+
 2.1.5 - (2021-03-18)
 --------------------
 * Fix country history on GB
