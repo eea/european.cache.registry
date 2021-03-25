@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.7 - (2021-03-25)
+--------------------
+* Add patch for allowing old GB OR to be used for reporting
+  [dianaboiangiu]
+
 2.1.6 - (2021-03-19)
 --------------------
 * Fix sync error
