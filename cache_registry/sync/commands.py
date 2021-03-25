@@ -5,7 +5,7 @@ from os import environ
 from flask_script.commands import InvalidCommand
 from datetime import datetime, timedelta
 
-from cache_registry.sync.parsers import parse_company
+from cache_registry.sync.parsers import parse_company, parse_rc
 from flask import current_app
 from sqlalchemy import desc
 from cache_registry.models import Undertaking, db, OrganizationLog, Country, DeliveryLicence, Stock, OldCompany
@@ -67,6 +67,15 @@ def get_last_update(days, updated_since, domain):
     print("Using last_update {}".format(last_update))
     return last_update
 
+def patch_undertaking_old_gb_represent(external_id, data):
+    external_id = str(external_id)
+    patch = current_app.config.get('PATCH_GB_OLD_REPR', {})
+    if external_id in patch:
+        represent = parse_rc(data.get('euLegalRepresentativeCompany'))
+        if not represent:
+            print("Patching old gb represent on undertaking: {}".format(external_id))
+            data.update(patch[external_id])
+    return data
 
 def update_undertakings(undertakings, check_function):
     # import at this level since an import at module level will break
@@ -79,6 +88,8 @@ def update_undertakings(undertakings, check_function):
         check_passed_exists = None
         if undertaking_exists:
             check_passed_exists = undertaking_exists.check_passed
+        if not undertaking['domain'] == ODS:
+            undertaking = patch_undertaking_old_gb_represent(undertaking['id'], undertaking)
         check_passed = check_function(undertaking)
         if (not undertaking['@type'] == 'ODSUndertaking') or check_passed or undertaking_exists:
             (_, represent) = update_undertaking(undertaking, check_passed=check_passed)
