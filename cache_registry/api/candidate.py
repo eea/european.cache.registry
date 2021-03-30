@@ -2,6 +2,7 @@ from flask import abort
 from flask import request
 
 from cache_registry.api.views import ApiView
+from cache_registry.models import Undertaking
 
 from cache_registry.match import (
     get_all_candidates,
@@ -57,6 +58,16 @@ class CandidateVerify(ApiView):
         link = verify_link(undertaking_id, oldcompany_id,
                            user) or abort(404)
         return self.serialize(link, pop_id=False)
+
+
+class CandidateVerifyMatchingIds(ApiView):
+
+    def get(self, domain, undertaking_id, oldcompany_id):
+        undertaking = Undertaking.query.filter_by(external_id=undertaking_id).first()
+        if undertaking:
+            if undertaking.oldcompany_account == oldcompany_id:
+                return { "match": "True"}
+        return { "match": "False" }
 
 
 class CandidateVerifyNone(ApiView):

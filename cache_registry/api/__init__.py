@@ -140,6 +140,11 @@ register_url(prefix=candidate_prefix, name=candidate_name,
              view_name='non-list')
 
 register_url(prefix=candidate_prefix, name=candidate_name,
+             url='/verify-matching-ids/<undertaking_id>/<oldcompany_id>',
+             view=CandidateVerifyMatchingIds,
+             view_name='verify-matching-ids')
+
+register_url(prefix=candidate_prefix, name=candidate_name,
              url='/verify/<undertaking_id>/<oldcompany_id>',
              view=CandidateVerify,
              view_name='verify')
