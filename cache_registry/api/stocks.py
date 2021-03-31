@@ -26,7 +26,11 @@ class StocksUndertakingListView(ApiView):
 
     def post(self, **kwargs):
         external_id = kwargs['external_id']
-        undertaking = Undertaking.query.filter_by(external_id=external_id, domain='ODS').first_or_404()
+        undertaking = Undertaking.query.filter_by(external_id=external_id, domain='ODS').first()
+        if not undertaking:
+            context = {}
+            context[external_id] = {}
+            return context
         years = [stock.year for stock in Stock.query.filter_by(undertaking=undertaking).distinct(Stock.year).all()]
         context = {}
         context[external_id] = {}
