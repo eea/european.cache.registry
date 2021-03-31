@@ -62,12 +62,22 @@ class CandidateVerify(ApiView):
 
 class CandidateVerifyMatchingIds(ApiView):
 
-    def get(self, domain, undertaking_id, oldcompany_id):
-        undertaking = Undertaking.query.filter_by(external_id=undertaking_id).first()
+    def get(self, undertaking_id, oldcompany_id):
+        if not undertaking_id or not oldcompany_id:
+            return { "match": 0 }
+        domain = ''
+        if 'ods' in oldcompany_id:
+            domain = 'ODS'
+        elif 'fgas' in oldcompany_id:
+            domain = 'FGAS'
+        if domain:
+            undertaking = Undertaking.query.filter_by(domain=domain, external_id=undertaking_id).first()
+        else:
+            undertaking = Undertaking.query.filter_by(external_id=undertaking_id).first()
         if undertaking:
             if undertaking.oldcompany_account == oldcompany_id:
-                return { "match": "True"}
-        return { "match": "False" }
+                return { "match": 1 }
+        return { "match": 0 }
 
 
 class CandidateVerifyNone(ApiView):
