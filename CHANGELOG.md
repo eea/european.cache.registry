@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.1.8 - (2021-03-31)
+--------------------
+* Management of old companyID and new companyID
+* Fix error in stocks for FGAS companies
+  [dianaboiangiu]
+
 2.1.7 - (2021-03-25)
 --------------------
 * Add patch for allowing old GB OR to be used for reporting
