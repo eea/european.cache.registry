@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1.9 - (2021-04-13)
+--------------------
+* Add endpoint for all years licences listing
+  [dianaboiangiu]
+
 2.1.8 - (2021-03-31)
 --------------------
 * Management of old companyID and new companyID
