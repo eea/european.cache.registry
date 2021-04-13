@@ -66,6 +66,49 @@ class SubstanceYearListView(ApiView):
         data.extend(self.patch_licences(**kwargs))
         return {"licences": data}
 
+class SubstanceListView(ApiView):
+    model = Substance
+
+    def get_queryset(self, domain, pk, **kwargs):
+        undertaking = Undertaking.query.filter_by(domain=domain, external_id=pk).first_or_404()
+        deliveries = undertaking.deliveries.all()
+        if not deliveries:
+            return []
+        substances = []
+        for delivery in deliveries:
+            substances.extend(delivery.substances.all())
+        data = json.loads(request.data)
+        return substances
+
+    @classmethod
+    def serialize(cls, obj, **kwargs):
+        data = ApiView.serialize(obj)
+        _strip_fields = (
+            'date_created', 'date_updated',
+            'delivery_id'
+        )
+        for field in _strip_fields:
+            data.pop(field)
+        data['company_id'] = obj.deliverylicence.undertaking.external_id
+        data['use_kind'] = data.pop('lic_use_kind')
+        data['use_desc'] = data.pop('lic_use_desc')
+        data['type'] = data.pop('lic_type')
+        data['quantity'] = int(data['quantity'])
+        return data
+
+    def patch_licences(self, **kwargs):
+        data = []
+        pk = int(kwargs['pk'])
+        patch = current_app.config.get('PATCH_LICENCES', [])
+        for element in patch:
+            if element.get('company_id') == pk:
+                data.append(element)
+        return data
+
+    def post(self, **kwargs):
+        data = [self.serialize(u) for u in self.get_queryset(**kwargs)]
+        data.extend(self.patch_licences(**kwargs))
+        return {"licences": data}
 
 class LicencesOfOneDeliveryListView(ListView):
     model = Licence

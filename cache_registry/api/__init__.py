@@ -77,6 +77,11 @@ register_url(prefix=licence_prefix, name=licence_name,
              view_name='current_substances_per_undertaking')
 
 register_url(prefix=licence_prefix, name=licence_name,
+             url='/licences/aggregated',
+             view=SubstanceListView,
+             view_name='all_substances_per_undertaking')
+
+register_url(prefix=licence_prefix, name=licence_name,
              url='/<year>/licences',
              view=LicencesOfOneDeliveryListView,
              view_name='licences_per_delivery')
