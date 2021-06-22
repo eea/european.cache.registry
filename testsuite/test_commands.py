@@ -5,6 +5,7 @@ import sys
 from io import StringIO
 from contextlib import redirect_stdout
 from datetime import datetime, timedelta
+from flask import current_app
 
 from cache_registry import models
 from cache_registry.sync.commands import (
@@ -127,11 +128,9 @@ def test_get_last_update(client):
 def test_manager(client):
     user1 = UserFactory(username='test1', email='test@mail.com')
     user2 = UserFactory(username='test2', email='test@mail.com')
-    capturedOutput = StringIO()
-    sys.stdout = capturedOutput
-    check_integrity()
-    sys.stdout = sys.__stdout__
-    duplicates = ast.literal_eval(capturedOutput.getvalue())
+    runner = current_app.test_cli_runner()
+    results = runner.invoke(check_integrity, [])
+    duplicates = ast.literal_eval(results.stdout)
     assert duplicates[user1.email] == [user1.id, user2.id]
 
 
@@ -141,7 +140,8 @@ def test_command_flush(client):
     undertaking = UndertakingFactory()
     links = [OldCompanyLinkFactory(undertaking=undertaking, oldcompany=oldcompany1),
              OldCompanyLinkFactory(undertaking=undertaking, oldcompany=oldcompany2)]
-    flush()
+    runner = current_app.test_cli_runner()
+    results = runner.invoke(flush, [])
     assert OldCompanyLink.query.count() == 0
 
 
@@ -154,7 +154,9 @@ def test_command_unverify(client):
     link = OldCompanyLinkFactory(undertaking=undertaking, undertaking_id=undertaking.id,
                                  oldcompany=oldcompany, oldcompany_id=oldcompany.id,
                                  verified=True)
-    unverify(undertaking.external_id, undertaking.domain)
+    runner = current_app.test_cli_runner()
+    runner.invoke(unverify, ['--undertaking_external_id', undertaking.external_id,'--domain', undertaking.domain])
+    undertaking = Undertaking.query.first()
     assert undertaking.oldcompany == None
     assert undertaking.oldcompany_extid == None
     assert undertaking.oldcompany_verified == False
@@ -163,7 +165,12 @@ def test_command_unverify(client):
 def test_command_manual(client):
     oldcompany = OldCompanyFactory()
     undertaking = UndertakingFactory(domain='FGAS')
-    manual(undertaking.external_id, undertaking.domain, oldcompany.name)
+    runner = current_app.test_cli_runner()
+    runner.invoke(manual, ['--undertaking_id', undertaking.external_id,
+                           '--domain', undertaking.domain,
+                           '--oldcompany_account', oldcompany.name])
+    undertaking = Undertaking.query.first()
+    oldcompany = OldCompany.query.first()
     assert undertaking.oldcompany == None
     assert undertaking.oldcompany_extid == None
     assert undertaking.oldcompany_verified == True
@@ -174,8 +181,13 @@ def test_command_verify(client):
     oldcompany = OldCompanyFactory()
     undertaking = UndertakingFactory(domain='FGAS')
     link = OldCompanyLinkFactory(undertaking=undertaking, oldcompany=oldcompany)
-    result = verify(undertaking.external_id, oldcompany.external_id)
-    assert result == True
+    runner = current_app.test_cli_runner()
+    result = runner.invoke(verify, 
+                            ['--undertaking_id', undertaking.external_id,
+                             '--oldcompany_id', oldcompany.external_id])
+    link = OldCompanyLink.query.first()
+    undertaking = Undertaking.query.first()
+    assert bool(result.stdout) == True
     assert link.verified == True
     assert undertaking.oldcompany == link.oldcompany
     assert undertaking.oldcompany_account == link.oldcompany.account
@@ -194,7 +206,8 @@ def test_command_check_passed(client):
         db.session.add(undertaking)
         db.session.commit()
 
-    check_passed()
+    runner = current_app.test_cli_runner()
+    result = runner.invoke(check_passed, [])
     undertaking_checks_passed = Undertaking.query.filter_by(external_id=10008).first()
     undertaking_checks_failed = Undertaking.query.filter_by(external_id=10009).first()
 

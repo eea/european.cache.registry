@@ -7,15 +7,15 @@ from io import StringIO
 
 from cache_registry.api.views import ApiView
 from cache_registry.sync.commands import (
-    bdr,
-    fgases,
-    fgases_debug_noneu,
-    licences,
-    ods,
-    sync_collections_title
+    call_bdr,
+    call_fgases,
+    call_fgases_debug_noneu,
+    call_licences,
+    call_ods,
+    call_sync_collections_title
 )
 
-from cache_registry.match import run, flush, verify, unverify, test, manual
+from cache_registry.match import call_run, call_flush
 
 
 @contextlib.contextmanager
@@ -42,36 +42,35 @@ class MgmtCommand(ApiView):
 
         output.seek(0)
         message = output.read() + message
-
         return {'success': success, 'message': message}
 
 
 class SyncFgasesView(MgmtCommand):
-    command_func = staticmethod(fgases)
+    command_func = staticmethod(call_fgases)
 
 
 class SyncFgasesDebugNoneuView(MgmtCommand):
-    command_func = staticmethod(fgases_debug_noneu)
+    command_func = staticmethod(call_fgases_debug_noneu)
 
 
 class SyncODSView(MgmtCommand):
-    command_func = staticmethod(ods)
+    command_func = staticmethod(call_ods)
 
 
 class SyncLicencesView(MgmtCommand):
-    command_func = staticmethod(licences)
+    command_func = staticmethod(call_licences)
 
 class SyncCollectionsTitleView(MgmtCommand):
-    command_func = staticmethod(sync_collections_title)
+    command_func = staticmethod(call_sync_collections_title)
 
 
 class SyncBdr(MgmtCommand):
-    command_func = staticmethod(bdr)
+    command_func = staticmethod(call_bdr)
 
 
 class MatchRun(MgmtCommand):
-    command_func = staticmethod(run)
+    command_func = staticmethod(call_run)
 
 
 class MatchFlush(MgmtCommand):
-    command_func = staticmethod(flush)
+    command_func = staticmethod(call_flush)

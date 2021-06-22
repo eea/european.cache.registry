@@ -1,5 +1,5 @@
-from flask_script import Manager
+from flask.cli import AppGroup
 
-sync_manager = Manager()
+sync_manager = AppGroup('sync')
 
 import cache_registry.sync.commands

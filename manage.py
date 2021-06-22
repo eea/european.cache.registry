@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import logging
-from cache_registry.app import create_app, create_manager
+from cache_registry.app import create_app, create_cli_commands
 
 app = create_app()
 
@@ -13,8 +13,7 @@ def main():
                         format=default_format,
                         datefmt=default_datefmt)
     logging.getLogger('werkzeug').setLevel(logging.INFO)
-    manager = create_manager(app)
-    manager.run()
+    create_cli_commands(app)
 
 
 if __name__ == "__main__":

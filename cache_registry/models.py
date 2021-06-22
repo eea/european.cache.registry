@@ -3,21 +3,21 @@ import argparse
 import json
 import os
 import sys
+import click
 from alembic import op
 from datetime import date, datetime
 from sqlalchemy import (
     Column, Date, DateTime, ForeignKey, Integer, String, Boolean, Float
 )
+from cache_registry import app
 from sqlalchemy.orm import relationship
 
 from flask_sqlalchemy import BaseQuery
 from flask_sqlalchemy import SQLAlchemy
-from flask_script import Manager
+from flask.cli import AppGroup
 from instance.settings import FGAS, ODS
 
 db = SQLAlchemy()
-db_manager = Manager()
-
 
 class SerializableModel(object):
     def get_serialized(self, name):
@@ -151,7 +151,7 @@ class Undertaking(SerializableModel, db.Model):
     country_history = relationship(
         'Country',
         secondary='undertaking_country_history',
-        backref=db.backref('undertakings', lazy='dynamic')
+        backref=db.backref('undertakings', lazy='dynamic'),
     )
     # Undertaking:
     undertaking_type = Column(String(32), default='FGASUndertaking')
@@ -277,8 +277,8 @@ class OldCompanyLink(SerializableModel, db.Model):
     date_added = Column(DateTime)
     date_verified = Column(DateTime)
 
-    oldcompany = relationship('OldCompany')
-    undertaking = relationship('Undertaking', backref=db.backref('links'))
+    oldcompany = relationship('OldCompany', overlaps="candidates")
+    undertaking = relationship('Undertaking', backref=db.backref('links', overlaps="candidates"), overlaps="candidates")
 
 
 class UndertakingTypes(SerializableModel, db.Model):
@@ -286,8 +286,8 @@ class UndertakingTypes(SerializableModel, db.Model):
 
     undertaking_id = Column(ForeignKey('undertaking.id'), primary_key=True)
     type_id = Column(ForeignKey('type.id'), primary_key=True)
-    undertaking = relationship('Undertaking', backref=db.backref('types_link'))
-    type = relationship('Type')
+    undertaking = relationship('Undertaking', backref=db.backref('types_link', overlaps="types,undertaking"), overlaps="types,undertaking")
+    type = relationship('Type', overlaps="types,undertaking")
 
 
 class UndertakingBusinessProfile(SerializableModel, db.Model):
@@ -297,8 +297,8 @@ class UndertakingBusinessProfile(SerializableModel, db.Model):
     businessprofile_id = Column(ForeignKey('businessprofile.id'),
                                 primary_key=True)
     undertaking = relationship('Undertaking',
-                               backref=db.backref('businessprofiles_link'))
-    businessprofile = relationship('BusinessProfile')
+                               backref=db.backref('businessprofiles_link', overlaps="businessprofiles,undertakings"), overlaps="businessprofiles,undertakings")
+    businessprofile = relationship('BusinessProfile', overlaps="businessprofiles,undertakings")
 
 
 class UndertakingRepresentHistory(SerializableModel, db.Model):
@@ -308,8 +308,8 @@ class UndertakingRepresentHistory(SerializableModel, db.Model):
     represent_id = Column(ForeignKey('represent.id'),
                                 primary_key=True)
     undertaking = relationship('Undertaking', cascade="all",
-                               backref=db.backref('represent_history_link'))
-    represent = relationship('EuLegalRepresentativeCompany', cascade="all")
+                               backref=db.backref('represent_history_link', overlaps="represent_history,undertakings"), overlaps="represent_history,undertakings")
+    represent = relationship('EuLegalRepresentativeCompany', cascade="all", overlaps="represent_history,undertakings")
 
 class UndertakingCountryHistory(SerializableModel, db.Model):
     __tablename__ = 'undertaking_country_history'
@@ -318,8 +318,8 @@ class UndertakingCountryHistory(SerializableModel, db.Model):
     country_id = Column(ForeignKey('country.id'),
                                 primary_key=True)
     undertaking = relationship('Undertaking', cascade="all",
-                               backref=db.backref('undertaking_country_history_link'))
-    country = relationship('Country', cascade="all")
+                               backref=db.backref('undertaking_country_history_link', overlaps="country_history,undertakings"), overlaps="country_history,undertakings")
+    country = relationship('Country', cascade="all", overlaps="country_history,undertakings")
 
 
 class OrganizationLog(SerializableModel, db.Model):
@@ -443,32 +443,32 @@ class LicenceDetailsConverstion(SerializableModel, db.Model):
     lic_use_desc = Column(String(100))
     lic_type = Column(String(100))
 
+# @db_manager.command('alembic')
+# @click.argument('alembic_args', nargs=argparse.REMAINDER)
+# def alembic(alembic_args):
+#     from alembic.config import CommandLine
 
-@db_manager.option('alembic_args', nargs=argparse.REMAINDER)
-def alembic(alembic_args):
-    from alembic.config import CommandLine
-
-    CommandLine().main(argv=alembic_args)
-
-
-@db_manager.command
-def revision(message=None):
-    if message is None:
-        message = raw_input('revision name: ')
-    return alembic(['revision', '--autogenerate', '-m', message])
+#     CommandLine().main(argv=alembic_args)
 
 
-@db_manager.command
-def upgrade(revision='head'):
-    return alembic(['upgrade', revision])
+# @db_manager.command('revision')
+# def revision(message=None):
+#     if message is None:
+#         message = raw_input('revision name: ')
+#     return alembic(['revision', '--autogenerate', '-m', message])
 
 
-@db_manager.command
-def downgrade(revision):
-    return alembic(['downgrade', revision])
+# @db_manager.command('upgrade')
+# def upgrade(revision='head'):
+#     return alembic(['upgrade', revision])
 
 
-@db_manager.command
+# @db_manager.command('downgrade')
+# def downgrade(revision):
+#     return alembic(['downgrade', revision])
+
+
+# @db_manager.command('loaddata')
 def loaddata(fixture, session=None):
     if not session:
         session = db.session

@@ -1,8 +1,8 @@
 import requests
 import json
+import click
 from os import environ
 
-from flask_script.commands import InvalidCommand
 from datetime import datetime, timedelta
 
 from cache_registry.sync.parsers import parse_company, parse_rc
@@ -133,14 +133,20 @@ def print_all_undertakings(undertakings):
     print(undertakings_count, "values")
 
 
-@sync_manager.command
-@sync_manager.option('-u', '--updated', dest='updated_since',
+@sync_manager.command('fgases')
+@click.option('-d', '--days', 'days',
+                     help="Number of days the update is done for.")
+@click.option('-u', '--updated', 'updated_since',
                      help="Date in DD/MM/YYYY format")
-@sync_manager.option('-p', '--page_size', dest='page_size',
+@click.option('-p', '--page_size', 'page_size',
                      help="Page size")
-@sync_manager.option('-i', '--external_id', dest='external_id',
+@click.option('-i', '--external_id', 'id',
                      help="External id of a company")
 def fgases(days=7, updated_since=None, page_size=200, id=None):
+    return call_fgases(days, updated_since, page_size, id)
+
+
+def call_fgases(days=7, updated_since=None, page_size=200, id=None):
     if not id:
         last_update = get_last_update(days, updated_since, domain=FGAS)
     else:
@@ -166,9 +172,10 @@ def fgases(days=7, updated_since=None, page_size=200, id=None):
     return True
 
 
-@sync_manager.option('-i', '--external_id', dest='external_id',
+@sync_manager.command('undertaking_remove')
+@click.option('-i', '--external_id', 'external_id',
                      help="External id of a company")
-@sync_manager.option('-d', '--domain', dest='domain',
+@click.option('-d', '--domain', 'domain',
                      help="Domain")
 def undertaking_remove(external_id, domain):
     undertaking = (
@@ -190,14 +197,19 @@ def undertaking_remove(external_id, domain):
         current_app.logger.warning(msg)
 
 
-@sync_manager.command
-@sync_manager.option('-u', '--updated', dest='updated_since',
+@sync_manager.command('ods')
+@click.option('-d', '--days', 'days',
+                     help="Number of days the update is done for.")
+@click.option('-u', '--updated', 'updated_since',
                      help="Date in DD/MM/YYYY format")
-@sync_manager.option('-p', '--page_size', dest='page_size',
+@click.option('-p', '--page_size', 'page_size',
                      help="Page size")
-@sync_manager.option('-i', '--external_id', dest='external_id',
+@click.option('-i', '--external_id', 'id',
                      help="External id of a company")
 def ods(days=7, updated_since=None, page_size=200, id=None):
+    return call_ods(days, updated_since, page_size, id)
+
+def call_ods(days=7, updated_since=None, page_size=200, id=None):
     if not id:
         last_update = get_last_update(days, updated_since, domain=ODS)
     else:
@@ -224,13 +236,15 @@ def ods(days=7, updated_since=None, page_size=200, id=None):
     return True
 
 
-@sync_manager.command
-@sync_manager.option('-y', '--year', dest='year',
+@sync_manager.command('licences')
+@click.option('-y', '--year', 'year',
                      help="Licences from year x")
-@sync_manager.option('-p', '--page_size', dest='page_size',
+@click.option('-p', '--page_size', 'page_size',
                      help="Page size")
-
 def licences(year, page_size=200):
+    return call_licences(year, page_size)
+
+def call_licences(year, page_size=200):
     data = get_licences(year=year, page_size=page_size)
     companies = aggregate_licences_to_undertakings(data)
     for company, data in companies.items():
@@ -255,12 +269,15 @@ def licences(year, page_size=200):
     return True
 
 
-@sync_manager.command
-@sync_manager.option('-u', '--updated', dest='updated_since',
+@sync_manager.command('fgases_debug_noneu')
+@click.option('-u', '--updated', 'updated_since',
                      help="Date in DD/MM/YYYY format")
-@sync_manager.option('-p', '--page_size', dest='page_size',
+@click.option('-p', '--page_size', 'page_size',
                      help="Page size")
 def fgases_debug_noneu(days=7, updated_since=None, page_size=None):
+    return call_fgases_debug_noneu(days, updated_since, page_size)
+
+def call_fgases_debug_noneu(days=7, updated_since=None, page_size=None):
     # returns a list with all NON EU companies without a legal representative
     last_update = get_last_update(days, updated_since, domain=FGAS)
     undertakings = get_latest_undertakings(
@@ -271,9 +288,11 @@ def fgases_debug_noneu(days=7, updated_since=None, page_size=None):
     print_all_undertakings(undertakings)
     return True
 
-
-@sync_manager.command
+@sync_manager.command('sync_collections_title')
 def sync_collections_title():
+    return call_sync_collections_title()
+
+def call_sync_collections_title():
     collections = get_bdr_collections()
     if collections:
         colls = {}
@@ -296,8 +315,11 @@ def sync_collections_title():
     return True
 
 
-@sync_manager.command
+@sync_manager.command('bdr')
 def bdr():
+    return call_bdr()
+
+def call_bdr():
     obligations = current_app.config.get('MANUAL_VERIFY_ALL_COMPANIES', [])
     for obl in obligations:
         if obl:
@@ -308,8 +330,8 @@ def bdr():
     return True
 
 
-@sync_manager.command
-@sync_manager.option('-y', '--year', dest='year')
+@sync_manager.command('remove_all_licences_substances')
+@click.option('-y', '--year', 'year')
 
 def remove_all_licences_substances(year=None):
     if year:
@@ -323,8 +345,8 @@ def remove_all_licences_substances(year=None):
         db.session.commit()
     return True
 
-@sync_manager.command
-@sync_manager.option('-f', '--file', dest='file',
+@sync_manager.command('import_stocks_json')
+@click.option('-f', '--file', 'file',
                      help="Json file with stocks")
 def import_stocks_json(file):
     with open(file) as f:
@@ -369,8 +391,8 @@ def import_stocks_json(file):
             db.session.add(stock_object)
             db.session.commit()
 
-@sync_manager.command
-@sync_manager.option('-f', '--file', dest='file',
+@sync_manager.command('import_oldcompany')
+@click.option('-f', '--file', 'file',
                      help="Json file with stocks")
 def import_oldcompany(file):
     import csv

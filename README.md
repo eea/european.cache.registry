@@ -59,7 +59,7 @@ verified by a authenticated user.
 
 1. Run the server:
 
-        python manage.py runserver -h 0.0.0.0 -p 5000
+        python -m flask run -h 0.0.0.0 -p 5000
 
 1. On Postman, you can access the application at http://localhost:5000, using
 the following header:
@@ -119,25 +119,25 @@ the ports directive (e.g. "5000:5000" instead of "5000").
 
 * Fetch the latest data from a test server:
 
-        python ./manage.py sync fgases [-d 30]
-        python ./manage.py sync ods [-d 30]
+        python -m flask sync fgases [-d 30]
+        python -m flask sync ods [-d 30]
 
 
 * In order to sync from a long time ago, it is advised to use pagination. To use pagination, you must give -p parameter, containing the
 * number of companies that are brought in one request.
 
-        python ./manage.py sync fgases [-d 30] [-p 100]
-        python ./manage.py sync ods [-d 30] [-p 100]
+        python -m flask sync fgases [-d 30] [-p 100]
+        python -m flask sync ods [-d 30] [-p 100]
 
 * Fetch a specific company by providing the external id:
 
-        python ./manage.py sync fgases [-i 12345]
-        python ./manage.py sync ods [-i 12345]
+        python -m flask sync fgases [-i 12345]
+        python -m flask sync ods [-i 12345]
 
 
 * In order to sync BDR collections title with the cache server's corresponding undertakings name:
 
-        python manage.py sync sync_collections_title
+        python -m flask sync sync_collections_title
 
 * For syncing bdr without SSL verification, set the following switch in settings:
 
@@ -156,8 +156,8 @@ be patched.
 ## Syncronise with Licence Portal
 
 * The licences for ODS are now taken from DG Clima and exposed:
-        python ./manage.py sync licence 2017 2017-1
-        python ./manage.py sync licence 2017 2017-1
+        python -m flask sync licence 2017 2017-1
+        python -m flask sync licence 2017 2017-1
 
 * The first parameter [2017], represents the year from which those deliveries are taken.
 * The second parameter [2017-1], represents the name of the delivery.
@@ -188,26 +188,26 @@ by the algorithm should be auto-verified(!This company should also be declared i
 
 * Run matching algorithm:
 
-        docker exec ecr.app bash -c "python ./manage.py run"
+        docker exec ecr.app bash -c "python -m flask match run"
 
 * Cleanup all existing links made by the matching command, verified or not:
 
-        docker exec ecr.app bash -c "python ./manage.py flush"
+        docker exec ecr.app bash -c "python -m flask flush"
 
 * Verify link made by the matching algorithm:
 
         docker exec ecr.app bash -c
-            "python ./manage.py verify {undertaking_id} {oldcompany_id}"
+            "python -m flask verify {undertaking_id} {oldcompany_id}"
 
 * Unverify link made by the matching algorithm and already verified:
 
         docker exec ecr.app bash -c
-            "python ./manage.py unverify {undertaking_id} {domain}"
+            "python -m flask unverify {undertaking_id} {domain}"
 
 * Manually connect undertaking and old company on a certain domain, without creating a matching link like the algorithm does:
 
         docker exec ecr.app bash -c
-            "python ./manage.py manual {undertaking_id} {domain} {oldcompany_id}"
+            "python -m flask manual {undertaking_id} {domain} {oldcompany_id}"
 
 ## Testing
 

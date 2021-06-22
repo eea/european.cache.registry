@@ -4,9 +4,11 @@ import requests
 
 from flask import url_for
 from . import factories
+from flask import current_app
+
 
 from cache_registry.match import run
-from cache_registry.models import OldCompanyLink
+from cache_registry.models import OldCompanyLink, Undertaking, OldCompany
 
 
 def mockreturn(url, **kwargs):
@@ -47,7 +49,9 @@ def test_auto_verify_companies(client, monkeypatch):
                                                country_code='FR',
                                                vat='1234',
                                                oldcompany_verified=False)
-    run()
+    runner = current_app.test_cli_runner()
+    results = runner.invoke(run, [])
+    undertaking = Undertaking.query.first()
     assert undertaking.oldcompany_verified is True
     assert undertaking.oldcompany_id is None
     assert undertaking.oldcompany_account is None
@@ -63,7 +67,10 @@ def test_find_company_link(client, monkeypatch):
         country_code=undertaking.country_code,
         eori=undertaking.vat
     )
-    run()
+    runner = current_app.test_cli_runner()
+    results = runner.invoke(run, [])
+    undertaking = Undertaking.query.first()
+    old_company = OldCompany.query.filter_by(eori=undertaking.vat).first()
     links = OldCompanyLink.query.all()
     assert len(links) == 1
     assert not links[0].verified

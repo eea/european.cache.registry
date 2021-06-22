@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import Blueprint
-from flask_script import Manager
+from flask.cli import AppGroup
 
 from .candidate import *
 from .commands import *
@@ -11,7 +11,7 @@ from .undertaking import *
 from .user import *
 
 api = Blueprint('api', __name__)
-api_manager = Manager()
+api_manager = AppGroup('api')
 
 
 def register_url(prefix, url, view, name, view_name):

@@ -1,11 +1,13 @@
 # coding=utf-8
 from datetime import datetime
-
+import click
 from fuzzywuzzy import fuzz
 
 from sqlalchemy import or_
-from flask_script import Manager
+from flask.cli import AppGroup
+
 from flask import current_app
+from flask.cli import with_appcontext
 
 from cache_registry import models
 from cache_registry.mails import send_match_mail
@@ -14,7 +16,7 @@ from cache_registry.sync.bdr import call_bdr
 from instance.settings import FGAS, ODS
 from sqlalchemy.orm import joinedload
 
-match_manager = Manager()
+match_manager = AppGroup('match')
 
 
 def get_fuzz_limit():
@@ -245,8 +247,11 @@ def match_all(companies, oldcompanies):
     return links, new_companies
 
 
-@match_manager.command
+@match_manager.command('run')
 def run():
+    return call_run()
+
+def call_run():
     no_represent_companies = get_unverified_non_eu_no_represent_companies()
 
     for company in no_represent_companies:
@@ -276,7 +281,9 @@ def run():
     return True
 
 
-@match_manager.command
+@match_manager.command('verify')
+@click.option('-u', '--undertaking_id', 'undertaking_id')
+@click.option('-o', '--oldcompany_id', 'oldcompany_id')
 def verify(undertaking_id, oldcompany_id):
     result = verify_link(undertaking_id, oldcompany_id, "None  Mgmt Command")
     if result:
@@ -286,16 +293,20 @@ def verify(undertaking_id, oldcompany_id):
     return True
 
 
-@match_manager.command
+@match_manager.command('flush')
 def flush():
     """ Remove all previously created links in the match database."""
+    return call_flush()
+
+def call_flush():
     for link in models.OldCompanyLink.query.all():
         models.db.session.delete(link)
     models.db.session.commit()
     return True
 
-
-@match_manager.command
+@match_manager.command('unverify')
+@click.option('-u', '--undertaking_external_id', 'undertaking_external_id')
+@click.option('-d', '--domain', 'domain')
 def unverify(undertaking_external_id, domain):
     """ Remove a link from the matching database """
     u = unverify_link(undertaking_external_id, domain, 'SYSTEM')
@@ -303,7 +314,7 @@ def unverify(undertaking_external_id, domain):
     return True
 
 
-@match_manager.command
+@match_manager.command('test')
 def test(new, old):
     """ Show fuzzy match for two words"""
     print("'{}' and '{}' match by {} (LIMIT: {})".format(new, old,
@@ -312,7 +323,10 @@ def test(new, old):
     return True
 
 
-@match_manager.command
+@match_manager.command('manual')
+@click.option('-u', '--undertaking_id', 'undertaking_id')
+@click.option('-d', '--domain', 'domain')
+@click.option('-o', '--oldcompany_account', 'oldcompany_account')
 def manual(undertaking_id, domain, oldcompany_account):
     print("Verifying company: {} with old company account: {}".format(
         undertaking_id, oldcompany_account))

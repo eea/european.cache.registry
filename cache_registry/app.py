@@ -2,8 +2,9 @@ import logging
 
 import sys
 import flask
-from flask_script import Manager
-from cache_registry.models import db, db_manager
+from flask_migrate import Migrate
+
+from cache_registry.models import db
 from cache_registry.api import api, api_manager
 from cache_registry.misc import misc
 from cache_registry.sync import sync_manager
@@ -19,6 +20,23 @@ DEFAULT_CONFIG = {
     'SEND_MATCHING_MAILS': False
 }
 
+def init_config(app):
+    try:
+        default_format = '%(asctime)s - %(name)s - %(levelname)s: %(message)s'
+        default_datefmt = '%d-%m-%Y %H:%M'
+        logging.basicConfig(level=logging.DEBUG,
+                            format=default_format,
+                            datefmt=default_datefmt)
+        logging.getLogger('werkzeug').setLevel(logging.INFO)
+        create_cli_commands(app)
+    except Exception as e:
+        if app.config['DEBUG'] or not app.config.get('SENTRY_DSN'):
+            raise
+        else:
+            if not (isinstance(e, SystemExit) and e.code == 0):
+                sentry = app.extensions['sentry']
+                sentry.captureException()
+
 
 def create_app(config={}):
     app = flask.Flask(__name__, instance_relative_config=True)
@@ -27,7 +45,10 @@ def create_app(config={}):
         app.config.from_pyfile('settings.py', silent=True)
     else:
         app.config.update(config)
+    init_config(app)
+    migrate = Migrate()
     db.init_app(app)
+    migrate.init_app(app, db)
     app.register_blueprint(api)
     app.register_blueprint(misc)
     admin.init_app(app)
@@ -54,12 +75,8 @@ def create_logger(app):
     '''))
 
 
-def create_manager(app):
-    manager = Manager(app)
-
-    manager.add_command('db', db_manager)
-    manager.add_command('sync', sync_manager)
-    manager.add_command('api', api_manager)
-    manager.add_command('match', match_manager)
-    manager.add_command('utils', utils_manager)
-    return manager
+def create_cli_commands(app):
+    app.cli.add_command(api_manager)
+    app.cli.add_command(match_manager)
+    app.cli.add_command(sync_manager)
+    app.cli.add_command(utils_manager)

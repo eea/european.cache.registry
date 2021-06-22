@@ -14,12 +14,12 @@ done
 
 if [ ! -e .skip-db-init ]; then
   touch .skip-db-init
-  echo "Running DB CMD: ./manage.py db alembic upgrade head"
-  python manage.py db alembic upgrade head
+  echo "Running DB CMD: .py db upgrade head"
+  python -m flask db upgrade head
 fi
 
 if [ "$DEBUG" = 'True' ]; then
-    python manage.py runserver -h 0.0.0.0 -p 5000
+    python -m flask run -h 0.0.0.0 -p 5000
 fi
 
 if [ -z "$1" ]; then
@@ -33,7 +33,7 @@ if [ -z "$1" ]; then
 fi
 
 if [[ $COMMANDS == *"$1"* ]]; then
-  exec python manage.py "$@"
+  exec python -m flask "$@"
 fi
 
 exec "$@"

@@ -2,8 +2,9 @@ import collections
 import csv
 import json
 import pprint
+import click
 
-from flask_script import Manager
+from flask.cli import AppGroup
 from flask import current_app
 
 from cache_registry.models import Country, db, User, Undertaking, ProcessAgentUse
@@ -12,10 +13,10 @@ from cache_registry.sync.fgases import eea_double_check_fgases
 from cache_registry.sync.ods import eea_double_check_ods
 
 
-utils_manager = Manager()
+utils_manager = AppGroup('utils')
 
 
-@utils_manager.command
+@utils_manager.command('check_integrity')
 def check_integrity():
     emails = User.query.with_entities(User.email).all()
     duplicates = [e for e, nr in collections.Counter(emails).items() if nr > 1]
@@ -28,7 +29,7 @@ def check_integrity():
     pprint.pprint(d)
 
 
-@utils_manager.command
+@utils_manager.command('check_passed')
 def check_passed():
     undertakings = Undertaking.query.all()
     for undertaking in undertakings:
@@ -82,7 +83,7 @@ def check_passed():
         if check_passed == False and undertaking.check_passed == True:
             call_bdr(undertaking, undertaking.oldcompany_account)
 
-@utils_manager.command
+@utils_manager.command('set_ni_previous_reporting_folder')
 def set_ni_previous_reporting_folder():
     country = Country.query.filter_by(code='UK')[0]
     undertakings = Undertaking.query.filter_by(country_code='UK_NI')
@@ -91,14 +92,14 @@ def set_ni_previous_reporting_folder():
         db.session.add(undertaking)
         db.session.commit()
 
-@utils_manager.command
+@utils_manager.command('call_bdr_ni')
 def call_bdr_ni():
     country = Country.query.filter_by(code='UK')[0]
     undertakings = Undertaking.query.filter_by(country_code='UK_NI')
     for undertaking in undertakings:
         call_bdr(undertaking)
 
-@utils_manager.command
+@utils_manager.command('call_bdr_fgas_uk')
 def call_bdr_fgas_uk():
     country = Country.query.filter_by(code='UK')[0]
     undertakings = Undertaking.query.filter(Undertaking.country_code_orig.in_(('UK_GB', 'UK'))).filter_by(domain='FGAS')
@@ -108,7 +109,7 @@ def call_bdr_fgas_uk():
             oldcompany_call = True
         call_bdr(undertaking, oldcompany_call)
 
-@utils_manager.command
+@utils_manager.command('set_previous_reporting_folder_uk')
 def set_previous_reporting_folder_uk():
     country = Country.query.filter_by(code='UK')[0]
     undertakings = Undertaking.query.filter_by(country_code='UK_GB', domain='FGAS')
@@ -118,8 +119,8 @@ def set_previous_reporting_folder_uk():
             db.session.add(undertaking)
             db.session.commit()
 
-@utils_manager.command
-@utils_manager.option('-f', '--file', dest='file',
+@utils_manager.command('import_pau')
+@click.option('-f', '--file', 'file',
                      help="file_path")
 def import_pau(file=None):
     with open(file) as f:
@@ -147,8 +148,8 @@ def import_pau(file=None):
             db.session.commit()
 
 
-@utils_manager.command
-@utils_manager.option('-f', '--file', dest='file',
+@utils_manager.command('transform_excel_to_json')
+@click.option('-f', '--file', 'file',
                      help="file_path")
 def transform_excel_to_json(file=None):
     json_data = []
