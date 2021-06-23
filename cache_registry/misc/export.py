@@ -1,58 +1,80 @@
+from io import BytesIO
 import json
+from openpyxl import Workbook
+from tempfile import NamedTemporaryFile
 
 from flask import Response
 from flask.views import MethodView
-
-from io import BytesIO
-from openpyxl import Workbook
-from tempfile import NamedTemporaryFile
 
 from cache_registry.api.undertaking import UndertakingListView
 from cache_registry.match import get_all_non_candidates
 from cache_registry.models import User
 
-MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 
 class UndertakingListExport(MethodView):
     COLUMNS = [
-        'company_id', 'name', 'domain', 'status', 'undertaking_type',
-        'website',
-        'date_updated', 'phone', 'oldcompany_extid', 'address_city',
-        'address_country_code', 'address_country_name', 'address_country_type',
-        'address_zipcode', 'address_number', 'address_street', 'country_code',
-        'vat', 'users', 'users', 'types', 'collection_id', 'date_created',
-        'oldcompany_account', 'oldcompany_verified', 'representative_name',
-        'representative_contact_first_name',
-        'representative_contact_last_name',
-        'check_passed',
-        'representative_vatnumber', 'representative_contact_email',
-        'representative_address_zipcode', 'representative_address_number',
-        'representative_address_street', 'representative_address_city',
-        'representative_address_country_code',
-        'representative_address_country_type',
-        'representative_address_country_name',
-        'represent_history',
+        "company_id",
+        "name",
+        "domain",
+        "status",
+        "undertaking_type",
+        "website",
+        "date_updated",
+        "phone",
+        "oldcompany_extid",
+        "address_city",
+        "address_country_code",
+        "address_country_name",
+        "address_country_type",
+        "address_zipcode",
+        "address_number",
+        "address_street",
+        "country_code",
+        "vat",
+        "users",
+        "users",
+        "types",
+        "collection_id",
+        "date_created",
+        "oldcompany_account",
+        "oldcompany_verified",
+        "representative_name",
+        "representative_contact_first_name",
+        "representative_contact_last_name",
+        "check_passed",
+        "representative_vatnumber",
+        "representative_contact_email",
+        "representative_address_zipcode",
+        "representative_address_number",
+        "representative_address_street",
+        "representative_address_city",
+        "representative_address_country_code",
+        "representative_address_country_type",
+        "representative_address_country_name",
+        "represent_history",
     ]
 
     def get_data(self, domain):
-        return [UndertakingListView.serialize(c) for c
-                in get_all_non_candidates(domain)]
+        return [
+            UndertakingListView.serialize(c) for c in get_all_non_candidates(domain)
+        ]
 
     def parse_column(self, qs, column):
         def _parse_address(qs, column):
-            for sub_column in column.split('_'):
+            for sub_column in column.split("_"):
                 qs = qs[sub_column]
             return qs
 
-        if column.startswith('address'):
+        if column.startswith("address"):
             return _parse_address(qs, column)
-        elif column.startswith('representative'):
-            repr_info = column.split('_', 1)[1]
-            qs = qs['representative']
+        elif column.startswith("representative"):
+            repr_info = column.split("_", 1)[1]
+            qs = qs["representative"]
             if not qs:
                 return None
-            if repr_info.startswith('address'):
+            if repr_info.startswith("address"):
                 return _parse_address(qs, repr_info)
             return qs[repr_info]
         return qs[column]
@@ -62,25 +84,32 @@ class UndertakingListExport(MethodView):
 
         wb = Workbook()
         ws = wb.active
-        ws.title = 'Companies List'
+        ws.title = "Companies List"
         ws.append(self.COLUMNS)
         for qs in queryset:
-            qs['users'] = ', '.join([user['username'] for user in qs['users']])
-            qs['represent_history'] = ', '.join([repr['name'] for repr in qs['represent_history']])
+            qs["users"] = ", ".join([user["username"] for user in qs["users"]])
+            qs["represent_history"] = ", ".join(
+                [repr["name"] for repr in qs["represent_history"]]
+            )
             values = [self.parse_column(qs, column) for column in self.COLUMNS]
             ws.append(values)
         with NamedTemporaryFile() as tmp:
             wb.save(tmp.name)
             response = Response(BytesIO(tmp.read()), mimetype=MIME_TYPE)
-            response.headers.add('Content-Disposition',
-                                 'attachment; filename=companies_list.xlsx')
+            response.headers.add(
+                "Content-Disposition", "attachment; filename=companies_list.xlsx"
+            )
             return response
 
 
 class UserListExport(MethodView):
     COLUMNS = [
-        'username', 'companyname', 'country', 'contact_firstname',
-        'contact_lastname', 'contact_email',
+        "username",
+        "companyname",
+        "country",
+        "contact_firstname",
+        "contact_lastname",
+        "contact_email",
     ]
 
     def get(self, **kwargs):
@@ -88,45 +117,54 @@ class UserListExport(MethodView):
 
         wb = Workbook()
         ws = wb.active
-        ws.title = 'Users List'
+        ws.title = "Users List"
         ws.append(self.COLUMNS)
         for user in users:
             companies_with_domain = user.verified_undertakings.filter_by(
-                domain=kwargs['domain'])
+                domain=kwargs["domain"]
+            )
             for company in companies_with_domain:
                 for cp in company.contact_persons:
                     if cp.username == user.username:
-                        values = [user.username, company.name,
-                                  company.address.country.name, cp.first_name,
-                                  cp.last_name, cp.email]
+                        values = [
+                            user.username,
+                            company.name,
+                            company.address.country.name,
+                            cp.first_name,
+                            cp.last_name,
+                            cp.email,
+                        ]
                         ws.append(values)
 
         with NamedTemporaryFile() as tmp:
             wb.save(tmp.name)
             response = Response(BytesIO(tmp.read()), mimetype=MIME_TYPE)
-            response.headers.add('Content-Disposition',
-                                 'attachment; filename=users_list.xlsx')
+            response.headers.add(
+                "Content-Disposition", "attachment; filename=users_list.xlsx"
+            )
             return response
 
 
 class UserListExportJSON(MethodView):
-
     def get(self, **kwargs):
         users = User.query.all()
 
         resp = []
         for user in users:
             companies_with_domain = user.verified_undertakings.filter_by(
-                domain=kwargs['domain'])
+                domain=kwargs["domain"]
+            )
             for company in companies_with_domain:
                 for cp in company.contact_persons:
                     if cp.username == user.username:
-                        resp.append({
-                            'username': user.username,
-                            'companyname': company.name,
-                            'country': company.address.country.name,
-                            'contact_firstname': cp.first_name,
-                            'contact_lastname': cp.last_name,
-                            'contact_email': cp.email
-                          })
-        return Response(json.dumps(resp, indent=2), mimetype='application/json')
+                        resp.append(
+                            {
+                                "username": user.username,
+                                "companyname": company.name,
+                                "country": company.address.country.name,
+                                "contact_firstname": cp.first_name,
+                                "contact_lastname": cp.last_name,
+                                "contact_email": cp.email,
+                            }
+                        )
+        return Response(json.dumps(resp, indent=2), mimetype="application/json")

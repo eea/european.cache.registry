@@ -1,21 +1,20 @@
 import contextlib
-
+from io import StringIO
 import sys
 
 from flask import request
-from io import StringIO
+
 
 from cache_registry.api.views import ApiView
+from cache_registry.match import call_run, call_flush
 from cache_registry.sync.commands import (
     call_bdr,
     call_fgases,
     call_fgases_debug_noneu,
     call_licences,
     call_ods,
-    call_sync_collections_title
+    call_sync_collections_title,
 )
-
-from cache_registry.match import call_run, call_flush
 
 
 @contextlib.contextmanager
@@ -35,14 +34,14 @@ class MgmtCommand(ApiView):
         with stdout_redirect(StringIO()) as output:
             try:
                 success = self.command_func(**kwargs)
-                message = ''
+                message = ""
             except Exception as ex:
                 success = False
                 message = repr(ex)
 
         output.seek(0)
         message = output.read() + message
-        return {'success': success, 'message': message}
+        return {"success": success, "message": message}
 
 
 class SyncFgasesView(MgmtCommand):
@@ -59,6 +58,7 @@ class SyncODSView(MgmtCommand):
 
 class SyncLicencesView(MgmtCommand):
     command_func = staticmethod(call_licences)
+
 
 class SyncCollectionsTitleView(MgmtCommand):
     command_func = staticmethod(call_sync_collections_title)

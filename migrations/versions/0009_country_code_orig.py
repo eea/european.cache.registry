@@ -1,15 +1,16 @@
-revision = '0009'
-down_revision = '0008'
+revision = "0009"
+down_revision = "0008"
 
 from alembic import op
 import sqlalchemy as sa
 
 
 def upgrade():
-    op.add_column('undertaking',
-                  sa.Column('country_code_orig', sa.String(length=10),
-                            default="", nullable=True))
+    op.add_column(
+        "undertaking",
+        sa.Column("country_code_orig", sa.String(length=10), default="", nullable=True),
+    )
 
 
 def downgrade():
-    op.drop_column('undertaking', 'country_code_orig')
+    op.drop_column("undertaking", "country_code_orig")

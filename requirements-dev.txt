@@ -1,8 +1,9 @@
 -r requirements.txt
-
-Flask-WebTest==0.0.9
-pytest-cov==2.12.1
-pytest-click==1.0.2
+black==21.6b0
 coveralls==3.1.0
 factory-boy==3.2.0
+flake8==3.9.2
+Flask-WebTest==0.0.9
 ipdb
+pytest-cov==2.12.1
+pytest-click==1.0.2

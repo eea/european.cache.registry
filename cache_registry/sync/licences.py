@@ -1,20 +1,21 @@
-import json
+from datetime import datetime, date
+from math import ceil
 import requests
 
-from datetime import datetime, date
+
 from flask import current_app
-from math import ceil
+
 from sqlalchemy import func
 
-from .auth import get_auth
+from .auth import get_auth, InvalidResponse, Unauthorized
 from .bdr import get_absolute_url
 from cache_registry.models import (
+    CountryCodesConversion,
     DeliveryLicence,
     Licence,
-    CountryCodesConversion,
-    SubstanceNameConversion,
     LicenceDetailsConverstion,
     Substance,
+    SubstanceNameConversion,
     Undertaking,
     db,
 )
@@ -30,13 +31,17 @@ CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION = {
     "Inward processing - drawback procedure": "",
 }
 
+
 def delete_all_substances_and_licences(delivery_licence):
     substances = Substance.query.filter_by(deliverylicence=delivery_licence).all()
     for substance in substances:
         db.session.delete(substance)
 
+
 def get_or_create_delivery(year, undertaking):
-    delivery = DeliveryLicence.query.filter_by(year=year, undertaking=undertaking).first()
+    delivery = DeliveryLicence.query.filter_by(
+        year=year, undertaking=undertaking
+    ).first()
     if delivery:
         return delivery
     delivery = DeliveryLicence(year=year, undertaking=undertaking)
@@ -46,20 +51,19 @@ def get_or_create_delivery(year, undertaking):
 
 
 def get_licences(year=2017, page_size=20):
-    """ Get latest licences from specific API url """
-    auth = get_auth('API_USER', 'API_PASSWORD')
-    url = get_absolute_url('API_URL', '/latest/licences/')
+    """Get latest licences from specific API url"""
+    auth = get_auth("API_USER", "API_PASSWORD")
+    url = get_absolute_url("API_URL", "/latest/licences/")
 
-    params = {'year': year}
-    
-    headers = dict(zip(('user', 'password'), auth))
-    ssl_verify = current_app.config['HTTPS_VERIFY']
+    params = {"year": year}
 
-    params['pageSize'] = page_size
-    params['pageNumber'] = 1
+    headers = dict(zip(("user", "password"), auth))
+    ssl_verify = current_app.config["HTTPS_VERIFY"]
 
-    response = requests.get(url, params=params, headers=headers,
-                            verify=ssl_verify)
+    params["pageSize"] = page_size
+    params["pageNumber"] = 1
+
+    response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
 
     if response.status_code == 401:
         raise Unauthorized()
@@ -67,14 +71,12 @@ def get_licences(year=2017, page_size=20):
     if response.status_code != 200:
         raise InvalidResponse()
 
-
-    no_of_pages = int(response.headers['numberOfPages'])
+    no_of_pages = int(response.headers["numberOfPages"])
     response_json = response.json()
 
     for page_number in range(2, no_of_pages + 1):
-        params['pageNumber'] = page_number
-        response = requests.get(url, params=params,
-                                headers=headers, verify=ssl_verify)
+        params["pageNumber"] = page_number
+        response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
         if response.status_code != 200:
             raise InvalidResponse()
         response_json += response.json()
@@ -84,44 +86,57 @@ def get_licences(year=2017, page_size=20):
 def parse_licence(licence, undertaking_id, substance):
 
     original_country = CountryCodesConversion.query.filter(
-        func.lower(CountryCodesConversion.country_name_short_en) == func.lower(licence['organizationCountryName'])).first()
+        func.lower(CountryCodesConversion.country_name_short_en)
+        == func.lower(licence["organizationCountryName"])
+    ).first()
     international_country = CountryCodesConversion.query.filter(
-        func.lower(CountryCodesConversion.country_name_short_en) == func.lower(licence['internationalPartyCountryName'])).first()
+        func.lower(CountryCodesConversion.country_name_short_en)
+        == func.lower(licence["internationalPartyCountryName"])
+    ).first()
     if not original_country:
-        original_country = ''
-        message = 'Country {} could not be translated.'.format(licence['organizationCountryName'])
+        original_country = ""
+        message = "Country {} could not be translated.".format(
+            licence["organizationCountryName"]
+        )
         current_app.logger.error(message)
     else:
         original_country = original_country.country_code_alpha2
 
     if not international_country:
-        international_country = ''
-        message = 'Country {} could not be translated.'.format(licence['internationalPartyCountryName'])
+        international_country = ""
+        message = "Country {} could not be translated.".format(
+            licence["internationalPartyCountryName"]
+        )
         current_app.logger.error(message)
     else:
         international_country = international_country.country_code_alpha2
 
     licence = {
-        'chemical_name': licence['chemicalName'],
-        'custom_procedure_name': licence['customProcedureName'],
-        'organization_country_name': original_country,
-        'organization_country_name_orig': licence['organizationCountryName'],
-        'international_party_country_name': international_country,
-        'international_party_country_name_orig': licence['internationalPartyCountryName'],
-        'total_odp_mass': licence['totalOdpMass'],
-        'net_mass': licence['netMass'],
-        'licence_state': licence['licenceState'],
-        'licence_id': licence['licenceId'],
-        'long_licence_number': licence['longLicenceNumber'],
-        'template_detailed_use_code': licence['templateDetailedUseCode'],
-        'licence_type': licence['licenceType'],
-        'mixture_nature_type': licence['mixtureNatureType'],
-        'substance_id': substance.id,
-        'year': substance.year,
-        'updated_since': licence['licenceUpdateDate'],
+        "chemical_name": licence["chemicalName"],
+        "custom_procedure_name": licence["customProcedureName"],
+        "organization_country_name": original_country,
+        "organization_country_name_orig": licence["organizationCountryName"],
+        "international_party_country_name": international_country,
+        "international_party_country_name_orig": licence[
+            "internationalPartyCountryName"
+        ],
+        "total_odp_mass": licence["totalOdpMass"],
+        "net_mass": licence["netMass"],
+        "licence_state": licence["licenceState"],
+        "licence_id": licence["licenceId"],
+        "long_licence_number": licence["longLicenceNumber"],
+        "template_detailed_use_code": licence["templateDetailedUseCode"],
+        "licence_type": licence["licenceType"],
+        "mixture_nature_type": licence["mixtureNatureType"],
+        "substance_id": substance.id,
+        "year": substance.year,
+        "updated_since": licence["licenceUpdateDate"],
     }
-    licence_object = db.session.query(Licence).filter_by(licence_id=licence['licence_id'],year=substance.year,
-                                                         chemical_name=licence['chemical_name'])
+    licence_object = db.session.query(Licence).filter_by(
+        licence_id=licence["licence_id"],
+        year=substance.year,
+        chemical_name=licence["chemical_name"],
+    )
     if licence_object.first():
         licence_object.update(licence)
         licence_object.first().substance = substance
@@ -133,26 +148,40 @@ def parse_licence(licence, undertaking_id, substance):
 
     return licence_object
 
+
 def get_or_create_substance(delivery_licence, licence):
-    if licence['licenceState'].lower() not in ['expired', 'closed']:
+    if licence["licenceState"].lower() not in ["expired", "closed"]:
         return None
-    if licence['mixtureNatureType'].lower() != 'virgin':
-        ec_substance_name = "{} (non-virgin)".format(licence['chemicalName'])
+    if licence["mixtureNatureType"].lower() != "virgin":
+        ec_substance_name = "{} (non-virgin)".format(licence["chemicalName"])
     else:
-        ec_substance_name = "{} ({})".format(licence['chemicalName'], licence['mixtureNatureType'].lower())
-    substance_conversion = SubstanceNameConversion.query.filter_by(ec_substance_name=ec_substance_name).first()
+        ec_substance_name = "{} ({})".format(
+            licence["chemicalName"], licence["mixtureNatureType"].lower()
+        )
+    substance_conversion = SubstanceNameConversion.query.filter_by(
+        ec_substance_name=ec_substance_name
+    ).first()
     if not substance_conversion:
         return None
-    country = CountryCodesConversion.query.filter(func.lower(CountryCodesConversion.country_name_short_en) == func.lower(licence['organizationCountryName'])).first()
+    country = CountryCodesConversion.query.filter(
+        func.lower(CountryCodesConversion.country_name_short_en)
+        == func.lower(licence["organizationCountryName"])
+    ).first()
     if not country:
         return None
-    s_country = CountryCodesConversion.query.filter(func.lower(CountryCodesConversion.country_name_short_en) == func.lower(licence['internationalPartyCountryName'])).first()
+    s_country = CountryCodesConversion.query.filter(
+        func.lower(CountryCodesConversion.country_name_short_en)
+        == func.lower(licence["internationalPartyCountryName"])
+    ).first()
     if not s_country:
         return None
     licence_details = LicenceDetailsConverstion.query.filter_by(
-        template_detailed_use_code=licence['templateDetailedUseCode']).first()
+        template_detailed_use_code=licence["templateDetailedUseCode"]
+    ).first()
 
-    lic_use_kind = CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION.get(licence['customProcedureName'], '')
+    lic_use_kind = CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION.get(
+        licence["customProcedureName"], ""
+    )
     substance = Substance.query.filter_by(
         substance=substance_conversion.corrected_name,
         organization_country_name=country.country_code_alpha2,
@@ -161,7 +190,7 @@ def get_or_create_substance(delivery_licence, licence):
         year=delivery_licence.year,
         lic_type=licence_details.lic_type,
         s_orig_country_name=s_country.country_code_alpha2,
-        ).first()
+    ).first()
     if not substance:
         substance = Substance(
             substance=substance_conversion.corrected_name,
@@ -173,7 +202,7 @@ def get_or_create_substance(delivery_licence, licence):
             s_orig_country_name=s_country.country_code_alpha2,
             lic_type=licence_details.lic_type,
             quantity=0,
-            )
+        )
         db.session.add(substance)
         db.session.commit()
     return substance
@@ -187,31 +216,48 @@ def aggregate_licence_to_substance(delivery_licence, year):
         db.session.add(substance)
         db.session.commit()
 
+
 def translate_date(date_string):
-   if not date_string:
-       return date.today()
-   date_with_time = datetime.strptime(date_string[0:10], '%Y-%m-%d')
-   return date(year=date_with_time.year, month=date_with_time.month, day=date_with_time.day)
+    if not date_string:
+        return date.today()
+    date_with_time = datetime.strptime(date_string[0:10], "%Y-%m-%d")
+    return date(
+        year=date_with_time.year, month=date_with_time.month, day=date_with_time.day
+    )
+
 
 def aggregate_licences_to_undertakings(data):
     undertakings = {}
     not_found_undertakings = []
     for licence in data:
-        undertaking_obj = Undertaking.query.filter_by(external_id=licence['organizationId'], domain='ODS').first()
+        undertaking_obj = Undertaking.query.filter_by(
+            external_id=licence["organizationId"], domain="ODS"
+        ).first()
         if not undertaking_obj:
-            if licence['organizationId'] not in not_found_undertakings:
-                message = 'Undertaking {} is not present in the application.'.format(licence['organizationId'])
+            if licence["organizationId"] not in not_found_undertakings:
+                message = "Undertaking {} is not present in the application.".format(
+                    licence["organizationId"]
+                )
                 current_app.logger.error(message)
-                not_found_undertakings.append(licence['organizationId'])
+                not_found_undertakings.append(licence["organizationId"])
             continue
         undertaking = undertakings.get(undertaking_obj.external_id, None)
         if not undertaking:
-            updated_since = translate_date(licence['licenceUpdateDate'])
-            undertakings[undertaking_obj.external_id] = {"updated_since": updated_since, "licences": []}
+            updated_since = translate_date(licence["licenceUpdateDate"])
+            undertakings[undertaking_obj.external_id] = {
+                "updated_since": updated_since,
+                "licences": [],
+            }
             undertaking = undertakings[undertaking_obj.external_id]
         else:
-            updated_since = translate_date(licence['licenceUpdateDate'])
-            undertaking_updated_since = undertakings[undertaking_obj.external_id]['updated_since']
-            undertakings[undertaking_obj.external_id]['updated_since'] = updated_since if updated_since > undertaking_updated_since else undertaking_updated_since
-        undertaking['licences'].append(licence)
+            updated_since = translate_date(licence["licenceUpdateDate"])
+            undertaking_updated_since = undertakings[undertaking_obj.external_id][
+                "updated_since"
+            ]
+            undertakings[undertaking_obj.external_id]["updated_since"] = (
+                updated_since
+                if updated_since > undertaking_updated_since
+                else undertaking_updated_since
+            )
+        undertaking["licences"].append(licence)
     return undertakings

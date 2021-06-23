@@ -1,8 +1,8 @@
 import json
 
-from flask import Response
 from flask import current_app
 from flask import request
+from flask import Response
 from flask.views import MethodView
 
 
@@ -12,38 +12,39 @@ class ApiView(MethodView):
     def dispatch_request(self, **kwargs):
         if not ApiView.authenticate():
             resp = {
-                'status': 'Unauthorized',
-                'message': 'You need to be authenticated '
-                           'in order to access this resource.',
+                "status": "Unauthorized",
+                "message": "You need to be authenticated "
+                "in order to access this resource.",
             }
             status_code = 401
-            return Response(json.dumps(resp, indent=2),
-                            mimetype='application/json'), status_code
+            return (
+                Response(json.dumps(resp, indent=2), mimetype="application/json"),
+                status_code,
+            )
 
         resp = super(ApiView, self).dispatch_request(**kwargs)
 
         if isinstance(resp, (dict, list, tuple)):
-            return Response(json.dumps(resp, indent=2),
-                            mimetype='application/json')
+            return Response(json.dumps(resp, indent=2), mimetype="application/json")
 
         return resp
 
     @classmethod
     def authenticate(cls):
-        token = current_app.config.get('API_TOKEN', '')
-        authorization = request.headers.get('Authorization', '')
+        token = current_app.config.get("API_TOKEN", "")
+        authorization = request.headers.get("Authorization", "")
         if authorization == token:
             return True
         return False
 
     @classmethod
     def serialize(cls, obj, **kwargs):
-        pop_id = kwargs.get('pop_id', True)
+        pop_id = kwargs.get("pop_id", True)
         if not obj:
             return None
         data = obj.as_dict()
         if pop_id:
-            data.pop('id')
+            data.pop("id")
         return data
 
 

@@ -2,296 +2,339 @@
 import json
 
 from flask import url_for
-from instance.settings import FGAS, ODS
+
 from . import factories
+
+from instance.settings import FGAS, ODS
+
 
 
 def test_authorization_failed(client):
-    resp = client.get(url_for('api.company-list', domain='FGAS'),
-                      headers={"Authorization": "test"} ,expect_errors=True)
+    resp = client.get(
+        url_for("api.company-list", domain="FGAS"),
+        headers={"Authorization": "test"},
+        expect_errors=True,
+    )
     assert resp.status_code == 401
-    assert resp.json['status'] == 'Unauthorized'
+    assert resp.json["status"] == "Unauthorized"
 
 
 def test_undertaking_list(client):
     undertaking = factories.UndertakingFactory()
-    type = factories.TypeFactory(
-        domain=undertaking.domain,
-        type='IMPORTER'
-    )
+    type = factories.TypeFactory(domain=undertaking.domain, type="IMPORTER")
     undertaking.types.append(type)
-    resp = client.get(url_for('api.company-list',
-                              domain=undertaking.domain))
+    resp = client.get(url_for("api.company-list", domain=undertaking.domain))
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
-    assert data['company_id'] == undertaking.external_id
-    for field in ['name', 'website', 'phone', 'domain', 'status',
-                  'undertaking_type', 'vat', 'oldcompany_verified',
-                  'oldcompany_account', 'oldcompany_extid']:
+    assert data["company_id"] == undertaking.external_id
+    for field in [
+        "name",
+        "website",
+        "phone",
+        "domain",
+        "status",
+        "undertaking_type",
+        "vat",
+        "oldcompany_verified",
+        "oldcompany_account",
+        "oldcompany_extid",
+    ]:
         assert data[field] == getattr(undertaking, field)
 
-    assert data['types'] == type.type
+    assert data["types"] == type.type
 
-    for date_field in ['date_created', 'date_updated']:
-        assert data[date_field] == getattr(undertaking,
-                                           date_field).strftime('%d/%m/%Y')
+    for date_field in ["date_created", "date_updated"]:
+        assert data[date_field] == getattr(undertaking, date_field).strftime("%d/%m/%Y")
 
 
 def test_undertaking_list_small(client):
     undertaking = factories.UndertakingFactory()
-    resp = client.get(url_for('api.company-list-small',
-                              domain=undertaking.domain))
+    resp = client.get(url_for("api.company-list-small", domain=undertaking.domain))
 
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
-    assert data['company_id'] == undertaking.external_id
-    for field in ['name', 'domain', 'vat']:
+    assert data["company_id"] == undertaking.external_id
+    for field in ["name", "domain", "vat"]:
         assert data[field] == getattr(undertaking, field)
-    assert data['date_created'] == getattr(undertaking,
-                                           'date_created').strftime('%d/%m/%Y')
+    assert data["date_created"] == getattr(undertaking, "date_created").strftime(
+        "%d/%m/%Y"
+    )
+
 
 def test_undertaking_detail_short_view(client):
     undertaking = factories.UndertakingFactory()
-    resp = client.get(url_for('api.company-detail_short',
-                              domain=undertaking.domain, pk=undertaking.external_id))
+    resp = client.get(
+        url_for(
+            "api.company-detail_short",
+            domain=undertaking.domain,
+            pk=undertaking.external_id,
+        )
+    )
 
     resp_data = resp.json
     assert len(resp_data) == 8
     data = resp_data
-    assert data['company_id'] == undertaking.external_id
-    assert data['company_name'] == undertaking.name
-    assert data['address'] == undertaking.address.street + ", " + undertaking.address.number
-    assert data['postal_code'] == undertaking.address.zipcode
-    assert data['city'] == undertaking.address.city
-    assert data['country'] == undertaking.address.country.name
-    assert data['eori_code'] == undertaking.vat
+    assert data["company_id"] == undertaking.external_id
+    assert data["company_name"] == undertaking.name
+    assert (
+        data["address"]
+        == undertaking.address.street + ", " + undertaking.address.number
+    )
+    assert data["postal_code"] == undertaking.address.zipcode
+    assert data["city"] == undertaking.address.city
+    assert data["country"] == undertaking.address.country.name
+    assert data["eori_code"] == undertaking.vat
 
 
 def test_undertaking_list_small_none(client):
-    resp = client.get(url_for('api.company-list-small',
-                              domain='FGAS'))
+    resp = client.get(url_for("api.company-list-small", domain="FGAS"))
 
     resp_data = resp.json
     assert len(resp_data) == 0
 
+
 def test_undertaking_list_domain_filter(client):
     factories.UndertakingFactory(domain=FGAS)
     undertaking = factories.UndertakingFactory(domain=ODS)
-    type = factories.TypeFactory(
-        domain=undertaking.domain,
-        type='IMPORTER'
-    )
+    type = factories.TypeFactory(domain=undertaking.domain, type="IMPORTER")
     undertaking.types.append(type)
-    resp = client.get(url_for('api.company-list',
-                              domain=ODS))
+    resp = client.get(url_for("api.company-list", domain=ODS))
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
-    assert data['company_id'] == undertaking.external_id
+    assert data["company_id"] == undertaking.external_id
 
-    for field in ['name', 'website', 'phone', 'domain', 'status',
-                  'undertaking_type', 'vat', 'oldcompany_verified',
-                  'oldcompany_account', 'oldcompany_extid']:
+    for field in [
+        "name",
+        "website",
+        "phone",
+        "domain",
+        "status",
+        "undertaking_type",
+        "vat",
+        "oldcompany_verified",
+        "oldcompany_account",
+        "oldcompany_extid",
+    ]:
         assert data[field] == getattr(undertaking, field)
-    assert data['types'] == type.type
+    assert data["types"] == type.type
 
-    for date_field in ['date_created', 'date_updated']:
-        assert data[date_field] == getattr(
-            undertaking, date_field).strftime('%d/%m/%Y')
+    for date_field in ["date_created", "date_updated"]:
+        assert data[date_field] == getattr(undertaking, date_field).strftime("%d/%m/%Y")
 
 
 def test_undertaking_list_all(client):
     undertaking = factories.UndertakingFactory()
     undertaking.oldcompany_verified = False
-    resp = client.get(url_for('api.company-list-all',
-                              domain=undertaking.domain))
+    resp = client.get(url_for("api.company-list-all", domain=undertaking.domain))
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
-    assert data['company_id'] == undertaking.external_id
+    assert data["company_id"] == undertaking.external_id
 
 
 def test_undertaking_list_all_domain_filter(client):
     factories.UndertakingFactory(domain=FGAS)
     undertaking = factories.UndertakingFactory(domain=ODS)
-    undertaking.oldcompany_verified = False 
-    resp = client.get(url_for('api.company-list-all',
-                              domain=ODS))
+    undertaking.oldcompany_verified = False
+    resp = client.get(url_for("api.company-list-all", domain=ODS))
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
-    assert data['company_id'] == undertaking.external_id
+    assert data["company_id"] == undertaking.external_id
 
 
 def test_undertaking_list_vat(client):
     undertaking = factories.UndertakingFactory()
-    resp = client.get(url_for('api.company-list-by-vat',
-                              domain=undertaking.domain,
-                              vat=undertaking.vat))
+    resp = client.get(
+        url_for(
+            "api.company-list-by-vat", domain=undertaking.domain, vat=undertaking.vat
+        )
+    )
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
-    assert data['company_id'] == undertaking.external_id
+    assert data["company_id"] == undertaking.external_id
 
 
 def test_undertaking_list_vat_domain_filter(client):
     factories.UndertakingFactory(domain=FGAS)
     undertaking = factories.UndertakingFactory(domain=ODS)
-    resp = client.get(url_for('api.company-list-by-vat',
-                              vat=undertaking.vat,
-                              domain=ODS))
+    resp = client.get(
+        url_for("api.company-list-by-vat", vat=undertaking.vat, domain=ODS)
+    )
     resp_data = resp.json
     assert len(resp_data) == 1
     data = resp_data[0]
-    assert data['company_id'] == undertaking.external_id
+    assert data["company_id"] == undertaking.external_id
 
 
 def test_undertaking_details(client):
     undertaking = factories.UndertakingFactory(oldcompany=None)
-    type = factories.TypeFactory(domain=undertaking.domain,
-                                 type='EXPORTER')
+    type = factories.TypeFactory(domain=undertaking.domain, type="EXPORTER")
     undertaking.types.append(type)
     oldcompany = factories.OldCompanyFactory(id=2)
-    factories.OldCompanyLinkFactory(oldcompany=oldcompany,
-                                    undertaking=undertaking)
+    factories.OldCompanyLinkFactory(oldcompany=oldcompany, undertaking=undertaking)
     resp = client.get(
-        url_for('api.company-detail',
-                domain=undertaking.domain,
-                pk=undertaking.external_id))
+        url_for(
+            "api.company-detail", domain=undertaking.domain, pk=undertaking.external_id
+        )
+    )
     data = resp.json
-    assert data['company_id'] == undertaking.external_id
-    for field in ['name', 'website', 'phone', 'domain', 'status',
-                  'undertaking_type', 'vat', 'oldcompany_verified',
-                  'oldcompany_account', 'oldcompany_extid']:
+    assert data["company_id"] == undertaking.external_id
+    for field in [
+        "name",
+        "website",
+        "phone",
+        "domain",
+        "status",
+        "undertaking_type",
+        "vat",
+        "oldcompany_verified",
+        "oldcompany_account",
+        "oldcompany_extid",
+    ]:
         assert data[field] == getattr(undertaking, field)
 
-    assert data['date_created'] == undertaking.date_created.strftime('%d/%m/%Y')
-    assert data['representative']['name'] == undertaking.represent.name
-    assert data['address']['zipcode'] == undertaking.address.zipcode
-    assert data['candidates'][0]['company_id'] == oldcompany.external_id
-    assert data['types'] == type.type
+    assert data["date_created"] == undertaking.date_created.strftime("%d/%m/%Y")
+    assert data["representative"]["name"] == undertaking.represent.name
+    assert data["address"]["zipcode"] == undertaking.address.zipcode
+    assert data["candidates"][0]["company_id"] == oldcompany.external_id
+    assert data["types"] == type.type
 
 
 def test_undertaking_details_404(client):
     resp = client.get(
-        url_for('api.company-detail',
-                domain='ODS',pk=1), expect_errors=True)
+        url_for("api.company-detail", domain="ODS", pk=1), expect_errors=True
+    )
     assert resp.status_code == 404
 
 
 def test_undertaking_details_domain_filter(client):
     undertaking = factories.UndertakingFactory(domain=FGAS)
-    factories.UndertakingFactory(domain=ODS,
-                                 external_id=undertaking.external_id)
-    type = factories.TypeFactory(domain=ODS, type='EXPORTER')
+    factories.UndertakingFactory(domain=ODS, external_id=undertaking.external_id)
+    type = factories.TypeFactory(domain=ODS, type="EXPORTER")
     undertaking.types.append(type)
     resp = client.get(
-        url_for('api.company-detail',
-                domain=undertaking.domain,
-                pk=undertaking.external_id))
+        url_for(
+            "api.company-detail", domain=undertaking.domain, pk=undertaking.external_id
+        )
+    )
     data = resp.json
-    assert data['company_id'] == undertaking.external_id
-    for field in ['name', 'website', 'phone', 'domain', 'status',
-                  'undertaking_type', 'vat', 'oldcompany_verified',
-                  'oldcompany_account', 'oldcompany_extid']:
+    assert data["company_id"] == undertaking.external_id
+    for field in [
+        "name",
+        "website",
+        "phone",
+        "domain",
+        "status",
+        "undertaking_type",
+        "vat",
+        "oldcompany_verified",
+        "oldcompany_account",
+        "oldcompany_extid",
+    ]:
         assert data[field] == getattr(undertaking, field)
 
-    assert data['date_created'] == undertaking.date_created.strftime('%d/%m/%Y')
-    assert data['representative']['name'] == undertaking.represent.name
-    assert data['address']['zipcode'] == undertaking.address.zipcode
-    assert data['types'] == type.type
+    assert data["date_created"] == undertaking.date_created.strftime("%d/%m/%Y")
+    assert data["representative"]["name"] == undertaking.represent.name
+    assert data["address"]["zipcode"] == undertaking.address.zipcode
+    assert data["types"] == type.type
 
 
 def test_undertaking_details_without_address(client):
     undertaking = factories.UndertakingFactory()
     undertaking.address = None
     resp = client.get(
-        url_for('api.company-detail',
-                domain=undertaking.domain,
-                pk=undertaking.external_id))
+        url_for(
+            "api.company-detail", domain=undertaking.domain, pk=undertaking.external_id
+        )
+    )
     data = resp.json
-    assert data['company_id'] == undertaking.external_id
-    assert data['address'] is None
+    assert data["company_id"] == undertaking.external_id
+    assert data["address"] is None
 
 
 def test_undertaking_details_without_address_domain_filter(client):
     undertaking = factories.UndertakingFactory(domain=FGAS)
-    factories.UndertakingFactory(domain=ODS,
-                                 external_id=undertaking.external_id)
+    factories.UndertakingFactory(domain=ODS, external_id=undertaking.external_id)
     undertaking.address = None
     resp = client.get(
-        url_for('api.company-detail',
-                domain=undertaking.domain,
-                pk=undertaking.external_id))
+        url_for(
+            "api.company-detail", domain=undertaking.domain, pk=undertaking.external_id
+        )
+    )
     data = resp.json
-    assert data['company_id'] == undertaking.external_id
-    assert data['address'] is None
+    assert data["company_id"] == undertaking.external_id
+    assert data["address"] is None
 
 
 def test_undertaking_details_without_representative(client):
     undertaking = factories.UndertakingFactory()
     undertaking.represent = None
     resp = client.get(
-        url_for('api.company-detail',
-                domain=undertaking.domain,
-                pk=undertaking.external_id))
+        url_for(
+            "api.company-detail", domain=undertaking.domain, pk=undertaking.external_id
+        )
+    )
     data = resp.json
-    assert data['company_id'] == undertaking.external_id
-    assert data['representative'] is None
+    assert data["company_id"] == undertaking.external_id
+    assert data["representative"] is None
 
 
 def test_undertaking_details_without_representative_domain_filter(client):
     undertaking = factories.UndertakingFactory(domain=FGAS)
-    factories.UndertakingFactory(domain=ODS,
-                                 external_id=undertaking.external_id)
+    factories.UndertakingFactory(domain=ODS, external_id=undertaking.external_id)
     undertaking.represent = None
     resp = client.get(
-        url_for('api.company-detail',
-                domain=undertaking.domain,
-                pk=undertaking.external_id))
+        url_for(
+            "api.company-detail", domain=undertaking.domain, pk=undertaking.external_id
+        )
+    )
     data = resp.json
-    assert data['company_id'] == undertaking.external_id
-    assert data['representative'] is None
+    assert data["company_id"] == undertaking.external_id
+    assert data["representative"] is None
 
 
 def test_filter_undertaking(client):
-    country_ro = factories.CountryFactory(code='ro')
+    country_ro = factories.CountryFactory(code="ro")
     address_cn = factories.AddressFactory(country=country_ro)
-    represent = factories.RepresentativeFactory(name='Le Representant',
-                                                vatnumber=1234,
-                                                address=address_cn)
-    undertaking = factories.UndertakingFactory(oldcompany_verified=True,
-                                               vat='21890',
-                                               represent=represent,
-                                               external_id=42,
-                                               country_code='ro',
-                                               domain=FGAS,
-                                               country_code_orig='cn',
-                                               name='A Good Company Name')
+    represent = factories.RepresentativeFactory(
+        name="Le Representant", vatnumber=1234, address=address_cn
+    )
+    undertaking = factories.UndertakingFactory(
+        oldcompany_verified=True,
+        vat="21890",
+        represent=represent,
+        external_id=42,
+        country_code="ro",
+        domain=FGAS,
+        country_code_orig="cn",
+        name="A Good Company Name",
+    )
     wrong_data = {
-        'id': [43, 44],
-        'vat': [21891],
-        'name': ['Bad Company', 'Bad Name'],
-        'OR_name': ['Orice', 'Bad represent'],
-        'countrycode': ['bg', undertaking.country_code]
+        "id": [43, 44],
+        "vat": [21891],
+        "name": ["Bad Company", "Bad Name"],
+        "OR_name": ["Orice", "Bad represent"],
+        "countrycode": ["bg", undertaking.country_code],
     }
 
     good_data = {
-        'id': [undertaking.external_id],
-        'vat': [undertaking.vat],
-        'name': [undertaking.name, 'Good Companyy Name', 'A Good Companyy N'],
-        'OR_vat': [1234],
-        'OR_name': [undertaking.represent.name, 'Le repreesenta'],
-        'countrycode': [undertaking.country_code_orig]
+        "id": [undertaking.external_id],
+        "vat": [undertaking.vat],
+        "name": [undertaking.name, "Good Companyy Name", "A Good Companyy N"],
+        "OR_vat": [1234],
+        "OR_name": [undertaking.represent.name, "Le repreesenta"],
+        "countrycode": [undertaking.country_code_orig],
     }
 
     def _test_params(count, **params):
-        resp = client.get(url_for('api.company-filter',
-                                  domain=FGAS), params)
+        resp = client.get(url_for("api.company-filter", domain=FGAS), params)
         data = resp.json
-        assert data['count'] == count
+        assert data["count"] == count
 
     for field, values in good_data.items():
         for value in values:
@@ -304,117 +347,137 @@ def test_filter_undertaking(client):
 
 def test_user_list(client):
     user = factories.UserFactory()
-    resp = client.get(url_for('api.user-list'))
+    resp = client.get(url_for("api.user-list"))
     data = resp.json
     assert len(data) == 1
     data = data[0]
-    assert data['username'] == user.username
+    assert data["username"] == user.username
 
 
 def test_user_companies_by_username(client):
     undertaking = factories.UndertakingFactory()
     user = factories.UserFactory()
     undertaking.contact_persons.append(user)
-    resp = client.get(url_for('api.user-companies', pk=user.username))
+    resp = client.get(url_for("api.user-companies", pk=user.username))
     data = resp.json
     assert len(data) == 1
     data = data[0]
-    assert data['company_id'] == undertaking.external_id
+    assert data["company_id"] == undertaking.external_id
+
 
 def test_user_companies_404(client):
-    resp = client.get(url_for('api.user-companies', pk=20), expect_errors=True)
+    resp = client.get(url_for("api.user-companies", pk=20), expect_errors=True)
     assert resp.status_code == 404
+
 
 def test_user_companies_by_email(client):
     undertaking = factories.UndertakingFactory()
     user = factories.UserFactory()
     undertaking.contact_persons.append(user)
-    resp = client.get(url_for('api.user-companies', pk=user.email),
-                      expect_errors=True)
+    resp = client.get(url_for("api.user-companies", pk=user.email), expect_errors=True)
     assert resp.status_code == 400
 
 
 def test_candidates_list(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=False)
     oldcompany = factories.OldCompanyFactory(id=2)
-    factories.OldCompanyLinkFactory(oldcompany=oldcompany,
-                                    undertaking=undertaking)
-    resp = client.get(url_for('api.candidate-list',
-                              domain=undertaking.domain))
+    factories.OldCompanyLinkFactory(oldcompany=oldcompany, undertaking=undertaking)
+    resp = client.get(url_for("api.candidate-list", domain=undertaking.domain))
     data = resp.json
     assert len(data) == 1
     data = data[0]
-    assert data['undertaking']['company_id'] == undertaking.external_id
-    assert len(data['links']) == 1
-    assert data['links'][0]['name'] == oldcompany.name
+    assert data["undertaking"]["company_id"] == undertaking.external_id
+    assert len(data["links"]) == 1
+    assert data["links"][0]["name"] == oldcompany.name
 
 
 def test_noncandidates_list(client):
     undertaking = factories.UndertakingFactory()
-    resp = client.get(url_for('api.candidate-non-list',
-                              domain=undertaking.domain))
+    resp = client.get(url_for("api.candidate-non-list", domain=undertaking.domain))
     data = resp.json
     assert len(data) == 1
     data = data[0]
-    assert data['name'] == undertaking.name
+    assert data["name"] == undertaking.name
 
 
 def test_unverify_link(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=True)
-    factories.OldCompanyLinkFactory(oldcompany=undertaking.oldcompany,
-                                    undertaking=undertaking)
-    resp = client.post(url_for('api.candidate-unverify',
-                               domain=undertaking.domain,
-                               undertaking_id=undertaking.external_id),
-                       dict(user='test_user'))
+    factories.OldCompanyLinkFactory(
+        oldcompany=undertaking.oldcompany, undertaking=undertaking
+    )
+    resp = client.post(
+        url_for(
+            "api.candidate-unverify",
+            domain=undertaking.domain,
+            undertaking_id=undertaking.external_id,
+        ),
+        dict(user="test_user"),
+    )
     data = resp.json
-    assert data['company_id'] == undertaking.external_id
+    assert data["company_id"] == undertaking.external_id
 
 
 def test_verify_none_link(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=True)
-    factories.OldCompanyLinkFactory(oldcompany=undertaking.oldcompany,
-                                    undertaking=undertaking)
+    factories.OldCompanyLinkFactory(
+        oldcompany=undertaking.oldcompany, undertaking=undertaking
+    )
 
-    resp = client.post(url_for('api.candidate-verify-none',
-                               domain=undertaking.domain,
-                               undertaking_id=undertaking.external_id),
-                       dict(user='test_user', id=1, verified=True))
-    assert undertaking.oldcompany == None
-    assert undertaking.oldcompany_verified == True
-    assert undertaking.oldcompany_extid == None
+    client.post(
+        url_for(
+            "api.candidate-verify-none",
+            domain=undertaking.domain,
+            undertaking_id=undertaking.external_id,
+        ),
+        dict(user="test_user", id=1, verified=True),
+    )
+    assert undertaking.oldcompany is None
+    assert undertaking.oldcompany_verified is True
+    assert undertaking.oldcompany_extid is None
 
 
 def test_verify_manual(client):
 
-    oldcompany = factories.OldCompanyFactory(account='test_account')
+    oldcompany = factories.OldCompanyFactory(account="test_account")
     undertaking = factories.UndertakingFactory()
 
-    resp = client.post(url_for('api.candidate-manual',
-                               domain=undertaking.domain,
-                               undertaking_id=undertaking.external_id,
-                               oldcompany_account=oldcompany.account),
-                       dict(user='test_user'))
-    assert undertaking.oldcompany == None
-    assert undertaking.oldcompany_verified == True
-    assert undertaking.oldcompany_extid == None
+    client.post(
+        url_for(
+            "api.candidate-manual",
+            domain=undertaking.domain,
+            undertaking_id=undertaking.external_id,
+            oldcompany_account=oldcompany.account,
+        ),
+        dict(user="test_user"),
+    )
+    assert undertaking.oldcompany is None
+    assert undertaking.oldcompany_verified is True
+    assert undertaking.oldcompany_extid is None
     assert undertaking.oldcompany_account == oldcompany.account
 
 
 def test_update_status_undertaking(client):
-    undertaking = factories.UndertakingFactory(status='DISABLED')
-    resp = client.post(url_for('api.company-statusupdate',
-                       domain=undertaking.domain,
-                       pk=undertaking.external_id),
-                       dict(status='VALID'))
+    undertaking = factories.UndertakingFactory(status="DISABLED")
+    resp = client.post(
+        url_for(
+            "api.company-statusupdate",
+            domain=undertaking.domain,
+            pk=undertaking.external_id,
+        ),
+        dict(status="VALID"),
+    )
     assert json.loads(resp.body.decode())
-    assert undertaking.status == 'VALID'
+    assert undertaking.status == "VALID"
 
 
 def test_update_status_undertaking_no_status(client):
-    undertaking = factories.UndertakingFactory(status='DISABLED')
-    resp = client.post(url_for('api.company-statusupdate',
-                       domain=undertaking.domain,
-                       pk=undertaking.external_id),
-                       dict(status=''))
-    assert resp.body.decode() == 'false'
+    undertaking = factories.UndertakingFactory(status="DISABLED")
+    resp = client.post(
+        url_for(
+            "api.company-statusupdate",
+            domain=undertaking.domain,
+            pk=undertaking.external_id,
+        ),
+        dict(status=""),
+    )
+    assert resp.body.decode() == "false"

@@ -1,7 +1,7 @@
 import json
 
 from cache_registry.api.views import ApiView, DetailView, ListView
-from cache_registry.models import OldCompany, db
+from cache_registry.models import db, OldCompany
 
 
 class OldCompanyDetail(DetailView):
@@ -10,7 +10,7 @@ class OldCompanyDetail(DetailView):
     @classmethod
     def serialize(cls, obj):
         rep = ApiView.serialize(obj)
-        rep['country'] = obj.country
+        rep["country"] = obj.country
         return rep
 
 
