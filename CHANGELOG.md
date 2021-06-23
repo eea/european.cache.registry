@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.2.0 - (2021-06-23)
+--------------------
+* Upgrade packages to latest version
+* Upgrade python from 3.6 to 3.8
+* And black and flake8 format
+  [dianaboiangiu]
+
 2.1.9 - (2021-04-13)
 --------------------
 * Add endpoint for all years licences listing
