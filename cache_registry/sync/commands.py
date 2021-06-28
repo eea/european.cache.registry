@@ -343,10 +343,10 @@ def call_sync_collections_title():
 
 @sync_manager.command("bdr")
 def bdr():
-    return call_bdr()
+    return call_command_bdr()
 
 
-def call_bdr():
+def call_command_bdr():
     obligations = current_app.config.get("MANUAL_VERIFY_ALL_COMPANIES", [])
     for obl in obligations:
         if obl:

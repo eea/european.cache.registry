@@ -14,7 +14,7 @@ done
 
 if [ ! -e .skip-db-init ]; then
   touch .skip-db-init
-  echo "Running DB CMD: .py db upgrade head"
+  echo "Running DB CMD: python -m flask db upgrade head"
   python -m flask db upgrade head
 fi
 
