@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.1 - (2021-06-28)
+--------------------
+* Fix call bdr command
+  [dianaboiangiu]
+
 2.2.0 - (2021-06-23)
 --------------------
 * Upgrade packages to latest version
