@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.3 - (2021-07-29)
+--------------------
+* Fix match mail link to company details
+  [dianaboiangiu]
+
 2.2.2 - (2021-07-29)
 --------------------
 * Allow call bdr for all companies with check passed True
