@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.2 - (2021-07-29)
+--------------------
+* Allow call bdr for all companies with check passed True
+  [dianaboiangiu]
+
 2.2.1 - (2021-06-28)
 --------------------
 * Fix call bdr command
