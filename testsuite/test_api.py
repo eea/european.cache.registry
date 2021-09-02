@@ -8,7 +8,6 @@ from . import factories
 from instance.settings import FGAS, ODS
 
 
-
 def test_authorization_failed(client):
     resp = client.get(
         url_for("api.company-list", domain="FGAS"),

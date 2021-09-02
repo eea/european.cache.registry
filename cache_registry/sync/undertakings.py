@@ -1,5 +1,6 @@
 import requests
-
+import logging
+from logging.handlers import RotatingFileHandler
 from flask import current_app
 
 from cache_registry.models import (
@@ -17,6 +18,19 @@ from cache_registry.sync import parsers
 from instance.settings import ODS
 from .bdr import update_bdr_col_name, get_absolute_url
 from .auth import get_auth, Unauthorized, InvalidResponse, patch_users
+
+
+def get_logger(module_name):
+    """Generate a logger."""
+    logger = logging.getLogger(module_name)
+    log_file_updated = "ecr_updates_logging.log"
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    file_handler_updates = RotatingFileHandler(
+        log_file_updated, maxBytes=20971520, backupCount=1
+    )  # 20mb
+    logger.handlers = [file_handler_updates]
+    return logger
 
 
 def get_latest_undertakings(type_url, updated_since=None, page_size=None, id=None):
@@ -85,8 +99,61 @@ def patch_undertaking_old_gb_represent(external_id, data):
     return data
 
 
+def add_updates_log(undertaking, data):
+
+    existing_undertaking_data = """   
+        Organisation ID: {}
+        Organisation Name: {}
+        Organisation Status: {}
+        Organisation Domain: {}
+        Organisation type: {}
+        Organisation Country code: {}
+        Organisation Country code orig: {}
+        Organisation vat: {}
+        Organisation check_passed: {}
+        Organisation date_created: {}
+        Organisation date_updated: {}
+        Organisation date_created_in_ecr: {}
+        Organisation date_updated_in_ecr: {}
+        Organisation country_history: {}
+        Organisation types: {}
+        Organisation represent: {}
+        Organisation represent_history: {}
+        Organisation businessprofiles: {}
+
+    """.format(
+        undertaking.external_id,
+        undertaking.name,
+        undertaking.status,
+        undertaking.domain,
+        undertaking.undertaking_type,
+        undertaking.country_code,
+        undertaking.country_code_orig,
+        undertaking.vat,
+        undertaking.check_passed,
+        undertaking.date_created,
+        undertaking.date_updated,
+        undertaking.date_created_in_ecr,
+        undertaking.date_updated_in_ecr,
+        [x.code for x in undertaking.country_history],
+        [x.type for x in undertaking.types],
+        undertaking.represent,
+        undertaking.represent_history,
+        [x.highleveluses for x in undertaking.businessprofiles],
+    )
+    received_undertaking_data = """   
+        Received data: {}
+    """.format(
+        data,
+    )
+    message = f"Undertaking {undertaking.external_id} updated: \n Old data: {existing_undertaking_data} New data: {received_undertaking_data}"
+    logger = get_logger("updated")
+    logger.info(message)
+
+
 def update_undertaking(data, check_passed=True):
     """Create or update undertaking from received data"""
+    original_data = data.copy()
     represent_changed = False
     data = patch_undertaking(data["id"], data)
     address = parsers.parse_address(data.pop("address"))
@@ -111,6 +178,7 @@ def update_undertaking(data, check_passed=True):
     if not undertaking:
         undertaking = Undertaking(**data)
     else:
+        add_updates_log(undertaking, original_data)
         u_name = undertaking.name
         parsers.update_obj(undertaking, data)
         if undertaking.name != u_name:
