@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.4 - (2021-09-02)
+--------------------
+* Add logging for company changes in synchronization
+  [dianaboiangiu]
+
 2.2.3 - (2021-07-29)
 --------------------
 * Fix match mail link to company details
