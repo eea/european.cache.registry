@@ -76,7 +76,7 @@ def patch_undertaking_old_gb_represent(external_id, data):
     external_id = str(external_id)
     patch = current_app.config.get("PATCH_GB_OLD_REPR", {})
     if external_id in patch:
-        represent = data.get("euLegalRepresentativeCompany"))
+        represent = data.get("euLegalRepresentativeCompany")
         if not represent:
             print("Patching old gb represent on undertaking: {}".format(external_id))
             data.update(patch[external_id])
