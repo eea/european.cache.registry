@@ -15,7 +15,7 @@ from cache_registry.models import (
 )
 from cache_registry.models import db
 from cache_registry.sync import parsers
-from instance.settings import ODS
+from instance.settings import FGAS, ODS
 from .bdr import update_bdr_col_name, get_absolute_url
 from .auth import get_auth, Unauthorized, InvalidResponse, patch_users
 
@@ -33,10 +33,13 @@ def get_logger(module_name):
     return logger
 
 
-def get_latest_undertakings(type_url, updated_since=None, page_size=None, id=None):
+def get_latest_undertakings(type_url, updated_since=None, page_size=None, id=None, domain=FGAS):
     """Get latest undertakings from specific API url"""
     auth = get_auth("API_USER", "API_PASSWORD")
-    url = get_absolute_url("API_URL", type_url)
+    if domain == FGAS:
+        url = get_absolute_url("API_URL_FGAS", type_url)
+    else:
+        url = get_absolute_url("API_URL_ODS", type_url)
     if updated_since:
         updated_since = updated_since.strftime("%d/%m/%Y")
         params = {"updatedSince": updated_since}

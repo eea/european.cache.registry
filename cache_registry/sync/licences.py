@@ -53,7 +53,7 @@ def get_or_create_delivery(year, undertaking):
 def get_licences(year=2017, page_size=20):
     """Get latest licences from specific API url"""
     auth = get_auth("API_USER", "API_PASSWORD")
-    url = get_absolute_url("API_URL", "/latest/licences/")
+    url = get_absolute_url("API_URL_ODS", "/latest/licences/")
 
     params = {"year": year}
 

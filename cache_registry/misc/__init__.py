@@ -145,6 +145,8 @@ class SettingsOverview(MethodView):
     def get(self, **kwargs):
         resp = {
             "BASE_URL": current_app.config.get("BASE_URL", "undefined"),
+            "BASE_URL_ODS": current_app.config.get("BASE_URL_ODS", "undefined"),
+            "BASE_URL_FGAS": current_app.config.get("BASE_URL_FGAS", "undefined"),
             "AUTO_VERIFY_COMPANIES": current_app.config.get(
                 "AUTO_VERIFY_NEW_COMPANIES", ("FGAS",)
             ),

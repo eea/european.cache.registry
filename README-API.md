@@ -979,7 +979,9 @@ Settings calls
 Display the value of the configured middleware settings
 
     {
-      "BASE_URL": "http://example.com"
+      "BASE_URL": "http://example.com",
+      "BASE_URL_FGAS": "http://example.com",
+      "BASE_URL_ODS": "http://example.com"
     }
 
 
@@ -1011,7 +1013,9 @@ Settings calls
 Display the value of the configured middleware settings
 
     {
-      "BASE_URL": "http://example.com"
+      "BASE_URL": "http://example.com",
+      "BASE_URL_FGAS": "http://example.com",
+      "BASE_URL_ODS": "http://example.com"
     }
 
 

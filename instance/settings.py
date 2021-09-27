@@ -20,7 +20,12 @@ SQLALCHEMY_DATABASE_URI = "{schema}://{user}:{pwd}@{host}/{dbname}".format(
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 BASE_URL = os.environ.get("BASE_URL", "http://localhost")
+BASE_URL_FGAS = os.environ.get("BASE_URL_FGAS", "http://localhost")
+BASE_URL_ODS = os.environ.get("BASE_URL_ODS", "http://localhost")
+
 API_URL = BASE_URL + "/rest/api"
+API_URL_FGAS = BASE_URL_FGAS + "/rest/api"
+API_URL_ODS = BASE_URL_ODS + "/rest/api"
 API_USER = os.environ.get("API_USER", "")
 API_PASSWORD = os.environ.get("API_PASSWORD", "")
 API_TOKEN = os.environ.get("API_TOKEN", "")

@@ -161,6 +161,7 @@ def call_fgases(days=7, updated_since=None, page_size=200, id=None):
         updated_since=last_update,
         page_size=page_size,
         id=id,
+        domain=FGAS,
     )
     (undertakings_for_call_bdr, undertakings_count) = update_undertakings(
         undertakings, eea_double_check_fgases
@@ -221,6 +222,7 @@ def call_ods(days=7, updated_since=None, page_size=200, id=None):
         updated_since=last_update,
         page_size=page_size,
         id=id,
+        domain=ODS,
     )
 
     (undertakings_for_call_bdr, undertakings_count) = update_undertakings(
@@ -295,6 +297,7 @@ def call_fgases_debug_noneu(days=7, updated_since=None, page_size=None):
         type_url="/latest/fgasundertakings/",
         updated_since=last_update,
         page_size=page_size,
+        domain=FGAS,
     )
     print_all_undertakings(undertakings)
     return True

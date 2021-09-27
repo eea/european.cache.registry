@@ -15,6 +15,8 @@ from cache_registry.sync import sync_manager
 
 DEFAULT_CONFIG = {
     "API_URL": "http://example.com/rest/api",
+    "API_URL_FGAS": "http://example.com/rest/api",
+    "API_URL_ODS": "http://example.com/rest/api",
     "BDR_API_URL": "http://example.com/api",
     "HTTPS_VERIFY": None,
     "SEND_MATCHING_MAILS": False,
