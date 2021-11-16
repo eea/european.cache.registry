@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.7 - (2021-11-16)
+--------------------
+* Add separate API url for FGAS/ODS
+  [dianaboiangiu]
+
 2.2.6 - (2021-09-14)
 --------------------
 * Fix representative data parsing
