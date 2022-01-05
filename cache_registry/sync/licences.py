@@ -23,13 +23,14 @@ from cache_registry.models import (
 CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION = {
     "Release for free circulation": "free circulation",
     "Release for free circulation - VAT exempt": "free circulation",
+    "Release for free circulation - no VAT paid": "free circulation",
     "Re-import - with release for free circulation": "free circulation",
     "Re-export": "re-export",
     "Permanent export": "permanent export",
     "Transit - non-community goods": "transit",
     "Release for free circulation - redispatched": "free circulation",
-    "Inward processing - suspension system": "",
-    "Inward processing - drawback procedure": "",
+    "Inward processing - suspension system": "inward processing",
+    "Inward processing - drawback procedure": "inward processing",
 }
 
 
