@@ -25,6 +25,7 @@ CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION = {
     "Release for free circulation - VAT exempt": "free circulation",
     "Re-import - with release for free circulation": "free circulation",
     "Re-export": "re-export",
+    "Permanent export": "permanent export",
     "Transit - non-community goods": "transit",
     "Release for free circulation - redispatched": "free circulation",
     "Inward processing - suspension system": "",
@@ -217,11 +218,8 @@ def aggregate_licence_to_substance(delivery_licence, year):
     substances = Substance.query.filter_by(year=year, deliverylicence=delivery_licence)
     for substance in substances:
         quantity = sum([licence.net_mass for licence in substance.licences.all()])
-        print(substance.lic_use_desc)
         if substance.lic_use_desc == "laboratory uses":
             substance.quantity = round(quantity, 7)
-            print(substance.quantity)
-            print(delivery_licence.undertaking.external_id)
         else:
             substance.quantity = int(ceil(quantity))
         db.session.add(substance)
