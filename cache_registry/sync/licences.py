@@ -71,7 +71,12 @@ def get_licences(year=2017, page_size=20):
     if response.status_code != 200:
         raise InvalidResponse()
 
-    no_of_pages = int(response.headers["numberOfPages"])
+    if not page_size:
+        return response.json()
+    try:
+        no_of_pages = int(response.headers["numberOfPages"])
+    except:
+        no_of_pages = 1
     response_json = response.json()
 
     for page_number in range(2, no_of_pages + 1):
@@ -212,7 +217,13 @@ def aggregate_licence_to_substance(delivery_licence, year):
     substances = Substance.query.filter_by(year=year, deliverylicence=delivery_licence)
     for substance in substances:
         quantity = sum([licence.net_mass for licence in substance.licences.all()])
-        substance.quantity = int(ceil(quantity))
+        print(substance.lic_use_desc)
+        if substance.lic_use_desc == "laboratory uses":
+            substance.quantity = round(quantity, 7)
+            print(substance.quantity)
+            print(delivery_licence.undertaking.external_id)
+        else:
+            substance.quantity = int(ceil(quantity))
         db.session.add(substance)
         db.session.commit()
 

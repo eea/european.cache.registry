@@ -1,6 +1,7 @@
 # coding=utf-8
 from functools import reduce
 import json
+import numpy as np
 
 from flask import current_app
 from flask import request
@@ -48,7 +49,8 @@ class SubstanceYearListView(ApiView):
         data["use_kind"] = data.pop("lic_use_kind")
         data["use_desc"] = data.pop("lic_use_desc")
         data["type"] = data.pop("lic_type")
-        data["quantity"] = int(data["quantity"])
+        data["quantity"] = data["quantity"]
+        data["quantity"] = np.format_float_positional(data["quantity"], trim="-")
         return data
 
     def patch_licences(self, **kwargs):
@@ -58,6 +60,9 @@ class SubstanceYearListView(ApiView):
         patch = current_app.config.get("PATCH_LICENCES", [])
         for element in patch:
             if element.get("year") == year and element.get("company_id") == pk:
+                element["quantity"] = np.format_float_positional(
+                    element["quantity"], trim="-"
+                )
                 data.append(element)
         return data
 
@@ -93,7 +98,8 @@ class SubstanceListView(ApiView):
         data["use_kind"] = data.pop("lic_use_kind")
         data["use_desc"] = data.pop("lic_use_desc")
         data["type"] = data.pop("lic_type")
-        data["quantity"] = int(data["quantity"])
+        data["quantity"] = data["quantity"]
+        data["quantity"] = np.format_float_positional(data["quantity"], trim="-")
         return data
 
     def patch_licences(self, **kwargs):
@@ -102,6 +108,9 @@ class SubstanceListView(ApiView):
         patch = current_app.config.get("PATCH_LICENCES", [])
         for element in patch:
             if element.get("company_id") == pk:
+                element["quantity"] = np.format_float_positional(
+                    element["quantity"], trim="-"
+                )
                 data.append(element)
         return data
 

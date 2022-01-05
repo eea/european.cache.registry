@@ -156,8 +156,8 @@ be patched.
 ## Syncronise with Licence Portal
 
 * The licences for ODS are now taken from DG Clima and exposed:
-        python -m flask sync licence 2017 2017-1
-        python -m flask sync licence 2017 2017-1
+        python -m flask sync licences 2017 2017-1
+        python -m flask sync licences 2017 2017-1
 
 * The first parameter [2017], represents the year from which those deliveries are taken.
 * The second parameter [2017-1], represents the name of the delivery.
