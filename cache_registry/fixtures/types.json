@@ -182,5 +182,69 @@
             "domain": "ODS",
             "type":"ODS_PRODUCER_IN_EU"
         }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 24,
+            "domain": "FGAS",
+            "type":"PRODUCER_IMPORTER_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 25,
+            "domain": "FGAS",
+            "type":"EXPORTER_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 26,
+            "domain": "FGAS",
+            "type":"IMPORTER_OF_EQUIPMENT_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 27,
+            "domain": "FGAS",
+            "type":"PRODUCER_IMPORTER_EXPORTER_NON_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 28,
+            "domain": "FGAS",
+            "type":"MANUFACTURER_OF_EQUIPMENT_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 29,
+            "domain": "FGAS",
+            "type":"RECEIVER_EXEMPTED_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 30,
+            "domain": "FGAS",
+            "type":"DESTROYER_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 31,
+            "domain": "FGAS",
+            "type":"FEEDSTOCK_USER_HFCS"
+        }
     }
 ]

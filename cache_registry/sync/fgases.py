@@ -50,11 +50,6 @@ def eea_double_check_fgases(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
-    if not all([type.startswith("FGAS_") for type in data["types"]]):
-        message = "Organisation types elements don't start with 'FGAS_'"
-        current_app.logger.warning(message + identifier)
-        ok = False
-
     if data["businessProfile"]:
         if not all(
             [
