@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2.2.8 - (2022-01-12)
+--------------------
+* Accept fgas type without prefix
+* Surpress scientific notation in quantity values
+* FGAS GB companies should not report without OR
+* Add new values for use kind import
+* Use decimals for licences with laboratory uses desc
+  [dianaboiangiu]
+
 2.2.7 - (2021-11-16)
 --------------------
 * Add separate API url for FGAS/ODS
