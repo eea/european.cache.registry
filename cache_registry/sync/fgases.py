@@ -2,6 +2,7 @@ from flask import current_app
 
 from instance.settings import FGAS
 
+from cache_registry.models import Type
 
 def eea_double_check_fgases(data):
     ok = True
@@ -65,6 +66,13 @@ def eea_double_check_fgases(data):
         data["businessProfile"] = {"highLevelUses": []}
         current_app.logger.warning(message + identifier)
         ok = False
+
+    types = [object.type for object in Type.query.filter_by(domain=FGAS)]
+    for type in data["types"]:
+        if type not in types:
+            message = "Organisation type {0} is not accepted.".format(type)
+            current_app.logger.warning(message + identifier)
+            ok = False
 
     if not data["domain"] == FGAS:
         message = "Organisation domain is not FGAS"
