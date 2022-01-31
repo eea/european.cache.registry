@@ -2100,7 +2100,7 @@
         "fields": {
             "id": 263,
             "country_name_short_en": "Great Britain",
-            "country_code_alpha2": "GB"
+            "country_code_alpha2": "UK_GB"
         }
     },
     {
@@ -2108,7 +2108,7 @@
         "fields": {
             "id": 264,
             "country_name_short_en": "Northern Ireland",
-            "country_code_alpha2": "NI"
+            "country_code_alpha2": "UK_NI"
         }
     }
 ]
