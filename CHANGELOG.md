@@ -1,6 +1,13 @@
 Changelog
 =========
 
+
+2.2.9 - (2022-01-31)
+--------------------
+* Update country codes for licences
+* Set eori number column in export companies
+  [dianaboiangiu]
+
 2.2.8 - (2022-01-12)
 --------------------
 * Accept fgas type without prefix
