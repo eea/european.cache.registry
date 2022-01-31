@@ -14,46 +14,46 @@ MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 
 class UndertakingListExport(MethodView):
+
     COLUMNS = [
-        "company_id",
-        "name",
-        "domain",
-        "status",
-        "undertaking_type",
-        "website",
-        "date_updated",
-        "phone",
-        "oldcompany_extid",
-        "address_city",
-        "address_country_code",
-        "address_country_name",
-        "address_country_type",
-        "address_zipcode",
-        "address_number",
-        "address_street",
-        "country_code",
-        "vat",
-        "users",
-        "users",
-        "types",
-        "collection_id",
-        "date_created",
-        "oldcompany_account",
-        "oldcompany_verified",
-        "representative_name",
-        "representative_contact_first_name",
-        "representative_contact_last_name",
-        "check_passed",
-        "representative_vatnumber",
-        "representative_contact_email",
-        "representative_address_zipcode",
-        "representative_address_number",
-        "representative_address_street",
-        "representative_address_city",
-        "representative_address_country_code",
-        "representative_address_country_type",
-        "representative_address_country_name",
-        "represent_history",
+        ("company_id", "company_id"),
+        ("name", "name"),
+        ("domain", "domain"),
+        ("status", "status"),
+        ("undertaking_type", "undertaking_type"),
+        ("website", "website"),
+        ("date_updated", "date_updated"),
+        ("phone", "phone"),
+        ("oldcompany_extid", "oldcompany_extid"),
+        ("address_city", "address_city"),
+        ("address_country_code", "address_country_code"),
+        ("address_country_name", "address_country_name"),
+        ("address_country_type", "address_country_type"),
+        ("address_zipcode", "address_zipcode"),
+        ("address_number", "address_number"),
+        ("address_street", "address_street"),
+        ("country_code", "country_code"),
+        ("vat", "eori_number"),
+        ("users", "users"),
+        ("types", "types"),
+        ("collection_id", "collection_id"),
+        ("date_created", "date_created"),
+        ("oldcompany_account", "oldcompany_account"),
+        ("oldcompany_verified", "oldcompany_verified"),
+        ("representative_name", "representative_name"),
+        ("representative_contact_first_name", "representative_contact_first_name"),
+        ("representative_contact_last_name", "representative_contact_last_name"),
+        ("check_passed", "check_passed"),
+        ("representative_vatnumber", "representative_vatnumber"),
+        ("representative_contact_email", "representative_contact_email"),
+        ("representative_address_zipcode", "representative_address_zipcode"),
+        ("representative_address_number", "representative_address_number"),
+        ("representative_address_street", "representative_address_street"),
+        ("representative_address_city", "representative_address_city"),
+        ("representative_address_country_code", "representative_address_country_code"),
+        ("representative_address_country_type", "representative_address_country_type"),
+        ("representative_address_country_name", "representative_address_country_name"),
+        ("represent_history", "represent_history"),
     ]
 
     def get_data(self, domain):
@@ -85,13 +85,13 @@ class UndertakingListExport(MethodView):
         wb = Workbook()
         ws = wb.active
         ws.title = "Companies List"
-        ws.append(self.COLUMNS)
+        ws.append([column[1] for column in self.COLUMNS])
         for qs in queryset:
             qs["users"] = ", ".join([user["username"] for user in qs["users"]])
             qs["represent_history"] = ", ".join(
                 [repr["name"] for repr in qs["represent_history"]]
             )
-            values = [self.parse_column(qs, column) for column in self.COLUMNS]
+            values = [self.parse_column(qs, column[0]) for column in self.COLUMNS]
             ws.append(values)
         with NamedTemporaryFile() as tmp:
             wb.save(tmp.name)
