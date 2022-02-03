@@ -193,6 +193,7 @@ def get_or_create_substance(delivery_licence, licence):
         substance=substance_conversion.corrected_name,
         organization_country_name=country.country_code_alpha2,
         lic_use_desc=licence_details.lic_use_desc,
+        lic_use_kind=lic_use_kind,
         deliverylicence=delivery_licence,
         year=delivery_licence.year,
         lic_type=licence_details.lic_type,
