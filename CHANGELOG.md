@@ -1,6 +1,10 @@
 Changelog
 =========
 
+2.2.10 - (2022-01-31)
+---------------------
+* Add use_kind as unique field for license aggregation
+  [dianaboiangiu]
 
 2.2.9 - (2022-01-31)
 --------------------
