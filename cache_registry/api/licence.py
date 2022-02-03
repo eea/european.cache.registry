@@ -71,9 +71,7 @@ class SubstanceYearListView(ApiView):
         return {"licences": data}
 
     def dispatch_request(self, **kwargs):
-        return super(SubstanceYearListView, self).dispatch_request(
-            use_decimal_notation=True, **kwargs
-        )
+        return super(SubstanceYearListView, self).dispatch_request(**kwargs)
 
 
 class SubstanceListView(ApiView):
@@ -124,9 +122,7 @@ class SubstanceListView(ApiView):
         return {"licences": data}
 
     def dispatch_request(self, **kwargs):
-        return super(SubstanceListView, self).dispatch_request(
-            use_decimal_notation=True, **kwargs
-        )
+        return super(SubstanceListView, self).dispatch_request(**kwargs)
 
 
 class LicencesOfOneDeliveryListView(ListView):
