@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.12 - (2022-02-04)
+---------------------
+* Make country conversion field longer
+  [dianaboiangiu]
+
 2.2.11 - (2022-02-02)
 ---------------------
 * Change substance quantity postgres type
