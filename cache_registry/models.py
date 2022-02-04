@@ -481,7 +481,7 @@ class CountryCodesConversion(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     country_name_short_en = Column(String(100))
-    country_code_alpha2 = Column(String(4))
+    country_code_alpha2 = Column(String(5))
 
 
 class LicenceDetailsConverstion(SerializableModel, db.Model):
