@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.13 - (2022-02-15)
+---------------------
+* Set vat number label on FGAS companies
+  [dianaboiangiu]
+
 2.2.12 - (2022-02-04)
 ---------------------
 * Make country conversion field longer
