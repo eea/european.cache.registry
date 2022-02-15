@@ -163,7 +163,7 @@ def transform_excel_to_json(file=None):
         reader = csv.DictReader(f)
         fieldnames = [
             "type",
-            "substance name form",
+            "substance_name_form",
             "is_virgin",
             "company_name",
             "code",
