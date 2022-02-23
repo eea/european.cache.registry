@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.2.14 - (2022-02-23)
+---------------------
+* Fix types/business profile issue
+* Limit calls to bdr
+  [dianaboiangiu]
+
 2.2.13 - (2022-02-15)
 ---------------------
 * Set vat number label on FGAS companies
