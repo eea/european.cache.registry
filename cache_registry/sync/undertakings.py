@@ -179,8 +179,11 @@ def update_undertaking(data, check_passed=True):
 
     undertaking = Undertaking.query.filter_by(external_id=data["external_id"]).first()
     if not undertaking:
+        represent_changed = True
         undertaking = Undertaking(**data)
     else:
+        undertaking.types.clear()
+        undertaking.businessprofiles.clear()
         add_updates_log(undertaking, original_data)
         u_name = undertaking.name
         parsers.update_obj(undertaking, data)

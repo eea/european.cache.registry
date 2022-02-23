@@ -104,11 +104,10 @@ def update_undertakings(undertakings, check_function):
             or check_passed
             or undertaking_exists
         ):
-            (_, represent) = update_undertaking(undertaking, check_passed=check_passed)
+            (_, represent_changed) = update_undertaking(undertaking, check_passed=check_passed)
             undertakings_count += 1
-            if check_passed:
+            if check_passed and represent_changed:
                 undertakings_for_call_bdr.append(undertaking)
-
     return undertakings_for_call_bdr, undertakings_count
 
 
@@ -224,7 +223,6 @@ def call_ods(days=7, updated_since=None, page_size=200, id=None):
         id=id,
         domain=ODS,
     )
-
     (undertakings_for_call_bdr, undertakings_count) = update_undertakings(
         undertakings, eea_double_check_ods
     )
