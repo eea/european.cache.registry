@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.15 - (2022-03-10)
+---------------------
+* Add eori number field to Undertaking
+  [dianaboiangiu]
+
 2.2.14 - (2022-02-23)
 ---------------------
 * Fix types/business profile issue
