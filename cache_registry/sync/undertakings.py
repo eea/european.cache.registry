@@ -170,7 +170,7 @@ def update_undertaking(data, check_passed=True):
     data["date_created"] = parsers.parse_date(data.pop("dateCreated"))
     data["date_updated"] = parsers.parse_date(data.pop("dateUpdated"))
     data["undertaking_type"] = data.pop("@type", None)
-
+    data["eori_number"] = data.pop("eori", "")
     if data["domain"] == ODS:
         represent = None
         data["vat"] = data.pop("eoriNumber")

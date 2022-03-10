@@ -158,6 +158,7 @@ class Undertaking(SerializableModel, db.Model):
     # Undertaking:
     undertaking_type = Column(String(32), default="FGASUndertaking")
     vat = Column(String(255))
+    eori_number = Column(String(255), default="")
     types = relationship(
         "Type",
         secondary="undertaking_types",
