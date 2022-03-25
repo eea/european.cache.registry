@@ -33,7 +33,8 @@ class UndertakingListExport(MethodView):
         "address_number": "address_number",
         "address_street": "address_street",
         "country_code": "country_code",
-        "vat": "eori_number",
+        "vat": "vat_number",
+        "eori_number": "eori_number",
         "users": "users",
         "types": "types",
         "collection_id": "collection_id",
@@ -81,8 +82,9 @@ class UndertakingListExport(MethodView):
 
     def get(self, domain, **kwargs):
         queryset = self.get_data(domain)
-        if domain == 'FGAS':
-            self.COLUMNS['vat'] = 'vat_number'
+        if domain == 'ODS':
+            self.COLUMNS['vat'] = 'eori_number'
+            self.COLUMNS.pop('eori_number')
 
         wb = Workbook()
         ws = wb.active

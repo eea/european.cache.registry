@@ -70,6 +70,7 @@ class UndertakingListSmallView(ListView):
             "name": obj.name,
             "domain": obj.domain,
             "vat": obj.vat,
+            "eori_number": obj.eori_number,
             "date_created": obj.date_created.strftime("%d/%m/%Y"),
             "address": AddressDetail.serialize(obj.address),
             "users": [UserListView.serialize(cp) for cp in obj.contact_persons],
