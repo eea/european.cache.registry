@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.16 - (2022-03-25)
+---------------------
+* Add eori number to FGAS companies
+  [dianaboiangiu]
+
 2.2.15 - (2022-03-10)
 ---------------------
 * Add eori number field to Undertaking
