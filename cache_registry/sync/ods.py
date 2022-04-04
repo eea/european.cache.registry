@@ -4,6 +4,7 @@ from instance.settings import (
     NOT_OBLIGED_TO_REPORT,
     NO_HIGHLEVEL_TYPES,
     NOT_OBLIGED_TO_REPORT_ODS_TYPES,
+    COMPANIES_EXCEPTED_FROM_CHECKS,
 )
 
 
@@ -44,6 +45,13 @@ def eea_double_check_ods(data):
     required_fields_country = ["code", "name", "type"]
     required_fields_user = ["userName", "firstName", "lastName", "emailAddress"]
     ok = True
+
+    if str(data["id"]) in COMPANIES_EXCEPTED_FROM_CHECKS:
+        message = "Company has been excepted from checks"
+        current_app.logger.warning(message + identifier)
+        ok = True
+        return ok
+
     for field in required_fields:
         if not all((field in data, data[field])):
             message = "Organisation {0} field is missing.".format(field)

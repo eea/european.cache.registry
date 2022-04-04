@@ -1,6 +1,6 @@
 from flask import current_app
 
-from instance.settings import FGAS
+from instance.settings import FGAS, COMPANIES_EXCEPTED_FROM_CHECKS
 
 from cache_registry.models import Type
 
@@ -32,6 +32,12 @@ def eea_double_check_fgases(data):
     country_type = data["address"]["country"]["type"]
     data["address"]["country"]["code"]
     has_eu_legal_rep = data.get("euLegalRepresentativeCompany")
+
+    if str(data["id"]) in COMPANIES_EXCEPTED_FROM_CHECKS:
+        message = "Company has been excepted from checks"
+        current_app.logger.warning(message + identifier)
+        ok = True
+        return ok
 
     if all([country_type in ["NONEU_TYPE", "AMBIGUOUS_TYPE"], not has_eu_legal_rep]):
         message = "NONEU_TYPE and AMBIGOUS_TYPE Companies must have a representative."
