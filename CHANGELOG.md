@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.17 - (2022-03-26)
+---------------------
+* Add env variable for checks exception
+  [dianaboiangiu]
+
 2.2.16 - (2022-03-25)
 ---------------------
 * Add eori number to FGAS companies
