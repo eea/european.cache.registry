@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.2.18 - (2023-02-14)
+---------------------
+* Fix ODS/FGAS companies have the same ID
+  [dianaboiangiu]
+
 2.2.17 - (2022-03-26)
 ---------------------
 * Add env variable for checks exception
