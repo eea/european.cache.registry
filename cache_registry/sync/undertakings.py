@@ -177,7 +177,7 @@ def update_undertaking(data, check_passed=True):
 
     data["check_passed"] = check_passed
 
-    undertaking = Undertaking.query.filter_by(external_id=data["external_id"]).first()
+    undertaking = Undertaking.query.filter_by(external_id=data["external_id"], domain= data["domain"]).first()
     if not undertaking:
         represent_changed = True
         undertaking = Undertaking(**data)
