@@ -16,4 +16,4 @@ raven==6.10.0
 requests==2.25.1
 openpyxl==3.0.7
 SQLAlchemy==1.4.18
-Werkzeug==2.0.1
+Werkzeug==2.2.3
