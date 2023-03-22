@@ -106,7 +106,7 @@ def update_undertakings(undertakings, check_function):
         ):
             (_, represent_changed) = update_undertaking(undertaking, check_passed=check_passed)
             undertakings_count += 1
-            if check_passed and represent_changed:
+            if check_passed or represent_changed:
                 undertakings_for_call_bdr.append(undertaking)
     return undertakings_for_call_bdr, undertakings_count
 
