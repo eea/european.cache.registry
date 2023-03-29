@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.2.20 - (2023-03-29)
+---------------------
+* Fix sync issue on ODS/FGAS
+  [dianaboiangiu]
+
+2.2.19 - (2023-03-22)
+---------------------
+* Relax call bdr conditions
+  [dianaboiangiu]
+
 2.2.18 - (2023-02-14)
 ---------------------
 * Fix ODS/FGAS companies have the same ID
