@@ -172,7 +172,7 @@ def call_fgases(days=7, updated_since=None, page_size=200, id=None):
     db.session.commit()
     for undertaking in undertakings_for_call_bdr:
         undertaking_obj = Undertaking.query.filter_by(
-            external_id=undertaking["external_id"]
+            external_id=undertaking["external_id"], domain=FGAS
         ).first()
         call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
@@ -233,7 +233,7 @@ def call_ods(days=7, updated_since=None, page_size=200, id=None):
     db.session.commit()
     for undertaking in undertakings_for_call_bdr:
         undertaking_obj = Undertaking.query.filter_by(
-            external_id=undertaking["external_id"]
+            external_id=undertaking["external_id"], domain=ODS
         ).first()
         call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
