@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.3.0 - (2023-03-31)
+---------------------
+* Improve format
+* Improve bdr company folder creation
+  [dianaboiangiu]
+
 2.2.20 - (2023-03-29)
 ---------------------
 * Fix sync issue on ODS/FGAS
