@@ -44,9 +44,15 @@ def parse_address(address):
 @not_null
 def parse_rc(rc):
     rc["vatnumber"] = rc.pop("vatNumber", "") or rc.pop("vatnumber", "")
-    rc["contact_first_name"] = rc.pop("contactPersonFirstName", "") or rc.pop("contact_first_name", "")
-    rc["contact_last_name"] = rc.pop("contactPersonLastName", "") or rc.pop("contact_last_name", "")
-    rc["contact_email"] = rc.pop("contactPersonEmailAddress", "") or rc.pop("contact_email", "")
+    rc["contact_first_name"] = rc.pop("contactPersonFirstName", "") or rc.pop(
+        "contact_first_name", ""
+    )
+    rc["contact_last_name"] = rc.pop("contactPersonLastName", "") or rc.pop(
+        "contact_last_name", ""
+    )
+    rc["contact_email"] = rc.pop("contactPersonEmailAddress", "") or rc.pop(
+        "contact_email", ""
+    )
     rc["address"] = parse_address(rc.pop("address"))
     return rc
 

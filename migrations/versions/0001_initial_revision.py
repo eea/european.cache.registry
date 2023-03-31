@@ -1,8 +1,8 @@
-revision = "0001"
-down_revision = None
-
 from alembic import op
 import sqlalchemy as sa
+
+revision = "0001"
+down_revision = None
 
 
 def upgrade():
@@ -137,7 +137,7 @@ def upgrade():
             ["user.id"],
         ),
     )
-    op.create_unique_constraint(u"email", "user", ["email"])
+    op.create_unique_constraint("email", "user", ["email"])
 
 
 def downgrade():

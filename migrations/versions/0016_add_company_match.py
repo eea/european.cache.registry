@@ -1,8 +1,8 @@
-revision = "0016"
-down_revision = "0015"
-
 from alembic import op
 import sqlalchemy as sa
+
+revision = "0016"
+down_revision = "0015"
 
 
 def upgrade():
@@ -41,15 +41,15 @@ def upgrade():
     )
 
     op.add_column(
-        u"matching_log", sa.Column("oldcompany_id", sa.Integer(), nullable=True)
+        "matching_log", sa.Column("oldcompany_id", sa.Integer(), nullable=True)
     )
     op.add_column(
-        u"undertaking", sa.Column("oldcompany_id", sa.Integer(), nullable=True)
+        "undertaking", sa.Column("oldcompany_id", sa.Integer(), nullable=True)
     )
 
 
 def downgrade():
-    op.drop_column(u"undertaking", "oldcompany_id")
-    op.drop_column(u"matching_log", "oldcompany_id")
+    op.drop_column("undertaking", "oldcompany_id")
+    op.drop_column("matching_log", "oldcompany_id")
     op.drop_table("old_company_link")
     op.drop_table("old_company")

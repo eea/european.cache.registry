@@ -8,7 +8,14 @@ from flask import current_app
 from flask.cli import AppGroup
 
 
-from cache_registry.models import Country, ProcessAgentUse, Undertaking, User, db, loaddata
+from cache_registry.models import (
+    Country,
+    ProcessAgentUse,
+    Undertaking,
+    User,
+    db,
+    loaddata,
+)
 from cache_registry.sync.bdr import call_bdr
 from cache_registry.sync.fgases import eea_double_check_fgases
 from cache_registry.sync.ods import eea_double_check_ods
@@ -177,6 +184,7 @@ def transform_excel_to_json(file=None):
             json_data.append(json_object)
     with open("export_json_stocks.json", "w") as f:
         f.write(json.dumps(json_data))
+
 
 @utils_manager.command("load_data")
 @click.option("-f", "--file", "file", help="file_path")

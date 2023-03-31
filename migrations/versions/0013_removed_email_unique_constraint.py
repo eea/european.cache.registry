@@ -1,7 +1,7 @@
+from alembic import op
+
 revision = "0013"
 down_revision = "0012"
-
-from alembic import op
 
 
 def upgrade():
@@ -9,4 +9,4 @@ def upgrade():
 
 
 def downgrade():
-    op.create_unique_constraint(u"email", "user", ["email"])
+    op.create_unique_constraint("email", "user", ["email"])

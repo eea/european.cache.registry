@@ -1,7 +1,3 @@
-revision = "0019"
-down_revision = "0018"
-
-
 from alembic import op
 
 import sqlalchemy as sa
@@ -9,6 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
 from cache_registry.models import loaddata
+
+revision = "0019"
+down_revision = "0018"
 
 Session = sessionmaker()
 Base = declarative_base()
@@ -51,10 +50,10 @@ def upgrade():
             continue
         profiles = undertaking.businessprofile.highleveluses.split(",")
         undertaking_businessprofiles[undertaking.id] = profiles
-    op.drop_column(u"undertaking", "businessprofile_id")
+    op.drop_column("undertaking", "businessprofile_id")
     session.query(BusinessProfile).delete()
 
-    op.add_column(u"businessprofile", sa.Column("domain", sa.String(length=32)))
+    op.add_column("businessprofile", sa.Column("domain", sa.String(length=32)))
     loaddata("cache_registry/fixtures/business_profiles.json", session=session)
     m2m_values = []
     for undertaking_id, highleveluses in undertaking_businessprofiles.items():
@@ -79,7 +78,7 @@ def downgrade():
     session = Session(bind=bind)
 
     op.add_column(
-        u"undertaking",
+        "undertaking",
         sa.Column(
             "businessprofile_id", sa.Integer(), autoincrement=False, nullable=True
         ),
@@ -113,7 +112,7 @@ def downgrade():
         undertaking.businessprofile_id = old_format_businessprofile_id
         old_format_businessprofile_id += 1
 
-    op.drop_column(u"businessprofile", "domain")
+    op.drop_column("businessprofile", "domain")
     op.drop_table("undertaking_businessprofile")
     session.query(BusinessProfile).delete()
     op.bulk_insert(BusinessProfile.__table__, old_format_businessprofile_values)

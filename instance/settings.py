@@ -116,7 +116,9 @@ NOT_OBLIGED_TO_REPORT_ODS_TYPES = {
     "EXPORTER_ODS",
 }
 
-COMPANIES_EXCEPTED_FROM_CHECKS=os.environ.get("COMPANIES_EXCEPTED_FROM_CHECKS", "").split(",")
+COMPANIES_EXCEPTED_FROM_CHECKS = os.environ.get(
+    "COMPANIES_EXCEPTED_FROM_CHECKS", ""
+).split(",")
 
 try:
     from instance.extra.localsettings import *

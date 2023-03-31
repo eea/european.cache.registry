@@ -4,6 +4,7 @@ from instance.settings import FGAS, COMPANIES_EXCEPTED_FROM_CHECKS
 
 from cache_registry.models import Type
 
+
 def eea_double_check_fgases(data):
     ok = True
 

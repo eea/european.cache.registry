@@ -82,9 +82,9 @@ class UndertakingListExport(MethodView):
 
     def get(self, domain, **kwargs):
         queryset = self.get_data(domain)
-        if domain == 'ODS':
-            self.COLUMNS['vat'] = 'eori_number'
-            self.COLUMNS.pop('eori_number')
+        if domain == "ODS":
+            self.COLUMNS["vat"] = "eori_number"
+            self.COLUMNS.pop("eori_number")
 
         wb = Workbook()
         ws = wb.active

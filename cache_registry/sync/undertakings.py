@@ -33,7 +33,9 @@ def get_logger(module_name):
     return logger
 
 
-def get_latest_undertakings(type_url, updated_since=None, page_size=None, id=None, domain=FGAS):
+def get_latest_undertakings(
+    type_url, updated_since=None, page_size=None, id=None, domain=FGAS
+):
     """Get latest undertakings from specific API url"""
     auth = get_auth("API_USER", "API_PASSWORD")
     if domain == FGAS:
@@ -177,7 +179,9 @@ def update_undertaking(data, check_passed=True):
 
     data["check_passed"] = check_passed
 
-    undertaking = Undertaking.query.filter_by(external_id=data["external_id"], domain= data["domain"]).first()
+    undertaking = Undertaking.query.filter_by(
+        external_id=data["external_id"], domain=data["domain"]
+    ).first()
     if not undertaking:
         represent_changed = True
         undertaking = Undertaking(**data)

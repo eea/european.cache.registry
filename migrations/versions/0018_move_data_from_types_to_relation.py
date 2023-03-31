@@ -1,13 +1,3 @@
-revision = "0018"
-down_revision = "0017"
-
-"""
- This migration takes data from undertaking types field which right now look
- like this:
-        [value1,value2, value3]
- and creates relations between undertaking and type table with those values.
-"""
-
 from alembic import op
 
 import sqlalchemy as sa
@@ -17,6 +7,15 @@ from sqlalchemy.orm import relationship, sessionmaker
 
 from cache_registry.models import loaddata
 
+revision = "0018"
+down_revision = "0017"
+
+"""
+ This migration takes data from undertaking types field which right now look
+ like this:
+        [value1,value2, value3]
+ and creates relations between undertaking and type table with those values.
+"""
 
 Session = sessionmaker()
 Base = declarative_base()
