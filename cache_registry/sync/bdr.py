@@ -21,13 +21,14 @@ def check_no_represent(undertaking):
         return True
 
 
-def do_bdr_request(url, params=None):
+def do_bdr_request(url, params=None, method="get"):
     auth = get_auth("BDR_ENDPOINT_USER", "BDR_ENDPOINT_PASSWORD")
     ssl_verify = current_app.config["HTTPS_VERIFY"]
-
     response = None
     try:
-        response = requests.get(url, params=params, auth=auth, verify=ssl_verify)
+        response = getattr(requests, method)(
+            url, params=params, auth=auth, verify=ssl_verify
+        )
     except requests.ConnectionError:
         error_message = "BDR was unreachable - {}".format(datetime.now())
         current_app.logger.warning(error_message)
@@ -64,6 +65,27 @@ def check_bdr_request(params, relative_url):
     else:
         error_message = "Invalid response: " + str(response)
     return not error_message
+
+
+def check_if_company_folder_exists(undertaking):
+    if not current_app.config.get("BDR_ENDPOINT_URL"):
+        current_app.logger.warning("No bdr endpoint. No bdr call.")
+    DOMAIN_TO_ZOPE_FOLDER = {"FGAS": "fgases", "ODS": "ods"}
+    country_code = undertaking.country_code
+
+    if country_code:
+        country_code = country_code.lower()
+
+        if check_no_represent(undertaking):
+            country_code = "non_eu"
+
+    relative_url = f"/{DOMAIN_TO_ZOPE_FOLDER[undertaking.domain]}/{country_code}/{undertaking.external_id}"
+    url = get_absolute_url("BDR_ENDPOINT_URL", relative_url)
+    response = do_bdr_request(url, params=None, method="head")
+    if response.status_code == 404:
+        return False
+    else:
+        return True
 
 
 def call_bdr(undertaking, old_collection=False):

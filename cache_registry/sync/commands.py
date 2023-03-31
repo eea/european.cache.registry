@@ -17,7 +17,13 @@ from cache_registry.models import (
 from instance.settings import FGAS, ODS
 from . import sync_manager
 from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
-from .bdr import get_bdr_collections, update_bdr_col_name, get_absolute_url, call_bdr
+from .bdr import (
+    get_bdr_collections,
+    update_bdr_col_name,
+    get_absolute_url,
+    call_bdr,
+    check_if_company_folder_exists,
+)
 from .licences import (
     aggregate_licences_to_undertakings,
     aggregate_licence_to_substance,
@@ -104,7 +110,9 @@ def update_undertakings(undertakings, check_function):
             or check_passed
             or undertaking_exists
         ):
-            (_, represent_changed) = update_undertaking(undertaking, check_passed=check_passed)
+            (_, represent_changed) = update_undertaking(
+                undertaking, check_passed=check_passed
+            )
             undertakings_count += 1
             if check_passed or represent_changed:
                 undertakings_for_call_bdr.append(undertaking)
@@ -174,7 +182,8 @@ def call_fgases(days=7, updated_since=None, page_size=200, id=None):
         undertaking_obj = Undertaking.query.filter_by(
             external_id=undertaking["external_id"], domain=FGAS
         ).first()
-        call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
+        if not check_if_company_folder_exists(undertaking_obj):
+            call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
 
 
@@ -235,7 +244,9 @@ def call_ods(days=7, updated_since=None, page_size=200, id=None):
         undertaking_obj = Undertaking.query.filter_by(
             external_id=undertaking["external_id"], domain=ODS
         ).first()
-        call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
+        if undertaking_obj.check_passed:
+            if not check_if_company_folder_exists(undertaking_obj):
+                call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
 
 
