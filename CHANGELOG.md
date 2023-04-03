@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.1 - (2023-04-03)
+--------------------
+* Use old company id when necessary when checking if company folder exists
+  [dianaboiangiu]
+
 2.3.0 - (2023-03-31)
 ---------------------
 * Improve format
