@@ -72,14 +72,18 @@ def check_if_company_folder_exists(undertaking):
         current_app.logger.warning("No bdr endpoint. No bdr call.")
     DOMAIN_TO_ZOPE_FOLDER = {"FGAS": "fgases", "ODS": "ods"}
     country_code = undertaking.country_code
-
+    url_id = ""
     if country_code:
         country_code = country_code.lower()
 
         if check_no_represent(undertaking):
             country_code = "non_eu"
+    if undertaking.oldcompany_account:
+        url_id = undertaking.oldcompany_account
+    else:
+        url_id = undertaking.external_id
 
-    relative_url = f"/{DOMAIN_TO_ZOPE_FOLDER[undertaking.domain]}/{country_code}/{undertaking.external_id}"
+    relative_url = f"/{DOMAIN_TO_ZOPE_FOLDER[undertaking.domain]}/{country_code}/{url_id}"
     url = get_absolute_url("BDR_ENDPOINT_URL", relative_url)
     response = do_bdr_request(url, params=None, method="head")
     if response.status_code == 404:
