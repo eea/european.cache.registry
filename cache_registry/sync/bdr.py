@@ -83,7 +83,9 @@ def check_if_company_folder_exists(undertaking):
     else:
         url_id = undertaking.external_id
 
-    relative_url = f"/{DOMAIN_TO_ZOPE_FOLDER[undertaking.domain]}/{country_code}/{url_id}"
+    relative_url = (
+        f"/{DOMAIN_TO_ZOPE_FOLDER[undertaking.domain]}/{country_code}/{url_id}"
+    )
     url = get_absolute_url("BDR_ENDPOINT_URL", relative_url)
     response = do_bdr_request(url, params=None, method="head")
     if response.status_code == 404:

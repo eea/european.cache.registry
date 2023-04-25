@@ -14,6 +14,7 @@ from .candidate import (
 from .commands import (
     SyncCollectionsTitleView,
     SyncFgasesView,
+    SyncStocksView,
     MatchFlush,
     SyncODSView,
     SyncLicencesView,
@@ -334,6 +335,15 @@ register_url(
     view=SyncLicencesView,
     view_name="sync-licences",
 )
+
+register_url(
+    prefix=command_prefix,
+    name=command_name,
+    url="/stocks",
+    view=SyncStocksView,
+    view_name="stocks",
+)
+
 
 register_url(
     prefix=command_prefix,

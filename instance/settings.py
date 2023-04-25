@@ -40,6 +40,10 @@ BDR_ENDPOINT_PASSWORD = os.environ.get("BDR_ENDPOINT_PASSWORD", "")
 
 BDR_HELP_DESK_MAIL = os.environ.get("BDR_HELP_DESK_MAIL", "")
 
+
+STOCKS_API_TOKEN = os.environ.get("STOCKS_API_TOKEN", "")
+STOCKS_API_URL = os.environ.get("STOCKS_API_URL", "")
+
 LOG_FILE = os.environ.get("LOG_FILE", "log_file.log")
 
 # email server

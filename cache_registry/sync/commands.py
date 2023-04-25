@@ -1,6 +1,12 @@
 import requests
 import json
 import click
+import urllib.parse
+
+from io import BytesIO
+from scrapy.selector import Selector
+from zipfile import ZipFile
+from urllib.request import urlopen
 
 from datetime import datetime, timedelta
 
@@ -437,3 +443,63 @@ def import_oldcompany(file):
                 undertaking.oldcompany_account = row[0]
                 db.session.add(undertaking)
                 db.session.commit()
+
+
+@sync_manager.command("stocks")
+@click.option("-y", "--year", "year", help="Year to use")
+def stocks(year=None):
+    return call_stocks(year)
+
+
+def call_stocks(year=None):
+    # We use current year to get records from last year
+    if not year:
+        year = datetime.now().year
+
+    params = urllib.parse.urlencode(
+        {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year}
+    )
+    url = "?".join([current_app.config.get("STOCKS_API_URL", ""), params])
+    headers = {"Authorization": current_app.config.get("STOCKS_API_TOKEN", "")}
+    ssl_verify = current_app.config["HTTPS_VERIFY"]
+    response = requests.get(url, headers=headers, verify=ssl_verify)
+    a_href = Selector(response=response).xpath("//a/@href").get()
+    resp_file = urlopen(a_href)
+    data = resp_file.read()
+
+    myzip = ZipFile(BytesIO(data))
+    file_name = myzip.namelist()[0]
+    res = myzip.open(file_name).read()
+    json_data = json.loads(res)
+    stocks = Stock.query.filter_by(year=year).all()
+    stocks_count = len(stocks)
+    for stock in stocks:
+        db.session.delete(stock)
+    print(f"Deleted {stocks_count} stocks from year {year}")
+    stocks_count = 0
+    for stock in json_data:
+        if stock["year"] == year:
+            if stock["company_id"].startswith("ods"):
+                undertaking = Undertaking.query.filter_by(
+                    oldcompany_account=stock["company_id"], domain="ODS"
+                ).first()
+            else:
+                undertaking = Undertaking.query.filter_by(
+                    external_id=stock["company_id"], domain="ODS"
+                ).first()
+            if undertaking:
+                stock_obj = Stock(
+                    year=stock["year"],
+                    type=stock["type"],
+                    substance_name_form=stock["substance_name_form"],
+                    is_virgin=stock["is_virgin"],
+                    result=stock["result"],
+                    code=str(stock["company_id"]),
+                    undertaking=undertaking,
+                    undertaking_id=undertaking.id,
+                )
+                db.session.add(stock_obj)
+                db.session.commit()
+                stocks_count += 1
+    print(f"Created {stocks_count} stocks for year {year}")
+    return True

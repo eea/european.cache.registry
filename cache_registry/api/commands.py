@@ -13,6 +13,7 @@ from cache_registry.sync.commands import (
     call_fgases_debug_noneu,
     call_licences,
     call_ods,
+    call_stocks,
     call_sync_collections_title,
 )
 
@@ -58,6 +59,10 @@ class SyncODSView(MgmtCommand):
 
 class SyncLicencesView(MgmtCommand):
     command_func = staticmethod(call_licences)
+
+
+class SyncStocksView(MgmtCommand):
+    command_func = staticmethod(call_stocks)
 
 
 class SyncCollectionsTitleView(MgmtCommand):
