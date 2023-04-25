@@ -454,7 +454,7 @@ def stocks(year=None):
 def call_stocks(year=None):
     # We use current year to get records from last year
     if not year:
-        year = datetime.now().year
+        year = datetime.now().year - 1
 
     params = urllib.parse.urlencode(
         {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year}
@@ -494,7 +494,7 @@ def call_stocks(year=None):
                     substance_name_form=stock["substance_name_form"],
                     is_virgin=stock["is_virgin"],
                     result=stock["result"],
-                    code=str(stock["company_id"]),
+                    code=str(undertaking.external_id),
                     undertaking=undertaking,
                     undertaking_id=undertaking.id,
                 )
