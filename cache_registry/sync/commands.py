@@ -456,6 +456,7 @@ def call_stocks(year=None):
     if not year:
         year = datetime.now().year - 1
 
+    year_to_use = year - 1
     params = urllib.parse.urlencode(
         {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year}
     )
@@ -471,14 +472,14 @@ def call_stocks(year=None):
     file_name = myzip.namelist()[0]
     res = myzip.open(file_name).read()
     json_data = json.loads(res)
-    stocks = Stock.query.filter_by(year=year).all()
+    stocks = Stock.query.filter_by(year=year_to_use).all()
     stocks_count = len(stocks)
     for stock in stocks:
         db.session.delete(stock)
-    print(f"Deleted {stocks_count} stocks from year {year}")
+    print(f"Deleted {stocks_count} stocks from year {year_to_use}")
     stocks_count = 0
     for stock in json_data:
-        if stock["year"] == year:
+        if stock["year"] == year_to_use:
             if stock["company_id"].startswith("ods"):
                 undertaking = Undertaking.query.filter_by(
                     oldcompany_account=stock["company_id"], domain="ODS"
@@ -501,5 +502,5 @@ def call_stocks(year=None):
                 db.session.add(stock_obj)
                 db.session.commit()
                 stocks_count += 1
-    print(f"Created {stocks_count} stocks for year {year}")
+    print(f"Created {stocks_count} stocks for year {year_to_use}")
     return True
