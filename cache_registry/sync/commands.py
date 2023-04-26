@@ -472,7 +472,17 @@ def call_stocks(year=None):
     file_name = myzip.namelist()[0]
     res = myzip.open(file_name).read()
     json_data = json.loads(res)
-    stocks = Stock.query.filter_by(year=year_to_use).all()
+    stocks = (
+        Stock.query.filter_by(year=year_to_use)
+        .filter(
+            Stock.code.not_in(
+                [
+                    "23",
+                ]
+            )
+        )
+        .all()
+    )
     stocks_count = len(stocks)
     for stock in stocks:
         db.session.delete(stock)
