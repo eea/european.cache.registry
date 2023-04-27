@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.2 - (2023-04-27)
+--------------------
+* Fetch stocks from API
+  [dianaboiangiu]
+
 2.3.1 - (2023-04-03)
 --------------------
 * Use old company id when necessary when checking if company folder exists
