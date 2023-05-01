@@ -1,6 +1,6 @@
 alembic==1.6.5
 blinker==1.4
-Flask==2.0.1
+Flask==2.3.2
 Flask-Admin==1.5.8
 Flask-Mail==0.9.1
 Flask-Migrate==3.0.1
