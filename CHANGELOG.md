@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.3 - (2023-05-03)
+--------------------
+* Fetch test stocks from API
+  [dianaboiangiu]
+
 2.3.2 - (2023-04-27)
 --------------------
 * Fetch stocks from API
