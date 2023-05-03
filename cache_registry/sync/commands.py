@@ -458,7 +458,7 @@ def call_stocks(year=None):
 
     year_to_use = year - 1
     params = urllib.parse.urlencode(
-        {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year}
+        {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year, "Include_testdata": "yes"}
     )
     url = "?".join([current_app.config.get("STOCKS_API_URL", ""), params])
     headers = {"Authorization": current_app.config.get("STOCKS_API_TOKEN", "")}
@@ -472,17 +472,7 @@ def call_stocks(year=None):
     file_name = myzip.namelist()[0]
     res = myzip.open(file_name).read()
     json_data = json.loads(res)
-    stocks = (
-        Stock.query.filter_by(year=year_to_use)
-        .filter(
-            Stock.code.not_in(
-                [
-                    "23",
-                ]
-            )
-        )
-        .all()
-    )
+    stocks = Stock.query.filter_by(year=year_to_use).all()
     stocks_count = len(stocks)
     for stock in stocks:
         db.session.delete(stock)
