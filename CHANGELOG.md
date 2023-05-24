@@ -1,6 +1,9 @@
 Changelog
 =========
 
+2.3.4 - (2023-05-24)
+--------------------
+* Use GET method for Zope request (Zope2  HEAD requests treated like DAV issue)
 2.3.3 - (2023-05-03)
 --------------------
 * Fetch test stocks from API
