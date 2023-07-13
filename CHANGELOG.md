@@ -1,13 +1,21 @@
 Changelog
 =========
 
+2.3.6 - (2023-07-13)
+--------------------
+* Fix Dockerfile
+  [dianaboiangiu]
+
 2.3.5 - (2023-07-13)
 --------------------
 * Allow calls to BDR only on check passed True
+  [dianaboiangiu]
 
 2.3.4 - (2023-05-24)
 --------------------
 * Use GET method for Zope request (Zope2  HEAD requests treated like DAV issue)
+  [dianaboiangiu]
+
 2.3.3 - (2023-05-03)
 --------------------
 * Fetch test stocks from API
