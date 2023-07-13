@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.7 - (2023-07-13)
+--------------------
+Set a smaller range for updated_since
+  [dianaboiangiu]
+
 2.3.6 - (2023-07-13)
 --------------------
 * Fix Dockerfile
