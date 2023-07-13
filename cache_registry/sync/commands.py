@@ -188,7 +188,7 @@ def call_fgases(days=7, updated_since=None, page_size=200, id=None):
         undertaking_obj = Undertaking.query.filter_by(
             external_id=undertaking["external_id"], domain=FGAS
         ).first()
-        if not check_if_company_folder_exists(undertaking_obj):
+        if undertaking_obj.check_passed:
             call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
 
@@ -251,8 +251,7 @@ def call_ods(days=7, updated_since=None, page_size=200, id=None):
             external_id=undertaking["external_id"], domain=ODS
         ).first()
         if undertaking_obj.check_passed:
-            if not check_if_company_folder_exists(undertaking_obj):
-                call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
+            call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
 
 
@@ -458,7 +457,7 @@ def call_stocks(year=None):
 
     year_to_use = year - 1
     params = urllib.parse.urlencode(
-        {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year, "Include_testdata": "yes"}
+        {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year, "Include_testdata": "Yes"}
     )
     url = "?".join([current_app.config.get("STOCKS_API_URL", ""), params])
     headers = {"Authorization": current_app.config.get("STOCKS_API_TOKEN", "")}
