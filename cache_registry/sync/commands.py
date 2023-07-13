@@ -162,7 +162,7 @@ def fgases(days=7, updated_since=None, page_size=200, id=None):
     return call_fgases(days, updated_since, page_size, id)
 
 
-def call_fgases(days=7, updated_since=None, page_size=200, id=None):
+def call_fgases(days=3, updated_since=None, page_size=200, id=None):
     if not id:
         last_update = get_last_update(days, updated_since, domain=FGAS)
     else:
@@ -224,7 +224,7 @@ def ods(days=7, updated_since=None, page_size=200, id=None):
     return call_ods(days, updated_since, page_size, id)
 
 
-def call_ods(days=7, updated_since=None, page_size=200, id=None):
+def call_ods(days=3, updated_since=None, page_size=200, id=None):
     if not id:
         last_update = get_last_update(days, updated_since, domain=ODS)
     else:
@@ -304,7 +304,7 @@ def fgases_debug_noneu(days=7, updated_since=None, page_size=None):
     return call_fgases_debug_noneu(days, updated_since, page_size)
 
 
-def call_fgases_debug_noneu(days=7, updated_since=None, page_size=None):
+def call_fgases_debug_noneu(days=3, updated_since=None, page_size=None):
     # returns a list with all NON EU companies without a legal representative
     last_update = get_last_update(days, updated_since, domain=FGAS)
     undertakings = get_latest_undertakings(
