@@ -1,6 +1,9 @@
 Changelog
 =========
 
+2.3.5 - (2023-07-13)
+--------------------
+* Allow calls to BDR only on check passed True
 2.3.4 - (2023-05-24)
 --------------------
 * Use GET method for Zope request (Zope2  HEAD requests treated like DAV issue)
