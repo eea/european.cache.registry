@@ -38,6 +38,7 @@ def delete_all_substances_and_licences(delivery_licence):
     substances = Substance.query.filter_by(deliverylicence=delivery_licence).all()
     for substance in substances:
         db.session.delete(substance)
+        db.session.commit()
 
 
 def get_or_create_delivery(year, undertaking):
@@ -211,7 +212,11 @@ def get_or_create_substance(delivery_licence, licence):
             lic_type=licence_details.lic_type,
             quantity=0,
         )
-        db.session.add(substance)
+        try:
+            db.session.add(substance)
+        except:
+            db.session.expire_all()
+            db.session.add(substance)
         db.session.commit()
     return substance
 
