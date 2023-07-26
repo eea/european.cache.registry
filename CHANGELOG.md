@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.9 - (2023-07-26)
+--------------------
+* Make HEAD calls to bdr before making full calls
+  [dianaboiangiu]
+
 2.3.8 - (2023-07-17)
 --------------------
 * Fix Sqlalchemy error
