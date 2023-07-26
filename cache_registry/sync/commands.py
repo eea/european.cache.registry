@@ -189,7 +189,8 @@ def call_fgases(days=3, updated_since=None, page_size=200, id=None):
             external_id=undertaking["external_id"], domain=FGAS
         ).first()
         if undertaking_obj.check_passed:
-            call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
+            if not check_if_company_folder_exists(undertaking_obj):
+                call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
 
 
@@ -251,7 +252,8 @@ def call_ods(days=3, updated_since=None, page_size=200, id=None):
             external_id=undertaking["external_id"], domain=ODS
         ).first()
         if undertaking_obj.check_passed:
-            call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
+            if not check_if_company_folder_exists(undertaking_obj):
+                call_bdr(undertaking_obj, undertaking_obj.oldcompany_account)
     return True
 
 
