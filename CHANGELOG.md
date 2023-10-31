@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.10 - (2023-10-31)
+--------------------
+* Fix sync stocks
+  [dianaboiangiu]
+
 2.3.9 - (2023-07-26)
 --------------------
 * Make HEAD calls to bdr before making full calls
