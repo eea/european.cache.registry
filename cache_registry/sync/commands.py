@@ -454,10 +454,11 @@ def stocks(year=None):
 
 def call_stocks(year=None):
     # We use current year to get records from last year
-    if not year:
+    if year:
+        year = int(year) - 1
+    else:
         year = datetime.now().year - 1
 
-    year_to_use = year - 1
     params = urllib.parse.urlencode(
         {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year, "Include_testdata": "Yes"}
     )
@@ -473,35 +474,34 @@ def call_stocks(year=None):
     file_name = myzip.namelist()[0]
     res = myzip.open(file_name).read()
     json_data = json.loads(res)
-    stocks = Stock.query.filter_by(year=year_to_use).all()
+    stocks = Stock.query.all()
     stocks_count = len(stocks)
     for stock in stocks:
         db.session.delete(stock)
-    print(f"Deleted {stocks_count} stocks from year {year_to_use}")
+    print(f"Deleted {stocks_count} stocks")
     stocks_count = 0
     for stock in json_data:
-        if stock["year"] == year_to_use:
-            if stock["company_id"].startswith("ods"):
-                undertaking = Undertaking.query.filter_by(
-                    oldcompany_account=stock["company_id"], domain="ODS"
-                ).first()
-            else:
-                undertaking = Undertaking.query.filter_by(
-                    external_id=stock["company_id"], domain="ODS"
-                ).first()
-            if undertaking:
-                stock_obj = Stock(
-                    year=stock["year"],
-                    type=stock["type"],
-                    substance_name_form=stock["substance_name_form"],
-                    is_virgin=stock["is_virgin"],
-                    result=stock["result"],
-                    code=str(undertaking.external_id),
-                    undertaking=undertaking,
-                    undertaking_id=undertaking.id,
-                )
-                db.session.add(stock_obj)
-                db.session.commit()
-                stocks_count += 1
-    print(f"Created {stocks_count} stocks for year {year_to_use}")
+        if stock["company_id"].startswith("ods"):
+            undertaking = Undertaking.query.filter_by(
+                oldcompany_account=stock["company_id"], domain="ODS"
+            ).first()
+        else:
+            undertaking = Undertaking.query.filter_by(
+                external_id=stock["company_id"], domain="ODS"
+            ).first()
+        if undertaking:
+            stock_obj = Stock(
+                year=stock["year"],
+                type=stock["type"],
+                substance_name_form=stock["substance_name_form"],
+                is_virgin=stock["is_virgin"],
+                result=stock["result"],
+                code=str(undertaking.external_id),
+                undertaking=undertaking,
+                undertaking_id=undertaking.id,
+            )
+            db.session.add(stock_obj)
+            db.session.commit()
+            stocks_count += 1
+    print(f"Created {stocks_count} stocks")
     return True
