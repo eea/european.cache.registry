@@ -453,11 +453,10 @@ def stocks(year=None):
 
 
 def call_stocks(year=None):
-    # We use current year to get records from last year
     if year:
-        year = int(year) - 1
+        year = int(year)
     else:
-        year = datetime.now().year - 1
+        year = datetime.now().year
 
     params = urllib.parse.urlencode(
         {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year, "Include_testdata": "Yes"}
