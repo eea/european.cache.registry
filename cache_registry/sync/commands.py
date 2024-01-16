@@ -451,6 +451,30 @@ def import_oldcompany(file):
 def stocks(year=None):
     return call_stocks(year)
 
+def _update_or_create_stocks(data, undertaking):
+    created = False
+    stock = Stock.query.filter_by(
+        year=data['year'], type=data['type'], substance_name_form=data['substance_name_form'],
+        undertaking=undertaking, code=str(undertaking.external_id), undertaking_id=undertaking.id
+    ).first()
+    if stock:
+        stock.is_virgin = data["is_virgin"]
+        stock.result = data["result"]
+    else:
+        stock = Stock(
+            year=data["year"],
+            type=data["type"],
+            substance_name_form=data["substance_name_form"],
+            is_virgin=data["is_virgin"],
+            result=data["result"],
+            code=str(undertaking.external_id),
+            undertaking=undertaking,
+            undertaking_id=undertaking.id,
+        )
+        created = True
+    db.session.add(stock)
+    db.session.commit()
+    return stock, created
 
 def call_stocks(year=None):
     if year:
@@ -489,18 +513,8 @@ def call_stocks(year=None):
                 external_id=stock["company_id"], domain="ODS"
             ).first()
         if undertaking:
-            stock_obj = Stock(
-                year=stock["year"],
-                type=stock["type"],
-                substance_name_form=stock["substance_name_form"],
-                is_virgin=stock["is_virgin"],
-                result=stock["result"],
-                code=str(undertaking.external_id),
-                undertaking=undertaking,
-                undertaking_id=undertaking.id,
-            )
-            db.session.add(stock_obj)
-            db.session.commit()
-            stocks_count += 1
+            stock, created = _update_or_create_stocks(stock, undertaking)
+            if created:
+                stocks_count += 1
     print(f"Created {stocks_count} stocks")
     return True

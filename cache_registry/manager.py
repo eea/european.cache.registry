@@ -149,12 +149,12 @@ def import_pau(file=None):
                 continue
             process_agent_use = ProcessAgentUse(
                 type=row[1],
-                substance=row[4],
-                member_state=row[3],
-                pau_use=row[5],
-                value=row[6],
-                process_name=row[7],
-                year=row[8],
+                substance=row[3],
+                member_state=row[2],
+                pau_use=row[4],
+                value=row[5],
+                process_name=row[6],
+                year=row[7],
                 undertaking_id=undertaking.id,
                 undertaking=undertaking,
             )
