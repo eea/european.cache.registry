@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.11 - (2024-01-16)
+--------------------
+* Improve stocks script to update entries already created
+  [dianaboiangiu]
+
 2.3.10 - (2023-10-31)
 --------------------
 * Fix sync stocks
