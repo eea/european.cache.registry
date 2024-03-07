@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.12 - (2024-03-07)
+---------------------
+* Return users with email in Users endpoint
+  [dianaboiangiu]
+
 2.3.11 - (2024-01-16)
 --------------------
 * Improve stocks script to update entries already created

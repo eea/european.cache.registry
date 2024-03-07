@@ -14,8 +14,6 @@ class UserCompaniesView(DetailView):
     model = User
 
     def get_object(self, pk, **kwargs):
-        if "@" in pk:
-            abort(400)
         user = self.model.query.filter_by(username=pk).first()
         if not user:
             current_app.logger.warning("Unknown user: {}".format(pk))
