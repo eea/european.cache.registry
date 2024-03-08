@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.13 - (2024-03-08)
+---------------------
+* Fix response decode
+  [dianaboiangiu]
+
 2.3.12 - (2024-03-07)
 ---------------------
 * Return users with email in Users endpoint
