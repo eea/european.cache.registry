@@ -149,10 +149,11 @@ def update_bdr_col_name(undertaking):
         error_message = ""
         if response is not None:
             try:
-                res = ast.literal_eval(response.content)
+                res = json.loads(response.content)
             except:
+                current_app.logger.warning("Could not decode response")
                 res = {}
-            if not res.get("updated") is True:
+            if not res.get("updated"):
                 error_message = "Collection for id: {0} not updated".format(
                     undertaking.external_id
                 )
