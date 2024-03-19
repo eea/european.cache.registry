@@ -43,6 +43,7 @@ BDR_HELP_DESK_MAIL = os.environ.get("BDR_HELP_DESK_MAIL", "")
 
 STOCKS_API_TOKEN = os.environ.get("STOCKS_API_TOKEN", "")
 STOCKS_API_URL = os.environ.get("STOCKS_API_URL", "")
+STOCKS_INCLUDE_TESTDATA = os.environ.get("STOCKS_INCLUDE_TESTDATA", "No")
 
 LOG_FILE = os.environ.get("LOG_FILE", "log_file.log")
 

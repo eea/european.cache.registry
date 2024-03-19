@@ -481,9 +481,9 @@ def call_stocks(year=None):
         year = int(year)
     else:
         year = datetime.now().year
-
+    include_test_data = current_app.config.get("STOCKS_INCLUDE_TESTDATA", "No")
     params = urllib.parse.urlencode(
-        {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year, "Include_testdata": "Yes"}
+        {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year, "Include_testdata": include_test_data}
     )
     url = "?".join([current_app.config.get("STOCKS_API_URL", ""), params])
     headers = {"Authorization": current_app.config.get("STOCKS_API_TOKEN", "")}
