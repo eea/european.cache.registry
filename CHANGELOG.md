@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.14 - (2024-03-19)
+---------------------
+* Add ENV var STOCKS_INCLUDE_TESTDATA
+  [dianaboiangiu]
+
 2.3.13 - (2024-03-08)
 ---------------------
 * Fix response decode
