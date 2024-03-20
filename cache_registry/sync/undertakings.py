@@ -251,7 +251,7 @@ def update_undertaking(data, check_passed=True):
     UndertakingTypes.query.filter_by(undertaking=undertaking).delete()
     for type in types:
         type_object = Type.query.filter_by(type=type, domain=data["domain"]).first()
-        if type_object not in undertaking.types:
+        if type_object and type_object not in undertaking.types:
             undertaking.types.append(type_object)
 
     unique_emails = set([cp.get("email") for cp in contact_persons])
