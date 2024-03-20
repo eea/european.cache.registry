@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.15 - (2024-03-20)
+---------------------
+* Fix fgas sync
+  [dianaboiangiu]
+
 2.3.14 - (2024-03-19)
 ---------------------
 * Add ENV var STOCKS_INCLUDE_TESTDATA
