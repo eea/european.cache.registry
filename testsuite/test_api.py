@@ -374,7 +374,7 @@ def test_user_companies_by_email(client):
     user = factories.UserFactory()
     undertaking.contact_persons.append(user)
     resp = client.get(url_for("api.user-companies", pk=user.email), expect_errors=True)
-    assert resp.status_code == 400
+    assert resp.status_code == 404
 
 
 def test_candidates_list(client):

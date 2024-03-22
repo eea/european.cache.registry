@@ -70,7 +70,7 @@ def get_latest_undertakings(
         return response.json()
     try:
         no_of_pages = int(response.headers["numberOfPages"])
-    except:
+    except (ValueError, KeyError):
         no_of_pages = 1
     response_json = response.json()
 
@@ -88,7 +88,7 @@ def patch_undertaking(external_id, data):
     external_id = str(external_id)
     patch = current_app.config.get("PATCH_COMPANIES", {})
     if external_id in patch:
-        print("Patching undertaking: {}".format(external_id))
+        print(f"Patching undertaking: {external_id}")
         data.update(patch[external_id])
     return data
 
@@ -99,59 +99,38 @@ def patch_undertaking_old_gb_represent(external_id, data):
     if external_id in patch:
         represent = data.get("euLegalRepresentativeCompany")
         if not represent:
-            print("Patching old gb represent on undertaking: {}".format(external_id))
+            print(f"Patching old gb represent on undertaking: {external_id}")
             data.update(patch[external_id])
     return data
 
 
 def add_updates_log(undertaking, data):
 
-    existing_undertaking_data = """   
-        Organisation ID: {}
-        Organisation Name: {}
-        Organisation Status: {}
-        Organisation Domain: {}
-        Organisation type: {}
-        Organisation Country code: {}
-        Organisation Country code orig: {}
-        Organisation vat: {}
-        Organisation check_passed: {}
-        Organisation date_created: {}
-        Organisation date_updated: {}
-        Organisation date_created_in_ecr: {}
-        Organisation date_updated_in_ecr: {}
-        Organisation country_history: {}
-        Organisation types: {}
-        Organisation represent: {}
-        Organisation represent_history: {}
-        Organisation businessprofiles: {}
-
-    """.format(
-        undertaking.external_id,
-        undertaking.name,
-        undertaking.status,
-        undertaking.domain,
-        undertaking.undertaking_type,
-        undertaking.country_code,
-        undertaking.country_code_orig,
-        undertaking.vat,
-        undertaking.check_passed,
-        undertaking.date_created,
-        undertaking.date_updated,
-        undertaking.date_created_in_ecr,
-        undertaking.date_updated_in_ecr,
-        [x.code for x in undertaking.country_history],
-        [x.type for x in undertaking.types],
-        undertaking.represent,
-        undertaking.represent_history,
-        [x.highleveluses for x in undertaking.businessprofiles],
-    )
-    received_undertaking_data = """   
-        Received data: {}
-    """.format(
-        data,
-    )
-    message = f"Undertaking {undertaking.external_id} updated: \n Old data: {existing_undertaking_data} New data: {received_undertaking_data}"
+    existing_undertaking_data = f"""
+        Organisation ID: {undertaking.external_id}
+        Organisation Name: {undertaking.name}
+        Organisation Status: {undertaking.status}
+        Organisation Domain: {undertaking.domain}
+        Organisation type: {undertaking.undertaking_type}
+        Organisation Country code: {undertaking.country_code}
+        Organisation Country code orig: {undertaking.country_code_orig}
+        Organisation vat: {undertaking.vat}
+        Organisation check_passed: {undertaking.check_passed}
+        Organisation date_created: {undertaking.date_created}
+        Organisation date_updated: {undertaking.date_updated}
+        Organisation date_created_in_ecr: {undertaking.date_created_in_ecr}
+        Organisation date_updated_in_ecr: {undertaking.date_updated_in_ecr}
+        Organisation country_history: {[x.code for x in undertaking.country_history]}
+        Organisation types: {[x.type for x in undertaking.types]}
+        Organisation represent: {undertaking.represent}
+        Organisation represent_history: {undertaking.represent_history}
+        Organisation businessprofiles: {[x.highleveluses for x in undertaking.businessprofiles]}
+    """
+    received_undertaking_data = f"Received data: {data}"
+    message = f"""
+        Undertaking {undertaking.external_id} updated: \n \
+        Old data: {existing_undertaking_data} New data: {received_undertaking_data}"
+    """
     logger = get_logger("updated")
     logger.info(message)
 
@@ -193,9 +172,7 @@ def update_undertaking(data, check_passed=True):
         parsers.update_obj(undertaking, data)
         if undertaking.name != u_name:
             if update_bdr_col_name(undertaking):
-                print(
-                    "Updated collection title for: {0}".format(undertaking.external_id)
-                )
+                print(f"Updated collection title for: {undertaking.external_id}")
     if not undertaking.address:
         addr = Address(**address)
         db.session.add(addr)
@@ -211,7 +188,10 @@ def update_undertaking(data, check_passed=True):
         business_profile_object = BusinessProfile.query.filter_by(
             highleveluses=business_profile, domain=data["domain"]
         ).first()
-        if business_profile_object not in undertaking.businessprofiles:
+        if (
+            business_profile_object
+            and business_profile_object not in undertaking.businessprofiles
+        ):
             undertaking.businessprofiles.append(business_profile_object)
 
     if not represent:
@@ -308,8 +288,8 @@ def remove_undertaking(data, domain):
         external_id=data.get("id"), domain=domain
     ).first()
     if undertaking:
-        msg = "Removing undertaking name: {}" " with id: {}".format(
-            undertaking.name, undertaking.id
+        msg = (
+            f"Removing undertaking name: '{undertaking.name}' with id: {undertaking.id}"
         )
         current_app.logger.warning(msg)
         undertaking.represent_history = []
@@ -318,5 +298,5 @@ def remove_undertaking(data, domain):
         db.session.commit()
         db.session.delete(undertaking)
     else:
-        msg = "No company with id: {} found in the db".format(data.get("id"))
+        msg = f"No company with id: {data.get('id')} found in the db"
         current_app.logger.warning(msg)

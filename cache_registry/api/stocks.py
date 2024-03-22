@@ -94,7 +94,7 @@ class LoadStocksJson(ApiView):
                 context["message"] = "\n".join(
                     [
                         context["message"],
-                        "Company {} does not exist.".format(stock["company_id"]),
+                        f"Company {stock['company_id']} does not exist.",
                     ]
                 )
                 continue

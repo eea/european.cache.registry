@@ -1,7 +1,7 @@
-import ast
-from datetime import datetime
 import json
 import requests
+
+from datetime import datetime
 
 
 from flask import current_app
@@ -30,7 +30,7 @@ def do_bdr_request(url, params=None, method="get"):
             url, params=params, auth=auth, verify=ssl_verify
         )
     except requests.ConnectionError:
-        error_message = "BDR was unreachable - {}".format(datetime.now())
+        error_message = f"BDR was unreachable - {datetime.now()}"
         current_app.logger.warning(error_message)
         print(error_message)
         if "sentry" in current_app.extensions:
@@ -70,6 +70,7 @@ def check_bdr_request(params, relative_url):
 def check_if_company_folder_exists(undertaking):
     if not current_app.config.get("BDR_ENDPOINT_URL"):
         current_app.logger.warning("No bdr endpoint. No bdr call.")
+        return True
     DOMAIN_TO_ZOPE_FOLDER = {"FGAS": "fgases", "ODS": "ods"}
     country_code = undertaking.country_code
     url_id = ""
@@ -150,21 +151,19 @@ def update_bdr_col_name(undertaking):
         if response is not None:
             try:
                 res = json.loads(response.content)
-            except:
+            except ValueError:
                 current_app.logger.warning("Could not decode response")
                 res = {}
             if not res.get("updated"):
-                error_message = "Collection for id: {0} not updated".format(
-                    undertaking.external_id
+                error_message = (
+                    f"Collection for id: {undertaking.external_id} not updated"
                 )
             elif response.status_code != 200:
-                error_message = "Invalid status code: " + response.status_code
+                error_message = f"Invalid status code: {response.status_code}"
         else:
-            error_message = "Invalid response: " + str(response)
+            error_message = f"Invalid response: {str(response)}"
     else:
-        error_message = "Collection for id: {0} not updated as company country is set to None".format(
-            undertaking.external_id
-        )
+        error_message = f"Collection for id: {undertaking.external_id} not updated as company country is set to None"
     if error_message:
         current_app.logger.warning(error_message)
         print(error_message)

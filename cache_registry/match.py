@@ -325,11 +325,9 @@ def unverify(undertaking_external_id, domain):
 @match_manager.command("test")
 def test(new, old):
     """Show fuzzy match for two words"""
-    print(
-        "'{}' and '{}' match by {} (LIMIT: {})".format(
-            new, old, fuzz.ratio(new, old), get_fuzz_limit()
-        )
-    )
+    ratio = fuzz.ration(new, old)
+    limit = get_fuzz_limit()
+    print(f"'{new}' and '{old}' match by {ratio} (LIMIT: {limit})")
     return True
 
 
@@ -339,9 +337,7 @@ def test(new, old):
 @click.option("-o", "--oldcompany_account", "oldcompany_account")
 def manual(undertaking_id, domain, oldcompany_account):
     print(
-        "Verifying company: {} with old company account: {}".format(
-            undertaking_id, oldcompany_account
-        )
+        f"Verifying company: {undertaking_id} with old company account: {oldcompany_account}"
     )
     print(verify_manual(undertaking_id, domain, oldcompany_account, "SYSTEM"))
     return True

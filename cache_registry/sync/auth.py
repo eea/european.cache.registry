@@ -23,7 +23,7 @@ def patch_users(external_id, users):
     external_id = str(external_id)
     patch = current_app.config.get("PATCH_USERS", {})
     if external_id in patch:
-        print("Patching company: {}".format(external_id))
+        print(f"Patching company: {external_id}")
         users.extend(patch[external_id])
         return users, True
     return users, False
@@ -37,5 +37,5 @@ def cleanup_unused_users():
     for u in unused_users:
         db.session.delete(u)
         current_app.logger.info(
-            "User {} with email {} has been deleted".format(u.username, u.email)
+            f"User {u.username} with email {u.email} has been deleted"
         )

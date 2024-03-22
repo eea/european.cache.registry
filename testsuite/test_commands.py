@@ -34,13 +34,15 @@ def test_update_undertakings_fgas(client):
     with open("testsuite/fixtures/companies-fgas.json") as file:
         data = json.load(file)
 
-    (undertakings_with_changed_represent, undertakings_count) = update_undertakings(
+    # for FGAS includes all undertakings with check_passed = True and
+    # representative changed (including new undertaking)
+    (undertakings_for_call_bdr, undertakings_count) = update_undertakings(
         data, eea_double_check_fgases
     )
 
     assert undertakings_count == 4
     assert Undertaking.query.fgases().count() == 4
-    assert len(undertakings_with_changed_represent) == 3
+    assert len(undertakings_for_call_bdr) == 4
 
 
 def test_update_undertakings_ods(client):

@@ -84,7 +84,7 @@ def upgrade():
                 op.drop_table("type")
                 op.drop_table("undertaking_types")
                 raise Exception(
-                    "Related type object {0} not found in the database.".format(type)
+                    f"Related type object {type} not found in the database."
                 )
             undertaking_types.append(
                 {"undertaking_id": undertaking.id, "type_id": type_object.id}

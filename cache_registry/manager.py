@@ -145,7 +145,7 @@ def import_pau(file=None):
                 continue
             undertaking = Undertaking.query.filter_by(external_id=row[0]).first()
             if not undertaking:
-                current_app.logger.warning("{} company does not exists".format(row[0]))
+                current_app.logger.warning(f"{row[0]} company does not exists")
                 continue
             process_agent_use = ProcessAgentUse(
                 type=row[1],

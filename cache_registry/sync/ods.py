@@ -12,21 +12,14 @@ from cache_registry.models import Type, BusinessProfile
 
 
 def eea_double_check_ods(data):
-    identifier = """
-        Organisation ID: {}
-        Organisation status: {}
-        Organisation highLevelUses: {}
-        Organisation types: {}
-        Organisation contact persons: {}
-        Organisation domain: {}
-    """.format(
-        data["id"],
-        data["status"],
-        data["businessProfile"]["highLevelUses"],
-        data["types"],
-        data["contactPersons"],
-        data["domain"],
-    )
+    identifier = f"""
+        Organisation ID: {data['id']}
+        Organisation status: {data['status']}
+        Organisation highLevelUses: {data['businessProfile']['highLevelUses']}
+        Organisation types: {data['types']}
+        Organisation contact persons: {data['contactPersons']}
+        Organisation domain: {data['domain']}
+    """
 
     required_fields = [
         "@type",
@@ -54,7 +47,7 @@ def eea_double_check_ods(data):
 
     for field in required_fields:
         if not all((field in data, data[field])):
-            message = "Organisation {0} field is missing.".format(field)
+            message = f"Organisation {field} field is missing."
             current_app.logger.warning(message + identifier)
             ok = False
 
@@ -81,7 +74,7 @@ def eea_double_check_ods(data):
     country = data["address"]["country"]
     for field in required_fields_country:
         if not all((field in country, country[field])):
-            message = "Organisation country {0} is missing.".format(field)
+            message = f"Organisation country {field} is missing."
             current_app.logger.warning(message + identifier)
             ok = False
 
@@ -93,14 +86,14 @@ def eea_double_check_ods(data):
     for user in data["contactPersons"]:
         for field in required_fields_user:
             if not all((field in user, user[field])):
-                message = "Organisation user {0} is missing.".format(field)
+                message = f"Organisation user {field} is missing."
                 current_app.logger.warning(message + identifier)
                 ok = False
 
     types = [object.type for object in Type.query.filter_by(domain=ODS)]
     for type in data["types"]:
         if type not in types:
-            message = "Organisation type {0} is not accepted.".format(type)
+            message = f"Organisation type {type} is not accepted."
             current_app.logger.warning(message + identifier)
             ok = False
 
@@ -112,7 +105,7 @@ def eea_double_check_ods(data):
     high_level_uses_set = set(data["businessProfile"]["highLevelUses"])
 
     if set(data["types"]).issubset(NOT_OBLIGED_TO_REPORT_ODS_TYPES):
-        message = "Organization types {} should not report.".format(data["types"])
+        message = f"Organization types {data['types']} should not report."
         current_app.logger.warning(message + identifier)
         ok = False
 
@@ -123,9 +116,7 @@ def eea_double_check_ods(data):
 
     for high_level_use in data["businessProfile"]["highLevelUses"]:
         if high_level_use not in businessprofiles:
-            message = "Organisation highlevel use {0} is not accepted.".format(
-                high_level_use
-            )
+            message = f"Organisation highlevel use {high_level_use} is not accepted."
             current_app.logger.warning(message + identifier)
             ok = False
         elif high_level_use not in NOT_OBLIGED_TO_REPORT:
@@ -133,11 +124,8 @@ def eea_double_check_ods(data):
             obliged_to_report = True
 
     if not obliged_to_report and high_level_uses_set:
-        message = (
-            "Organisations with highlevel uses {0} should not be reported.".format(
-                ", ".join(high_level_uses_set)
-            )
-        )
+        high_lvl_uses_text = ", ".join(high_level_uses_set)
+        message = f"Organisations with highlevel uses {high_lvl_uses_text} should not be reported."
         current_app.logger.warning(message + identifier)
         ok = False
 

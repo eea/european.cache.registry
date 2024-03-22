@@ -278,5 +278,29 @@
             "domain": "ODS",
             "highleveluses": "export.of.hcfc.other"
         }
+    },
+    {
+        "model": "BusinessProfile",
+        "fields": {
+            "id": 36,
+            "domain": "FGAS",
+            "highleveluses": "fgas.prod-imp-exp.hfcs.exporter"
+        }
+    },
+    {
+        "model": "BusinessProfile",
+        "fields": {
+            "id": 37,
+            "domain": "FGAS",
+            "highleveluses": "fgas.prod-imp-exp.hfcs.customs-procedure-release"
+        }
+    },
+    {
+        "model": "BusinessProfile",
+        "fields": {
+            "id": 38,
+            "domain": "FGAS",
+            "highleveluses": "fgas.prod-imp-exp.hfcs.customs-others"
+        }
     }
 ]

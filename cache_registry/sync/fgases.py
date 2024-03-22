@@ -1,7 +1,10 @@
 from flask import current_app
 
-from instance.settings import FGAS, COMPANIES_EXCEPTED_FROM_CHECKS
-
+from instance.settings import (
+    COMPANIES_EXCEPTED_FROM_CHECKS,
+    FGAS,
+    NOT_OBLIGED_TO_REPORT_FGAS_TYPES,
+)
 from cache_registry.models import Type
 
 
@@ -14,21 +17,14 @@ def eea_double_check_fgases(data):
     else:
         businessprofile = data["businessProfile"]["highLevelUses"]
 
-    identifier = """
-        Organisation ID: {}
-        Organisation status: {}
-        Organisation highLevelUses: {}
-        Organisation types: {}
-        Organisation contact persons: {}
-        Organisation domain: {}
-    """.format(
-        data["id"],
-        data["status"],
-        businessprofile,
-        data["types"],
-        data["contactPersons"],
-        data["domain"],
-    )
+    identifier = f"""
+        Organisation ID: {data['id']}
+        Organisation status: {data['status']}
+        Organisation highLevelUses: {businessprofile}
+        Organisation types: {data['types']}
+        Organisation contact persons: {data['contactPersons']}
+        Organisation domain: {data['domain']}
+    """
 
     country_type = data["address"]["country"]["type"]
     data["address"]["country"]["code"]
@@ -74,10 +70,15 @@ def eea_double_check_fgases(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
+    if set(data["types"]).issubset(NOT_OBLIGED_TO_REPORT_FGAS_TYPES):
+        message = f"Organization types {data['types']} should not report."
+        current_app.logger.warning(message + identifier)
+        ok = False
+
     types = [object.type for object in Type.query.filter_by(domain=FGAS)]
     for type in data["types"]:
         if type not in types:
-            message = "Organisation type {0} is not accepted.".format(type)
+            message = f"Organisation type {type} is not accepted."
             current_app.logger.warning(message + identifier)
             ok = False
 

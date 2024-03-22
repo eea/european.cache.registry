@@ -5,6 +5,7 @@ Revises: 0034
 Create Date: 2022-02-03 13:36:56.196359
 
 """
+
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import DOUBLE_PRECISION

@@ -78,7 +78,7 @@ def get_licences(year=2017, page_size=20):
         return response.json()
     try:
         no_of_pages = int(response.headers["numberOfPages"])
-    except:
+    except (KeyError, ValueError):
         no_of_pages = 1
     response_json = response.json()
 
@@ -103,8 +103,8 @@ def parse_licence(licence, undertaking_id, substance):
     ).first()
     if not original_country:
         original_country = ""
-        message = "Country {} could not be translated.".format(
-            licence["organizationCountryName"]
+        message = (
+            f"Country {licence['organizationCountryName']} could not be translated."
         )
         current_app.logger.error(message)
     else:
@@ -112,9 +112,7 @@ def parse_licence(licence, undertaking_id, substance):
 
     if not international_country:
         international_country = ""
-        message = "Country {} could not be translated.".format(
-            licence["internationalPartyCountryName"]
-        )
+        message = f"Country {licence['internationalPartyCountryName']} could not be translated."
         current_app.logger.error(message)
     else:
         international_country = international_country.country_code_alpha2
@@ -161,10 +159,10 @@ def get_or_create_substance(delivery_licence, licence):
     if licence["licenceState"].lower() not in ["expired", "closed"]:
         return None
     if licence["mixtureNatureType"].lower() != "virgin":
-        ec_substance_name = "{} (non-virgin)".format(licence["chemicalName"])
+        ec_substance_name = f"{licence['chemicalName']} (non-virgin)"
     else:
-        ec_substance_name = "{} ({})".format(
-            licence["chemicalName"], licence["mixtureNatureType"].lower()
+        ec_substance_name = (
+            f"{licence['chemicalName']} ({licence['mixtureNatureType'].lower()})"
         )
     substance_conversion = SubstanceNameConversion.query.filter_by(
         ec_substance_name=ec_substance_name
@@ -251,8 +249,9 @@ def aggregate_licences_to_undertakings(data):
         ).first()
         if not undertaking_obj:
             if licence["organizationId"] not in not_found_undertakings:
-                message = "Undertaking {} is not present in the application.".format(
-                    licence["organizationId"]
+                external_id = licence["organizationId"]
+                message = (
+                    f"Undertaking {external_id} is not present in the application."
                 )
                 current_app.logger.error(message)
                 not_found_undertakings.append(licence["organizationId"])

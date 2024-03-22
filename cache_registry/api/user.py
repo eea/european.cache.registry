@@ -16,7 +16,7 @@ class UserCompaniesView(DetailView):
     def get_object(self, pk, **kwargs):
         user = self.model.query.filter_by(username=pk).first()
         if not user:
-            current_app.logger.warning("Unknown user: {}".format(pk))
+            current_app.logger.warning(f"Unknown user: {pk}")
             abort(404)
         return user
 
@@ -32,9 +32,11 @@ class UserCompaniesView(DetailView):
                 "country_history": [
                     country_hist.code for country_hist in company.country_history
                 ],
-                "representative_country": None
-                if not company.represent
-                else company.represent.address.country.code,
+                "representative_country": (
+                    None
+                    if not company.represent
+                    else company.represent.address.country.code
+                ),
                 "represent_history": [
                     EuLegalRepresentativeCompanyDetail.serialize(representative_hist)
                     for representative_hist in company.represent_history

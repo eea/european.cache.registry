@@ -10,7 +10,7 @@ from urllib.request import urlopen
 
 from datetime import datetime, timedelta
 
-from cache_registry.sync.parsers import parse_company, parse_rc
+from cache_registry.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
 from cache_registry.models import (
@@ -49,7 +49,7 @@ def get_old_companies(obligation):
     token = current_app.config.get("BDR_API_KEY", "")
     if obligation.lower() == "fgas":
         obligation = "fgases"
-    url = get_absolute_url("BDR_API_URL", "/company/obligation/{0}/".format(obligation))
+    url = get_absolute_url("BDR_API_URL", f"/company/obligation/{obligation}/")
     headers = {"Authorization": token}
     ssl_verify = current_app.config["HTTPS_VERIFY"]
     response = requests.get(url, headers=headers, verify=ssl_verify)
@@ -80,7 +80,7 @@ def get_last_update(days, updated_since, domain):
             )
             last_update = last.date_updated - timedelta(days=1) if last else None
 
-    print("Using last_update {}".format(last_update))
+    print(f"Using last_update {last_update}")
     return last_update
 
 
@@ -90,16 +90,12 @@ def patch_undertaking_old_gb_represent(external_id, data):
     if external_id in patch:
         represent = data.get("euLegalRepresentativeCompany")
         if not represent:
-            print("Patching old gb represent on undertaking: {}".format(external_id))
+            print(f"Patching old gb represent on undertaking: {external_id}")
             data.update(patch[external_id])
     return data
 
 
 def update_undertakings(undertakings, check_function):
-    # import at this level since an import at module level will break
-    # due to a circular import between cache_registry.match and cache_registry.sync.fgases
-    from cache_registry.match import verify_none
-
     undertakings_count = 0
     undertakings_for_call_bdr = []
     for undertaking in undertakings:
@@ -167,7 +163,7 @@ def call_fgases(days=3, updated_since=None, page_size=200, id=None):
         last_update = get_last_update(days, updated_since, domain=FGAS)
     else:
         last_update = None
-        print("Fetching data for company {}".format(id))
+        print(f"Fetching data for company {id}")
 
     undertakings = get_latest_undertakings(
         type_url="/latest/fgasundertakings/",
@@ -202,8 +198,9 @@ def undertaking_remove(external_id, domain):
         external_id=external_id, domain=domain
     ).first()
     if undertaking:
-        msg = "Removing undertaking name: {}" " with id: {}".format(
-            undertaking.name, undertaking.id
+        msg = (
+            f"Removing undertaking name: {undertaking.name}"
+            " with id: {undertaking.id}"
         )
         undertaking.represent_history.clear()
         undertaking.types.clear()
@@ -212,7 +209,7 @@ def undertaking_remove(external_id, domain):
         db.session.delete(undertaking)
         db.session.commit()
     else:
-        msg = "No company with id: {} found in the db".format(external_id)
+        msg = f"No company with id: {external_id} found in the db"
         current_app.logger.warning(msg)
 
 
@@ -230,7 +227,7 @@ def call_ods(days=3, updated_since=None, page_size=200, id=None):
         last_update = get_last_update(days, updated_since, domain=ODS)
     else:
         last_update = None
-        print("Fetching data for company {}".format(id))
+        print(f"Fetching data for company {id}")
 
     undertakings = get_latest_undertakings(
         type_url="/latest/odsundertakings/",
@@ -280,15 +277,11 @@ def call_licences(year, page_size=200):
             for licence in data["licences"]:
                 substance = get_or_create_substance(delivery_licence, licence)
                 if not substance:
-                    substance_name = "{} ({})".format(
-                        licence["chemicalName"], licence["mixtureNatureType"].lower()
-                    )
-                    message = "Substance {} could not be translated or Country code {} or Substance country code {} \
-                               could not be translated or licence does not have an approved state.".format(
-                        substance_name,
-                        licence["organizationCountryName"],
-                        licence["internationalPartyCountryName"],
-                    )
+                    sub_name = f"{licence['chemicalName']}({licence['mixtureNatureType'].lower()})"
+                    message = f"Substance {sub_name} could not be translated or Country \
+                               code {licence['organizationCountryName']} or Substance \
+                               country code {licence['internationalPartyCountryName']} \
+                               could not be translated or licence does not have an approved state."
                     current_app.logger.error(message)
                     continue
                 parse_licence(licence, undertaking.id, substance)
@@ -335,8 +328,8 @@ def call_sync_collections_title():
                     colls[c_id] = collection
                 else:
                     print(
-                        "Duplicate collection for company_id: {0} have {1}"
-                        " and found {2}".format(c_id, colls[c_id], collection)
+                        f"Duplicate collection for company_id: {c_id} have {colls[c_id]} \
+                        and found {collection}"
                     )
         undertakings = Undertaking.query
         for undertaking in undertakings:
@@ -345,7 +338,7 @@ def call_sync_collections_title():
             coll = colls.get(ext_id)
             if coll and coll.get("title") != title:
                 if update_bdr_col_name(undertaking):
-                    print("Updated collection title for: {0}".format(ext_id))
+                    print(f"Updated collection title for: {ext_id}")
     return True
 
 
@@ -392,16 +385,16 @@ def import_stocks_json(file):
         try:
             int(code)
             undertaking = Undertaking.query.filter_by(external_id=code).first()
-        except:
+        except ValueError:
             undertaking = Undertaking.query.filter_by(oldcompany_account=code).first()
         if not undertaking:
+            year = stock["year"]
+            substance_name_form = stock["substance_name_form"]
+            code = stock["code"]
+            type = stock["type"]
             print(
-                "Stock {} - {} - {} - {} was not imported as undertaking does not exist.".format(
-                    stock["year"],
-                    stock["substance_name_form"],
-                    stock["code"],
-                    stock["type"],
-                )
+                f"Stock {year} - {substance_name_form} - {code} - {type} \
+                 was not imported as undertaking does not exist."
             )
             continue
         stock_object = Stock.query.filter_by(
@@ -451,11 +444,16 @@ def import_oldcompany(file):
 def stocks(year=None):
     return call_stocks(year)
 
+
 def _update_or_create_stocks(data, undertaking):
     created = False
     stock = Stock.query.filter_by(
-        year=data['year'], type=data['type'], substance_name_form=data['substance_name_form'],
-        undertaking=undertaking, code=str(undertaking.external_id), undertaking_id=undertaking.id
+        year=data["year"],
+        type=data["type"],
+        substance_name_form=data["substance_name_form"],
+        undertaking=undertaking,
+        code=str(undertaking.external_id),
+        undertaking_id=undertaking.id,
     ).first()
     if stock:
         stock.is_virgin = data["is_virgin"]
@@ -476,6 +474,7 @@ def _update_or_create_stocks(data, undertaking):
     db.session.commit()
     return stock, created
 
+
 def call_stocks(year=None):
     if year:
         year = int(year)
@@ -483,7 +482,12 @@ def call_stocks(year=None):
         year = datetime.now().year
     include_test_data = current_app.config.get("STOCKS_INCLUDE_TESTDATA", "No")
     params = urllib.parse.urlencode(
-        {"opt_showresult": "false", "opt_servicemode": "sync", "Upper_limit": year, "Include_testdata": include_test_data}
+        {
+            "opt_showresult": "false",
+            "opt_servicemode": "sync",
+            "Upper_limit": year,
+            "Include_testdata": include_test_data,
+        }
     )
     url = "?".join([current_app.config.get("STOCKS_API_URL", ""), params])
     headers = {"Authorization": current_app.config.get("STOCKS_API_TOKEN", "")}

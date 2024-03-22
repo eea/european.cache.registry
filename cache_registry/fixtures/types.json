@@ -246,5 +246,21 @@
             "domain": "FGAS",
             "type":"FEEDSTOCK_USER_HFCS"
         }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 32,
+            "domain": "FGAS",
+            "type":"EXPORTER_OF_EQUIPMENT_HFCS"
+        }
+    },
+    {
+        "model":"Type",
+        "fields":{
+            "id": 33,
+            "domain": "FGAS",
+            "type":"RECLAIMER_HFCS"
+        }
     }
 ]
