@@ -17,4 +17,4 @@ requests==2.25.1
 openpyxl==3.0.7
 Scrapy==2.8.0
 SQLAlchemy==1.4.18
-Werkzeug==2.0.1
+Werkzeug==2.2.3
