@@ -53,7 +53,7 @@ def get_or_create_delivery(year, undertaking):
     return delivery
 
 
-def get_licences(year=2017, page_size=20):
+def get_licences(year=2023, page_size=20):
     """Get latest licences from specific API url"""
     auth = get_auth("API_USER", "API_PASSWORD")
     url = get_absolute_url("API_URL_ODS", "/latest/licences/")
