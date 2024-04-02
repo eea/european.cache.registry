@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.16 - (2024-04-02)
+---------------------
+* Update types and business profiles for FGAS
+  [dianaboiangiu]
+
 2.3.15 - (2024-03-20)
 ---------------------
 * Fix fgas sync
