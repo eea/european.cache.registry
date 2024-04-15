@@ -107,6 +107,11 @@ def update_undertakings(undertakings, check_function):
                 undertaking["id"], undertaking
             )
         check_passed = check_function(undertaking)
+        if undertaking_exists:
+            if undertaking_exists.domain == "FGAS":
+                if undertaking_exists.check_passed and not check_passed:
+                    message = f"Company {undertaking_exists.external_id} has failed the checks"
+                    current_app.logger.warning(message)
         if (
             (not undertaking["@type"] == "ODSUndertaking")
             or check_passed
@@ -211,6 +216,14 @@ def undertaking_remove(external_id, domain):
     else:
         msg = f"No company with id: {external_id} found in the db"
         current_app.logger.warning(msg)
+
+@sync_manager.command("old_companies_sync")
+@click.option("-u", "--updated", "updated_since", help="Date in dd-MM-YYYY format")
+def old_companies_sync( updated_since=None):
+    updated = datetime.strptime("01-01-2018","%d-%m-%Y")
+    undertakings = Undertaking.query.filter(Undertaking.date_updated <= updated, Undertaking.domain=="FGAS")
+    for undertaking in undertakings:
+        call_fgases(id=undertaking.external_id)
 
 
 @sync_manager.command("ods")
