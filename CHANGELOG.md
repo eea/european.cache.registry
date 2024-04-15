@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.17 - (2024-04-15)
+---------------------
+* Log companies affected by the latest changes
+  [dianaboiangiu]
+
 2.3.16 - (2024-04-02)
 ---------------------
 * Update types and business profiles for FGAS
