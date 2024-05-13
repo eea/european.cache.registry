@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.18 - (2024-05-13)
+---------------------
+* Add new endpoint user/companies to include ecas_id
+  [dianaboiangiu]
+
 2.3.17 - (2024-04-15)
 ---------------------
 * Log companies affected by the latest changes
