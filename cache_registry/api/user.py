@@ -53,9 +53,6 @@ class UserCompaniesIncludeEcasView(ApiView):
     def get_object(self, **kwargs):
         user = None
         checked_username = []
-        import pdb
-
-        pdb.set_trace()
         if "username" in request.args:
             username = request.args.get("username")
             checked_username.append(username)

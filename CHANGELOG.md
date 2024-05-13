@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.3.19 - (2024-05-13)
+---------------------
+* Remove breakpoint
+  [dianaboiangiu]
+
 2.3.18 - (2024-05-13)
 ---------------------
 * Add new endpoint user/companies to include ecas_id
