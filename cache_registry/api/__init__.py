@@ -54,6 +54,7 @@ from .undertaking import (
 from .user import (
     UserListView,
     UserCompaniesView,
+    UserCompaniesIncludeEcasView,
 )
 
 api = Blueprint("api", __name__)
@@ -227,6 +228,14 @@ register_url(
     url="/<pk>/companies",
     view=UserCompaniesView,
     view_name="companies",
+)
+
+register_url(
+    prefix=user_prefix,
+    name=user_name,
+    url="/companies",
+    view=UserCompaniesIncludeEcasView,
+    view_name="companies_ecas",
 )
 
 # Candidate
