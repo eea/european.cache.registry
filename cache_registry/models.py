@@ -48,6 +48,7 @@ class User(SerializableModel, db.Model):
     first_name = Column(String(255))
     last_name = Column(String(255))
     email = Column(String(255))
+    type = Column(String(64))
 
     @property
     def verified_undertakings(self):
@@ -113,6 +114,31 @@ class Type(SerializableModel, db.Model):
     id = Column(Integer, primary_key=True)
     type = Column(String(255))
     domain = Column(String(32), default="FGAS")
+
+
+auditor_users = db.Table(
+    "auditor_users",
+    db.Column("user_id", db.Integer(), db.ForeignKey("user.id")),
+    db.Column("auditor_id", db.Integer(), db.ForeignKey("auditor.id")),
+)
+
+
+class Auditor(SerializableModel, db.Model):
+    __tablename__ = "auditor"
+
+    id = Column(Integer, primary_key=True)
+    auditor_uid = Column(String(20))
+    name = Column(String(255))
+    contact_persons = relationship(
+        User,
+        secondary=auditor_users,
+        backref=db.backref("auditors", lazy="dynamic"),
+    )
+    date_created = Column(Date)
+    date_updated = Column(Date)
+    date_created_in_ecr = Column(Date, server_default=db.func.now())
+    date_updated_in_ecr = Column(Date, onupdate=db.func.now())
+    status = Column(String(64))
 
 
 undertaking_users = db.Table(

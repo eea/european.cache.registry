@@ -14,6 +14,7 @@ from cache_registry.sync.parsers import parse_company
 from flask import current_app
 from sqlalchemy import desc
 from cache_registry.models import (
+    Auditor,
     Undertaking,
     db,
     OrganizationLog,
@@ -21,16 +22,17 @@ from cache_registry.models import (
     Stock,
 )
 from instance.settings import FGAS, ODS
-from . import sync_manager
-from .auth import cleanup_unused_users, InvalidResponse, Unauthorized
-from .bdr import (
+from cache_registry.sync import sync_manager
+from cache_registry.sync.auditors import get_latest_auditors, update_auditor
+from cache_registry.sync.auth import cleanup_unused_users, InvalidResponse, Unauthorized
+from cache_registry.sync.bdr import (
     get_bdr_collections,
     update_bdr_col_name,
     get_absolute_url,
     call_bdr,
     check_if_company_folder_exists,
 )
-from .licences import (
+from cache_registry.sync.licences import (
     aggregate_licences_to_undertakings,
     aggregate_licence_to_substance,
     delete_all_substances_and_licences,
@@ -39,10 +41,10 @@ from .licences import (
     get_or_create_delivery,
     parse_licence,
 )
-from .undertakings import get_latest_undertakings, update_undertaking
+from cache_registry.sync.undertakings import get_latest_undertakings, update_undertaking
 
-from .fgases import eea_double_check_fgases
-from .ods import eea_double_check_ods
+from cache_registry.sync.fgases import eea_double_check_fgases
+from cache_registry.sync.ods import eea_double_check_ods
 
 
 def get_old_companies(obligation):
@@ -61,7 +63,7 @@ def get_old_companies(obligation):
     return response.json()
 
 
-def get_last_update(days, updated_since, domain):
+def get_last_update(days, updated_since, domain=FGAS, model_name=Undertaking):
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, "%d/%m/%Y")
@@ -73,11 +75,11 @@ def get_last_update(days, updated_since, domain):
         if days > 0:
             last_update = datetime.now() - timedelta(days=days)
         else:
-            last = (
-                Undertaking.query.filter_by(domain=domain)
-                .order_by(desc(Undertaking.date_updated))
-                .first()
-            )
+            queryset = model_name.query.all()
+            if hasattr(model_name, "domain"):
+                queryset = queryset.query.filter_by(domain=domain)
+
+            last = queryset.order_by(desc(model_name.date_updated)).first()
             last_update = last.date_updated - timedelta(days=1) if last else None
 
     print(f"Using last_update {last_update}")
@@ -126,11 +128,11 @@ def update_undertakings(undertakings, check_function):
     return undertakings_for_call_bdr, undertakings_count
 
 
-def log_changes(last_update, undertakings_count, domain):
+def log_changes(last_update, obj_count, domain):
     if isinstance(last_update, datetime):
         last_update = last_update.date()
     log = OrganizationLog(
-        organizations=undertakings_count, using_last_update=last_update, domain=domain
+        organizations=obj_count, using_last_update=last_update, domain=domain
     )
     db.session.add(log)
 
@@ -152,6 +154,39 @@ def print_all_undertakings(undertakings):
                         print(undertaking)
 
     print(undertakings_count, "values")
+
+
+@sync_manager.command("auditors")
+@click.option("-d", "--days", "days", help="Number of days the update is done for.")
+@click.option("-u", "--updated", "updated_since", help="Date in DD/MM/YYYY format")
+@click.option("-p", "--page_size", "page_size", help="Page size")
+@click.option("-i", "--auditor_uid", "uid", help="Auditor uid")
+def auditors(days=7, updated_since=None, page_size=200, uid=""):
+    return call_auditors(days, updated_since, page_size, uid)
+
+
+def call_auditors(days=7, updated_since=None, page_size=200, uid=""):
+    if not uid:
+        last_update = get_last_update(days, updated_since, model_name=Auditor)
+    else:
+        last_update = None
+        print(f"Fetching data for auditor {uid}")
+
+    auditors_data = get_latest_auditors(
+        updated_since=last_update, page_size=page_size, uid=uid
+    )
+    for auditor_dict in auditors_data:
+        update_auditor(auditor_dict)
+
+    cleanup_unused_users()
+
+    if not uid:
+        auditors_count = len(auditors_data)
+        log_changes(last_update, auditors_count, domain=FGAS)
+        print(auditors_count, "values")
+
+    db.session.commit()
+    return True
 
 
 @sync_manager.command("fgases")
