@@ -18,6 +18,31 @@ def test_authorization_failed(client):
     assert resp.json["status"] == "Unauthorized"
 
 
+def test_auditor_list(client):
+    auditor = factories.AuditorFactory()
+    resp = client.get(url_for("api.auditor-list"))
+    assert len(resp.json) == 1
+
+    data = resp.json[0]
+    assert data["auditor_uid"] == auditor.auditor_uid
+    assert data["name"] == auditor.name
+    assert data["status"] == auditor.status
+    for date_field in ("date_created", "date_updated"):
+        assert data[date_field] == getattr(auditor, date_field).strftime("%d/%m/%Y")
+
+
+def test_auditor_details(client):
+    auditor = factories.AuditorFactory()
+    resp = client.get(url_for("api.auditor-detail", pk=auditor.auditor_uid))
+
+    data = resp.json
+    assert data["auditor_uid"] == auditor.auditor_uid
+    assert data["name"] == auditor.name
+    assert data["status"] == auditor.status
+    for date_field in ("date_created", "date_updated"):
+        assert data[date_field] == getattr(auditor, date_field).strftime("%d/%m/%Y")
+
+
 def test_undertaking_list(client):
     undertaking = factories.UndertakingFactory()
     type = factories.TypeFactory(domain=undertaking.domain, type="IMPORTER")

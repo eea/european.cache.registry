@@ -2,6 +2,7 @@
 from flask import Blueprint
 from flask.cli import AppGroup
 
+from .auditor import AuditorDetailView, AuditorListView
 from .candidate import (
     CandidateList,
     NonCandidateList,
@@ -64,6 +65,27 @@ api_manager = AppGroup("api")
 def register_url(prefix, url, view, name, view_name):
     api.add_url_rule(rule=prefix + url, view_func=view.as_view(name + "-" + view_name))
 
+
+# Auditor
+
+auditor_prefix = "/auditors"
+auditor_name = "auditor"
+
+register_url(
+    prefix=auditor_prefix,
+    name=auditor_name,
+    url="/list/",
+    view=AuditorListView,
+    view_name="list",
+)
+
+register_url(
+    prefix=auditor_prefix,
+    name=auditor_name,
+    url="/<pk>/details/",
+    view=AuditorDetailView,
+    view_name="detail",
+)
 
 # Undertaking
 
