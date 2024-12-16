@@ -78,6 +78,27 @@ class BusinessProfileFactory(SQLAlchemyModelFactory):
         sqlalchemy_session = models.db.session
 
 
+class AuditorFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.Auditor
+        sqlalchemy_session = models.db.session
+
+    auditor_uid = "TEST"
+    name = "n"
+    date_created = date(2015, 1, 1)
+    date_updated = date(2015, 1, 1)
+    status = "s"
+
+    @post_generation
+    def contact_persons(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for cp in extracted:
+                self.contact_persons.add(cp)
+
+
 class UndertakingFactory(SQLAlchemyModelFactory):
     class Meta:
         model = models.Undertaking

@@ -75,9 +75,9 @@ def get_last_update(days, updated_since, domain=FGAS, model_name=Undertaking):
         if days > 0:
             last_update = datetime.now() - timedelta(days=days)
         else:
-            queryset = model_name.query.all()
+            queryset = model_name.query
             if hasattr(model_name, "domain"):
-                queryset = queryset.query.filter_by(domain=domain)
+                queryset = queryset.filter_by(domain=domain)
 
             last = queryset.order_by(desc(model_name.date_updated)).first()
             last_update = last.date_updated - timedelta(days=1) if last else None
@@ -252,11 +252,14 @@ def undertaking_remove(external_id, domain):
         msg = f"No company with id: {external_id} found in the db"
         current_app.logger.warning(msg)
 
+
 @sync_manager.command("old_companies_sync")
 @click.option("-u", "--updated", "updated_since", help="Date in dd-MM-YYYY format")
-def old_companies_sync( updated_since=None):
-    updated = datetime.strptime("01-01-2018","%d-%m-%Y")
-    undertakings = Undertaking.query.filter(Undertaking.date_updated <= updated, Undertaking.domain=="FGAS")
+def old_companies_sync(updated_since=None):
+    updated = datetime.strptime("01-01-2018", "%d-%m-%Y")
+    undertakings = Undertaking.query.filter(
+        Undertaking.date_updated <= updated, Undertaking.domain == "FGAS"
+    )
     for undertaking in undertakings:
         call_fgases(id=undertaking.external_id)
 

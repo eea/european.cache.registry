@@ -1,0 +1,64 @@
+[
+    {
+        "auditorUID" : "TEST",
+        "name" : "AUDITOR",
+        "contactPersons" : [
+            {
+                "userName" : "user1",
+                "firstName" : "User 1",
+                "lastName" : "User 1",
+                "emailAddress" : "user1@mock.ec.europa.eu",
+                "type" : "AUDITOR_ORG_FGAS"
+            }
+        ],
+        "dateCreated" : "20/10/2014",
+        "dateUpdated" : "06/11/2014",
+        "status" : "VALID"
+    },
+    {
+        "auditorUID" : "TEST",
+        "name" : "AUDITOR",
+        "contactPersons" : [
+            {
+                "userName" : "user1",
+                "firstName" : "User 1",
+                "lastName" : "User 1",
+                "emailAddress" : "user1@mock.ec.europa.eu",
+                "type" : "AUDITOR_ORG_FGAS"
+            },
+            {
+                "userName" : "user2",
+                "firstName" : "User 2",
+                "lastName" : "User 2",
+                "emailAddress" : "user2@mock.ec.europa.eu",
+                "type" : "AUDITOR_ORG_FGAS"
+            }
+        ],
+        "dateCreated" : "20/10/2014",
+        "dateUpdated" : "06/11/2014",
+        "status" : "VALID"
+    },
+    {
+        "auditorUID" : "TEST",
+        "name" : "AUDITOR",
+        "contactPersons" : [
+            {
+                "userName" : "user1",
+                "firstName" : "User 1",
+                "lastName" : "User 1",
+                "emailAddress" : "user1@mock.ec.europa.eu",
+                "type" : "AUDITOR_ORG_FGAS"
+            },
+            {
+                "userName" : "user2",
+                "firstName" : "new first name",
+                "lastName" : "new last name",
+                "emailAddress" : "user2@mock.ec.europa.eu",
+                "type" : "AUDITOR_ORG_FGAS"
+            }
+        ],
+        "dateCreated" : "20/10/2014",
+        "dateUpdated" : "06/11/2014",
+        "status" : "VALID"
+    }
+]
