@@ -50,6 +50,10 @@ class ApiView(MethodView):
 
 class ListView(ApiView):
     def get_queryset(self, **kwargs):
+        page = request.args.get("page")
+        per_page = request.args.get("per-page")
+        if page and per_page:
+            return self.model.query.paginate(int(page), int(per_page)).items
         return self.model.query.all()
 
     def get(self, **kwargs):
