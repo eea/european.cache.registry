@@ -13,6 +13,7 @@ from .candidate import (
     CandidateVerifyManual,
 )
 from .commands import (
+    SyncAuditorsView,
     SyncCollectionsTitleView,
     SyncFgasesView,
     SyncStocksView,
@@ -326,6 +327,14 @@ register_url(
 
 command_prefix = "/sync"
 command_name = "sync"
+
+register_url(
+    prefix=command_prefix,
+    name=command_name,
+    url="/auditors/",
+    view=SyncAuditorsView,
+    view_name="auditors",
+)
 
 register_url(
     prefix=command_prefix,

@@ -7,6 +7,9 @@ PATCH_USERS = {
             'email': 'emailAddress',
         },
     ],
+}
+
+PATCH_AUDITOR_USERS = {
     'FAUCP7CE': [
         {
             'username': 'user_auditor',

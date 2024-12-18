@@ -1,5 +1,6 @@
 # coding: utf-8
 from datetime import date, datetime
+import enum
 import json
 import os
 
@@ -7,6 +8,7 @@ from sqlalchemy import (
     Column,
     Date,
     DateTime,
+    Enum,
     ForeignKey,
     Integer,
     String,
@@ -30,6 +32,8 @@ class SerializableModel(object):
             value = value.strftime("%d/%m/%Y %H:%M")
         elif isinstance(value, date):
             value = value.strftime("%d/%m/%Y")
+        elif isinstance(value, enum.Enum):
+            value = value.value
 
         return value
 
@@ -43,12 +47,17 @@ class SerializableModel(object):
 class User(SerializableModel, db.Model):
     __tablename__ = "user"
 
+    class UserType(enum.Enum):
+        AUDITOR_ORG_FGAS = "AUDITOR_ORG_FGAS"
+        AUDITOR_ORG_AND_VERIFIER = "AUDITOR_ORG_AND_VERIFIER"
+        AUDITOR_ORG_ONLY_VERIFIER = "AUDITOR_ORG_ONLY_VERIFIER"
+
     id = Column(Integer, primary_key=True)
     username = Column(String(255), unique=True)
     first_name = Column(String(255))
     last_name = Column(String(255))
     email = Column(String(255))
-    type = Column(String(64))
+    type = Column(Enum(UserType))
 
     @property
     def verified_undertakings(self):
@@ -126,6 +135,14 @@ auditor_users = db.Table(
 class Auditor(SerializableModel, db.Model):
     __tablename__ = "auditor"
 
+    class Status(enum.Enum):
+        DRAFT = "DRAFT"
+        SELF_REVISION = "SELF_REVISION"
+        SENT_TO_REVISION = "SENT_TO_REVISION"
+        REQUESTED = "REQUESTED"
+        VALID = "VALID"
+        CANCELLED = "CANCELLED"
+
     id = Column(Integer, primary_key=True)
     auditor_uid = Column(String(20))
     name = Column(String(255))
@@ -137,8 +154,8 @@ class Auditor(SerializableModel, db.Model):
     date_created = Column(Date)
     date_updated = Column(Date)
     date_created_in_ecr = Column(Date, server_default=db.func.now())
-    date_updated_in_ecr = Column(Date, onupdate=db.func.now())
-    status = Column(String(64))
+    date_updated_in_ecr = Column(Date, onupdate=datetime.now)
+    status = Column(Enum(Status))
 
 
 undertaking_users = db.Table(
@@ -172,7 +189,7 @@ class Undertaking(SerializableModel, db.Model):
     date_created = Column(Date)
     date_updated = Column(Date)
     date_created_in_ecr = Column(Date, server_default=db.func.now())
-    date_updated_in_ecr = Column(Date, onupdate=db.func.now())
+    date_updated_in_ecr = Column(Date, onupdate=datetime.now)
     status = Column(String(64))
     country_code = Column(String(10), default="")
     country_code_orig = Column(String(10), default="")
@@ -449,7 +466,7 @@ class Licence(SerializableModel, db.Model):
     licence_type = Column(String(50))
     mixture_nature_type = Column(String(50))
     date_created = Column(Date, server_default=db.func.now())
-    date_updated = Column(Date, onupdate=db.func.now())
+    date_updated = Column(Date, onupdate=datetime.now)
     updated_since = Column(String(30))
     substance_id = Column(ForeignKey("substance.id"), nullable=True, default=None)
     substance = relationship(
@@ -471,7 +488,7 @@ class Substance(SerializableModel, db.Model):
     organization_country_name = Column(String(4))
 
     date_created = Column(Date, server_default=db.func.now())
-    date_updated = Column(Date, onupdate=db.func.now())
+    date_updated = Column(Date, onupdate=datetime.now)
 
     delivery_id = Column(ForeignKey("delivery_licence.id"), nullable=True, default=None)
     deliverylicence = relationship(
@@ -487,7 +504,7 @@ class DeliveryLicence(SerializableModel, db.Model):
     id = Column(Integer, primary_key=True)
     year = Column(Integer)
     date_created = Column(Date, server_default=db.func.now())
-    date_updated = Column(Date, onupdate=db.func.now())
+    date_updated = Column(Date, onupdate=datetime.now)
     updated_since = Column(Date)
     undertaking_id = Column(ForeignKey("undertaking.id"), nullable=True, default=None)
     undertaking = relationship(

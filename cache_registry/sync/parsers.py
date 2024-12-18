@@ -63,7 +63,7 @@ def parse_cp_list(cp_list):
         cp["first_name"] = cp.pop("firstName")
         cp["last_name"] = cp.pop("lastName")
         cp["email"] = cp.pop("emailAddress")
-        cp["type"] = cp.pop("type", "")
+        cp["type"] = cp.pop("type", None)
     return cp_list
 
 

@@ -45,7 +45,7 @@ def test_update_auditors_fgas(client):
     for index, auditor in enumerate(auditors):
         assert auditor.auditor_uid == original_data[index]["auditorUID"]
         assert auditor.name == original_data[index]["name"]
-        assert auditor.status == original_data[index]["status"]
+        assert auditor.status.value == original_data[index]["status"]
         assert len(auditor.contact_persons) == len(
             original_data[index]["contactPersons"]
         )

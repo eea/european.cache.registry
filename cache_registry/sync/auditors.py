@@ -54,7 +54,9 @@ def update_auditor(data):
 
     original_data = data.copy()
     contact_persons = parsers.parse_cp_list(data.pop("contactPersons", []))
-    contact_persons, _ = patch_users(data["auditorUID"], contact_persons)
+    contact_persons, _ = patch_users(
+        data["auditorUID"], contact_persons, "PATCH_AUDITOR_USERS"
+    )
     data["auditor_uid"] = data.pop("auditorUID")
     data["date_created"] = parsers.parse_date(data.pop("dateCreated"))
     data["date_updated"] = parsers.parse_date(data.pop("dateUpdated"))

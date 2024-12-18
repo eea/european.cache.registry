@@ -54,7 +54,7 @@ def test_parse_auditor_update_cpinfo(client):
     assert len(cp) == 2
     assert cp[0].username == username0["username"]
     assert cp[0].email == username0["email"]
-    assert cp[0].type == username0["type"]
+    assert cp[0].type.value == username0["type"]
     assert cp[1].username == username1["username"]
     assert cp[1].email == username1["email"]
-    assert cp[1].type == username1["type"]
+    assert cp[1].type.value == username1["type"]

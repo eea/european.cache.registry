@@ -128,11 +128,11 @@ def update_undertakings(undertakings, check_function):
     return undertakings_for_call_bdr, undertakings_count
 
 
-def log_changes(last_update, obj_count, domain):
+def log_changes(last_update, undertakings_count, domain):
     if isinstance(last_update, datetime):
         last_update = last_update.date()
     log = OrganizationLog(
-        organizations=obj_count, using_last_update=last_update, domain=domain
+        organizations=undertakings_count, using_last_update=last_update, domain=domain
     )
     db.session.add(log)
 
@@ -181,9 +181,7 @@ def call_auditors(days=7, updated_since=None, page_size=200, uid=""):
     cleanup_unused_users()
 
     if not uid:
-        auditors_count = len(auditors_data)
-        log_changes(last_update, auditors_count, domain=FGAS)
-        print(auditors_count, "values")
+        print(f"{len(auditors_data)} values")
 
     db.session.commit()
     return True

@@ -87,7 +87,7 @@ class AuditorFactory(SQLAlchemyModelFactory):
     name = "n"
     date_created = date(2015, 1, 1)
     date_updated = date(2015, 1, 1)
-    status = "s"
+    status = "VALID"
 
     @post_generation
     def contact_persons(self, create, extracted, **kwargs):
@@ -109,7 +109,7 @@ class UndertakingFactory(SQLAlchemyModelFactory):
     website = "w"
     phone = "p"
     domain = FGAS
-    status = "s"
+    status = "VALID"
     date_created = date(2015, 1, 1)
     date_updated = date(2015, 1, 1)
     undertaking_type = "FGASUndertaking"
