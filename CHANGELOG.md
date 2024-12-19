@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.0 - (2024-12-19)
+--------------------
+* Add sync for auditors
+  [dianaboiangiu]
+
 2.3.19 - (2024-05-13)
 ---------------------
 * Remove breakpoint
