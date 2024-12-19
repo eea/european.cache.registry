@@ -9,6 +9,18 @@ PATCH_USERS = {
     ],
 }
 
+PATCH_AUDITOR_USERS = {
+    'FAUCP7CE': [
+        {
+            'username': 'user_auditor',
+            'first_name': 'firstName',
+            'last_name': 'lastName',
+            'email': 'user@auditor.org',
+            'type': 'AUDITOR_ORG_FGAS',
+        },
+    ],
+}
+
 PATCH_COMPANIES = {
     '26880': {
         'company_id': 10085,

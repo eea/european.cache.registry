@@ -1,14 +1,9 @@
 from datetime import datetime, date
 from math import ceil
-import requests
-
 
 from flask import current_app
-
 from sqlalchemy import func
 
-from .auth import get_auth, InvalidResponse, Unauthorized
-from .bdr import get_absolute_url
 from cache_registry.models import (
     CountryCodesConversion,
     DeliveryLicence,
@@ -19,6 +14,9 @@ from cache_registry.models import (
     Undertaking,
     db,
 )
+from cache_registry.sync.bdr import get_absolute_url
+from cache_registry.sync.utils import get_response
+
 
 CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION = {
     "Release for free circulation": "free circulation",
@@ -55,40 +53,13 @@ def get_or_create_delivery(year, undertaking):
 
 def get_licences(year=2023, page_size=20):
     """Get latest licences from specific API url"""
-    auth = get_auth("API_USER", "API_PASSWORD")
+
     url = get_absolute_url("API_URL_ODS", "/latest/licences/")
-
     params = {"year": year}
-
-    headers = dict(zip(("user", "password"), auth))
-    ssl_verify = current_app.config["HTTPS_VERIFY"]
-
     params["pageSize"] = page_size
     params["pageNumber"] = 1
 
-    response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
-
-    if response.status_code == 401:
-        raise Unauthorized()
-
-    if response.status_code != 200:
-        raise InvalidResponse()
-
-    if not page_size:
-        return response.json()
-    try:
-        no_of_pages = int(response.headers["numberOfPages"])
-    except (KeyError, ValueError):
-        no_of_pages = 1
-    response_json = response.json()
-
-    for page_number in range(2, no_of_pages + 1):
-        params["pageNumber"] = page_number
-        response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
-        if response.status_code != 200:
-            raise InvalidResponse()
-        response_json += response.json()
-    return response_json
+    return get_response(url, params)
 
 
 def parse_licence(licence, undertaking_id, substance):

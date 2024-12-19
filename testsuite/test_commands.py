@@ -1,4 +1,5 @@
 import ast
+import copy
 import json
 
 from contextlib import redirect_stdout
@@ -17,7 +18,8 @@ from .factories import (
 
 from cache_registry.manager import check_integrity, check_passed
 from cache_registry.match import flush, manual, unverify, verify
-from cache_registry.models import OldCompany, OldCompanyLink, Undertaking, db
+from cache_registry.models import Auditor, OldCompany, OldCompanyLink, Undertaking, db
+from cache_registry.sync.auditors import update_auditor
 from cache_registry.sync.commands import (
     update_undertakings,
     print_all_undertakings,
@@ -25,9 +27,30 @@ from cache_registry.sync.commands import (
 )
 from cache_registry.sync.fgases import eea_double_check_fgases
 from cache_registry.sync.ods import eea_double_check_ods
-from cache_registry.sync.parsers import parse_company
+from cache_registry.sync.parsers import parse_company, parse_date
 
 from instance.settings import FGAS
+
+
+def test_update_auditors_fgas(client):
+    with open("testsuite/fixtures/auditors-fgas.json") as file:
+        data = json.load(file)
+
+    original_data = copy.deepcopy(data)
+    for auditor_dict in data:
+        update_auditor(auditor_dict)
+
+    auditors = Auditor.query.all()
+    assert len(auditors) == len(original_data)
+    for index, auditor in enumerate(auditors):
+        assert auditor.auditor_uid == original_data[index]["auditorUID"]
+        assert auditor.name == original_data[index]["name"]
+        assert auditor.status.value == original_data[index]["status"]
+        assert len(auditor.contact_persons) == len(
+            original_data[index]["contactPersons"]
+        )
+        assert auditor.date_created == parse_date(original_data[index]["dateCreated"])
+        assert auditor.date_updated == parse_date(original_data[index]["dateUpdated"])
 
 
 def test_update_undertakings_fgas(client):

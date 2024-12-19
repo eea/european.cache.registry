@@ -8,6 +8,7 @@ from flask import request
 from cache_registry.api.views import ApiView
 from cache_registry.match import call_run, call_flush
 from cache_registry.sync.commands import (
+    call_auditors,
     call_bdr,
     call_fgases,
     call_fgases_debug_noneu,
@@ -43,6 +44,10 @@ class MgmtCommand(ApiView):
         output.seek(0)
         message = output.read() + message
         return {"success": success, "message": message}
+
+
+class SyncAuditorsView(MgmtCommand):
+    command_func = staticmethod(call_auditors)
 
 
 class SyncFgasesView(MgmtCommand):

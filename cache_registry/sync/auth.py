@@ -18,10 +18,10 @@ def get_auth(user, password):
     )
 
 
-def patch_users(external_id, users):
+def patch_users(external_id, users, patch_dict="PATCH_USERS"):
     """Patch the list of contact persons"""
     external_id = str(external_id)
-    patch = current_app.config.get("PATCH_USERS", {})
+    patch = current_app.config.get(patch_dict, {})
     if external_id in patch:
         print(f"Patching company: {external_id}")
         users.extend(patch[external_id])
@@ -31,7 +31,7 @@ def patch_users(external_id, users):
 
 def cleanup_unused_users():
     """Remove users that do not have a company attached"""
-    unused_users = User.query.filter_by(undertakings=None)
+    unused_users = User.query.filter_by(undertakings=None, auditors=None)
 
     print("Removing", unused_users.count(), "unused users")
     for u in unused_users:
