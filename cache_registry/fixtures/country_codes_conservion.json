@@ -2110,5 +2110,21 @@
             "country_name_short_en": "Northern Ireland",
             "country_code_alpha2": "UK_NI"
         }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 265,
+            "country_name_short_en": "Türkiye",
+            "country_code_alpha2": "TR"
+        }
+    },
+    {
+        "model":"CountryCodesConversion",
+        "fields": {
+            "id": 266,
+            "country_name_short_en": "North Macedonia",
+            "country_code_alpha2": "MK"
+        }
     }
 ]
