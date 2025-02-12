@@ -166,6 +166,7 @@ class UserListExportJSON(MethodView):
                                 "username": user.username,
                                 "companyname": company.name,
                                 "country": company.address.country.name,
+                                "ecas_id": cp.ecas_id,
                                 "contact_firstname": cp.first_name,
                                 "contact_lastname": cp.last_name,
                                 "contact_email": cp.email,

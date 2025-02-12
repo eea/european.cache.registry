@@ -37,7 +37,8 @@ Overview
 **User calls:**
 
 * `/user/list` - all users
-* `/user/[username]/companies` - all verified companies and user has access to
+* `/user/[username]/companies` - all verified companies the user has access to
+* `/user/companies?username=[username]&ecas_id=[ecas_id]` - all verified companies the user has access to (check is done with both parameters on both username and ecas_id fields)
 
 **Matching calls:**
 
@@ -106,6 +107,7 @@ Returns the list of all verified undertakings in the system, as fetched from dom
         "users": [
           {
             "username": "nzhouray",
+            "ecas_id": "nzhouray",
             "first_name": "fname--9367",
             "last_name": "lname--9367",
             "id": 1,
@@ -203,6 +205,7 @@ Returns the list of all verified undertakings in the system, as fetched from dom
         "vat": "NREORI26610",
         "users": [
             {
+                "ecas_id": "nwuderra",
                 "username": "nwuderra",
                 "first_name": "fname--25688",
                 "last_name": "lname--25688",
@@ -225,6 +228,7 @@ Returns a list of all undertakings in the system (verified or not), as fetched f
         "users": [
           {
             "username": "nzhouray",
+            "ecas_id": "nzhouray",
             "first_name": "fname--9367",
             "last_name": "lname--9367",
             "id": 1,
@@ -395,6 +399,7 @@ Returns an undertakings details from the system, as fetched from domain registry
       "vat": null,
       "users": [
         {
+          "ecas_id": "nzhouray",
           "username": "nzhouray",
           "first_name": "fname--9367",
           "last_name": "lname--9367",
@@ -623,6 +628,7 @@ Returns a list of all undertakings in the system, as fetched from all registries
 
     [
       {
+        "ecas_id": "user1",
         "username": "user1",
         "first_name": "User 1",
         "last_name": "User 1",
@@ -636,6 +642,48 @@ Returns a list of all undertakings in the system, as fetched from all registries
 The _username_ should be a username (ex: "user1")
 
 Returns the list of undertakings for a user given by its unique username.
+
+
+    [
+      {
+        "collection_id": null,
+        "domain": "FGAS",
+        "country": "CN",
+        "company_id": 10085,
+        "name": "FGAS-NMORGANIZATION--10085",
+        "respresentative_country": "DE",
+        "country_history": [],
+        "represent_history": [
+          {
+          "name": "EULEGALNAME44 OLD",
+          "contact_last_name": "lname--9853",
+          "vatnumber": "EUVAT45",
+          "contact_email": "9853email@climaOds2010.yyy",
+          "contact_first_name": "fname--9853",
+          "address": {
+            "city": "city--7954",
+            "country": {
+              "code": "IE",
+              "type": "EU_TYPE",
+              "name": "Ireland"
+            },
+            "zipcode": "zipcode--7954",
+            "number": "nrstreet--7954",
+            "street": "street--7954"
+        }
+      ],
+      }
+    ]
+
+
+/user/companies?username=[username]&ecas_id=[ecas_id]
+-----------------------------------------------------
+
+The _username_ should be a username (ex: "user1")
+The _ecas_id_ should be of the same format as the username
+
+Returns the list of undertakings for a user given by its username or ecas_id.
+The values given are checked against both the username and ecas_id field, to ensure that the user is found.
 
 
     [

@@ -402,6 +402,18 @@ def test_user_companies_by_email(client):
     assert resp.status_code == 404
 
 
+def test_user_companies_include_ecas(client):
+    undertaking = factories.UndertakingFactory()
+    user = factories.UserFactory(ecas_id="username", username="username@mail.com")
+    undertaking.contact_persons.append(user)
+    resp = client.get(url_for("api.user-companies_ecas"), {"ecas_id": user.ecas_id})
+    assert resp.status_code == 200
+    data = resp.json
+    assert len(data) == 1
+    data = data[0]
+    assert data["company_id"] == undertaking.external_id
+
+
 def test_candidates_list(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=False)
     oldcompany = factories.OldCompanyFactory(id=2)

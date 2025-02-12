@@ -56,12 +56,17 @@ class UserCompaniesIncludeEcasView(ApiView):
         if "username" in request.args:
             username = request.args.get("username")
             checked_username.append(username)
-            user = self.model.query.filter_by(username=username).first()
-        if not user:
-            if "ecas_id" in request.args:
-                ecas_id = request.args.get("ecas_id")
-                checked_username.append(ecas_id)
-                user = self.model.query.filter_by(username=ecas_id).first()
+            user = self.model.query.filter(
+                (self.model.username == username) | (self.model.ecas_id == username)
+            ).first()
+        if user:
+            return user
+        if "ecas_id" in request.args:
+            ecas_id = request.args.get("ecas_id")
+            checked_username.append(ecas_id)
+            user = self.model.query.filter(
+                (self.model.username == ecas_id) | (self.model.ecas_id == ecas_id)
+            ).first()
         if not user:
             current_app.logger.warning(f"Unknown user: {''.join(checked_username)}")
             abort(404)

@@ -49,6 +49,10 @@ def test_update_auditors_fgas(client):
         assert len(auditor.contact_persons) == len(
             original_data[index]["contactPersons"]
         )
+        for idx, contact_person in enumerate(auditor.contact_persons):
+            username = original_data[index]["contactPersons"][idx]["userName"]
+            if "@" not in username:
+                assert contact_person.ecas_id == username
         assert auditor.date_created == parse_date(original_data[index]["dateCreated"])
         assert auditor.date_updated == parse_date(original_data[index]["dateUpdated"])
 

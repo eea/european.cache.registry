@@ -172,6 +172,7 @@ class UserFactory(SQLAlchemyModelFactory):
         model = models.User
         sqlalchemy_session = models.db.session
 
+    ecas_id = "username"
     username = "username"
     first_name = "first"
     last_name = "last"

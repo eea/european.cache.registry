@@ -7,7 +7,7 @@ ARG REQFILE
 
 ENV WORK_DIR=/var/local/european.cache.registry
 
-RUN runDeps="build-essential vim netcat-traditional" \
+RUN runDeps="build-essential vim netcat-traditional curl" \
  && apt-get update \
  && apt-get install -y --no-install-recommends $runDeps \
  && rm -vrf /var/lib/apt/lists/*

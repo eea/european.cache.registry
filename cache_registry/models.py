@@ -53,6 +53,7 @@ class User(SerializableModel, db.Model):
         AUDITOR_ORG_ONLY_VERIFIER = "AUDITOR_ORG_ONLY_VERIFIER"
 
     id = Column(Integer, primary_key=True)
+    ecas_id = Column(String(255))
     username = Column(String(255), unique=True)
     first_name = Column(String(255))
     last_name = Column(String(255))

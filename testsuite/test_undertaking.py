@@ -19,7 +19,9 @@ def test_parse_undertaking_new_cp(client):
     cp = u.contact_persons
     assert len(cp) == 2
     assert cp[0].username == username0
+    assert cp[0].ecas_id == username0
     assert cp[1].username == username1
+    assert cp[1].ecas_id == username1
 
 
 def test_parse_undertaking_remove_cp(client):
@@ -34,6 +36,7 @@ def test_parse_undertaking_remove_cp(client):
     cp = u.contact_persons
     assert len(cp) == 1
     assert cp[0].username == remaining_username
+    assert cp[0].ecas_id == remaining_username
 
 
 def test_parse_undertaking_update_cpinfo(client):
@@ -49,8 +52,10 @@ def test_parse_undertaking_update_cpinfo(client):
     cp = u.contact_persons
     assert len(cp) == 2
     assert cp[0].username == username0["username"]
+    assert cp[0].ecas_id == username0["username"]
     assert cp[0].email == username0["email"]
     assert cp[1].username == username1["username"]
+    assert cp[1].ecas_id == username1["username"]
     assert cp[1].email == username1["email"]
 
 

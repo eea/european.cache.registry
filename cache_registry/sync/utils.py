@@ -53,6 +53,13 @@ def get_response(url, params):
     return response_json
 
 
+def set_ecas_id(obj):
+    """Set ecas_id for an object if it doesn't have one using the username."""
+    if not obj.ecas_id:
+        if "@" not in obj.username:
+            obj.ecas_id = obj.username
+
+
 def update_contact_persons(obj, contact_persons):
     unique_emails = set([cp.get("email") for cp in contact_persons])
     existing_persons = obj.contact_persons
@@ -81,8 +88,10 @@ def update_contact_persons(obj, contact_persons):
                     do_update = True
             if do_update:
                 parsers.update_obj(user, contact_person)
+                set_ecas_id(user)
         else:
             user = User(**contact_person)
+            set_ecas_id(user)
             db.session.add(user)
         if user not in existing_persons:
             obj.contact_persons.append(user)

@@ -1690,14 +1690,6 @@
     {
         "model":"SubstanceNameConversion",
         "fields": {
-            "id": 231,
-            "ec_substance_name": "1,1,1-trichloroethane (non-virgin)",
-            "corrected_name": "TCA (non-virgin)"
-        }
-    },
-    {
-        "model":"SubstanceNameConversion",
-        "fields": {
             "id": 212,
             "ec_substance_name": "HCFC-244bb (virgin)",
             "corrected_name": "HCFC-244 (virgin)"
@@ -1845,6 +1837,38 @@
             "id": 230,
             "ec_substance_name": "HCFC-132b (virgin)",
             "corrected_name": "HCFC-132 (virgin)"
+        }
+    },
+    {
+        "model":"SubstanceNameConversion",
+        "fields": {
+            "id": 231,
+            "ec_substance_name": "1,1,1-trichloroethane (non-virgin)",
+            "corrected_name": "TCA (non-virgin)"
+        }
+    },
+    {
+        "model": "SubstanceNameConversion",
+        "fields": {
+            "id": 232,
+            "ec_substance_name": "CFC-217ba (virgin)",
+            "corrected_name": "CFC-217ba (virgin)"
+        }
+    },
+    {
+        "model": "SubstanceNameConversion",
+        "fields": {
+            "id": 233,
+            "ec_substance_name": "HBFC-253 B1 (CAS: 460-32-2) (virgin)",
+            "corrected_name": "HBFC-253 B1 (CAS: 460-32-2) (virgin)"
+        }
+    },
+    {
+        "model": "SubstanceNameConversion",
+        "fields": {
+            "id": 234,
+            "ec_substance_name": "HBFC-253 B1 (CAS: 460-32-2) (non-virgin)",
+            "corrected_name": "HBFC-253 B1 (CAS: 460-32-2) (non-virgin)"
         }
     }
 ]

@@ -104,6 +104,18 @@ def set_ni_previous_reporting_folder():
         db.session.commit()
 
 
+@utils_manager.command("set_users_ecas_id")
+def set_users_ecas_id():
+    users = User.query.filter_by(ecas_id=None)
+    print(f"Users without ecas_id: {users.count()}")
+    for user in users:
+        if "@" not in user.username:
+            print(f"Setting ecas_id for user {user.username}")
+            user.ecas_id = user.username
+            db.session.add(user)
+            db.session.commit()
+
+
 @utils_manager.command("call_bdr_ni")
 def call_bdr_ni():
     undertakings = Undertaking.query.filter_by(country_code="UK_NI")
