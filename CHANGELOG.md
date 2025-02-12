@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.1 - (2025-02-12)
+--------------------
+* Save ecas_id separately from the username
+  [dianaboiangiu]
+
 2.4.0 - (2024-12-19)
 --------------------
 * Add sync for auditors
