@@ -1,6 +1,7 @@
+from copy import deepcopy
 from flask import current_app
 
-from cache_registry.models import db, Auditor, User
+from cache_registry.models import db, Address, Auditor, User
 from cache_registry.sync import parsers
 from cache_registry.sync.auth import patch_users
 from cache_registry.sync.bdr import get_absolute_url
@@ -8,6 +9,7 @@ from cache_registry.sync.utils import (
     get_logger,
     get_response,
     update_contact_persons,
+    update_ms_accreditation_issuing_countries,
 )
 
 
@@ -49,15 +51,21 @@ def add_updates_log(auditor, data):
     logger.info(message)
 
 
-def update_auditor(data):
+def update_auditor(original_data):
     """Create or update auditor from received data"""
 
-    original_data = data.copy()
+    data = deepcopy(original_data)
+    address = parsers.parse_address(data.pop("address"))
     contact_persons = parsers.parse_cp_list(data.pop("contactPersons", []))
     contact_persons, _ = patch_users(
         data["auditorUID"], contact_persons, "PATCH_AUDITOR_USERS"
     )
     data["auditor_uid"] = data.pop("auditorUID")
+    data["ets_accreditation"] = data.pop("etsAccreditation").get("enabled")
+    ms_accreditation = parsers.parse_ms_accreditation(data.pop("msAccreditation"))
+
+    data["ms_accreditation"] = ms_accreditation["ms_accreditation"]
+
     data["date_created"] = parsers.parse_date(data.pop("dateCreated"))
     data["date_updated"] = parsers.parse_date(data.pop("dateUpdated"))
 
@@ -69,4 +77,11 @@ def update_auditor(data):
         parsers.update_obj(auditor, data)
 
     db.session.add(auditor)
+    if not auditor.address:
+        addr = Address(**address)
+        db.session.add(addr)
+        auditor.address = addr
+    else:
+        parsers.update_obj(auditor.address, address)
     update_contact_persons(auditor, contact_persons)
+    update_ms_accreditation_issuing_countries(auditor, ms_accreditation)

@@ -88,6 +88,11 @@ class AuditorFactory(SQLAlchemyModelFactory):
     date_created = date(2015, 1, 1)
     date_updated = date(2015, 1, 1)
     status = "VALID"
+    address = SubFactory(AddressFactory)
+    phone = "p"
+    website = "w"
+    ets_accreditation = False
+    ms_accreditation = False
 
     @post_generation
     def contact_persons(self, create, extracted, **kwargs):

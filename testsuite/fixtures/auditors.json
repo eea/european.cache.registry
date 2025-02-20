@@ -13,7 +13,27 @@
         ],
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
-        "status" : "VALID"
+        "status" : "VALID",
+        "phone": "+09 84 394 94 34",
+        "website": null,
+        "address": {
+            "street": "Test street",
+            "number": "4",
+            "zipCode": "12345",
+            "city": "Test city",
+            "country": {
+                "code": "PL",
+                "name": "Poland",
+                "type": "EU_TYPE"
+            }
+        },
+        "etsAccreditation": {
+            "enabled": true
+        },
+        "msAccreditation": {
+            "enabled": false,
+            "issuingCountryCodes": []
+        }
     },
     {
         "auditorUID" : "TEST",
@@ -36,7 +56,29 @@
         ],
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
-        "status" : "VALID"
+        "status" : "VALID",
+        "phone": "+03 43 534 23 3",
+        "website": null,
+        "address": {
+            "street": "Test street",
+            "number": "4",
+            "zipCode": "12345",
+            "city": "Test city",
+            "country": {
+                "code": "PL",
+                "name": "Poland",
+                "type": "EU_TYPE"
+            }
+        },
+        "etsAccreditation": {
+            "enabled": true
+        },
+        "msAccreditation": {
+            "enabled": true,
+            "issuingCountryCodes": [
+                "BE"
+            ]
+        }
     },
     {
         "auditorUID" : "TEST",
@@ -59,6 +101,26 @@
         ],
         "dateCreated" : "20/10/2014",
         "dateUpdated" : "06/11/2014",
-        "status" : "VALID"
+        "status" : "VALID",
+        "phone": "+01 23 456 78 9",
+        "website": "https://www.example.com/",
+        "address": {
+            "street": "Test street 2",
+            "number": "4",
+            "zipCode": "45678",
+            "city": "Test city 2",
+            "country": {
+                "code": "PL",
+                "name": "Poland",
+                "type": "EU_TYPE"
+            }
+        },
+        "etsAccreditation": {
+            "enabled": false
+        },
+        "msAccreditation": {
+            "enabled": false,
+            "issuingCountryCodes": []
+        }
     }
 ]

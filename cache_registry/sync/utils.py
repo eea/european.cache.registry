@@ -104,3 +104,13 @@ def update_contact_persons(obj, contact_persons):
                 or person.username not in current_usernames
             ):
                 obj.contact_persons.remove(person)
+
+
+def update_ms_accreditation_issuing_countries(obj, ms_accreditation):
+    """Update issuing countries for ms_accreditation."""
+    for country in ms_accreditation["ms_accreditation_issuing_countries"]:
+        if country not in obj.ms_accreditation_issuing_countries:
+            obj.ms_accreditation_issuing_countries.append(country)
+    for country in obj.ms_accreditation_issuing_countries:
+        if country not in ms_accreditation["ms_accreditation_issuing_countries"]:
+            obj.ms_accreditation_issuing_countries.remove(country)

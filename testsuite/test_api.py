@@ -27,8 +27,20 @@ def test_auditor_list(client):
     assert data["auditor_uid"] == auditor.auditor_uid
     assert data["name"] == auditor.name
     assert data["status"] == auditor.status
-    for date_field in ("date_created", "date_updated"):
+    assert data["website"] == auditor.website
+    assert data["phone"] == auditor.phone
+    for date_field in ("date_created", "date_updated", "date_created_in_ecr"):
         assert data[date_field] == getattr(auditor, date_field).strftime("%d/%m/%Y")
+    assert data["ets_accreditation"] == auditor.ets_accreditation
+    assert data["ms_accreditation"] == auditor.ms_accreditation
+    assert data["ms_accreditation_issuing_countries"] == [
+        country.code for country in auditor.ms_accreditation_issuing_countries
+    ]
+    assert data["address"]["street"] == auditor.address.street
+    assert data["address"]["number"] == auditor.address.number
+    assert data["address"]["city"] == auditor.address.city
+    assert data["address"]["zipcode"] == auditor.address.zipcode
+    assert data["address"]["country"]["code"] == auditor.address.country.code
 
 
 def test_auditor_details(client):
@@ -39,8 +51,20 @@ def test_auditor_details(client):
     assert data["auditor_uid"] == auditor.auditor_uid
     assert data["name"] == auditor.name
     assert data["status"] == auditor.status
-    for date_field in ("date_created", "date_updated"):
+    assert data["website"] == auditor.website
+    assert data["phone"] == auditor.phone
+    for date_field in ("date_created", "date_updated", "date_created_in_ecr"):
         assert data[date_field] == getattr(auditor, date_field).strftime("%d/%m/%Y")
+    assert data["ets_accreditation"] == auditor.ets_accreditation
+    assert data["ms_accreditation"] == auditor.ms_accreditation
+    assert data["ms_accreditation_issuing_countries"] == [
+        country.code for country in auditor.ms_accreditation_issuing_countries
+    ]
+    assert data["address"]["street"] == auditor.address.street
+    assert data["address"]["number"] == auditor.address.number
+    assert data["address"]["city"] == auditor.address.city
+    assert data["address"]["zipcode"] == auditor.address.zipcode
+    assert data["address"]["country"]["code"] == auditor.address.country.code
 
 
 def test_undertaking_list(client):
