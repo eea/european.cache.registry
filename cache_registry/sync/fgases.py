@@ -92,7 +92,11 @@ def eea_double_check_fgases(data):
         if type in new_types:
             message = f"NEW TYPE USED for {data['id']}"
             current_app.logger.warning(message + identifier)
-    new_high_level_uses = ["fgas.prod-imp-exp.hfcs.exporter", "fgas.prod-imp-exp.hfcs.customs-procedure-release", "fgas.prod-imp-exp.hfcs.customs-others"]
+    new_high_level_uses = [
+        "fgas.prod-imp-exp.hfcs.exporter",
+        "fgas.prod-imp-exp.hfcs.customs-procedure-release",
+        "fgas.prod-imp-exp.hfcs.customs-others",
+    ]
     for high_level_use in data["businessProfile"]["highLevelUses"]:
         if high_level_use in new_high_level_uses:
             message = f"NEW HIGH LEVEL USED for {data['id']}"

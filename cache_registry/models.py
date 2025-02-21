@@ -145,24 +145,47 @@ class Auditor(SerializableModel, db.Model):
         CANCELLED = "CANCELLED"
 
     id = Column(Integer, primary_key=True)
-    auditor_uid = Column(String(20))
-    name = Column(String(255))
+    auditor_uid = Column(String(20), nullable=False)
+    name = Column(String(255), nullable=False)
+    address_id = Column(ForeignKey("address.id"), nullable=False)
+    website = Column(String(255))
+    phone = Column(String(32), nullable=False)
+    date_created = Column(Date, nullable=False)
+    date_updated = Column(Date, nullable=False)
+    date_created_in_ecr = Column(Date, server_default=db.func.now(), nullable=False)
+    date_updated_in_ecr = Column(Date, onupdate=datetime.now)
+    status = Column(Enum(Status), nullable=False)
+    ets_accreditation = Column(Boolean, nullable=False)
+    ms_accreditation = Column(Boolean, nullable=False)
+
+    # Link
+    address = relationship(Address)
     contact_persons = relationship(
         User,
         secondary=auditor_users,
         backref=db.backref("auditors", lazy="dynamic"),
+        cascade="all, delete",
     )
-    date_created = Column(Date)
-    date_updated = Column(Date)
-    date_created_in_ecr = Column(Date, server_default=db.func.now())
-    date_updated_in_ecr = Column(Date, onupdate=datetime.now)
-    status = Column(Enum(Status))
+    ms_accreditation_issuing_countries = relationship(
+        "Country",
+        secondary="auditor_ms_accreditation_issuing_countries",
+        backref=db.backref("auditors", lazy="dynamic"),
+        cascade="all, delete",
+    )
 
+
+auditor_ms_accreditation_issuing_countries = db.Table(
+    "auditor_ms_accreditation_issuing_countries",
+    db.Column("country_id", db.Integer(), db.ForeignKey("country.id"), nullable=False),
+    db.Column("auditor_id", db.Integer(), db.ForeignKey("auditor.id"), nullable=False),
+)
 
 undertaking_users = db.Table(
     "undertaking_users",
-    db.Column("user_id", db.Integer(), db.ForeignKey("user.id")),
-    db.Column("undertaking_id", db.Integer(), db.ForeignKey("undertaking.id")),
+    db.Column("user_id", db.Integer(), db.ForeignKey("user.id"), nullable=False),
+    db.Column(
+        "undertaking_id", db.Integer(), db.ForeignKey("undertaking.id"), nullable=False
+    ),
 )
 
 
@@ -393,6 +416,34 @@ class UndertakingRepresentHistory(SerializableModel, db.Model):
         "EuLegalRepresentativeCompany",
         cascade="all",
         overlaps="represent_history,undertakings",
+    )
+
+
+class AuditorUndertaking(SerializableModel, db.Model):
+    __tablename__ = "auditor_undertaking"
+    id = Column(Integer, primary_key=True)
+    auditor_id = Column(ForeignKey("auditor.id"))
+    undertaking_id = Column(ForeignKey("undertaking.id"))
+    user_id = Column(ForeignKey("user.id"))
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date)
+    reporting_envelope_url = Column(String(128))
+    verification_envelope_url = Column(String(128))
+
+    auditor = relationship(
+        "Auditor",
+        backref=db.backref("auditor_undertakings", lazy="dynamic"),
+        overlaps="undertakings",
+    )
+    undertaking = relationship(
+        "Undertaking",
+        backref=db.backref("auditor_undertakings", lazy="dynamic"),
+        overlaps="undertakings",
+    )
+    user = relationship(
+        "User",
+        backref=db.backref("auditor_undertakings", lazy="dynamic"),
+        overlaps="undertakings",
     )
 
 

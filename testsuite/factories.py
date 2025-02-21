@@ -87,7 +87,12 @@ class AuditorFactory(SQLAlchemyModelFactory):
     name = "n"
     date_created = date(2015, 1, 1)
     date_updated = date(2015, 1, 1)
-    status = "VALID"
+    status = models.Auditor.Status.VALID
+    address = SubFactory(AddressFactory)
+    phone = "p"
+    website = "w"
+    ets_accreditation = False
+    ms_accreditation = False
 
     @post_generation
     def contact_persons(self, create, extracted, **kwargs):
@@ -177,6 +182,20 @@ class UserFactory(SQLAlchemyModelFactory):
     first_name = "first"
     last_name = "last"
     email = "email@example.com"
+
+
+class AuditorUndertakingFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.AuditorUndertaking
+        sqlalchemy_session = models.db.session
+
+    auditor = SubFactory(AuditorFactory)
+    undertaking = SubFactory(UndertakingFactory)
+    user = SubFactory(UserFactory)
+    start_date = date(2015, 1, 1)
+    end_date = date(2015, 1, 1)
+    reporting_envelope_url = "reporting_envelope_url"
+    verification_envelope_url = "verification_envelope_url"
 
 
 class MatchingLog(SQLAlchemyModelFactory):

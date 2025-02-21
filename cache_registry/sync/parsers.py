@@ -67,6 +67,18 @@ def parse_cp_list(cp_list):
     return cp_list
 
 
+def parse_ms_accreditation(ms_accreditation):
+    ms_accreditation["ms_accreditation"] = ms_accreditation.pop("enabled")
+    ms_accreditation["ms_accreditation_issuing_countries"] = []
+    for country_code in ms_accreditation.pop("issuingCountryCodes"):
+        country = models.Country.query.filter_by(code=country_code).first()
+        if country:
+            ms_accreditation["ms_accreditation_issuing_countries"].append(country)
+        else:
+            print(f"Country {country_code} not found")
+    return ms_accreditation
+
+
 def parse_date_for_company(datestr):
     DATE_FORMAT = "%Y/%m/%d %H:%M"
     datestr = datestr[:-11]
