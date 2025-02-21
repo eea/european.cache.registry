@@ -1,11 +1,12 @@
 # coding=utf-8
 import json
+from datetime import datetime
 
 from flask import url_for
 
-from . import factories
-
+from cache_registry.models import db
 from instance.settings import FGAS, ODS
+from testsuite import factories
 
 
 def test_authorization_failed(client):
@@ -65,6 +66,256 @@ def test_auditor_details(client):
     assert data["address"]["city"] == auditor.address.city
     assert data["address"]["zipcode"] == auditor.address.zipcode
     assert data["address"]["country"]["code"] == auditor.address.country.code
+
+
+def test_auditor_check(client):
+    undertaking = factories.UndertakingFactory()
+    undertaking.country_code = undertaking.address.country.code
+    db.session.add(undertaking)
+    db.session.commit()
+    auditor = factories.AuditorFactory(address__country=undertaking.address.country)
+    resp = client.get(
+        url_for(
+            "api.company-auditor_check",
+            domain=undertaking.domain,
+            external_id=undertaking.external_id,
+            auditor_uid=auditor.auditor_uid,
+        )
+    )
+    data = resp.json
+    assert data["access"] is True
+    assert data["auditor"]["auditor_uid"] == auditor.auditor_uid
+    assert data["auditor"]["name"] == auditor.name
+
+
+def test_auditor_check_fail(client):
+    undertaking = factories.UndertakingFactory()
+    undertaking.country_code = undertaking.address.country.code
+    db.session.add(undertaking)
+    db.session.commit()
+    other_country = factories.CountryFactory(code="RO")
+    auditor = factories.AuditorFactory(address__country=other_country)
+
+    # Only FGAS domain is accepted
+    resp = client.get(
+        url_for(
+            "api.company-auditor_check",
+            domain="ODS",
+            external_id=12345,
+            auditor_uid=3234,
+        )
+    )
+    assert resp.status_code == 200
+    data = resp.json
+    assert data == {"error": "Invalid domain"}
+
+    # Auditor not found or undertaking not found
+    resp = client.get(
+        url_for(
+            "api.company-auditor_check",
+            domain=undertaking.domain,
+            external_id=34234,
+            auditor_uid=43243,
+        ),
+        expect_errors=True,
+    )
+
+    assert resp.status_code == 404
+
+    resp = client.get(
+        url_for(
+            "api.company-auditor_check",
+            domain=undertaking.domain,
+            external_id=undertaking.external_id,
+            auditor_uid=auditor.auditor_uid,
+        )
+    )
+    assert resp.status_code == 200
+    data = resp.json
+    assert data == {"access": False, "auditor": None}
+
+
+def test_auditor_assign(client):
+    undertaking = factories.UndertakingFactory()
+    undertaking.country_code = undertaking.address.country.code
+    db.session.add(undertaking)
+    db.session.commit()
+    auditor = factories.AuditorFactory()
+    user = factories.UserFactory(email="test@mail.com")
+    auditor.contact_persons.append(user)
+    db.session.commit()
+    resp = client.post(
+        url_for(
+            "api.company-auditor_assign",
+            domain=undertaking.domain,
+            external_id=undertaking.external_id,
+            auditor_uid=auditor.auditor_uid,
+        ),
+        json.dumps(
+            {
+                "email": user.email,
+                "reporting_envelope_url": "reporting",
+                "verification_envelope_url": "verification",
+            }
+        ),
+        content_type="application/json",
+    )
+    data = resp.json
+    assert data["success"] is True
+
+    # test if information can be retrieved in Auditor detail endpoint
+    resp = client.get(url_for("api.auditor-detail", pk=auditor.auditor_uid))
+    data = resp.json
+    assert data["auditor_uid"] == auditor.auditor_uid
+    assert len(data["audited_companies"]) == 1
+    audited_company = data["audited_companies"][0]
+    assert audited_company["start_date"] == datetime.now().strftime("%d/%m/%Y")
+    assert audited_company["end_date"] is None
+    assert audited_company["reporting_envelope_url"] == "reporting"
+    assert audited_company["verification_envelope_url"] == "verification"
+    assert audited_company["undertaking"]["company_id"] == undertaking.external_id
+    assert audited_company["undertaking"]["domain"] == undertaking.domain
+    assert audited_company["undertaking"]["name"] == undertaking.name
+    assert audited_company["auditor"]["auditor_uid"] == auditor.auditor_uid
+    assert audited_company["auditor"]["name"] == auditor.name
+    assert audited_company["user"]["email"] == user.email
+    assert audited_company["user"]["username"] == user.username
+    assert audited_company["user"]["first_name"] == user.first_name
+    assert audited_company["user"]["last_name"] == user.last_name
+    assert audited_company["user"]["type"] == user.type
+
+    # test if information can be retrieved in Undertaking detail endpoint
+    resp = client.get(
+        url_for(
+            "api.company-detail", domain=undertaking.domain, pk=undertaking.external_id
+        )
+    )
+    data = resp.json
+    assert data["company_id"] == undertaking.external_id
+    assert len(data["auditors"]) == 1
+    auditor_company = data["auditors"][0]
+    assert auditor_company["start_date"] == datetime.now().strftime("%d/%m/%Y")
+    assert auditor_company["end_date"] is None
+    assert auditor_company["reporting_envelope_url"] == "reporting"
+    assert auditor_company["verification_envelope_url"] == "verification"
+    assert auditor_company["auditor"]["auditor_uid"] == auditor.auditor_uid
+    assert auditor_company["auditor"]["name"] == auditor.name
+    assert auditor_company["undertaking"]["company_id"] == undertaking.external_id
+    assert auditor_company["undertaking"]["domain"] == undertaking.domain
+    assert auditor_company["undertaking"]["name"] == undertaking.name
+    assert auditor_company["user"]["email"] == user.email
+    assert auditor_company["user"]["username"] == user.username
+    assert auditor_company["user"]["first_name"] == user.first_name
+    assert auditor_company["user"]["last_name"] == user.last_name
+    assert auditor_company["user"]["type"] == user.type
+
+
+def test_auditor_assign_fail_validation(client):
+    undertaking = factories.UndertakingFactory()
+    undertaking.country_code = undertaking.address.country.code
+    db.session.add(undertaking)
+    db.session.commit()
+    auditor = factories.AuditorFactory()
+    user = factories.UserFactory(email="email@test.com")
+
+    resp = client.post(
+        url_for(
+            "api.company-auditor_assign",
+            domain=undertaking.domain,
+            external_id=undertaking.external_id,
+            auditor_uid=auditor.auditor_uid,
+        ),
+        json.dumps(
+            {
+                "email": user.email,
+            }
+        ),
+        content_type="application/json",
+        expect_errors=True,
+    )
+
+    assert resp.status_code == 400
+    data = resp.json
+    assert data["errors"] == {
+        "email": ["User not found"],
+        "reporting_envelope_url": ["Reporting envelope URL is required"],
+        "verification_envelope_url": ["Verification envelope URL is required"],
+    }
+
+    auditor.contact_persons.append(user)
+    db.session.commit()
+
+    factories.AuditorUndertakingFactory(
+        undertaking=undertaking,
+        auditor=auditor,
+        user=user,
+        start_date=datetime.now(),
+        end_date=None,
+        reporting_envelope_url="reporting",
+        verification_envelope_url="verification",
+    )
+    resp = client.post(
+        url_for(
+            "api.company-auditor_assign",
+            domain=undertaking.domain,
+            external_id=undertaking.external_id,
+            auditor_uid=auditor.auditor_uid,
+        ),
+        json.dumps(
+            {
+                "email": user.email,
+                "reporting_envelope_url": "reporting",
+                "verification_envelope_url": "verification",
+            }
+        ),
+        content_type="application/json",
+        expect_errors=True,
+    )
+    assert resp.status_code == 400
+    data = resp.json
+    assert data["errors"] == {
+        "auditor": ["Auditor already assigned"],
+    }
+
+
+def test_auditor_unassign(client):
+    undertaking = factories.UndertakingFactory()
+    undertaking.country_code = undertaking.address.country.code
+    db.session.add(undertaking)
+    db.session.commit()
+    auditor = factories.AuditorFactory()
+    user = factories.UserFactory(email="test@mail.com")
+    auditor.contact_persons.append(user)
+    db.session.commit()
+    auditor_undertaking = factories.AuditorUndertakingFactory(
+        auditor=auditor,
+        undertaking=undertaking,
+        user=user,
+        start_date=datetime.now(),
+        end_date=None,
+        reporting_envelope_url="reporting",
+        verification_envelope_url="verification",
+    )
+    resp = client.post(
+        url_for(
+            "api.company-auditor_unassign",
+            domain=undertaking.domain,
+            external_id=undertaking.external_id,
+            auditor_uid=auditor.auditor_uid,
+        ),
+        json.dumps(
+            {
+                "email": user.email,
+                "reporting_envelope_url": "reporting",
+                "verification_envelope_url": "verification",
+            }
+        ),
+        content_type="application/json",
+    )
+    assert resp.status_code == 200
+    data = resp.json
+    assert data["success"] is True
+    assert auditor_undertaking.end_date == datetime.now().date()
 
 
 def test_undertaking_list(client):

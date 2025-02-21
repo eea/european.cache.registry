@@ -7,6 +7,7 @@ from flask import abort, request
 from cache_registry.api.old_company import OldCompanyDetail
 from cache_registry.api.serializers import (
     AddressDetail,
+    AuditorUndertakingDetail,
     EuLegalRepresentativeCompanyDetail,
 )
 from cache_registry.api.user import UserListView
@@ -219,6 +220,10 @@ class UndertakingDetailView(DetailView):
                     OldCompanyDetail.serialize(c.oldcompany) for c in candidates
                 ],
                 "types": ",".join([type.type for type in obj.types]),
+                "auditors": [
+                    AuditorUndertakingDetail.serialize(au)
+                    for au in obj.auditor_undertakings
+                ],
             }
         )
         data["company_id"] = obj.external_id

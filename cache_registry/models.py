@@ -419,6 +419,34 @@ class UndertakingRepresentHistory(SerializableModel, db.Model):
     )
 
 
+class AuditorUndertaking(SerializableModel, db.Model):
+    __tablename__ = "auditor_undertaking"
+    id = Column(Integer, primary_key=True)
+    auditor_id = Column(ForeignKey("auditor.id"))
+    undertaking_id = Column(ForeignKey("undertaking.id"))
+    user_id = Column(ForeignKey("user.id"))
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date)
+    reporting_envelope_url = Column(String(128))
+    verification_envelope_url = Column(String(128))
+
+    auditor = relationship(
+        "Auditor",
+        backref=db.backref("auditor_undertakings", lazy="dynamic"),
+        overlaps="undertakings",
+    )
+    undertaking = relationship(
+        "Undertaking",
+        backref=db.backref("auditor_undertakings", lazy="dynamic"),
+        overlaps="undertakings",
+    )
+    user = relationship(
+        "User",
+        backref=db.backref("auditor_undertakings", lazy="dynamic"),
+        overlaps="undertakings",
+    )
+
+
 class UndertakingCountryHistory(SerializableModel, db.Model):
     __tablename__ = "undertaking_country_history"
 

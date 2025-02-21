@@ -9,6 +9,10 @@ from flask.views import MethodView
 class ApiView(MethodView):
     model = None
 
+    def __init__(self):
+        self.status_code = 200
+        super(ApiView, self).__init__()
+
     def dispatch_request(self, **kwargs):
         if not ApiView.authenticate():
             resp = {
@@ -16,16 +20,19 @@ class ApiView(MethodView):
                 "message": "You need to be authenticated "
                 "in order to access this resource.",
             }
-            status_code = 401
+            self.status_code = 401
             return (
                 Response(json.dumps(resp, indent=2), mimetype="application/json"),
-                status_code,
+                self.status_code,
             )
 
         resp = super(ApiView, self).dispatch_request(**kwargs)
 
         if isinstance(resp, (dict, list, tuple)):
-            return Response(json.dumps(resp, indent=2), mimetype="application/json")
+            return (
+                Response(json.dumps(resp, indent=2), mimetype="application/json"),
+                self.status_code,
+            )
 
         return resp
 

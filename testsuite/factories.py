@@ -184,6 +184,20 @@ class UserFactory(SQLAlchemyModelFactory):
     email = "email@example.com"
 
 
+class AuditorUndertakingFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = models.AuditorUndertaking
+        sqlalchemy_session = models.db.session
+
+    auditor = SubFactory(AuditorFactory)
+    undertaking = SubFactory(UndertakingFactory)
+    user = SubFactory(UserFactory)
+    start_date = date(2015, 1, 1)
+    end_date = date(2015, 1, 1)
+    reporting_envelope_url = "reporting_envelope_url"
+    verification_envelope_url = "verification_envelope_url"
+
+
 class MatchingLog(SQLAlchemyModelFactory):
     class Meta:
         model = models.MatchingLog

@@ -2,7 +2,14 @@
 from flask import Blueprint
 from flask.cli import AppGroup
 
-from .auditor import AuditorDetailView, AuditorListView
+from .auditor import (
+    AuditorAssignView,
+    AuditorUnassignView,
+    AuditorCheckView,
+    AuditorDetailView,
+    AuditorListView,
+)
+
 from .candidate import (
     CandidateList,
     NonCandidateList,
@@ -155,6 +162,30 @@ register_url(
     url="/<pk>/statusupdate",
     view=UndertakingStatusUpdate,
     view_name="statusupdate",
+)
+
+register_url(
+    prefix=undertaking_prefix,
+    name=undertaking_name,
+    url="/<external_id>/auditor/<auditor_uid>/check",
+    view=AuditorCheckView,
+    view_name="auditor_check",
+)
+
+register_url(
+    prefix=undertaking_prefix,
+    name=undertaking_name,
+    url="/<external_id>/auditor/<auditor_uid>/assign/",
+    view=AuditorAssignView,
+    view_name="auditor_assign",
+)
+
+register_url(
+    prefix=undertaking_prefix,
+    name=undertaking_name,
+    url="/<external_id>/auditor/<auditor_uid>/unassign/",
+    view=AuditorUnassignView,
+    view_name="auditor_unassign",
 )
 
 # Licence
