@@ -87,7 +87,7 @@ class AuditorFactory(SQLAlchemyModelFactory):
     name = "n"
     date_created = date(2015, 1, 1)
     date_updated = date(2015, 1, 1)
-    status = "VALID"
+    status = models.Auditor.Status.VALID
     address = SubFactory(AddressFactory)
     phone = "p"
     website = "w"

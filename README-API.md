@@ -1,4 +1,4 @@
-european.cache.registry API Documentation
+API Documentation
 =========================================
 
 The european.cache.registry API allows a client (BDR) to access cached data fetched
@@ -9,6 +9,13 @@ authentication.
 
 Overview
 --------
+**Auditor calls:**
+
+* `/auditors/list/` - list all auditors
+* `/auditors/[auditor_uid]/details/` - details about an auditor
+* `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/check` - verifies if the auditor and the company are from the same country. Returns the auditor information if this condition is met.
+* `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/` - assigns auditor to company
+* `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/unassign/` - unassigns an auditor from a company
 
 **Undertaking calls:**
 
@@ -90,6 +97,297 @@ verified or not
 **Debug:**
 
 * `/sync/fgases_debug_noneu` - returns a list with all NON EU companies without a legal representative from FGas
+
+Auditor calls
+==============
+
+/auditors/list/
+---------------
+
+Returns the list of auditors
+
+    [
+      {
+        "auditor_uid": "ABDFDFS",
+        "name": "Auditor name",
+        "website": "website.com",
+        "phone": "12342432",
+        "date_created": "01/01/2024",
+        "date_updated": "01/01/2024",
+        "date_created_in_ecr": "01/01/2024",
+        "date_updated_in_ecr": "01/01/2024",
+        "status": "VALID",
+        "ets_accreditation": true,
+        "ms_accreditation": true,
+        "ms_accreditation_issuing_countries": [
+          "BE",
+        ],
+        "address": {
+            "street": "One",
+            "number": null,
+            "zipcode": null,
+            "city": "City",
+            "country": {
+                "code": "PL",
+                "name": "Poland",
+                "type": "EU_TYPE"
+            }
+        },
+        "users": [
+            {
+                "ecas_id": "ecas_id",
+                "username": "username",
+                "first_name": "First name",
+                "last_name": "Last name",
+                "email": "mail@test.com",
+                "type": "TYPE"
+            }
+        ],
+        "audited_companies": [
+            {
+                "start_date": "20/02/2025",
+                "end_date": "21/03/2025",
+                "reporting_envelope_url": "reporting/folder/1234",
+                "verification_envelope_url": "verification/folder/12345",
+                "auditor": {
+                    "auditor_uid": "ABDFDFS",
+                    "name": "Auditor name"
+                },
+                "undertaking": {
+                    "company_id": 10085,
+                    "domain": "FGAS",
+                    "name": "Company name"
+                },
+                "user": {
+                    "ecas_id": "ecas_id",
+                    "username": "username",
+                    "first_name": "First name",
+                    "last_name": "Last name",
+                    "email": "mail@test.com",
+                    "type": "TYPE"
+                }
+            },
+            {
+                "start_date": "21/02/2025",
+                "end_date": "None",
+                "reporting_envelope_url": "reporting/folder/123423",
+                "verification_envelope_url": "verification/folder/1234345",
+                "auditor": {
+                    "auditor_uid": "ABDFDFS",
+                    "name": "Auditor name"
+                },
+                "undertaking": {
+                    "company_id": 10085,
+                    "domain": "FGAS",
+                    "name": "Company name"
+                },
+                "user": {
+                    "ecas_id": "ecas_id",
+                    "username": "username",
+                    "first_name": "First name",
+                    "last_name": "Last name",
+                    "email": "mail@test.com",
+                    "type": "TYPE"
+                }
+            }
+        ]
+      }
+    ]
+
+auditors/[auditor_uid]/details/
+-------------------------------
+
+Returns the auditor
+
+    {
+        "auditor_uid": "ABDFDFS",
+        "name": "Auditor name",
+        "website": "website.com",
+        "phone": "12342432",
+        "date_created": "01/01/2024",
+        "date_updated": "01/01/2024",
+        "date_created_in_ecr": "01/01/2024",
+        "date_updated_in_ecr": "01/01/2024",
+        "status": "VALID",
+        "ets_accreditation": true,
+        "ms_accreditation": true,
+        "ms_accreditation_issuing_countries": [
+          "BE",
+        ],
+        "address": {
+            "street": "One",
+            "number": null,
+            "zipcode": null,
+            "city": "City",
+            "country": {
+                "code": "PL",
+                "name": "Poland",
+                "type": "EU_TYPE"
+            }
+        },
+        "users": [
+            {
+                "ecas_id": "ecas_id",
+                "username": "username",
+                "first_name": "First name",
+                "last_name": "Last name",
+                "email": "mail@test.com",
+                "type": "TYPE"
+            }
+        ],
+        "audited_companies": [
+            {
+                "start_date": "20/02/2025",
+                "end_date": "21/03/2025",
+                "reporting_envelope_url": "reporting/folder/1234",
+                "verification_envelope_url": "verification/folder/12345",
+                "auditor": {
+                    "auditor_uid": "ABDFDFS",
+                    "name": "Auditor name"
+                },
+                "undertaking": {
+                    "company_id": 10085,
+                    "domain": "FGAS",
+                    "name": "Company name"
+                },
+                "user": {
+                    "ecas_id": "ecas_id",
+                    "username": "username",
+                    "first_name": "First name",
+                    "last_name": "Last name",
+                    "email": "mail@test.com",
+                    "type": "TYPE"
+                }
+            },
+            {
+                "start_date": "21/02/2025",
+                "end_date": "None",
+                "reporting_envelope_url": "reporting/folder/123423",
+                "verification_envelope_url": "verification/folder/1234345",
+                "auditor": {
+                    "auditor_uid": "ABDFDFS",
+                    "name": "Auditor name"
+                },
+                "undertaking": {
+                    "company_id": 10085,
+                    "domain": "FGAS",
+                    "name": "Company name"
+                },
+                "user": {
+                    "ecas_id": "ecas_id",
+                    "username": "username",
+                    "first_name": "First name",
+                    "last_name": "Last name",
+                    "email": "mail@test.com",
+                    "type": "TYPE"
+                }
+            }
+        ]
+    }
+
+/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/check
+--------------------------------------------------------------
+
+Returns the auditor if:
+* Auditor country == Company's country code (calculated as the address country or representative country)
+* the Auditor has a valid status.
+
+      {
+          "access": true,
+          "auditor": {
+              "auditor_uid": "ABDSDE",
+              "name": "Auditor name",
+              "website": null,
+              "phone": "+2343243453",
+              "date_created": "01/01/2024",
+              "date_updated": "01/01/2024",
+              "date_created_in_ecr": "01/01/2024",
+              "date_updated_in_ecr": "01/01/2024",
+              "status": "VALID",
+              "ets_accreditation": true,
+              "ms_accreditation": true,
+              "ms_accreditation_issuing_countries": [
+                "BE"
+              ],
+              "address": {
+                  "street": "One",
+                  "number": null,
+                  "zipcode": null,
+                  "city": "City",
+                  "country": {
+                      "code": "PL",
+                      "name": "Poland",
+                      "type": "EU_TYPE"
+                  }
+              },
+              "users": [
+                  {
+                      "ecas_id": "ecas_id",
+                      "username": "username",
+                      "first_name": "First name",
+                      "last_name": "Last name",
+                      "email": "mail@mail.com",
+                      "type": "TYPE"
+                  }
+              ]
+          }
+      }
+
+_POST:_ /undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/
+------------------------------------------------------------------------
+
+Assigns the auditor _[auditor_uid]_, lead by the given user _[email]_ to the company _[company_id]_ if:
+* the Auditor has a VALID status
+* Auditor's and Company's countries match
+* There is no other assignation for the same company_id, auditor_uid, email, reporting_envelope_url, verification_envelope_url open (end_date = None)
+* Given email matches a user if the Auditor's contact persons
+
+_POST DATA:_
+
+* _email = Lead user email (selected from auditor contact persons), required_
+* _reporting_envelope_url = Original envelope URL, required_
+* _verification_envelope_url = Verification envelope URL, required_
+
+        {
+          "email": "mail@test.com",
+          "reporting_envelope_url": "/folder/sds/23423",
+          "verification_envelope_url": "/folder/dsfs/dsfsdf"
+        }
+
+Response:
+
+    {
+      "success": true,
+      "errors": [],
+    }
+
+
+_POST:_ /undertaking/[domain]/[company_id]/auditor/[auditor_uid]/unassign/
+------------------------------------------------------------------------
+
+Unassigns the auditor _[auditor_uid]_, lead by the given user _[email]_ to the company _[company_id]_ .
+The auditor will still be visible in the undertaking detail and auditor listing/detail endpoints, but the end date field
+will have a value.
+
+_POST DATA:_
+
+* _email = Lead user email (selected from auditor contact persons), required_
+* _reporting_envelope_url = Original envelope URL, required_
+* _verification_envelope_url = Verification envelope URL, required_
+
+        {
+          "email": "mail@test.com",
+          "reporting_envelope_url": "/folder/sds/23423",
+          "verification_envelope_url": "/folder/dsfs/dsfsdf"
+        }
+
+Response:
+
+    {
+      "success": true,
+      "errors": [],
+    }
+
 
 Undertaking calls
 =================
@@ -384,6 +682,54 @@ Returns an undertakings details from the system, as fetched from domain registry
             "number": "nrstreet--7954",
             "street": "street--7954"
         }
+      ],
+      "auditors": [
+          {
+              "start_date": "20/02/2025",
+              "end_date": "21/03/2025",
+              "reporting_envelope_url": "reporting/folder/1234",
+              "verification_envelope_url": "verification/folder/12345",
+              "auditor": {
+                  "auditor_uid": "ABCDEDF",
+                  "name": "Auditor name"
+              },
+              "undertaking": {
+                  "company_id": 10085,
+                  "domain": "FGAS",
+                  "name": "Company name"
+              },
+              "user": {
+                  "ecas_id": "ecas_id",
+                  "username": "username",
+                  "first_name": "First name",
+                  "last_name": "Last name",
+                  "email": "mail@test.com",
+                  "type": "TYPE"
+              }
+          },
+          {
+              "start_date": "21/02/2025",
+              "end_date": "None",
+              "reporting_envelope_url": "reporting/folder/123423",
+              "verification_envelope_url": "verification/folder/1234345",
+              "auditor": {
+                  "auditor_uid": "ABCDEDF",
+                  "name": "Auditor name"
+              },
+              "undertaking": {
+                  "company_id": 10085,
+                  "domain": "FGAS",
+                  "name": "Company name"
+              },
+              "user": {
+                  "ecas_id": "ecas_id",
+                  "username": "username",
+                  "first_name": "First name",
+                  "last_name": "Last name",
+                  "email": "mail@test.com",
+                  "type": "TYPE"
+              }
+          }
       ],
       "address": {
         "city": "city--7953",

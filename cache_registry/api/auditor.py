@@ -76,6 +76,8 @@ class AuditorCheckView(ApiView):
         auditor = Auditor.query.filter_by(auditor_uid=auditor_uid).first()
         if not auditor:
             return False, None
+        if auditor.status.value != "VALID":
+            return False, None
         if undertaking.country_code != auditor.address.country.code:
             return False, None
         return True, auditor
@@ -151,15 +153,20 @@ class AuditorAssignView(ApiView):
             external_id=external_id, domain=domain
         ).first_or_404()
         auditor = Auditor.query.filter_by(auditor_uid=auditor_uid).first_or_404()
+        if auditor.status.value != "VALID":
+            self.status_code = 400
+            return {
+                "errors": {"all": ["Auditor is not valid for assignment."], "success": False}
+            }
         if undertaking.country_code != auditor.address.country.code:
             self.status_code = 400
             return {
-                "error": f"Auditor's country does not match the country of the company."
+                "errors": {"all": ["Auditor's country does not match the country of the company."], "success": False}
             }
         validated, errors = self.validate_data(undertaking, auditor, data)
         if not validated:
             self.status_code = 400
-            return {"errors": errors}
+            return {"errors": errors, "success": False}
 
         user = User.query.filter_by(email=data["email"]).first()
         auditor_undertaking = AuditorUndertaking(
@@ -172,7 +179,7 @@ class AuditorAssignView(ApiView):
         )
         db.session.add(auditor_undertaking)
         db.session.commit()
-        return {"success": True}
+        return {"success": True, "errors": []}
 
 
 class AuditorUnassignView(ApiView):

@@ -27,7 +27,7 @@ def test_auditor_list(client):
     data = resp.json[0]
     assert data["auditor_uid"] == auditor.auditor_uid
     assert data["name"] == auditor.name
-    assert data["status"] == auditor.status
+    assert data["status"] == auditor.status.value
     assert data["website"] == auditor.website
     assert data["phone"] == auditor.phone
     for date_field in ("date_created", "date_updated", "date_created_in_ecr"):
@@ -51,7 +51,7 @@ def test_auditor_details(client):
     data = resp.json
     assert data["auditor_uid"] == auditor.auditor_uid
     assert data["name"] == auditor.name
-    assert data["status"] == auditor.status
+    assert data["status"] == auditor.status.value
     assert data["website"] == auditor.website
     assert data["phone"] == auditor.phone
     for date_field in ("date_created", "date_updated", "date_created_in_ecr"):
