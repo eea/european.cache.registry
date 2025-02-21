@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.4.2 - (2025-02-21)
+--------------------
+* Fetch more information on auditors
+* Add endpoints for checking/assigning and unassigning an auditor to a company
+  [dianaboiangiu]
+
 2.4.1 - (2025-02-12)
 --------------------
 * Save ecas_id separately from the username
