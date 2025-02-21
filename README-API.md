@@ -339,12 +339,12 @@ _POST:_ /undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/
 Assigns the auditor _[auditor_uid]_, lead by the given user _[email]_ to the company _[company_id]_ if:
 * the Auditor has a VALID status
 * Auditor's and Company's countries match
-* There is no other assignation for the same company_id, auditor_uid, email, reporting_envelope_url, verification_envelope_url open (end_date = None)
-* Given email matches a user if the Auditor's contact persons
+* There is no other assignation for the same company_id + auditor_uid + email + reporting_envelope_url+ verification_envelope_url open _(i.e.: end_date = None)_
+* Given email matches a user in the Auditor's contact persons
 
 _POST DATA:_
 
-* _email = Lead user email (selected from auditor contact persons), required_
+* _email = Lead user email (selected from Auditor's contact persons), required_
 * _reporting_envelope_url = Original envelope URL, required_
 * _verification_envelope_url = Verification envelope URL, required_
 
@@ -365,13 +365,12 @@ Response:
 _POST:_ /undertaking/[domain]/[company_id]/auditor/[auditor_uid]/unassign/
 ------------------------------------------------------------------------
 
-Unassigns the auditor _[auditor_uid]_, lead by the given user _[email]_ to the company _[company_id]_ .
-The auditor will still be visible in the undertaking detail and auditor listing/detail endpoints, but the end date field
-will have a value.
+Unassigns the auditor _[auditor_uid]_, lead by the given user _[email]_ from the company _[company_id]_ .
+The auditor will still be visible in the undertaking detail and auditor listing/detail endpoints, however the end date field will be filled.
 
 _POST DATA:_
 
-* _email = Lead user email (selected from auditor contact persons), required_
+* _email = Lead user email (selected from Auditor's contact persons), required_
 * _reporting_envelope_url = Original envelope URL, required_
 * _verification_envelope_url = Verification envelope URL, required_
 
