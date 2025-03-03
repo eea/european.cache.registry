@@ -276,7 +276,7 @@ def test_auditor_assign_fail_validation(client):
     assert data["errors"] == {
         "auditor": [
             "Auditor already assigned",
-            "Verification envelope already has an auditor assigned"
+            "Verification envelope already has an auditor assigned",
         ],
     }
 
@@ -319,6 +319,97 @@ def test_auditor_unassign(client):
     data = resp.json
     assert data["success"] is True
     assert auditor_undertaking.end_date == datetime.now().date()
+
+
+def test_auditor_verification_envelopes(client):
+    auditor = factories.AuditorFactory()
+    undertaking = factories.UndertakingFactory()
+    undertaking.country_code = undertaking.address.country.code
+    db.session.add(undertaking)
+    db.session.commit()
+    user1 = factories.UserFactory(email="test@mail.com", username="test")
+    user2 = factories.UserFactory(email="test2@mail.com", username="test2")
+    auditor.contact_persons.append(user1)
+    auditor.contact_persons.append(user2)
+    db.session.commit()
+    auditor_undertaking1 = factories.AuditorUndertakingFactory(
+        auditor=auditor,
+        undertaking=undertaking,
+        user=user1,
+        start_date=datetime.now(),
+        end_date=None,
+        reporting_envelope_url="reporting/3/",
+        verification_envelope_url="/verification1",
+    )
+    auditor_undertaking2 = factories.AuditorUndertakingFactory(
+        auditor=auditor,
+        undertaking=undertaking,
+        user=user2,
+        start_date=datetime.now(),
+        end_date=None,
+        reporting_envelope_url="/reporting/3/",
+        verification_envelope_url="/verification2",
+    )
+
+    # test that the striping of the slash is working
+
+    reporting_envelope_possible_values = [
+        "/reporting/3",
+        "reporting/3",
+        "reporting/3/",
+        "/reporting/3/",
+    ]
+    for reporting_envelope in reporting_envelope_possible_values:
+        resp = client.get(
+            url_for("api.auditor-verification_envelopes"),
+            {"reporting_envelope_url": reporting_envelope},
+        )
+        data = resp.json
+        assert len(data["verification_envelopes"]) == 2
+
+    verification_envelope1 = data["verification_envelopes"][0]
+    verification_envelope1["start_date"] = auditor_undertaking1.start_date.strftime(
+        "%d/%m/%Y %H:%M"
+    )
+    verification_envelope1["end_date"] = None
+    verification_envelope1["reporting_envelope_url"] = (
+        auditor_undertaking1.reporting_envelope_url
+    )
+    verification_envelope1["verification_envelope_url"] = (
+        auditor_undertaking1.verification_envelope_url
+    )
+    verification_envelope1["auditor"]["auditor_uid"] = auditor.auditor_uid
+    verification_envelope1["auditor"]["name"] = auditor.name
+    verification_envelope1["undertaking"]["company_id"] = undertaking.external_id
+    verification_envelope1["undertaking"]["domain"] = undertaking.domain
+    verification_envelope1["undertaking"]["name"] = undertaking.name
+    verification_envelope1["user"]["email"] = user1.email
+    verification_envelope1["user"]["username"] = user1.username
+    verification_envelope1["user"]["first_name"] = user1.first_name
+    verification_envelope1["user"]["last_name"] = user1.last_name
+    verification_envelope1["user"]["type"] = user1.type
+
+    verification_envelope2 = data["verification_envelopes"][1]
+    verification_envelope2["start_date"] = auditor_undertaking2.start_date.strftime(
+        "%d/%m/%Y %H:%M"
+    )
+    verification_envelope2["end_date"] = None
+    verification_envelope2["reporting_envelope_url"] = (
+        auditor_undertaking2.reporting_envelope_url
+    )
+    verification_envelope2["verification_envelope_url"] = (
+        auditor_undertaking2.verification_envelope_url
+    )
+    verification_envelope2["auditor"]["auditor_uid"] = auditor.auditor_uid
+    verification_envelope2["auditor"]["name"] = auditor.name
+    verification_envelope2["undertaking"]["company_id"] = undertaking.external_id
+    verification_envelope2["undertaking"]["domain"] = undertaking.domain
+    verification_envelope2["undertaking"]["name"] = undertaking.name
+    verification_envelope2["user"]["email"] = user2.email
+    verification_envelope2["user"]["username"] = user2.username
+    verification_envelope2["user"]["first_name"] = user2.first_name
+    verification_envelope2["user"]["last_name"] = user2.last_name
+    verification_envelope2["user"]["type"] = user2.type
 
 
 def test_undertaking_list(client):

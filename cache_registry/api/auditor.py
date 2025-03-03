@@ -5,6 +5,7 @@ from collections import defaultdict
 from datetime import datetime
 
 from flask import request, Response
+from sqlalchemy import func
 
 from cache_registry.api.serializers import (
     AddressDetail,
@@ -242,3 +243,32 @@ class AuditorUnassignView(ApiView):
         db.session.add(auditor_undertaking)
         db.session.commit()
         return {"success": True}
+
+
+class AuditorVerificationEnvelopesView(ApiView):
+    model = AuditorUndertaking
+
+    def serialize(self, objs, **kwargs):
+        data = {
+            "verification_envelopes": [
+                AuditorUndertakingDetail.serialize(obj) for obj in objs
+            ]
+        }
+        return data
+
+    def get(self, **kwargs):
+        if "reporting_envelope_url" not in request.args:
+            self.status_code = 400
+            return {"error": "reporting_envelope_url query parameter is required"}
+
+        reporting_envelope_url = request.args.get("reporting_envelope_url")
+        trimmed_reporting_envelope_url = reporting_envelope_url.strip("/").rstrip("/")
+        objs = AuditorUndertaking.query.filter(
+            func.rtrim(func.ltrim(AuditorUndertaking.reporting_envelope_url, "/"), "/")
+            == trimmed_reporting_envelope_url
+        ).all()
+
+        return self.serialize(
+            objs,
+            **kwargs,
+        )

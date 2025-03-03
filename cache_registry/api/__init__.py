@@ -8,6 +8,7 @@ from .auditor import (
     AuditorCheckView,
     AuditorDetailView,
     AuditorListView,
+    AuditorVerificationEnvelopesView,
 )
 
 from .candidate import (
@@ -93,6 +94,14 @@ register_url(
     url="/<pk>/details/",
     view=AuditorDetailView,
     view_name="detail",
+)
+
+register_url(
+    prefix=auditor_prefix,
+    name=auditor_name,
+    url="/verification_envelopes/",
+    view=AuditorVerificationEnvelopesView,
+    view_name="verification_envelopes",
 )
 
 # Undertaking

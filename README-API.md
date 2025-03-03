@@ -16,6 +16,7 @@ Overview
 * `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/check` - verifies if the auditor and the company are from the same country. Returns the auditor information if this condition is met.
 * `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/` - assigns auditor to company
 * `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/unassign/` - unassigns an auditor from a company
+* `/auditors/verification_envelopes/?reporting_envelope_url=/reporting/envelope/url` -  returns the list of verification envelopes for a given reporting envelope
 
 **Undertaking calls:**
 
@@ -387,6 +388,63 @@ Response:
       "success": true,
       "errors": [],
     }
+
+
+_GET_: /auditors/verification_envelopes/?reporting_envelope_url=/reporting/envelope/url
+
+Returns a list of all the verification_envelopes available for the given reporting envelope url.
+Includes information on the assigned user for that verification evelope, the auditor company and the undertaking.
+
+{
+    "verification_envelopes": [
+        {
+            "start_date": "20/02/2025",
+            "end_date": "21/02/2025",
+            "reporting_envelope_url": "/reporting/envelope/url",
+            "verification_envelope_url": "/verification/envelope/url/1/",
+            "auditor": {
+                "auditor_uid": "1234ABC",
+                "name": "Auditor name"
+            },
+            "undertaking": {
+                "company_id": 12345,
+                "domain": "DOMAIN",
+                "name": "Undertaking name"
+            },
+            "user": {
+                "ecas_id": "ecas_id",
+                "username": "username1",
+                "first_name": "First name",
+                "last_name": "Last name",
+                "email": "email@mail.com",
+                "type": "TYPE"
+            }
+        },
+        {
+            "start_date": "21/02/2025",
+            "end_date": "21/02/2025",
+            "reporting_envelope_url": "/reporting/envelope/url",
+            "verification_envelope_url": "/verification/envelope/url/1/",
+            "auditor": {
+                "auditor_uid": "1234ABC",
+                "name": "Auditor name"
+            },
+            "undertaking": {
+                "company_id": 12345,
+                "domain": "DOMAIN",
+                "name": "Undertaking name"
+            },
+            "user": {
+                "ecas_id": "ecas_id",
+                "username": "username2",
+                "first_name": "First name",
+                "last_name": "Last name",
+                "email": "email2@mail.com",
+                "type": "TYPE"
+            }
+        },
+    ]
+}
 
 
 Undertaking calls
