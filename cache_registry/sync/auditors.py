@@ -51,19 +51,24 @@ def add_updates_log(auditor, data):
     logger.info(message)
 
 
+def patch_auditor(auditor_uid, data):
+    patch = current_app.config.get("PATCH_AUDITORS", {})
+    if auditor_uid in patch:
+        print(f"Patching undertaking: {auditor_uid}")
+        data.update(patch[auditor_uid])
+    return data
+
+
 def update_auditor(original_data):
     """Create or update auditor from received data"""
 
     data = deepcopy(original_data)
+    data = patch_auditor(data["auditorUID"], data)
     address = parsers.parse_address(data.pop("address"))
     contact_persons = parsers.parse_cp_list(data.pop("contactPersons", []))
-    contact_persons, _ = patch_users(
-        data["auditorUID"], contact_persons, "PATCH_AUDITOR_USERS"
-    )
     data["auditor_uid"] = data.pop("auditorUID")
     data["ets_accreditation"] = data.pop("etsAccreditation").get("enabled")
     ms_accreditation = parsers.parse_ms_accreditation(data.pop("msAccreditation"))
-
     data["ms_accreditation"] = ms_accreditation["ms_accreditation"]
 
     data["date_created"] = parsers.parse_date(data.pop("dateCreated"))

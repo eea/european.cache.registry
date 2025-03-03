@@ -9,18 +9,6 @@ PATCH_USERS = {
     ],
 }
 
-PATCH_AUDITOR_USERS = {
-    'FAUCP7CE': [
-        {
-            'username': 'user_auditor',
-            'first_name': 'firstName',
-            'last_name': 'lastName',
-            'email': 'user@auditor.org',
-            'type': 'AUDITOR_ORG_FGAS',
-        },
-    ],
-}
-
 PATCH_COMPANIES = {
     '26880': {
         'company_id': 10085,
@@ -29,4 +17,37 @@ PATCH_COMPANIES = {
         'status': 'VALID',
         'domain': 'ODS',
     }
+}
+
+
+PATCH_AUDITORS = {
+    "1234ABCD": {
+        "name": "Updated name",
+        "contactPersons": [
+            {
+                "type": "TYPE",
+                "userName": "username",
+                "firstName": "first name",
+                "lastName": "last name",
+                "emailAddress": "email@mail.com",
+            }
+        ],
+        "address": {
+            "street": "Street",
+            "number": "1",
+            "zipCode": "12345",
+            "city": "City",
+            "country": {
+                "code": "PL",
+                "name": "Poland",
+                "type": "TYPE"
+            }
+        },
+        "msAccreditation": {
+            "enabled": True,
+            "issuingCountryCodes": [
+                "RO"
+            ]
+        }
+    },
 }

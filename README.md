@@ -154,6 +154,9 @@ For patching licences, set `PATCH_LICENCES` to a list of licences to be added to
 a licences/aggregated endpoint. Only the data for the company_id and the given year will
 be patched.
 
+For patching the company data, set `PATCH_AUDITORS` to a dictionary
+containing values to be updated. Use the auditor uid as a key.
+
 ## Syncronise with Licence Portal
 
 * The licences for ODS are now taken from DG Clima and exposed:
