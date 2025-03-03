@@ -274,7 +274,10 @@ def test_auditor_assign_fail_validation(client):
     assert resp.status_code == 400
     data = resp.json
     assert data["errors"] == {
-        "auditor": ["Auditor already assigned"],
+        "auditor": [
+            "Auditor already assigned",
+            "Verification envelope already has an auditor assigned"
+        ],
     }
 
 

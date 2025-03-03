@@ -117,6 +117,7 @@ class AuditorAssignView(ApiView):
     def validate_data(self, undertaking, auditor, data):
         errors = defaultdict(list)
         validate = True
+
         if "email" not in data:
             validate = False
             errors["email"].append("Email is required")
@@ -145,6 +146,16 @@ class AuditorAssignView(ApiView):
             ).first():
                 validate = False
                 errors["auditor"].append("Auditor already assigned")
+            if AuditorUndertaking.query.filter_by(
+                undertaking=undertaking,
+                end_date=None,
+                verification_envelope_url=data["verification_envelope_url"],
+            ).first():
+                validate = False
+                errors["auditor"].append(
+                    "Verification envelope already has an auditor assigned"
+                )
+
         return validate, errors
 
     def post(self, domain, external_id, auditor_uid, **kwargs):
@@ -156,12 +167,20 @@ class AuditorAssignView(ApiView):
         if auditor.status.value != "VALID":
             self.status_code = 400
             return {
-                "errors": {"all": ["Auditor is not valid for assignment."], "success": False}
+                "errors": {
+                    "all": ["Auditor is not valid for assignment."],
+                    "success": False,
+                }
             }
         if undertaking.country_code != auditor.address.country.code:
             self.status_code = 400
             return {
-                "errors": {"all": ["Auditor's country does not match the country of the company."], "success": False}
+                "errors": {
+                    "all": [
+                        "Auditor's country does not match the country of the company."
+                    ],
+                    "success": False,
+                }
             }
         validated, errors = self.validate_data(undertaking, auditor, data)
         if not validated:

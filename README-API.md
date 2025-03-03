@@ -340,6 +340,7 @@ Assigns the auditor _[auditor_uid]_, lead by the given user _[email]_ to the com
 * the Auditor has a VALID status
 * Auditor's and Company's countries match
 * There is no other assignation for the same company_id + auditor_uid + email + reporting_envelope_url+ verification_envelope_url open _(i.e.: end_date = None)_
+* There is no assignation open for the verification_envelope_url _(i.e.: end_date=None)_
 * Given email matches a user in the Auditor's contact persons
 
 _POST DATA:_
