@@ -11,7 +11,7 @@ Overview
 --------
 **Auditor calls:**
 
-* `/auditors/list/` - list all auditors
+* [`/auditors/list/`][1] - list all auditors
 * `/auditors/[auditor_uid]/details/` - details about an auditor
 * `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/check` - verifies if the auditor and the company are from the same country. Returns the auditor information if this condition is met.
 * `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/` - assigns auditor to company
@@ -103,6 +103,7 @@ verified or not
 Auditor calls
 ==============
 
+[1]:#auditors-list 
 /auditors/list/
 ---------------
 
