@@ -65,6 +65,7 @@ from .user import (
     UserListView,
     UserCompaniesView,
     UserCompaniesIncludeEcasView,
+    UserCompaniesAuditorsView,
 )
 
 api = Blueprint("api", __name__)
@@ -299,6 +300,14 @@ register_url(
     url="/companies",
     view=UserCompaniesIncludeEcasView,
     view_name="companies_ecas",
+)
+
+register_url(
+    prefix=user_prefix,
+    name=user_name,
+    url="/companies/v2/",
+    view=UserCompaniesAuditorsView,
+    view_name="companies_auditors",
 )
 
 # Candidate

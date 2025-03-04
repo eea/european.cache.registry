@@ -64,6 +64,10 @@ class User(SerializableModel, db.Model):
     def verified_undertakings(self):
         return self.undertakings.filter_by(oldcompany_verified=True)
 
+    @property
+    def active_auditor_undertakings(self):
+        return self.auditor_undertakings.filter_by(end_date=None)
+
 
 class Country(SerializableModel, db.Model):
     __tablename__ = "country"

@@ -99,3 +99,38 @@ class UserCompaniesIncludeEcasView(ApiView):
 
     def get(self, **kwargs):
         return self.serialize(self.get_object(**kwargs))
+
+
+class UserCompaniesAuditorsView(UserCompaniesIncludeEcasView):
+    @classmethod
+    def serialize(cls, obj, **kwargs):
+        def _serialize(auditor_undertaking):
+            company = auditor_undertaking.undertaking
+            return {
+                "company_id": company.external_id,
+                "collection_id": company.oldcompany_account,
+                "name": company.name,
+                "domain": company.domain,
+                "country": company.country_code,
+                "country_history": [
+                    country_hist.code for country_hist in company.country_history
+                ],
+                "representative_country": (
+                    None
+                    if not company.represent
+                    else company.represent.address.country.code
+                ),
+                "represent_history": [
+                    EuLegalRepresentativeCompanyDetail.serialize(representative_hist)
+                    for representative_hist in company.represent_history
+                ],
+                "verification_envelope_url": auditor_undertaking.verification_envelope_url,
+            }
+
+        data = {}
+        data["reporter"] = super().serialize(obj, **kwargs)
+        data["auditor"] = [
+            _serialize(auditor_undertaking)
+            for auditor_undertaking in obj.active_auditor_undertakings
+        ]
+        return data

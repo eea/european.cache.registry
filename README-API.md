@@ -47,6 +47,7 @@ Overview
 * `/user/list` - all users
 * `/user/[username]/companies` - all verified companies the user has access to
 * `/user/companies?username=[username]&ecas_id=[ecas_id]` - all verified companies the user has access to (check is done with both parameters on both username and ecas_id fields)
+* `/user/companies/v2?username=[username]&ecas_id=[ecas_id]` - all verified companies and audited companies the user has access to
 
 **Matching calls:**
 
@@ -1120,6 +1121,85 @@ The values given are checked against both the username and ecas_id field, to ens
       ],
       }
     ]
+
+
+/user/companies/v2?username=[username]&ecas_id=[ecas_id]
+--------------------------------------------------------
+
+The _username_ should be a username (ex: "user1")
+The _ecas_id_ should be of the same format as the username
+
+Returns the list of undertakings for a user given by its username or ecas_id.
+Return the list of audited companies and the verification folder url for a user given by its username or ecas_id.
+
+The values given are checked against both the username and ecas_id field, to ensure that the user is found.
+
+
+    {
+        "reporter": [
+            {
+                "collection_id": null,
+                "domain": "FGAS",
+                "country": "CN",
+                "company_id": 10085,
+                "name": "FGAS-NMORGANIZATION--10085",
+                "respresentative_country": "DE",
+                "country_history": [],
+                "represent_history": [
+                    {
+                        "name": "EULEGALNAME44 OLD",
+                        "contact_last_name": "lname--9853",
+                        "vatnumber": "EUVAT45",
+                        "contact_email": "9853email@climaOds2010.yyy",
+                        "contact_first_name": "fname--9853",
+                        "address": {
+                            "city": "city--7954",
+                            "country": {
+                            "code": "IE",
+                            "type": "EU_TYPE",
+                            "name": "Ireland"
+                            },
+                            "zipcode": "zipcode--7954",
+                            "number": "nrstreet--7954",
+                            "street": "street--7954"
+                        }
+                    }
+                ]
+            }
+        ],
+        "auditor": [
+            {   
+                "verification_envelope_url": "verification/envelope/url/",
+                "collection_id": null,
+                "domain": "FGAS",
+                "country": "CN",
+                "company_id": 10085,
+                "name": "FGAS-NMORGANIZATION--10085",
+                "respresentative_country": "DE",
+                "country_history": [],
+                "represent_history": [
+                    {
+                        "name": "EULEGALNAME44 OLD",
+                        "contact_last_name": "lname--9853",
+                        "vatnumber": "EUVAT45",
+                        "contact_email": "9853email@climaOds2010.yyy",
+                        "contact_first_name": "fname--9853",
+                        "address": {
+                            "city": "city--7954",
+                            "country": {
+                            "code": "IE",
+                            "type": "EU_TYPE",
+                            "name": "Ireland"
+                            },
+                            "zipcode": "zipcode--7954",
+                            "number": "nrstreet--7954",
+                            "street": "street--7954"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
 
 Matching calls
 ==============

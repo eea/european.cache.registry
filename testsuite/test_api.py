@@ -783,6 +783,39 @@ def test_user_companies_include_ecas(client):
     assert data["company_id"] == undertaking.external_id
 
 
+def test_user_companies_include_ecas_v2(client):
+    undertaking = factories.UndertakingFactory()
+    user = factories.UserFactory(ecas_id="username", username="username@mail.com")
+    undertaking.contact_persons.append(user)
+    auditor = factories.AuditorFactory()
+    auditor.contact_persons.append(user)
+    db.session.commit()
+    audited_undertaking = factories.UndertakingFactory()
+    auditor_undertaking = factories.AuditorUndertakingFactory(
+        auditor=auditor,
+        undertaking=audited_undertaking,
+        user=user,
+        start_date=datetime.now(),
+        end_date=None,
+        reporting_envelope_url="reporting",
+        verification_envelope_url="verification",
+    )
+    resp = client.get(url_for("api.user-companies_auditors"), {"ecas_id": user.ecas_id})
+    assert resp.status_code == 200
+    data = resp.json
+    reporter_data = data["reporter"]
+    assert len(reporter_data) == 1
+    assert reporter_data[0]["company_id"] == undertaking.external_id
+
+    auditor_data = data["auditor"]
+    assert len(auditor_data) == 1
+    assert auditor_data[0]["company_id"] == audited_undertaking.external_id
+    assert (
+        auditor_data[0]["verification_envelope_url"]
+        == auditor_undertaking.verification_envelope_url
+    )
+
+
 def test_candidates_list(client):
     undertaking = factories.UndertakingFactory(oldcompany_verified=False)
     oldcompany = factories.OldCompanyFactory(id=2)
