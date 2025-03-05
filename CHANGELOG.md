@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.4 - (2025-03-05)
+--------------------
+* Add PATCH_AUDITOR_USERS to handle contact persons patching separately
+  [dianaboiangiu]
+
 2.4.3 - (2025-03-05)
 --------------------
 * Add PATCH_AUDITORS option
