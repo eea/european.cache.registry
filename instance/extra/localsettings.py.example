@@ -23,15 +23,6 @@ PATCH_COMPANIES = {
 PATCH_AUDITORS = {
     "1234ABCD": {
         "name": "Updated name",
-        "contactPersons": [
-            {
-                "type": "TYPE",
-                "userName": "username",
-                "firstName": "first name",
-                "lastName": "last name",
-                "emailAddress": "email@mail.com",
-            }
-        ],
         "address": {
             "street": "Street",
             "number": "1",
@@ -50,4 +41,17 @@ PATCH_AUDITORS = {
             ]
         }
     },
+}
+
+
+PATCH_AUDITOR_USERS = {
+    '1323ABCD': [
+        {
+            'username': 'user_auditor',
+            'first_name': 'firstName',
+            'last_name': 'lastName',
+            'email': 'user@auditor.org',
+            'type': 'TYPE',
+        },
+    ],
 }

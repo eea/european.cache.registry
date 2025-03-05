@@ -18,12 +18,12 @@ def get_auth(user, password):
     )
 
 
-def patch_users(external_id, users, patch_dict="PATCH_USERS"):
+def patch_users(external_id, users, patch_dict="PATCH_USERS", object_type="company"):
     """Patch the list of contact persons"""
     external_id = str(external_id)
     patch = current_app.config.get(patch_dict, {})
     if external_id in patch:
-        print(f"Patching company: {external_id}")
+        print(f"Patching {object_type} users: {external_id}")
         users.extend(patch[external_id])
         return users, True
     return users, False
