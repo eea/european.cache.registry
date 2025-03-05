@@ -38,8 +38,8 @@ Overview
 **Stocks calls**
 
 * [`/stocks`](#stocks---get) - all stocks in the database
-* [`/stocks/[company_id]`](#stocksyears2019---get) - all stocks for one company per years
-* [`/stocks/years/[years]`](#stocks12345---post) - all stocks for one selected year
+* [`/stocks/[company_id]`](#stocks12345---post) - all stocks for one company per years
+* [`/stocks/years/[years]`](#stocksyears2019---get) - all stocks for one selected year
 * `/stocks/import` - import new stocks
 
 **User calls:**
@@ -52,7 +52,7 @@ Overview
 **Matching calls:**
 
 * [`/candidate/[domain]/list`](#candidatedomainlist) -  all matching candidates from domain
-* `/candidate/[domain]/list/verified` - list verified undertakings from domain
+* [`/candidate/[domain]/list/verified`](#candidatedomainlistverified---get) - list verified undertakings from domain
 * [`/candidate/[domain]/verify/[undertaking_id]/[oldcompany_id]/`](#candidatedomainverifyundertaking_idoldcompany_id---post) - mark an
 undertaking-company link as verified from domain
 * [`/candidate/[domain]/verify-none/[undertaking_id]`](#candidatedomainverify-noneundertaking_id---post) - mark an
@@ -69,36 +69,36 @@ verified or not
 **Export calls:**
 
 * [`/export/user/list/[domain]`](#exportuserlistdomain) - export users list as CSV
-* `/export/user/json/[domain]` - export users list as JSON
+* [`/export/user/json/[domain]`](#exportuserlistdomain) - export users list as JSON
 * [`/export/undertaking/[domain]`](#exportundertakingdomain) - export companies list from domain as CSV
 
 **Mails calls:**
 
-* `/mail/list` - list the mails
-* `/mail/add` - add a mail to the list
-* `/mail/delete` - delete a mail from the list
-* `/alert_lockdown/wrong_match` - alert on wrong matching of a company
-* `/alert_lockdown/wrong_lockdown` - alert on wrong lockdown
-* `/alert_lockdown/unmatch` - alert at unmatch
+* [`/mail/list`](#maillist) - list the mails
+* [`/mail/add`](#mailadd---post) - add a mail to the list
+* [`/mail/delete`](#maildelete---post) - delete a mail from the list
+* [`/alert_lockdown/wrong_match`](#alert_lockdownwrong_match---post) - alert on wrong matching of a company
+* [`/alert_lockdown/wrong_lockdown`](#alert_lockdownwrong_lockdown---post) - alert on wrong lockdown
+* [`/alert_lockdown/unmatch`](#alert_lockdownunmatch---post) - alert at unmatch
 
 **Sync**:
 
-* `/sync/collections_title`
-* `/sync/fgases`
-* `/sync/ods`
-* `/sync/licences`
+* [`/sync/collections_title`](#synccollections_title---get)
+* [`/sync/fgases`](#syncfgases---get)
+* [`/sync/ods`](#syncods---get)
+* [`/sync/licences`](#synclicences----get)
 
 **Log calls:**
-* `/log/matching/[domain]` - matching logs
-* `/log/sync[domain]` - data sync logs
+* [`/log/matching/[domain]`](#logmatchingdomain) - matching logs
+* [`/log/sync[domain]`](logsyncdomain) - data sync logs
 
 **Settings:**
 
-* `/settings` - overview of the middleware settings
+* [`/settings`](#settings) - overview of the middleware settings
 
 **Debug:**
 
-* `/sync/fgases_debug_noneu` - returns a list with all NON EU companies without a legal representative from FGas
+* [`/sync/fgases_debug_noneu`](#syncfgases_debug_noneu---get) - returns a list with all NON EU companies without a legal representative from FGas
 
 Auditor calls
 ==============
