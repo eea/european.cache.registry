@@ -11,98 +11,98 @@ Overview
 --------
 **Auditor calls:**
 
-* `/auditors/list/` - list all auditors
-* `/auditors/[auditor_uid]/details/` - details about an auditor
-* `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/check` - verifies if the auditor and the company are from the same country. Returns the auditor information if this condition is met.
-* `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/` - assigns auditor to company
-* `/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/unassign/` - unassigns an auditor from a company
-* `/auditors/verification_envelopes/?reporting_envelope_url=/reporting/envelope/url` -  returns the list of verification envelopes for a given reporting envelope
+* [`/auditors/list/`](#auditorslist) - list all auditors
+* [`/auditors/[auditor_uid]/details/`](#auditorsauditor_uiddetails) - details about an auditor
+* [`/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/check`](#undertakingdomaincompany_idauditorauditor_uidcheck) - verifies if the auditor and the company are from the same country. Returns the auditor information if this condition is met.
+* [`/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/`](#post-undertakingdomaincompany_idauditorauditor_uidassign) - assigns auditor to company
+* [`/undertaking/[domain]/[company_id]/auditor/[auditor_uid]/unassign/`](#post-undertakingdomaincompany_idauditorauditor_uidunassign) - unassigns an auditor from a company
+* [`/auditors/verification_envelopes/?reporting_envelope_url=/reporting/envelope/url`](#get-auditorsverification_envelopesreporting_envelope_urlreportingenvelopeurl) -  returns the list of verification envelopes for a given reporting envelope
 
 **Undertaking calls:**
 
-* `/undertaking/[domain]/list` - all verified undertakings from domain
-* `/undertaking/[domain]/list-small` - all verified undertakings from domain but with fewer details
-* `/undertaking/[domain]/list/all` - all undertakings from domain, including unverified
-* `/undertaking/[domain]/list_by_vat/[vat]` - filter by vat undertakings from domain
-* `/undertaking/[domain]/filter` - count of undertakings from domain, given field filters
-* `/undertaking/[domain]/[company_id]/details` - details about an undertaking from a domain
-* `/undertaking/[domain]/[company_id]/details-short` - short details about an undertaking from a domain
-* `/undertaking/[domain]/[company_id]/statusupdate` - change the status of a company from a domain
+* [`/undertaking/[domain]/list`](#undertakingdomainlist) - all verified undertakings from domain
+* [`/undertaking/[domain]/list-small`](#undertakingdomainlist-small) - all verified undertakings from domain but with fewer details
+* [`/undertaking/[domain]/list/all`](#undertakingdomainlistall) - all undertakings from domain, including unverified
+* [`/undertaking/[domain]/list_by_vat/[vat]`](#undertakingdomainlist_by_vat) - filter by vat undertakings from domain
+* [`/undertaking/[domain]/filter`](#undertakingdomainfilternameidvatcountrycodeor_vator_name) - count of undertakings from domain, given field filters
+* [`/undertaking/[domain]/[company_id]/details`](#undertakingdomaincompany_iddetails) - details about an undertaking from a domain
+* [`/undertaking/[domain]/[company_id]/details-short`](#undertakingdomaincompany_iddetails-short) - short details about an undertaking from a domain
+* [`/undertaking/[domain]/[company_id]/statusupdate`](#undertakingdomaincompany_idstatusupdate---post) - change the status of a company from a domain
 
 **Licences calls**
 
-* `/undertaking/[domain]/[company_id]/licences/[year]/aggregated` - all substances(licences data aggregated) for one undertaking delivered in a year
-* `/undertaking/[domain]/[company_id]/deliveries/[year]/licences` - all licences for one undertaking for a certain year
-* `/undertaking/[domain]/[company_id]/deliveries/[year]/substances` - all substances for one undertaking for a certain year
+* [`/undertaking/[domain]/[company_id]/licences/[year]/aggregated`](#undertakingdomaincompany_idlicencesyearaggregated---post) - all substances(licences data aggregated) for one undertaking delivered in a year
+* [`/undertaking/[domain]/[company_id]/deliveries/[year]/licences`](#undertakingdomainpkdeliveriesyearlicences---get) - all licences for one undertaking for a certain year
+* [`/undertaking/[domain]/[company_id]/deliveries/[year]/substances`](#undertakingdomainpkdeliveriesyearsubstances---get) - all substances for one undertaking for a certain year
 
 **Stocks calls**
 
-* `/stocks` - all stocks in the database
-* `/stocks/[company_id]` - all stocks for one company per years
-* `/stocks/years/[years]` - all stocks for one selected year
+* [`/stocks`](#stocks---get) - all stocks in the database
+* [`/stocks/[company_id]`](#stocks12345---post) - all stocks for one company per years
+* [`/stocks/years/[years]`](#stocksyears2019---get) - all stocks for one selected year
 * `/stocks/import` - import new stocks
 
 **User calls:**
 
-* `/user/list` - all users
-* `/user/[username]/companies` - all verified companies the user has access to
-* `/user/companies?username=[username]&ecas_id=[ecas_id]` - all verified companies the user has access to (check is done with both parameters on both username and ecas_id fields)
-* `/user/companies/v2?username=[username]&ecas_id=[ecas_id]` - all verified companies and audited companies the user has access to
+* [`/user/list`](#userlist) - all users
+* [`/user/[username]/companies`](#userusernamecompanies) - all verified companies the user has access to
+* [`/user/companies?username=[username]&ecas_id=[ecas_id]`](#usercompaniesusernameusernameecas_idecas_id) - all verified companies the user has access to (check is done with both parameters on both username and ecas_id fields)
+* [`/user/companies/v2?username=[username]&ecas_id=[ecas_id]`](#usercompaniesv2usernameusernameecas_idecas_id) - all verified companies and audited companies the user has access to
 
 **Matching calls:**
 
-* `/candidate/[domain]/list` -  all matching candidates from domain
-* `/candidate/[domain]/list/verified` - list verified undertakings from domain
-* `/candidate/[domain]/verify/[undertaking_id]/[oldcompany_id]/` - mark an
+* [`/candidate/[domain]/list`](#candidatedomainlist) -  all matching candidates from domain
+* [`/candidate/[domain]/list/verified`](#candidatedomainlistverified---get) - list verified undertakings from domain
+* [`/candidate/[domain]/verify/[undertaking_id]/[oldcompany_id]/`](#candidatedomainverifyundertaking_idoldcompany_id---post) - mark an
 undertaking-company link as verified from domain
-* `/candidate/[domain]/verify-none/[undertaking_id]` - mark an
+* [`/candidate/[domain]/verify-none/[undertaking_id]`](#candidatedomainverify-noneundertaking_id---post) - mark an
 undertaking as verified from domain
-* `/candidate/[domain]/unverify/[undertaking_id]/` - unverify undertaking-company link
+* [`/candidate/[domain]/unverify/[undertaking_id]/`](#candidatedomainunverifyundertaking_id---post) - unverify undertaking-company link
 after prior verfication from domain
-* `/candidate/[domain]/manual/[undertaking_id]/[oldcompany_account]` - manualy link
+* [`/candidate/[domain]/manual/[undertaking_id]/[oldcompany_account]`](#candidatedomainmanualundertaking_idoldcompany_account---post) - manualy link
 undertaking with company account
 
-* `/match/run` - run matching algorithm
-* `/match/flush` - remove all matching links created by the matching algorithm,
+* [`/match/run`](#matchrun---get) - run matching algorithm
+* [`/match/flush`](#matchflush---get) - remove all matching links created by the matching algorithm,
 verified or not
 
 **Export calls:**
 
-* `/export/user/list/[domain]` - export users list as CSV
-* `/export/user/json/[domain]` - export users list as JSON
-* `/export/undertaking/[domain]` - export companies list from domain as CSV
+* [`/export/user/list/[domain]`](#exportuserlistdomain) - export users list as CSV
+* [`/export/user/json/[domain]`](#exportuserlistdomain) - export users list as JSON
+* [`/export/undertaking/[domain]`](#exportundertakingdomain) - export companies list from domain as CSV
 
 **Mails calls:**
 
-* `/mail/list` - list the mails
-* `/mail/add` - add a mail to the list
-* `/mail/delete` - delete a mail from the list
-* `/alert_lockdown/wrong_match` - alert on wrong matching of a company
-* `/alert_lockdown/wrong_lockdown` - alert on wrong lockdown
-* `/alert_lockdown/unmatch` - alert at unmatch
+* [`/mail/list`](#maillist) - list the mails
+* [`/mail/add`](#mailadd---post) - add a mail to the list
+* [`/mail/delete`](#maildelete---post) - delete a mail from the list
+* [`/alert_lockdown/wrong_match`](#alert_lockdownwrong_match---post) - alert on wrong matching of a company
+* [`/alert_lockdown/wrong_lockdown`](#alert_lockdownwrong_lockdown---post) - alert on wrong lockdown
+* [`/alert_lockdown/unmatch`](#alert_lockdownunmatch---post) - alert at unmatch
 
 **Sync**:
 
-* `/sync/collections_title`
-* `/sync/fgases`
-* `/sync/ods`
-* `/sync/licences`
+* [`/sync/collections_title`](#synccollections_title---get)
+* [`/sync/fgases`](#syncfgases---get)
+* [`/sync/ods`](#syncods---get)
+* [`/sync/licences`](#synclicences----get)
 
 **Log calls:**
-* `/log/matching/[domain]` - matching logs
-* `/log/sync[domain]` - data sync logs
+* [`/log/matching/[domain]`](#logmatchingdomain) - matching logs
+* [`/log/sync[domain]`](logsyncdomain) - data sync logs
 
 **Settings:**
 
-* `/settings` - overview of the middleware settings
+* [`/settings`](#settings) - overview of the middleware settings
 
 **Debug:**
 
-* `/sync/fgases_debug_noneu` - returns a list with all NON EU companies without a legal representative from FGas
+* [`/sync/fgases_debug_noneu`](#syncfgases_debug_noneu---get) - returns a list with all NON EU companies without a legal representative from FGas
 
 Auditor calls
 ==============
-
+ 
 /auditors/list/
 ---------------
 
@@ -366,7 +366,7 @@ Response:
 
 
 _POST:_ /undertaking/[domain]/[company_id]/auditor/[auditor_uid]/unassign/
-------------------------------------------------------------------------
+--------------------------------------------------------------------------
 
 Unassigns the auditor _[auditor_uid]_, lead by the given user _[email]_ from the company _[company_id]_ .
 The auditor will still be visible in the undertaking detail and auditor listing/detail endpoints, however the end date field will be filled.
@@ -392,60 +392,60 @@ Response:
 
 
 _GET_: /auditors/verification_envelopes/?reporting_envelope_url=/reporting/envelope/url
-
+---------------------------------------------------------------------------------------
 Returns a list of all the verification_envelopes available for the given reporting envelope url.
 Includes information on the assigned user for that verification evelope, the auditor company and the undertaking.
 
-{
-    "verification_envelopes": [
-        {
-            "start_date": "20/02/2025",
-            "end_date": "21/02/2025",
-            "reporting_envelope_url": "/reporting/envelope/url",
-            "verification_envelope_url": "/verification/envelope/url/1/",
-            "auditor": {
-                "auditor_uid": "1234ABC",
-                "name": "Auditor name"
+    {
+        "verification_envelopes": [
+            {
+                "start_date": "20/02/2025",
+                "end_date": "21/02/2025",
+                "reporting_envelope_url": "/reporting/envelope/url",
+                "verification_envelope_url": "/verification/envelope/url/1/",
+                "auditor": {
+                    "auditor_uid": "1234ABC",
+                    "name": "Auditor name"
+                },
+                "undertaking": {
+                    "company_id": 12345,
+                    "domain": "DOMAIN",
+                    "name": "Undertaking name"
+                },
+                "user": {
+                    "ecas_id": "ecas_id",
+                    "username": "username1",
+                    "first_name": "First name",
+                    "last_name": "Last name",
+                    "email": "email@mail.com",
+                    "type": "TYPE"
+                }
             },
-            "undertaking": {
-                "company_id": 12345,
-                "domain": "DOMAIN",
-                "name": "Undertaking name"
+            {
+                "start_date": "21/02/2025",
+                "end_date": "21/02/2025",
+                "reporting_envelope_url": "/reporting/envelope/url",
+                "verification_envelope_url": "/verification/envelope/url/1/",
+                "auditor": {
+                    "auditor_uid": "1234ABC",
+                    "name": "Auditor name"
+                },
+                "undertaking": {
+                    "company_id": 12345,
+                    "domain": "DOMAIN",
+                    "name": "Undertaking name"
+                },
+                "user": {
+                    "ecas_id": "ecas_id",
+                    "username": "username2",
+                    "first_name": "First name",
+                    "last_name": "Last name",
+                    "email": "email2@mail.com",
+                    "type": "TYPE"
+                }
             },
-            "user": {
-                "ecas_id": "ecas_id",
-                "username": "username1",
-                "first_name": "First name",
-                "last_name": "Last name",
-                "email": "email@mail.com",
-                "type": "TYPE"
-            }
-        },
-        {
-            "start_date": "21/02/2025",
-            "end_date": "21/02/2025",
-            "reporting_envelope_url": "/reporting/envelope/url",
-            "verification_envelope_url": "/verification/envelope/url/1/",
-            "auditor": {
-                "auditor_uid": "1234ABC",
-                "name": "Auditor name"
-            },
-            "undertaking": {
-                "company_id": 12345,
-                "domain": "DOMAIN",
-                "name": "Undertaking name"
-            },
-            "user": {
-                "ecas_id": "ecas_id",
-                "username": "username2",
-                "first_name": "First name",
-                "last_name": "Last name",
-                "email": "email2@mail.com",
-                "type": "TYPE"
-            }
-        },
-    ]
-}
+        ]
+    }
 
 
 Undertaking calls
@@ -818,27 +818,27 @@ Returns an undertakings details from the system, as fetched from domain registry
 
 This url is used to retrive details of a certain company and the contact persons of that company.
 
-{
-    "company_id": 324,
-    "company_name": "NMORGANIZATION--324",
-    "address": "str--567, 1",
-    "postal_code": "cp567",
-    "city": "Darmstadt",
-    "country": "Germany",
-    "eori_code": "NREORI324",
-    "contact_persons": [
-      {
-        "first_name": "fname25716",
-        "last_name": "lname25716",
-        "email": "25716email@test.yyy"
-      },
-      {
-        "first_name": "fname--25717",
-        "last_name": "lname--25717",
-        "email": "25717email@test.yyy"
-      }
-    ]
-}
+    {
+        "company_id": 324,
+        "company_name": "NMORGANIZATION--324",
+        "address": "str--567, 1",
+        "postal_code": "cp567",
+        "city": "Darmstadt",
+        "country": "Germany",
+        "eori_code": "NREORI324",
+        "contact_persons": [
+          {
+            "first_name": "fname25716",
+            "last_name": "lname25716",
+            "email": "25716email@test.yyy"
+          },
+          {
+            "first_name": "fname--25717",
+            "last_name": "lname--25717",
+            "email": "25717email@test.yyy"
+          }
+        ]
+    }
 
 /undertaking/[domain]/[company_id]/statusupdate - POST
 ------------------------------------------------------
@@ -939,30 +939,30 @@ Provies a list with all the licences for one undertaking for a certain year
 Provies a list with all the substances for one undertaking for a certain year
 
 
-  [
-    {
-      "year": 2018,
-      "substance": "HBFC-31 B1 (virgin)",
-      "lic_use_kind": "free circulation",
-      "lic_use_desc": "feedstock",
-      "lic_type": "import",
-      "quantity": 2342,
-      "date_created": "16/01/2020",
-      "date_updated": "16/01/2020",
-      "delivery_id": 2
-    },
-    {
-      "year": 2018,
-      "substance": "HCFC-22 (virgin)",
-      "lic_use_kind": "",
-      "lic_use_desc": "refrigeration",
-      "lic_type": "export",
-      "quantity": 5433,
-      "date_created": "16/01/2020",
-      "date_updated": "16/01/2020",
-      "delivery_id": 2
-    }
-  ]
+    [
+      {
+        "year": 2018,
+        "substance": "HBFC-31 B1 (virgin)",
+        "lic_use_kind": "free circulation",
+        "lic_use_desc": "feedstock",
+        "lic_type": "import",
+        "quantity": 2342,
+        "date_created": "16/01/2020",
+        "date_updated": "16/01/2020",
+        "delivery_id": 2
+      },
+      {
+        "year": 2018,
+        "substance": "HCFC-22 (virgin)",
+        "lic_use_kind": "",
+        "lic_use_desc": "refrigeration",
+        "lic_type": "export",
+        "quantity": 5433,
+        "date_created": "16/01/2020",
+        "date_updated": "16/01/2020",
+        "delivery_id": 2
+      }
+    ]
 
 Stocks calls
 ============
@@ -998,30 +998,34 @@ Response example:
     ]
 
 /stocks/years/2019 - GET
+------------------------
 
-[
-  {
-    "type": "cb",
-    "substance_name_form": "Cdf",
-    "is_virgin": true,
-    "code": "ods12345",
-    "result": 12345
-  },
-  {
-    "type": "d",
-    "substance_name_form": "Cdf",
-    "is_virgin": true,
-    "code": "ods12345",
-    "result": 12345
-  },
-]
+    [
+      {
+        "type": "cb",
+        "substance_name_form": "Cdf",
+        "is_virgin": true,
+        "code": "ods12345",
+        "result": 12345
+      },
+      {
+        "type": "d",
+        "substance_name_form": "Cdf",
+        "is_virgin": true,
+        "code": "ods12345",
+        "result": 12345
+      },
+    ]
 
 /stocks/12345 - POST
-{
-  "12345": {
-    "2019":
-  }
-}
+--------------------
+
+    {
+      "12345": {
+        "2019":
+      }
+    }
+
 User calls
 ==========
 
