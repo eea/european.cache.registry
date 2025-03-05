@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2.4.3 - (2025-03-05)
+--------------------
+* Add PATCH_AUDITORS option
+* Block assignation on /undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/ if an auditor already has an active assignation
+* Add /auditors/verification_envelopes/?reporting_envelope_url=/reporting/envelope/url endpoint
+* Add /user/companies/v2?username=[username]&ecas_id=[ecas_id] endpoint
+* Use section references in Readme API
+  [dianaboiangiu]
+
 2.4.2 - (2025-02-21)
 --------------------
 * Fetch more information on auditors
