@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.5 - (2025-03-07)
+--------------------
+* Fix fgases sync
+  [dianaboiangiu]
+
 2.4.4 - (2025-03-05)
 --------------------
 * Add PATCH_AUDITOR_USERS to handle contact persons patching separately
