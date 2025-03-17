@@ -73,7 +73,9 @@ def test_auditor_check(client):
     undertaking.country_code = undertaking.address.country.code
     db.session.add(undertaking)
     db.session.commit()
-    auditor = factories.AuditorFactory(address__country=undertaking.address.country)
+    auditor = factories.AuditorFactory(
+        ms_accreditation_issuing_countries=[undertaking.address.country]
+    )
     resp = client.get(
         url_for(
             "api.company-auditor_check",
@@ -84,6 +86,7 @@ def test_auditor_check(client):
     )
     data = resp.json
     assert data["access"] is True
+
     assert data["auditor"]["auditor_uid"] == auditor.auditor_uid
     assert data["auditor"]["name"] == auditor.name
 
@@ -132,7 +135,11 @@ def test_auditor_check_fail(client):
     )
     assert resp.status_code == 200
     data = resp.json
-    assert data == {"access": False, "auditor": None}
+    assert data == {
+        "access": False,
+        "auditor": None,
+        "errors": {"auditor": ["Auditor is not accredited for this country"]},
+    }
 
 
 def test_auditor_assign(client):
@@ -140,7 +147,9 @@ def test_auditor_assign(client):
     undertaking.country_code = undertaking.address.country.code
     db.session.add(undertaking)
     db.session.commit()
-    auditor = factories.AuditorFactory()
+    auditor = factories.AuditorFactory(
+        ms_accreditation_issuing_countries=[undertaking.address.country]
+    )
     user = factories.UserFactory(email="test@mail.com")
     auditor.contact_persons.append(user)
     db.session.commit()
@@ -217,6 +226,34 @@ def test_auditor_assign_fail_validation(client):
     db.session.commit()
     auditor = factories.AuditorFactory()
     user = factories.UserFactory(email="email@test.com")
+
+    resp = client.post(
+        url_for(
+            "api.company-auditor_assign",
+            domain=undertaking.domain,
+            external_id=undertaking.external_id,
+            auditor_uid=auditor.auditor_uid,
+        ),
+        json.dumps(
+            {
+                "email": user.email,
+            }
+        ),
+        content_type="application/json",
+        expect_errors=True,
+    )
+
+    assert resp.status_code == 400
+    data = resp.json
+    assert data["errors"] == {
+        "email": ["User not found"],
+        "reporting_envelope_url": ["Reporting envelope URL is required"],
+        "verification_envelope_url": ["Verification envelope URL is required"],
+        "auditor": ["Auditor is not accredited for this country"],
+    }
+
+    auditor.ms_accreditation_issuing_countries = [undertaking.address.country]
+    db.session.commit()
 
     resp = client.post(
         url_for(

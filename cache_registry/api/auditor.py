@@ -1,10 +1,8 @@
 # coding=utf-8
-import json
-
 from collections import defaultdict
 from datetime import datetime
 
-from flask import request, Response
+from flask import request
 from sqlalchemy import func
 
 from cache_registry.api.serializers import (
@@ -70,18 +68,27 @@ class AuditorDetailView(DetailView):
         return data
 
 
-class AuditorCheckView(ApiView):
-    model = Auditor
+class AuditorCheckAccessMixin:
 
     def check_access_to_auditor(self, undertaking, auditor_uid):
+        errors = defaultdict(list)
         auditor = Auditor.query.filter_by(auditor_uid=auditor_uid).first()
         if not auditor:
-            return False, None
+            errors["auditor"].append("Auditor not found")
         if auditor.status.value != "VALID":
-            return False, None
-        if undertaking.country_code != auditor.address.country.code:
-            return False, None
-        return True, auditor
+            errors["auditor"].append("Auditor is not valid")
+        if not auditor.ets_accreditation:
+            if undertaking.country_code not in [
+                country.code for country in auditor.ms_accreditation_issuing_countries
+            ]:
+                errors["auditor"].append("Auditor is not accredited for this country")
+        if errors:
+            return False, None, errors
+        return True, auditor, errors
+
+
+class AuditorCheckView(ApiView, AuditorCheckAccessMixin):
+    model = Auditor
 
     def serialize(self, obj, access, **kwargs):
         auditor = AuditorDetail.serialize(obj)
@@ -96,11 +103,12 @@ class AuditorCheckView(ApiView):
             external_id=external_id
         ).first_or_404()
 
-        access, auditor = self.check_access_to_auditor(undertaking, auditor_uid)
+        access, auditor, errors = self.check_access_to_auditor(undertaking, auditor_uid)
         if not auditor:
             return {
                 "access": False,
                 "auditor": None,
+                "errors": errors,
             }
         return self.serialize(
             auditor,
@@ -112,7 +120,7 @@ class AuditorCheckView(ApiView):
         )
 
 
-class AuditorAssignView(ApiView):
+class AuditorAssignView(ApiView, AuditorCheckAccessMixin):
     model = Auditor
 
     def validate_data(self, undertaking, auditor, data):
@@ -136,6 +144,12 @@ class AuditorAssignView(ApiView):
             errors["verification_envelope_url"].append(
                 "Verification envelope URL is required"
             )
+        access, auditor, access_errors = self.check_access_to_auditor(
+            undertaking, auditor.auditor_uid
+        )
+        if not access:
+            validate = False
+            errors.update(access_errors)
         if validate:
             if AuditorUndertaking.query.filter_by(
                 undertaking=undertaking,
@@ -165,24 +179,6 @@ class AuditorAssignView(ApiView):
             external_id=external_id, domain=domain
         ).first_or_404()
         auditor = Auditor.query.filter_by(auditor_uid=auditor_uid).first_or_404()
-        if auditor.status.value != "VALID":
-            self.status_code = 400
-            return {
-                "errors": {
-                    "all": ["Auditor is not valid for assignment."],
-                    "success": False,
-                }
-            }
-        if undertaking.country_code != auditor.address.country.code:
-            self.status_code = 400
-            return {
-                "errors": {
-                    "all": [
-                        "Auditor's country does not match the country of the company."
-                    ],
-                    "success": False,
-                }
-            }
         validated, errors = self.validate_data(undertaking, auditor, data)
         if not validated:
             self.status_code = 400
@@ -234,7 +230,7 @@ class AuditorUnassignView(ApiView):
             auditor=auditor,
             undertaking=undertaking,
             end_date=None,
-            user=User.query.filter_by(email=data["email"]).first(),
+            user=user,
             reporting_envelope_url=data["reporting_envelope_url"],
             verification_envelope_url=data["verification_envelope_url"],
         ).first_or_404()
