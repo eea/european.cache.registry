@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.6 - (2025-03-17)
+--------------------
+* Implement final auditor checks
+  [dianaboiangiu]
+
 2.4.5 - (2025-03-07)
 --------------------
 * Fix fgases sync
