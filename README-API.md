@@ -291,8 +291,8 @@ Returns the auditor
 --------------------------------------------------------------
 
 Returns the auditor if:
-* Auditor country == Company's country code (calculated as the address country or representative country)
 * the Auditor has a valid status.
+* Auditor has ets_accreditation = True **OR** Company's country code (calculated as the address country or representative country) is included in ms_accreditation_issuing_countries
 
       {
           "access": true,
@@ -339,8 +339,8 @@ _POST:_ /undertaking/[domain]/[company_id]/auditor/[auditor_uid]/assign/
 ------------------------------------------------------------------------
 
 Assigns the auditor _[auditor_uid]_, lead by the given user _[email]_ to the company _[company_id]_ if:
-* the Auditor has a VALID status
-* Auditor's and Company's countries match
+* the Auditor has a valid status.
+* Auditor has ets_accreditation = True **OR** Company's country code (calculated as the address country or representative country) is included in ms_accreditation_issuing_countries
 * There is no other assignation for the same company_id + auditor_uid + email + reporting_envelope_url+ verification_envelope_url open _(i.e.: end_date = None)_
 * There is no assignation open for the verification_envelope_url _(i.e.: end_date=None)_
 * Given email matches a user in the Auditor's contact persons
