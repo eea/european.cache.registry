@@ -3,7 +3,7 @@ from datetime import date, datetime
 import enum
 import json
 import os
-from sqlalchemy.sql import func
+
 from sqlalchemy import (
     Column,
     Date,

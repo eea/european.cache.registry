@@ -1,5 +1,6 @@
 from flask_sqlalchemy.record_queries import get_recorded_queries
 
+
 def sql_debug(response):
     queries = list(get_recorded_queries())
     query_str = ""

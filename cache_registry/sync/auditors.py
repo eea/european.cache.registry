@@ -1,7 +1,7 @@
 from copy import deepcopy
 from flask import current_app
 
-from cache_registry.models import db, Address, Auditor, User
+from cache_registry.models import db, Address, Auditor
 from cache_registry.sync import parsers
 from cache_registry.sync.auth import patch_users
 from cache_registry.sync.bdr import get_absolute_url

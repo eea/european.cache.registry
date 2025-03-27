@@ -100,7 +100,7 @@ def update_undertaking(data, check_passed=True):
     """Create or update undertaking from received data"""
     original_data = data.copy()
     represent_changed = False
-    #TODO should decide if this should be saved in the DB
+    # TODO should decide if this should be saved in the DB
     data.pop("registrationId", None)
     data = patch_undertaking(data["id"], data)
     address = parsers.parse_address(data.pop("address"))
