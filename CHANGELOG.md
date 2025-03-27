@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.5.0 - (2025-03-27)
+--------------------
+* Upgrade python to version 3.13
+* Upgrade packages to the latest available version
+  [dianaboiangiu]
+
 2.4.6 - (2025-03-17)
 --------------------
 * Implement final auditor checks
