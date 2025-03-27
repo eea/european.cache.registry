@@ -1,8 +1,7 @@
-from flask_sqlalchemy import get_debug_queries
-
+from flask_sqlalchemy.record_queries import get_recorded_queries
 
 def sql_debug(response):
-    queries = list(get_debug_queries())
+    queries = list(get_recorded_queries())
     query_str = ""
     total_duration = 0.0
     for q in queries:

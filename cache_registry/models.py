@@ -3,7 +3,7 @@ from datetime import date, datetime
 import enum
 import json
 import os
-
+from sqlalchemy.sql import func
 from sqlalchemy import (
     Column,
     Date,
@@ -17,7 +17,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
-from flask_sqlalchemy import BaseQuery
+from flask_sqlalchemy.query import Query
 from flask_sqlalchemy import SQLAlchemy
 
 from instance.settings import FGAS, ODS
@@ -156,8 +156,8 @@ class Auditor(SerializableModel, db.Model):
     phone = Column(String(32), nullable=False)
     date_created = Column(Date, nullable=False)
     date_updated = Column(Date, nullable=False)
-    date_created_in_ecr = Column(Date, server_default=db.func.now(), nullable=False)
-    date_updated_in_ecr = Column(Date, onupdate=datetime.now)
+    date_created_in_ecr = Column(Date, default=date.today, nullable=False)
+    date_updated_in_ecr = Column(Date, onupdate=date.today)
     status = Column(Enum(Status), nullable=False)
     ets_accreditation = Column(Boolean, nullable=False)
     ms_accreditation = Column(Boolean, nullable=False)
@@ -193,7 +193,7 @@ undertaking_users = db.Table(
 )
 
 
-class DomainQuery(BaseQuery):
+class DomainQuery(Query):
     def fgases(self):
         return self.filter(Undertaking.domain == FGAS)
 
@@ -216,8 +216,8 @@ class Undertaking(SerializableModel, db.Model):
     domain = Column(String(32), default="FGAS")
     date_created = Column(Date)
     date_updated = Column(Date)
-    date_created_in_ecr = Column(Date, server_default=db.func.now())
-    date_updated_in_ecr = Column(Date, onupdate=datetime.now)
+    date_created_in_ecr = Column(Date, default=date.today)
+    date_updated_in_ecr = Column(Date, onupdate=date.today)
     status = Column(String(64))
     country_code = Column(String(10), default="")
     country_code_orig = Column(String(10), default="")
@@ -521,8 +521,8 @@ class Licence(SerializableModel, db.Model):
     template_detailed_use_code = Column(String(255))
     licence_type = Column(String(50))
     mixture_nature_type = Column(String(50))
-    date_created = Column(Date, server_default=db.func.now())
-    date_updated = Column(Date, onupdate=datetime.now)
+    date_created = Column(Date, default=date.today)
+    date_updated = Column(Date, onupdate=date.today)
     updated_since = Column(String(30))
     substance_id = Column(ForeignKey("substance.id"), nullable=True, default=None)
     substance = relationship(
@@ -543,8 +543,8 @@ class Substance(SerializableModel, db.Model):
     quantity = Column(Float(precision=7))
     organization_country_name = Column(String(4))
 
-    date_created = Column(Date, server_default=db.func.now())
-    date_updated = Column(Date, onupdate=datetime.now)
+    date_created = Column(Date, default=date.today)
+    date_updated = Column(Date, onupdate=date.today)
 
     delivery_id = Column(ForeignKey("delivery_licence.id"), nullable=True, default=None)
     deliverylicence = relationship(
@@ -559,8 +559,8 @@ class DeliveryLicence(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     year = Column(Integer)
-    date_created = Column(Date, server_default=db.func.now())
-    date_updated = Column(Date, onupdate=datetime.now)
+    date_created = Column(Date, default=date.today)
+    date_updated = Column(Date, onupdate=date.today)
     updated_since = Column(Date)
     undertaking_id = Column(ForeignKey("undertaking.id"), nullable=True, default=None)
     undertaking = relationship(

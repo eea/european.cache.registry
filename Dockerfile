@@ -1,6 +1,6 @@
 ARG REQFILE=requirements-prod.txt
 
-FROM python:3.8-slim
+FROM python:3.13-slim
 MAINTAINER "EEA: IDM2 C-TEAM" <eea-edw-c-team-alerts@googlegroups.com>
 
 ARG REQFILE

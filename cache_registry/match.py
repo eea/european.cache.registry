@@ -1,8 +1,7 @@
 # coding=utf-8
 import click
 from datetime import datetime
-from fuzzywuzzy import fuzz
-
+from thefuzz import fuzz
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 
@@ -325,7 +324,7 @@ def unverify(undertaking_external_id, domain):
 @match_manager.command("test")
 def test(new, old):
     """Show fuzzy match for two words"""
-    ratio = fuzz.ration(new, old)
+    ratio = fuzz.ratio(new, old)
     limit = get_fuzz_limit()
     print(f"'{new}' and '{old}' match by {ratio} (LIMIT: {limit})")
     return True

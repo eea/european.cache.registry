@@ -19,15 +19,15 @@ if [ ! -e .skip-db-init ]; then
 fi
 
 if [ "$DEBUG" = 'True' ]; then
-    python -m flask run -h 0.0.0.0 -p 5000
+    python -m flask run -h 0.0.0.0 -p $PORT
 fi
 
 if [ -z "$1" ]; then
-  echo "Serving on port 5000"
+  echo "Serving on port '$PORT'"
   exec gunicorn manage:app \
                 --name european.cache.registry \
                 --timeout 120 \
-                --bind 0.0.0.0:5000 \
+                --bind 0.0.0.0:$PORT \
                 --access-logfile - \
                 --error-logfile -
 fi
