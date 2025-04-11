@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.5.1 - (2025-04-11)
+--------------------
+* Fix auditor check
+  [dianaboiangiu]
+
 2.5.0 - (2025-03-27)
 --------------------
 * Upgrade python to version 3.13
