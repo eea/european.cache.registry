@@ -75,13 +75,14 @@ class AuditorCheckAccessMixin:
         auditor = Auditor.query.filter_by(auditor_uid=auditor_uid).first()
         if not auditor:
             errors["auditor"].append("Auditor not found")
-        if auditor.status.value != "VALID":
-            errors["auditor"].append("Auditor is not valid")
-        if not auditor.ets_accreditation:
-            if undertaking.country_code not in [
-                country.code for country in auditor.ms_accreditation_issuing_countries
-            ]:
-                errors["auditor"].append("Auditor is not accredited for this country")
+        else:
+            if auditor.status.value != "VALID":
+                errors["auditor"].append("Auditor is not valid")
+            if not auditor.ets_accreditation:
+                if undertaking.country_code not in [
+                    country.code for country in auditor.ms_accreditation_issuing_countries
+                ]:
+                    errors["auditor"].append("Auditor is not accredited for this country")
         if errors:
             return False, None, errors
         return True, auditor, errors
