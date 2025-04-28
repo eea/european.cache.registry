@@ -80,9 +80,12 @@ class AuditorCheckAccessMixin:
                 errors["auditor"].append("Auditor is not valid")
             if not auditor.ets_accreditation:
                 if undertaking.country_code not in [
-                    country.code for country in auditor.ms_accreditation_issuing_countries
+                    country.code
+                    for country in auditor.ms_accreditation_issuing_countries
                 ]:
-                    errors["auditor"].append("Auditor is not accredited for this country")
+                    errors["auditor"].append(
+                        "Auditor is not accredited for this country"
+                    )
         if errors:
             return False, None, errors
         return True, auditor, errors

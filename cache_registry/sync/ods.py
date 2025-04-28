@@ -122,8 +122,11 @@ def eea_double_check_ods(data):
         elif high_level_use not in NOT_OBLIGED_TO_REPORT:
             high_level_uses_set.remove(high_level_use)
             obliged_to_report = True
-
-    if not obliged_to_report and high_level_uses_set:
+    if (
+        not obliged_to_report
+        and high_level_uses_set
+        and (len((set(data["types"]) & NO_HIGHLEVEL_TYPES)) == 0)
+    ):
         high_lvl_uses_text = ", ".join(high_level_uses_set)
         message = f"Organisations with highlevel uses {high_lvl_uses_text} should not be reported."
         current_app.logger.warning(message + identifier)
