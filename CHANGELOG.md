@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.5.3 - (2025-10-15)
+--------------------
+* Fix auditor assignation
+  [dianaboiangiu]
+
 2.5.2 - (2025-04-28)
 --------------------
 * Mark check_passed = True for NO_HIGHLEVEL_TYPES
