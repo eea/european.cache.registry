@@ -191,7 +191,9 @@ class AuditorAssignView(ApiView, AuditorCheckAccessMixin):
             self.status_code = 400
             return {"errors": errors, "success": False}
 
-        user = User.query.filter_by(email=data["email"]).first()
+        user = User.query.filter(
+            User.email == data["email"], User.auditors.contains(auditor)
+        ).first()
         auditor_undertaking = AuditorUndertaking(
             auditor=auditor,
             undertaking=undertaking,
