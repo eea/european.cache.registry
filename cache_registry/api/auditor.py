@@ -155,10 +155,13 @@ class AuditorAssignView(ApiView, AuditorCheckAccessMixin):
             validate = False
             errors.update(access_errors)
         if validate:
+            user = User.query.filter(
+                User.email == data["email"], User.auditors.contains(auditor)
+            ).first()
             if AuditorUndertaking.query.filter_by(
                 undertaking=undertaking,
                 auditor=auditor,
-                user=User.query.filter_by(email=data["email"]).first(),
+                user=user,
                 reporting_envelope_url=data["reporting_envelope_url"],
                 verification_envelope_url=data["verification_envelope_url"],
                 end_date=None,
@@ -229,7 +232,12 @@ class AuditorUnassignView(ApiView):
         if not validated:
             self.status_code = 400
             return {"errors": errors}
-        user = User.query.filter_by(email=data["email"]).first_or_404()
+        user = User.query.filter(
+            User.email == data["email"], User.auditors.contains(auditor)
+        ).first()
+        if not user:
+            self.status_code = 400
+            return {"errors": {"email": ["User not found"]}}
         auditor_undertaking = AuditorUndertaking.query.filter_by(
             auditor=auditor,
             undertaking=undertaking,
