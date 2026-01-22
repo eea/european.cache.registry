@@ -42,7 +42,7 @@ def test_get_or_create_substance(client):
         ec_substance_name="Substance (virgin)", corrected_name="Substance (virgin)"
     )
 
-    factories.LicenceDetailsConverstionFactory(
+    factories.LicenceDetailsConversionFactory(
         template_detailed_use_code="code.for.use",
         lic_use_kind="kind",
         lic_use_desc="desc",

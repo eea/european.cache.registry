@@ -8,7 +8,7 @@ from cache_registry.models import (
     CountryCodesConversion,
     DeliveryLicence,
     Licence,
-    LicenceDetailsConverstion,
+    LicenceDetailsConversion,
     Substance,
     SubstanceNameConversion,
     Undertaking,
@@ -152,10 +152,11 @@ def get_or_create_substance(delivery_licence, licence):
     ).first()
     if not s_country:
         return None
-    licence_details = LicenceDetailsConverstion.query.filter_by(
+    licence_details = LicenceDetailsConversion.query.filter_by(
         template_detailed_use_code=licence["templateDetailedUseCode"]
     ).first()
-
+    if not licence_details:
+        return None
     lic_use_kind = CUSTOMS_PROCEDURE_TO_LIC_USE_KIND_CONVERSION.get(
         licence["customProcedureName"], ""
     )
