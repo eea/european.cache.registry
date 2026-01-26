@@ -17,6 +17,8 @@ class User(SerializableModel, db.Model):
         AUDITOR_ORG_FGAS = "AUDITOR_ORG_FGAS"
         AUDITOR_ORG_AND_VERIFIER = "AUDITOR_ORG_AND_VERIFIER"
         AUDITOR_ORG_ONLY_VERIFIER = "AUDITOR_ORG_ONLY_VERIFIER"
+        ORGANISATION_USER = "ORGANISATION_USER"
+        EUONLYREPRESENTATIVE_USER = "EUONLYREPRESENTATIVE_USER"
 
     id = Column(Integer, primary_key=True)
     ecas_id = Column(String(255))

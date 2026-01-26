@@ -17,6 +17,7 @@ class UndertakingListExport(MethodView):
 
     COLUMNS = {
         "company_id": "company_id",
+        "registration_id": "registration_id",
         "name": "name",
         "domain": "domain",
         "status": "status",

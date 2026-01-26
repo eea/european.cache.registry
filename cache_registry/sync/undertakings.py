@@ -22,7 +22,12 @@ from instance.settings import FGAS, ODS
 
 
 def get_latest_undertakings(
-    type_url, updated_since=None, page_size=None, id=None, domain=FGAS
+    type_url,
+    updated_since=None,
+    page_size=None,
+    id=None,
+    registration_id=None,
+    domain=FGAS,
 ):
     """Get latest undertakings from specific API url"""
     if domain == FGAS:
@@ -37,6 +42,9 @@ def get_latest_undertakings(
 
     if id:
         params["organizationId"] = id
+
+    if registration_id:
+        params["registrationNumId"] = registration_id
 
     if page_size:
         params["pageSize"] = page_size
@@ -100,8 +108,6 @@ def update_undertaking(data, check_passed=True):
     """Create or update undertaking from received data"""
     original_data = data.copy()
     represent_changed = False
-    # TODO should decide if this should be saved in the DB
-    data.pop("registrationId", None)
     data = patch_undertaking(data["id"], data)
     address = parsers.parse_address(data.pop("address"))
     business_profiles = data.pop("businessProfile")
@@ -111,6 +117,7 @@ def update_undertaking(data, check_passed=True):
         represent = parsers.parse_rc(data.pop("euLegalRepresentativeCompany"))
     contact_persons, is_patched = patch_users(data["id"], contact_persons)
     data["external_id"] = data.pop("id")
+    data["registration_id"] = data.pop("registrationId", "")
     data["date_created"] = parsers.parse_date(data.pop("dateCreated"))
     data["date_updated"] = parsers.parse_date(data.pop("dateUpdated"))
     data["undertaking_type"] = data.pop("@type", None)
@@ -147,10 +154,17 @@ def update_undertaking(data, check_passed=True):
         parsers.update_obj(undertaking.address, address)
     db.session.add(undertaking)
     UndertakingBusinessProfile.query.filter_by(undertaking=undertaking).delete()
+    if not business_profiles:
+        business_profiles = {"highLevelUses": []}
     for business_profile in business_profiles["highLevelUses"]:
-        business_profile_object = BusinessProfile.query.filter_by(
-            highleveluses=business_profile, domain=data["domain"]
-        ).first()
+        if isinstance(business_profile, dict):
+            business_profile_object = BusinessProfile.query.filter_by(
+                highleveluses=business_profile["code"], domain=data["domain"]
+            ).first()
+        else:
+            business_profile_object = BusinessProfile.query.filter_by(
+                highleveluses=business_profile, domain=data["domain"]
+            ).first()
         if (
             business_profile_object
             and business_profile_object not in undertaking.businessprofiles

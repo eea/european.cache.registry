@@ -1,11 +1,15 @@
+import json
 import logging
 import requests
+import os
+
 from flask import current_app
 from logging.handlers import RotatingFileHandler
 
 from cache_registry.models import db, User
 from cache_registry.sync import parsers
 from cache_registry.sync.auth import get_auth, Unauthorized, InvalidResponse
+from cache_registry.models import *
 
 
 def get_logger(module_name):
@@ -28,6 +32,9 @@ def get_response(url, params):
     ssl_verify = current_app.config["HTTPS_VERIFY"]
 
     response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
+
+    if response.status_code == 404:
+        return []
 
     if response.status_code == 401:
         raise Unauthorized()
@@ -114,3 +121,30 @@ def update_ms_accreditation_issuing_countries(obj, ms_accreditation):
     for country in obj.ms_accreditation_issuing_countries:
         if country not in ms_accreditation["ms_accreditation_issuing_countries"]:
             obj.ms_accreditation_issuing_countries.remove(country)
+
+
+def loaddata(fixture, session=None):
+    if not session:
+        session = db.session
+    if not os.path.isfile(fixture):
+        print("Please provide a fixture file name")
+    else:
+        objects = get_fixture_objects(fixture)
+    session.commit()
+    for object in objects:
+        database_object = (
+            eval(object["model"]).query.filter_by(id=object["fields"]["id"]).first()
+        )
+        if not database_object:
+            session.add(eval(object["model"])(**object["fields"]))
+            session.commit()
+        else:
+            for key, value in object["fields"].items():
+                setattr(database_object, key, value)
+            session.add(database_object)
+            session.commit()
+
+
+def get_fixture_objects(file):
+    with open(file) as f:
+        return json.loads(f.read())

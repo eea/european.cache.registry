@@ -43,6 +43,7 @@ class Undertaking(SerializableModel, db.Model):
 
     # Organisation
     external_id = Column(Integer)
+    registration_id = Column(String(255))
     name = Column(String(255))
     address_id = Column(ForeignKey("address.id"))
     website = Column(String(255))
@@ -143,10 +144,12 @@ class BusinessProfile(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     highleveluses = Column(String(255))
+    code = Column(String(255))
+    short_code = Column(String(16))
     domain = Column(String(32), default="FGAS")
 
-    def __unicode__(self):
-        return self.highleveluses
+    def __str__(self):
+        return self.code
 
 
 class UndertakingBusinessProfile(SerializableModel, db.Model):

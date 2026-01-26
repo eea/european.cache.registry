@@ -192,22 +192,29 @@ def call_auditors(days=7, updated_since=None, page_size=200, uid=""):
 @click.option("-u", "--updated", "updated_since", help="Date in DD/MM/YYYY format")
 @click.option("-p", "--page_size", "page_size", help="Page size")
 @click.option("-i", "--external_id", "id", help="External id of a company")
-def fgases(days=7, updated_since=None, page_size=200, id=None):
-    return call_fgases(days, updated_since, page_size, id)
+@click.option(
+    "-r", "--registration_id", "registration_id", help="Registration id of a company"
+)
+def fgases(days=7, updated_since=None, page_size=200, id=None, registration_id=None):
+    return call_fgases(days, updated_since, page_size, id, registration_id)
 
 
-def call_fgases(days=3, updated_since=None, page_size=200, id=None):
-    if not id:
+def call_fgases(
+    days=3, updated_since=None, page_size=200, id=None, registration_id=None
+):
+    if not id and not registration_id:
         last_update = get_last_update(days, updated_since, domain=FGAS)
     else:
         last_update = None
-        print(f"Fetching data for company {id}")
+        identifier = id if id else registration_id
+        print(f"Fetching data for company {identifier}")
 
     undertakings = get_latest_undertakings(
         type_url="/latest/fgasundertakings/",
         updated_since=last_update,
         page_size=page_size,
         id=id,
+        registration_id=registration_id,
         domain=FGAS,
     )
     (undertakings_for_call_bdr, undertakings_count) = update_undertakings(
@@ -267,29 +274,33 @@ def old_companies_sync(updated_since=None):
 @click.option("-u", "--updated", "updated_since", help="Date in DD/MM/YYYY format")
 @click.option("-p", "--page_size", "page_size", help="Page size")
 @click.option("-i", "--external_id", "id", help="External id of a company")
-def ods(days=7, updated_since=None, page_size=200, id=None):
-    return call_ods(days, updated_since, page_size, id)
+@click.option(
+    "-r", "--registration_id", "registration_id", help="Registration id of a company"
+)
+def ods(days=7, updated_since=None, page_size=200, id=None, registration_id=None):
+    return call_ods(days, updated_since, page_size, id, registration_id)
 
 
-def call_ods(days=3, updated_since=None, page_size=200, id=None):
-    if not id:
+def call_ods(days=3, updated_since=None, page_size=200, id=None, registration_id=None):
+    if not id and not registration_id:
         last_update = get_last_update(days, updated_since, domain=ODS)
     else:
         last_update = None
-        print(f"Fetching data for company {id}")
-
+        identifier = id if id else registration_id
+        print(f"Fetching data for company {identifier}")
     undertakings = get_latest_undertakings(
         type_url="/latest/odsundertakings/",
         updated_since=last_update,
         page_size=page_size,
         id=id,
+        registration_id=registration_id,
         domain=ODS,
     )
     (undertakings_for_call_bdr, undertakings_count) = update_undertakings(
         undertakings, eea_double_check_ods
     )
     cleanup_unused_users()
-    if not id:
+    if not id and not registration_id:
         log_changes(last_update, undertakings_count, domain=ODS)
         print(undertakings_count, "values")
     db.session.commit()

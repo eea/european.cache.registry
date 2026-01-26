@@ -101,8 +101,15 @@ def eea_double_check_ods(data):
         object.highleveluses for object in BusinessProfile.query.filter_by(domain=ODS)
     ]
     obliged_to_report = False
-
-    high_level_uses_set = set(data["businessProfile"]["highLevelUses"])
+    try:
+        high_level_uses_set = set(data["businessProfile"]["highLevelUses"])
+    except TypeError:
+        high_level_uses_set = set(
+            [
+                highleveluse["code"]
+                for highleveluse in data["businessProfile"]["highLevelUses"]
+            ]
+        )
 
     if set(data["types"]).issubset(NOT_OBLIGED_TO_REPORT_ODS_TYPES):
         message = f"Organization types {data['types']} should not report."

@@ -20,15 +20,9 @@ class MovementReferenceNumber(SerializableModel, db.Model):  # MRN
     __tablename__ = "movement_reference_number"
     id = Column(Integer, primary_key=True)
     undertaking_id = Column(ForeignKey("undertaking.id"), nullable=False)
-    multi_year_licence_id = Column(ForeignKey("licence.id"))
+    multi_year_licence_id = Column(ForeignKey("multi_year_licence.id"), nullable=True)
     ghost_licence_number = Column(Boolean, nullable=False)
     mrn = Column(String(32), nullable=False)
-    quantities = relationship(
-        "CertExQuantity",
-        backref="movement_reference_number",
-        cascade="all, delete-orphan",
-        lazy="dynamic",
-    )
     undertaking = relationship("Undertaking")
 
     undertaking = relationship(
@@ -50,8 +44,21 @@ class CNQuantity(SerializableModel, db.Model):
     combined_nomenclature_id = Column(
         ForeignKey("combined_nomenclature.id"), nullable=False
     )
+    movement_reference_number_id = Column(
+        ForeignKey("movement_reference_number.id"),
+        nullable=False,
+    )
     reserved_ods_net_mass = Column(Float(7, asdecimal=True))
     consumed_ods_net_mass = Column(Float(7, asdecimal=True))
 
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
+
+    movement_reference_number = relationship(
+        "MovementReferenceNumber",
+        backref=db.backref("cn_quantities", lazy="dynamic"),
+    )
+    combined_nomenclature = relationship(
+        "CombinedNomenclature",
+        backref=db.backref("cn_quantities", lazy="dynamic"),
+    )
