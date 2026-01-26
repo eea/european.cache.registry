@@ -1,7 +1,7 @@
 import json
 
 from cache_registry.models import Auditor
-from cache_registry.sync.auditors import update_auditor
+from cache_registry.sync.commands.auditors import update_auditor
 
 
 def test_parse_auditor(client):

@@ -8,8 +8,8 @@ from cache_registry.models import (
     Undertaking,
     UndertakingBusinessProfile,
     UndertakingTypes,
+    db,
 )
-from cache_registry.models import db
 from cache_registry.sync import parsers
 from cache_registry.sync.auth import patch_users
 from cache_registry.sync.bdr import update_bdr_col_name, get_absolute_url
@@ -19,6 +19,26 @@ from cache_registry.sync.utils import (
     update_contact_persons,
 )
 from instance.settings import FGAS, ODS
+
+
+def patch_undertaking(external_id, data):
+    external_id = str(external_id)
+    patch = current_app.config.get("PATCH_COMPANIES", {})
+    if external_id in patch:
+        print(f"Patching undertaking: {external_id}")
+        data.update(patch[external_id])
+    return data
+
+
+def patch_undertaking_old_gb_represent(external_id, data):
+    external_id = str(external_id)
+    patch = current_app.config.get("PATCH_GB_OLD_REPR", {})
+    if external_id in patch:
+        represent = data.get("euLegalRepresentativeCompany")
+        if not represent:
+            print(f"Patching old gb represent on undertaking: {external_id}")
+            data.update(patch[external_id])
+    return data
 
 
 def get_latest_undertakings(
@@ -51,26 +71,6 @@ def get_latest_undertakings(
         params["pageNumber"] = 1
 
     return get_response(url, params)
-
-
-def patch_undertaking(external_id, data):
-    external_id = str(external_id)
-    patch = current_app.config.get("PATCH_COMPANIES", {})
-    if external_id in patch:
-        print(f"Patching undertaking: {external_id}")
-        data.update(patch[external_id])
-    return data
-
-
-def patch_undertaking_old_gb_represent(external_id, data):
-    external_id = str(external_id)
-    patch = current_app.config.get("PATCH_GB_OLD_REPR", {})
-    if external_id in patch:
-        represent = data.get("euLegalRepresentativeCompany")
-        if not represent:
-            print(f"Patching old gb represent on undertaking: {external_id}")
-            data.update(patch[external_id])
-    return data
 
 
 def add_updates_log(undertaking, data):
@@ -217,6 +217,37 @@ def update_undertaking(data, check_passed=True):
     db.session.add(undertaking)
 
     return (undertaking, represent_changed)
+
+
+def update_undertakings(undertakings, check_function):
+    undertakings_count = 0
+    undertakings_for_call_bdr = []
+    for undertaking in undertakings:
+        undertaking_exists = Undertaking.query.filter_by(
+            external_id=undertaking["id"]
+        ).first()
+        if not undertaking["domain"] == ODS:
+            undertaking = patch_undertaking_old_gb_represent(
+                undertaking["id"], undertaking
+            )
+        check_passed = check_function(undertaking)
+        if undertaking_exists:
+            if undertaking_exists.domain == "FGAS":
+                if undertaking_exists.check_passed and not check_passed:
+                    message = f"Company {undertaking_exists.external_id} has failed the checks"
+                    current_app.logger.warning(message)
+        if (
+            (not undertaking["@type"] == "ODSUndertaking")
+            or check_passed
+            or undertaking_exists
+        ):
+            (_, represent_changed) = update_undertaking(
+                undertaking, check_passed=check_passed
+            )
+            undertakings_count += 1
+            if check_passed or represent_changed:
+                undertakings_for_call_bdr.append(undertaking)
+    return undertakings_for_call_bdr, undertakings_count
 
 
 def remove_undertaking(data, domain):

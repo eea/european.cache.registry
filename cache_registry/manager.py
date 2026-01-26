@@ -16,8 +16,8 @@ from cache_registry.models import (
     db,
 )
 from cache_registry.sync.bdr import call_bdr
-from cache_registry.sync.fgases import eea_double_check_fgases
-from cache_registry.sync.ods import eea_double_check_ods
+from cache_registry.sync.eea_double_checks.fgases import eea_double_check_fgases
+from cache_registry.sync.eea_double_checks.ods import eea_double_check_ods
 from cache_registry.sync.utils import loaddata
 
 utils_manager = AppGroup("utils")

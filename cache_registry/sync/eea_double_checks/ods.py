@@ -1,4 +1,6 @@
 from flask import current_app
+
+from cache_registry.models import Type, BusinessProfile
 from instance.settings import (
     ODS,
     NOT_OBLIGED_TO_REPORT,
@@ -6,9 +8,6 @@ from instance.settings import (
     NOT_OBLIGED_TO_REPORT_ODS_TYPES,
     COMPANIES_EXCEPTED_FROM_CHECKS,
 )
-
-
-from cache_registry.models import Type, BusinessProfile
 
 
 def eea_double_check_ods(data):

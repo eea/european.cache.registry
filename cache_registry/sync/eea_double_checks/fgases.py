@@ -1,11 +1,11 @@
 from flask import current_app
 
+from cache_registry.models import Type
 from instance.settings import (
     COMPANIES_EXCEPTED_FROM_CHECKS,
     FGAS,
     NOT_OBLIGED_TO_REPORT_FGAS_TYPES,
 )
-from cache_registry.models import Type
 
 
 def eea_double_check_fgases(data):

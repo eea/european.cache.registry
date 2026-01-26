@@ -1,7 +1,7 @@
 import json
 
-from cache_registry.sync.fgases import eea_double_check_fgases
-from cache_registry.sync.ods import eea_double_check_ods
+from cache_registry.sync.eea_double_checks.fgases import eea_double_check_fgases
+from cache_registry.sync.eea_double_checks.ods import eea_double_check_ods
 
 
 def test_double_checks_fgases_status(client):

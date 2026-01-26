@@ -2,10 +2,10 @@
 
 from . import factories
 
-from cache_registry.sync.licences import (
+from cache_registry.sync.licences_aggregation import (
+    aggregate_licence_to_substance,
     get_or_create_delivery,
     get_or_create_substance,
-    aggregate_licence_to_substance,
 )
 
 

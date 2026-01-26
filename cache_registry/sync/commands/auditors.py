@@ -1,35 +1,19 @@
+import click
+
 from copy import deepcopy
 from flask import current_app
 
 from cache_registry.models import db, Address, Auditor
-from cache_registry.sync import parsers
-from cache_registry.sync.auth import patch_users
+from cache_registry.sync import parsers, sync_manager
+from cache_registry.sync.auth import cleanup_unused_users, patch_users
 from cache_registry.sync.bdr import get_absolute_url
 from cache_registry.sync.utils import (
+    get_last_update,
     get_logger,
     get_response,
     update_contact_persons,
     update_ms_accreditation_issuing_countries,
 )
-
-
-def get_latest_auditors(updated_since=None, page_size=None, uid=""):
-    """Get latest auditors from specific API url"""
-
-    url = get_absolute_url("API_URL_FGAS", "/latest/auditor/")
-    params = {}
-
-    if uid:
-        return [get_response(f"{url}{uid}", params)]
-
-    if updated_since:
-        params["updatedSince"] = updated_since.strftime("%d/%m/%Y")
-
-    if page_size:
-        params["pageSize"] = page_size
-        params["pageNumber"] = 1
-
-    return get_response(url, params)
 
 
 def add_updates_log(auditor, data):
@@ -93,3 +77,53 @@ def update_auditor(original_data):
         parsers.update_obj(auditor.address, address)
     update_contact_persons(auditor, contact_persons)
     update_ms_accreditation_issuing_countries(auditor, ms_accreditation)
+
+
+def get_latest_auditors(updated_since=None, page_size=None, uid=""):
+    """Get latest auditors from specific API url"""
+
+    url = get_absolute_url("API_URL_FGAS", "/latest/auditor/")
+    params = {}
+
+    if uid:
+        return [get_response(f"{url}{uid}", params)]
+
+    if updated_since:
+        params["updatedSince"] = updated_since.strftime("%d/%m/%Y")
+
+    if page_size:
+        params["pageSize"] = page_size
+        params["pageNumber"] = 1
+
+    return get_response(url, params)
+
+
+@sync_manager.command("auditors")
+@click.option("-d", "--days", "days", help="Number of days the update is done for.")
+@click.option("-u", "--updated", "updated_since", help="Date in DD/MM/YYYY format")
+@click.option("-p", "--page_size", "page_size", help="Page size")
+@click.option("-i", "--auditor_uid", "uid", help="Auditor uid")
+def auditors(days=7, updated_since=None, page_size=200, uid=""):
+    return call_auditors(days, updated_since, page_size, uid)
+
+
+def call_auditors(days=7, updated_since=None, page_size=200, uid=""):
+    if not uid:
+        last_update = get_last_update(days, updated_since, model_name=Auditor)
+    else:
+        last_update = None
+        print(f"Fetching data for auditor {uid}")
+
+    auditors_data = get_latest_auditors(
+        updated_since=last_update, page_size=page_size, uid=uid
+    )
+    for auditor_dict in auditors_data:
+        update_auditor(auditor_dict)
+
+    cleanup_unused_users()
+
+    if not uid:
+        print(f"{len(auditors_data)} values")
+
+    db.session.commit()
+    return True

@@ -3,13 +3,17 @@ import logging
 import requests
 import os
 
-from flask import current_app
+from datetime import datetime, timedelta
 from logging.handlers import RotatingFileHandler
 
-from cache_registry.models import db, User
+from flask import current_app
+from sqlalchemy import desc
+
+from cache_registry.models import *
 from cache_registry.sync import parsers
 from cache_registry.sync.auth import get_auth, Unauthorized, InvalidResponse
-from cache_registry.models import *
+
+from instance.settings import FGAS
 
 
 def get_logger(module_name):
@@ -148,3 +152,35 @@ def loaddata(fixture, session=None):
 def get_fixture_objects(file):
     with open(file) as f:
         return json.loads(f.read())
+
+
+def get_last_update(days, updated_since, domain=FGAS, model_name=Undertaking):
+    if updated_since:
+        try:
+            last_update = datetime.strptime(updated_since, "%d/%m/%Y")
+        except ValueError:
+            print("Invalid date format. Please use DD/MM/YYYY")
+            return False
+    else:
+        days = int(days)
+        if days > 0:
+            last_update = datetime.now() - timedelta(days=days)
+        else:
+            queryset = model_name.query
+            if hasattr(model_name, "domain"):
+                queryset = queryset.filter_by(domain=domain)
+
+            last = queryset.order_by(desc(model_name.date_updated)).first()
+            last_update = last.date_updated - timedelta(days=1) if last else None
+
+    print(f"Using last_update {last_update}")
+    return last_update
+
+
+def log_changes(last_update, undertakings_count, domain):
+    if isinstance(last_update, datetime):
+        last_update = last_update.date()
+    log = OrganizationLog(
+        organizations=undertakings_count, using_last_update=last_update, domain=domain
+    )
+    db.session.add(log)
