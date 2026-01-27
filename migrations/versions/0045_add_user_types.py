@@ -35,14 +35,14 @@ def upgrade():
     # Create a tempoary "_usertype" type, convert and drop the "old" usertype
     tmp_type.create(op.get_bind(), checkfirst=False)
     op.execute(
-        "ALTER TABLE public.user ALTER COLUMN type TYPE _usertype"
+        "ALTER TABLE ecr.user ALTER COLUMN type TYPE _usertype"
         " USING type::text::_usertype"
     )
     old_type.drop(op.get_bind(), checkfirst=False)
     # Create and convert to the "new" type usertype
     new_type.create(op.get_bind(), checkfirst=False)
     op.execute(
-        "ALTER TABLE public.user ALTER COLUMN type TYPE usertype"
+        "ALTER TABLE ecr.user ALTER COLUMN type TYPE usertype"
         " USING type::text::usertype"
     )
     tmp_type.drop(op.get_bind(), checkfirst=False)
@@ -58,14 +58,14 @@ def downgrade():
     # Create a tempoary "_usertype" type, convert and drop the "new" type
     tmp_type.create(op.get_bind(), checkfirst=False)
     op.execute(
-        "ALTER TABLE public.user ALTER COLUMN type TYPE _usertype"
+        "ALTER TABLE ecr.user ALTER COLUMN type TYPE _usertype"
         " USING type::text::_usertype"
     )
     new_type.drop(op.get_bind(), checkfirst=False)
     # Create and convert to the "old" type type
     old_type.create(op.get_bind(), checkfirst=False)
     op.execute(
-        "ALTER TABLE public.user ALTER COLUMN type TYPE usertype"
+        "ALTER TABLE ecr.user ALTER COLUMN type TYPE usertype"
         " USING type::text::usertype"
     )
     tmp_type.drop(op.get_bind(), checkfirst=False)
