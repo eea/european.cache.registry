@@ -50,7 +50,7 @@ class MultiYearLicence(SerializableModel, db.Model):
         secondary="multi_year_licence_combined_nomenclature_link",
         backref=db.backref("multi_year_licences", lazy="dynamic"),
     )
-    substance_nomenclatures = relationship(
+    substances = relationship(
         "SubstanceNomenclature",
         secondary="multi_year_licence_substance_link",
         backref=db.backref("multi_year_licences", lazy="dynamic"),
@@ -62,7 +62,7 @@ class DetailedUse(SerializableModel, db.Model):
 
     id = Column(Integer, primary_key=True)
     short_code = Column(String(20))
-    description = Column(String(255))
+    code = Column(String(255))
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
 

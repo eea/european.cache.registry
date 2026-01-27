@@ -13,6 +13,7 @@ from instance.settings import (
 def eea_double_check_ods(data):
     identifier = f"""
         Organisation ID: {data['id']}
+        Organisation Registration number: {data.get('registrationNumId', '')}
         Organisation status: {data['status']}
         Organisation highLevelUses: {data['businessProfile']['highLevelUses']}
         Organisation types: {data['types']}
@@ -21,7 +22,6 @@ def eea_double_check_ods(data):
     """
 
     required_fields = [
-        "@type",
         "id",
         "name",
         "address",
@@ -49,11 +49,6 @@ def eea_double_check_ods(data):
             message = f"Organisation {field} field is missing."
             current_app.logger.warning(message + identifier)
             ok = False
-
-    if data["@type"] != "ODSUndertaking":
-        message = "Organisation type is not ODSUndertaking."
-        current_app.logger.warning(message + identifier)
-        ok = False
 
     if not data["domain"] == ODS:
         message = "Organisation domain is not ODS."
@@ -121,6 +116,8 @@ def eea_double_check_ods(data):
         ok = False
 
     for high_level_use in data["businessProfile"]["highLevelUses"]:
+        if isinstance(high_level_use, dict):
+            high_level_use = high_level_use.get("code")
         if high_level_use not in businessprofiles:
             message = f"Organisation highlevel use {high_level_use} is not accepted."
             current_app.logger.warning(message + identifier)

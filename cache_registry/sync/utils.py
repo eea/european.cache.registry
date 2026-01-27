@@ -64,6 +64,53 @@ def get_response(url, params):
     return response_json
 
 
+def get_response_offset(url, params):
+    """
+    Docstring for get_response_offset
+
+    :param url: URL to fetch data from
+    :param params: Query parameters for the request. Manages pagination using 'offset' and 'pageSize'.
+    :return: Description
+    """
+    auth = get_auth("API_USER", "API_PASSWORD")
+    headers = dict(zip(("user", "password"), auth))
+    ssl_verify = current_app.config["HTTPS_VERIFY"]
+
+    response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
+
+    if response.status_code == 401:
+        raise Unauthorized()
+
+    if response.status_code == 404:
+        return []
+
+    if response.status_code != 200:
+        raise InvalidResponse()
+
+    if not params.get("pageSize", 100):
+        return response.json()
+
+    response_data = response.json()
+    aggregated_response = response_data.get("rows", [])
+
+    keep_fetching = response_data.get("rowCount", 0) > params.get(
+        "offset", 0
+    ) + params.get("pageSize", 100)
+
+    while keep_fetching:
+        params["offset"] = params.get("offset", 0) + params.get("pageSize", 100)
+        response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
+        if response.status_code != 200:
+            raise InvalidResponse()
+        response_data = response.json()
+        aggregated_response += response_data.get("rows", [])
+        keep_fetching = response_data.get("rowCount", 0) > params.get(
+            "offset", 0
+        ) + params.get("pageSize", 100)
+
+    return aggregated_response
+
+
 def set_ecas_id(obj):
     """Set ecas_id for an object if it doesn't have one using the username."""
     if not obj.ecas_id:

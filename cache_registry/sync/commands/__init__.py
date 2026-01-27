@@ -5,6 +5,7 @@ from .fgases import *
 from .import_oldcompany import *
 from .import_stocks_json import *
 from .licences import *
+from .multi_year_licences import *
 from .ods import *
 from .old_companies_sync import *
 from .remove_all_licences_substances import *

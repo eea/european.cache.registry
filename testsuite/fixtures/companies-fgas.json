@@ -1,6 +1,5 @@
 [
     {
-        "@type" : "FGASUndertaking",
         "id" : 10006,
         "name" : "AAAAA",
         "address" : {
@@ -51,7 +50,6 @@
         "types" : ["FGAS_MANUFACTURER_OF_EQUIPMENT_HFCS", "FGAS_EXPORTER_HFCS"]
     },
     {
-        "@type" : "FGASUndertaking",
         "id" : 10007,
         "name" : "AAAAA",
         "address" : {
@@ -114,7 +112,6 @@
             "FGAS_FEEDSTOCK_USER_HFCS" ]
     },
     {
-        "@type" : "FGASUndertaking",
         "id" : 10008,
         "name" : "AAAAA",
         "address" : {
@@ -177,7 +174,6 @@
             "FGAS_FEEDSTOCK_USER_HFCS" ]
     },
 {
-        "@type" : "FGASUndertaking",
         "id" : 10009,
         "name" : "AAAAA",
         "address" : {

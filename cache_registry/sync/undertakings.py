@@ -16,6 +16,7 @@ from cache_registry.sync.bdr import update_bdr_col_name, get_absolute_url
 from cache_registry.sync.utils import (
     get_logger,
     get_response,
+    get_response_offset,
     update_contact_persons,
 )
 from instance.settings import FGAS, ODS
@@ -69,7 +70,8 @@ def get_latest_undertakings(
     if page_size:
         params["pageSize"] = page_size
         params["pageNumber"] = 1
-
+    if domain == ODS:
+        return get_response_offset(url, params)
     return get_response(url, params)
 
 
@@ -113,14 +115,17 @@ def update_undertaking(data, check_passed=True):
     business_profiles = data.pop("businessProfile")
     contact_persons = parsers.parse_cp_list(data.pop("contactPersons"))
     types = data.pop("types")
-    if not data["domain"] == ODS:
-        represent = parsers.parse_rc(data.pop("euLegalRepresentativeCompany"))
+    represent = parsers.parse_rc(data.pop("euLegalRepresentativeCompany", None))
     contact_persons, is_patched = patch_users(data["id"], contact_persons)
+    data.pop("@type", None)
     data["external_id"] = data.pop("id")
-    data["registration_id"] = data.pop("registrationId", "")
+    data["registration_id"] = data.pop("registrationNumId", "")
     data["date_created"] = parsers.parse_date(data.pop("dateCreated"))
     data["date_updated"] = parsers.parse_date(data.pop("dateUpdated"))
-    data["undertaking_type"] = data.pop("@type", None)
+    if data["domain"] == FGAS:
+        data["undertaking_type"] = "FGASUndertaking"
+    else:
+        data["undertaking_type"] = "ODSUndertaking"
     data["eori_number"] = data.pop("eori", "")
     if data["domain"] == ODS:
         represent = None
@@ -236,11 +241,7 @@ def update_undertakings(undertakings, check_function):
                 if undertaking_exists.check_passed and not check_passed:
                     message = f"Company {undertaking_exists.external_id} has failed the checks"
                     current_app.logger.warning(message)
-        if (
-            (not undertaking["@type"] == "ODSUndertaking")
-            or check_passed
-            or undertaking_exists
-        ):
+        if (not undertaking["domain"] == "ODS") or check_passed or undertaking_exists:
             (_, represent_changed) = update_undertaking(
                 undertaking, check_passed=check_passed
             )

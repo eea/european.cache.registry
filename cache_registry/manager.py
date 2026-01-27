@@ -85,7 +85,6 @@ def check_passed():
             },
             "euLegalRepresentativeCompany": undertaking.represent,
             "domain": undertaking.domain,
-            "@type": undertaking.undertaking_type,
             "eoriNumber": eori,
         }
         check_passed = undertaking.check_passed
