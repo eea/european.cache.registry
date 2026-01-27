@@ -67,6 +67,7 @@ from .user import (
     UserCompaniesIncludeEcasView,
     UserCompaniesAuditorsView,
 )
+from .multi_year_licences import MultiYearLicenceReturnsViewset
 
 api = Blueprint("api", __name__)
 api_manager = AppGroup("api")
@@ -105,6 +106,13 @@ register_url(
     view_name="verification_envelopes",
 )
 
+register_url(
+    prefix="/",
+    name="multi_year_licences",
+    url="/multi_year_licences/",
+    view=MultiYearLicenceReturnsViewset,
+    view_name="multi_year_licence",
+)
 # Undertaking
 
 undertaking_prefix = "/undertaking/<domain>"

@@ -3,7 +3,7 @@ from flask_webtest import TestApp
 
 from cache_registry.app import create_app
 from cache_registry.models import db
-from cache_registry.models import loaddata
+from cache_registry.sync.utils import loaddata
 
 from instance.settings import FGAS, ODS
 

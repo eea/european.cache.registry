@@ -1,6 +1,5 @@
 [
     {
-        "@type" : "ODSUndertaking",
         "id" : 10006,
         "name" : "AAAAA",
         "address" : {
@@ -37,7 +36,6 @@
         }
     },
     {
-        "@type" : "ODSUndertaking",
         "id" : 10007,
         "name" : "AAAAA",
         "address" : {
@@ -78,7 +76,6 @@
         }
     },
     {
-        "@type" : "ODSUndertaking",
         "id" : 10008,
         "name" : "AAAAA",
         "address" : {

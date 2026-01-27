@@ -49,6 +49,13 @@ class UndertakingListView(ListView):
                         for businessprofiles in obj.businessprofiles
                     ]
                 ),
+                "businessprofiles": [
+                    {
+                        "code": businessprofiles.code,
+                        "short_code": businessprofiles.short_code,
+                    }
+                    for businessprofiles in obj.businessprofiles
+                ],
             }
         )
         data["company_id"] = obj.external_id
@@ -68,6 +75,7 @@ class UndertakingListSmallView(ListView):
             return None
         return {
             "company_id": obj.external_id,
+            "registration_id": obj.registration_id,
             "name": obj.name,
             "domain": obj.domain,
             "vat": obj.vat,
@@ -205,6 +213,13 @@ class UndertakingDetailView(DetailView):
                         for businessprofile in obj.businessprofiles
                     ]
                 ),
+                "businessprofiles": [
+                    {
+                        "code": businessprofiles.code,
+                        "short_code": businessprofiles.short_code,
+                    }
+                    for businessprofiles in obj.businessprofiles
+                ],
                 "country_history": [
                     country_hist.code for country_hist in country_history
                 ],
