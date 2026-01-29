@@ -75,7 +75,7 @@ def parse_multi_year_licence(licence_data, undertaking_id):
         "licence_type": licence_data["licenceType"],
         "substance_mixture": licence_data.get("substanceMixture", None),
     }
-
+    valid_status = licence_data.get("status", "") == "VALID"
     licence_object = (
         db.session.query(MultiYearLicence)
         .filter_by(
@@ -84,6 +84,15 @@ def parse_multi_year_licence(licence_data, undertaking_id):
         )
         .first()
     )
+    if not valid_status:
+        if licence_object:
+            db.session.delete(licence_object)
+            db.session.commit()
+        current_app.logger.info(
+            f"Multi Year Licence {licence['licence_id']} for undertaking ID {undertaking_id} is not valid. Skipping."
+        )
+        return None
+
     if licence_object:
         for key, value in licence.items():
             setattr(licence_object, key, value)
@@ -172,7 +181,7 @@ def parse_multi_year_licence(licence_data, undertaking_id):
     "-r",
     "--registration_id",
     "registration_id",
-    help="Registration ID number for filtering",
+    help="Undertaking registration ID number for filtering",
 )
 @click.option(
     "-ln",

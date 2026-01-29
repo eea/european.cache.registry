@@ -47,13 +47,20 @@ class MultiYearLicence(SerializableModel, db.Model):
     )
     cn_codes = relationship(
         "CombinedNomenclature",
+        cascade="all",
         secondary="multi_year_licence_combined_nomenclature_link",
         backref=db.backref("multi_year_licences", lazy="dynamic"),
     )
     substances = relationship(
         "SubstanceNomenclature",
+        cascade="all",
         secondary="multi_year_licence_substance_link",
         backref=db.backref("multi_year_licences", lazy="dynamic"),
+    )
+    detailed_uses_link = relationship(
+        "MultiYearLicenceDetailedUseLink",
+        cascade="all, delete-orphan",
+        backref=db.backref("multi_year_licence"),
     )
 
 
@@ -65,6 +72,10 @@ class DetailedUse(SerializableModel, db.Model):
     code = Column(String(255))
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
+    multi_year_licences_link = relationship(
+        "MultiYearLicenceDetailedUseLink",
+        backref=db.backref("detailed_use"),
+    )
 
 
 class MultiYearLicenceDetailedUseLink(SerializableModel, db.Model):
@@ -75,16 +86,6 @@ class MultiYearLicenceDetailedUseLink(SerializableModel, db.Model):
     )
     detailed_use_id = Column(ForeignKey("detailed_use.id"), primary_key=True)
     valid_until = Column(Date)
-    multi_year_licence = relationship(
-        "MultiYearLicence",
-        cascade="all",
-        backref=db.backref("detailed_uses_link"),
-    )
-    detailed_use = relationship(
-        "DetailedUse",
-        cascade="all",
-        backref=db.backref("multi_year_licences_link"),
-    )
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
 
