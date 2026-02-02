@@ -56,7 +56,7 @@ def eea_double_check_fgases(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
-    if not all(("status" in data, data["status"] in ["VALID", "REVISION"])):
+    if not all(("status" in data, data["status"] in ["VALID", "REVISION", "REPORTING_ONLY"])):
         message = "Organisation status differs from VALID or REVISION."
         current_app.logger.warning(message + identifier)
         ok = False
