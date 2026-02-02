@@ -119,6 +119,7 @@ def update_undertaking(data, check_passed=True):
     contact_persons, is_patched = patch_users(data["id"], contact_persons)
     data.pop("@type", None)
     data["external_id"] = data.pop("id")
+    data.pop("registrationId", None)
     data["registration_id"] = data.pop("registrationNumId", "")
     data["date_created"] = parsers.parse_date(data.pop("dateCreated"))
     data["date_updated"] = parsers.parse_date(data.pop("dateUpdated"))
