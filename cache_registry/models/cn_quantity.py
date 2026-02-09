@@ -24,6 +24,7 @@ class CNQuantity(SerializableModel, db.Model):
     multi_year_licence_id = Column(ForeignKey("multi_year_licence.id"))
     undertaking_id = Column(ForeignKey("undertaking.id"))
     combined_nomenclature_id = Column(ForeignKey("combined_nomenclature.id"))
+    customs_procedure = Column(Integer)  # used to determine lic_use_kind
     year = Column(Integer)  # year
     aggregated_reserved_ods_net_mass = Column(
         Float(precision=7, asdecimal=True), default=0.0

@@ -4,6 +4,18 @@ from cache_registry.models import (
     SubstanceNomenclature,
 )
 
+CUSTOMS_PROCEDURE_NUMBER_TO_LIC_USE_KIND_CONVERSION = {
+    40: "free circulation import",
+    42: "VAT-exempt free circulation",
+    51: "inward processing",
+    53: "temporary admission",
+    61: "end-use / outward processing",
+    71: "warehousing",
+    78: "free zones",
+    10: "export",
+    31: "re-export and transit",
+}
+
 
 def get_substances_from_cn_code(licence_object_id, cn_code, substances):
     if not substances:
