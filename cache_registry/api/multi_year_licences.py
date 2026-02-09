@@ -45,6 +45,26 @@ class MultiYearLicenceReturnsViewset(ListView):
                     }
                     for cn_quantity in cn_quantities
                 ],
+                "aggregated_data": [
+                    {
+                        "year": agg.year,
+                        "s_orig_country_name": agg.s_orig_country_name,
+                        "organization_country_name": agg.organization_country_name,
+                        "substance": agg.substance,
+                        "lic_use_kind": agg.lic_use_kind,
+                        "lic_use_desc": agg.lic_use_desc,
+                        "lic_type": agg.lic_type,
+                        "aggregated_reserved_ods_net_mass": str(
+                            agg.aggregated_reserved_ods_net_mass
+                        ),
+                        "aggregated_consumed_ods_net_mass": str(
+                            agg.aggregated_consumed_ods_net_mass
+                        ),
+                        "has_certex_data": agg.has_certex_data,
+                        "created_from_certex": agg.created_from_certex,
+                    }
+                    for agg in obj.aggregated_info
+                ],
                 "substances": [
                     {
                         "name": substance.name,
@@ -54,11 +74,10 @@ class MultiYearLicenceReturnsViewset(ListView):
                 ],
                 "detailed_uses": [
                     {
-                        "short_code": link.detailed_use.short_code,
-                        "code": link.detailed_use.code,
-                        "valid_until": link.valid_until,
+                        "short_code": detailed_use.short_code,
+                        "code": detailed_use.code,
                     }
-                    for link in obj.detailed_uses_link
+                    for detailed_use in obj.detailed_uses
                 ],
             }
         )
@@ -80,12 +99,12 @@ class MultiYearLicenceReturnsViewset(ListView):
                 external_id=external_id, domain="ODS"
             ).first_or_404()
             multi_year_licences = MultiYearLicence.query.filter_by(
-                undertaking_id=undertaking.id
+                undertaking_id=undertaking.id, status="VALID"
             )
         if year:
             if year == 2025:
                 multi_year_licences = multi_year_licences.filter(
-                    MultiYearLicence.validity_end_date >= "2025-03-01",
+                    MultiYearLicence.validity_end_date >= "2025-03-03",
                     MultiYearLicence.validity_start_date <= "2025-12-31",
                 )
             else:

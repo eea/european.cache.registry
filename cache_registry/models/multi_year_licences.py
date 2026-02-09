@@ -2,9 +2,11 @@
 from datetime import date
 
 from sqlalchemy import (
+    Boolean,
     Column,
     Date,
     ForeignKey,
+    Float,
     Integer,
     String,
 )
@@ -57,10 +59,46 @@ class MultiYearLicence(SerializableModel, db.Model):
         secondary="multi_year_licence_substance_link",
         backref=db.backref("multi_year_licences", lazy="dynamic"),
     )
-    detailed_uses_link = relationship(
-        "MultiYearLicenceDetailedUseLink",
-        cascade="all, delete-orphan",
-        backref=db.backref("multi_year_licence"),
+
+
+class MultiYearLicenceAggregated(SerializableModel, db.Model):
+    __tablename__ = "multi_year_licence_aggregated"
+    """
+    Aggregated information about the MultiYearLicence. For each entry in the MultiYearLicence,
+    for each year that the licence is valid, there is an entry in this table with the aggregated
+    reserved and consumed ODS net mass.
+    """
+
+    id = Column(Integer, primary_key=True)
+    multi_year_licence_id = Column(ForeignKey("multi_year_licence.id"))
+    undertaking_id = Column(ForeignKey("undertaking.id"), nullable=True, default=None)
+
+    s_orig_country_name = Column(String(100))  # still not sure how to get this value
+    organization_country_name = Column(
+        String(4)
+    )  # still not sure how to get this value
+    year = Column(Integer)
+    substance = Column(String(100))
+    lic_use_kind = Column(String(100))
+    lic_use_desc = Column(String(100))
+    lic_type = Column(String(50))
+    aggregated_reserved_ods_net_mass = Column(
+        Float(precision=7, asdecimal=True), default=0.0
+    )
+    aggregated_consumed_ods_net_mass = Column(
+        Float(precision=7, asdecimal=True), default=0.0
+    )
+    date_created = Column(Date, default=date.today)
+    date_updated = Column(Date, onupdate=date.today)
+    created_from_certex = Column(Boolean, default=False)
+    has_certex_data = Column(Boolean, default=False)
+
+    undertaking = relationship(
+        "Undertaking",
+        backref=db.backref("multi_year_licences_aggregated", lazy="dynamic"),
+    )  # organisation
+    multi_year_licence = relationship(
+        "MultiYearLicence", backref=db.backref("aggregated_info", lazy="dynamic")
     )
 
 
@@ -70,22 +108,8 @@ class DetailedUse(SerializableModel, db.Model):
     id = Column(Integer, primary_key=True)
     short_code = Column(String(20))
     code = Column(String(255))
-    date_created = Column(Date, default=date.today)
-    date_updated = Column(Date, onupdate=date.today)
-    multi_year_licences_link = relationship(
-        "MultiYearLicenceDetailedUseLink",
-        backref=db.backref("detailed_use"),
-    )
-
-
-class MultiYearLicenceDetailedUseLink(SerializableModel, db.Model):
-    __tablename__ = "multi_year_licence_detailed_use_link"
-
-    multi_year_licence_id = Column(
-        ForeignKey("multi_year_licence.id"), primary_key=True
-    )
-    detailed_use_id = Column(ForeignKey("detailed_use.id"), primary_key=True)
-    valid_until = Column(Date)
+    lic_use_desc = Column(String(255))
+    lic_type = Column(String(50))
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
 
@@ -112,12 +136,32 @@ class CombinedNomenclature(SerializableModel, db.Model):
     description = Column(String(255))  # description
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
+    substances = relationship(
+        "SubstanceNomenclature",
+        cascade="all",
+        secondary="substance_nomenclature_combined_nomenclature_link",
+        backref=db.backref("combined_nomenclatures", lazy="dynamic"),
+    )
 
 
 multi_year_licence_combined_nomenclature = db.Table(
     "multi_year_licence_combined_nomenclature_link",
     db.Column(
         "multi_year_licence_id", db.Integer(), db.ForeignKey("multi_year_licence.id")
+    ),
+    db.Column(
+        "combined_nomenclature_id",
+        db.Integer(),
+        db.ForeignKey("combined_nomenclature.id"),
+    ),
+)
+
+substance_nomenclature_combined_nomenclature_link = db.Table(
+    "substance_nomenclature_combined_nomenclature_link",
+    db.Column(
+        "substance_nomenclature_id",
+        db.Integer(),
+        db.ForeignKey("substance_nomenclature.id"),
     ),
     db.Column(
         "combined_nomenclature_id",
@@ -135,5 +179,22 @@ multi_year_licence_substances = db.Table(
         "substance_nomenclature_id",
         db.Integer(),
         db.ForeignKey("substance_nomenclature.id"),
+    ),
+)
+
+
+multi_year_licence_detailed_use_link = db.Table(
+    "multi_year_licence_detailed_use_link",
+    db.Column(
+        "multi_year_licence_id",
+        db.Integer(),
+        db.ForeignKey("multi_year_licence.id"),
+        primary_key=True,
+    ),
+    db.Column(
+        "detailed_use_id",
+        db.Integer(),
+        db.ForeignKey("detailed_use.id"),
+        primary_key=True,
     ),
 )
