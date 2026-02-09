@@ -15,11 +15,11 @@ def import_combined_nomenclature():
 
     for _, row in df.iterrows():
         combined_nomenclature = CombinedNomenclature.query.filter_by(
-            code=row["CN code"], description=row["description"]
+            code=str(row["CN code"]), description=row["description"]
         ).first()
         if not combined_nomenclature:
             combined_nomenclature = CombinedNomenclature(
-                code=row["CN code"],
+                code=str(row["CN code"]),
                 description=row["description"],
             )
             db.session.add(combined_nomenclature)
