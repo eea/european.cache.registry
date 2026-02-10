@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.5.5 - (2026-02-02)
+--------------------
+* Allow companies with FGAS REPORTING_ONLY status to report
+  [dianaboiangiu]
+
 2.5.3 - (2025-10-15)
 --------------------
 * Fix auditor assignation
