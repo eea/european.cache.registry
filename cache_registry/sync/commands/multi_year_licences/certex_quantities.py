@@ -7,6 +7,7 @@ from flask import current_app
 from cache_registry.models import (
     CombinedNomenclature,
     CNQuantity,
+    DetailedUse,
     MultiYearLicence,
     MultiYearLicenceAggregated,
     db,
@@ -16,6 +17,7 @@ from cache_registry.sync.bdr import get_absolute_url
 from cache_registry.sync.utils import get_response_offset
 from cache_registry.sync.commands.multi_year_licences.utils import (
     CUSTOMS_PROCEDURE_NUMBER_TO_LIC_USE_KIND_CONVERSION,
+    get_lic_use_desc_and_lic_type_from_detailed_uses,
     get_substances_from_cn_code,
 )
 
@@ -89,14 +91,6 @@ def aggregate_quantities_under_cn_codes(data):
     return aggregated_data
 
 
-def get_lic_use_desc_and_lic_type_from_detailed_uses(detailed_uses):
-    detailes_uses_data = []
-    for detail_use in detailed_uses:
-        if not (detail_use.lic_use_desc, detail_use.lic_type) in detailes_uses_data:
-            detailes_uses_data.append((detail_use.lic_use_desc, detail_use.lic_type))
-    return detailes_uses_data
-
-
 def remove_certex_data_from_multi_year_licences_aggregated(year):
     # remove existing MultiYearLicenceAggregated entries for the given year created from certex
     MultiYearLicenceAggregated.query.filter_by(
@@ -138,11 +132,11 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
             )
             continue
         detailed_uses_data = get_lic_use_desc_and_lic_type_from_detailed_uses(
-            licence_object.detailed_uses
+            licence_object
         )
         if len(detailed_uses_data) == 0:
             current_app.logger.warning(
-                f"Licence {licence_object.long_licence_number} has no detailed uses associated."
+                f"Licence {licence_object.long_licence_number} has no detailed uses associated or licence_type."
             )
             continue
         elif len(detailed_uses_data) > 1:

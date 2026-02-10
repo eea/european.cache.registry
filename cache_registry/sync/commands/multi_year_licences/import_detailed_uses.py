@@ -19,6 +19,7 @@ def import_combined_nomenclature():
         ).first()
         if not detailed_use:
             detailed_use = DetailedUse(
+                licence_type=row["licence_type"],
                 short_code=row["short_code"],
                 code=row["code"],
                 lic_use_desc=row["lic_use_desc"],
@@ -27,6 +28,7 @@ def import_combined_nomenclature():
             db.session.add(detailed_use)
             db.session.commit()
         else:
+            detailed_use.licence_type = row["licence_type"]
             detailed_use.lic_use_desc = row["lic_use_desc"]
             detailed_use.lic_type = row["lic_type"]
             db.session.commit()

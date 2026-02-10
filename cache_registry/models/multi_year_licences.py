@@ -106,6 +106,7 @@ class DetailedUse(SerializableModel, db.Model):
     __tablename__ = "detailed_use"
 
     id = Column(Integer, primary_key=True)
+    licence_type = Column(String(10))
     short_code = Column(String(20))
     code = Column(String(255))
     lic_use_desc = Column(String(255))

@@ -1,6 +1,7 @@
 from flask import current_app
 
 from cache_registry.models import (
+    DetailedUse,
     SubstanceNomenclature,
 )
 
@@ -38,3 +39,19 @@ def get_substances_from_cn_code(licence_object_id, cn_code, substances):
             [substance.id for substance in intersection_substances]
         )
     )
+
+
+def get_lic_use_desc_and_lic_type_from_detailed_uses(licence_object):
+    detailes_uses_data = []
+    for detail_use in licence_object.detailed_uses:
+        if not (detail_use.lic_use_desc, detail_use.lic_type) in detailes_uses_data:
+            detailes_uses_data.append((detail_use.lic_use_desc, detail_use.lic_type))
+    if not detailes_uses_data:
+        detailed_use = DetailedUse.query.filter_by(
+            licence_type=licence_object.licence_type,
+        ).first()
+        if detailed_use:
+            detailes_uses_data.append(
+                (detailed_use.lic_use_desc, detailed_use.lic_type)
+            )
+    return detailes_uses_data

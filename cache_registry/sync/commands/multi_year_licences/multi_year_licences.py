@@ -15,6 +15,7 @@ from cache_registry.sync import sync_manager
 from cache_registry.sync.bdr import get_absolute_url
 from cache_registry.sync.utils import get_response_offset
 from cache_registry.sync.commands.multi_year_licences.utils import (
+    get_lic_use_desc_and_lic_type_from_detailed_uses,
     get_substances_from_cn_code,
 )
 
@@ -196,38 +197,46 @@ def generate_multi_year_licence_aggregated(licence_object, year):
         if not substances:
             continue
         for substance in substances:
-            for detail_use in licence_object.detailed_uses:
-                if not detail_use.lic_use_desc or not detail_use.lic_type:
-                    current_app.logger.warning(
-                        f"""Detailed Use with id {detail_use.id} does not have lic_use_desc or lic_type defined."""
-                    )
-                    continue
-                multi_year_licence_aggregated = MultiYearLicenceAggregated.query.filter_by(
+            detailed_uses_data = get_lic_use_desc_and_lic_type_from_detailed_uses(
+                licence_object
+            )
+            if len(detailed_uses_data) == 0:
+                current_app.logger.warning(
+                    f"Licence {licence_object.long_licence_number} has no detailed uses associated or licence_type."
+                )
+                continue
+            elif len(detailed_uses_data) > 1:
+                current_app.logger.warning(
+                    f"Licence {licence_object.long_licence_number} has detailed uses associated with multiple use desc and types."
+                )
+                continue
+            detailed_use_data = detailed_uses_data[0]
+            multi_year_licence_aggregated = MultiYearLicenceAggregated.query.filter_by(
+                multi_year_licence_id=licence_object.id,
+                undertaking_id=licence_object.undertaking_id,
+                organization_country_name=licence_object.undertaking.country_code,
+                s_orig_country_name=licence_object.undertaking.country_code_orig,
+                year=year,
+                substance=substance.chemical_name,
+                lic_use_desc=detailed_use_data[0],
+                lic_type=detailed_use_data[1],
+            ).first()
+            if not multi_year_licence_aggregated:
+                multi_year_licence_aggregated = MultiYearLicenceAggregated(
                     multi_year_licence_id=licence_object.id,
                     undertaking_id=licence_object.undertaking_id,
                     organization_country_name=licence_object.undertaking.country_code,
                     s_orig_country_name=licence_object.undertaking.country_code_orig,
                     year=year,
                     substance=substance.chemical_name,
-                    lic_type=detail_use.lic_type,
-                    lic_use_desc=detail_use.lic_use_desc,
-                ).first()
-                if not multi_year_licence_aggregated:
-                    multi_year_licence_aggregated = MultiYearLicenceAggregated(
-                        multi_year_licence_id=licence_object.id,
-                        undertaking_id=licence_object.undertaking_id,
-                        organization_country_name=licence_object.undertaking.country_code,
-                        s_orig_country_name=licence_object.undertaking.country_code_orig,
-                        year=year,
-                        substance=substance.chemical_name,
-                        lic_use_kind=None,
-                        lic_use_desc=detail_use.lic_use_desc,
-                        lic_type=detail_use.lic_type,
-                        aggregated_reserved_ods_net_mass=0.0,  # Placeholder value
-                        aggregated_consumed_ods_net_mass=0.0,  # Placeholder value
-                    )
-                    db.session.add(multi_year_licence_aggregated)
-                    db.session.commit()
+                    lic_use_kind=None,
+                    lic_use_desc=detailed_use_data[0],
+                    lic_type=detailed_use_data[1],
+                    aggregated_reserved_ods_net_mass=0.0,  # this will be updated with the Certex data in the next step
+                    aggregated_consumed_ods_net_mass=0.0,  # this will be updated with the Certex data in the next step
+                )
+                db.session.add(multi_year_licence_aggregated)
+                db.session.commit()
 
 
 @sync_manager.command("multi_year_licences")
