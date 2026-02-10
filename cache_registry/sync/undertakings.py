@@ -8,41 +8,18 @@ from cache_registry.models import (
     Undertaking,
     UndertakingBusinessProfile,
     UndertakingTypes,
+    db,
 )
-from cache_registry.models import db
 from cache_registry.sync import parsers
 from cache_registry.sync.auth import patch_users
 from cache_registry.sync.bdr import update_bdr_col_name, get_absolute_url
 from cache_registry.sync.utils import (
     get_logger,
     get_response,
+    get_response_offset,
     update_contact_persons,
 )
 from instance.settings import FGAS, ODS
-
-
-def get_latest_undertakings(
-    type_url, updated_since=None, page_size=None, id=None, domain=FGAS
-):
-    """Get latest undertakings from specific API url"""
-    if domain == FGAS:
-        url = get_absolute_url("API_URL_FGAS", type_url)
-    else:
-        url = get_absolute_url("API_URL_ODS", type_url)
-    if updated_since:
-        updated_since = updated_since.strftime("%d/%m/%Y")
-        params = {"updatedSince": updated_since}
-    else:
-        params = {}
-
-    if id:
-        params["organizationId"] = id
-
-    if page_size:
-        params["pageSize"] = page_size
-        params["pageNumber"] = 1
-
-    return get_response(url, params)
 
 
 def patch_undertaking(external_id, data):
@@ -63,6 +40,39 @@ def patch_undertaking_old_gb_represent(external_id, data):
             print(f"Patching old gb represent on undertaking: {external_id}")
             data.update(patch[external_id])
     return data
+
+
+def get_latest_undertakings(
+    type_url,
+    updated_since=None,
+    page_size=None,
+    id=None,
+    registration_id=None,
+    domain=FGAS,
+):
+    """Get latest undertakings from specific API url"""
+    if domain == FGAS:
+        url = get_absolute_url("API_URL_FGAS", type_url)
+    else:
+        url = get_absolute_url("API_URL_ODS", type_url)
+    if updated_since:
+        updated_since = updated_since.strftime("%d/%m/%Y")
+        params = {"updatedSince": updated_since}
+    else:
+        params = {}
+
+    if id:
+        params["organizationId"] = id
+
+    if registration_id:
+        params["registrationNumId"] = registration_id
+
+    if page_size:
+        params["pageSize"] = page_size
+        params["pageNumber"] = 1
+    if domain == ODS:
+        return get_response_offset(url, params)
+    return get_response(url, params)
 
 
 def add_updates_log(undertaking, data):
@@ -100,20 +110,23 @@ def update_undertaking(data, check_passed=True):
     """Create or update undertaking from received data"""
     original_data = data.copy()
     represent_changed = False
-    # TODO should decide if this should be saved in the DB
-    data.pop("registrationId", None)
     data = patch_undertaking(data["id"], data)
     address = parsers.parse_address(data.pop("address"))
     business_profiles = data.pop("businessProfile")
     contact_persons = parsers.parse_cp_list(data.pop("contactPersons"))
     types = data.pop("types")
-    if not data["domain"] == ODS:
-        represent = parsers.parse_rc(data.pop("euLegalRepresentativeCompany"))
+    represent = parsers.parse_rc(data.pop("euLegalRepresentativeCompany", None))
     contact_persons, is_patched = patch_users(data["id"], contact_persons)
+    data.pop("@type", None)
     data["external_id"] = data.pop("id")
+    data.pop("registrationId", None)
+    data["registration_id"] = data.pop("registrationNumId", "")
     data["date_created"] = parsers.parse_date(data.pop("dateCreated"))
     data["date_updated"] = parsers.parse_date(data.pop("dateUpdated"))
-    data["undertaking_type"] = data.pop("@type", None)
+    if data["domain"] == FGAS:
+        data["undertaking_type"] = "FGASUndertaking"
+    else:
+        data["undertaking_type"] = "ODSUndertaking"
     data["eori_number"] = data.pop("eori", "")
     if data["domain"] == ODS:
         represent = None
@@ -147,10 +160,17 @@ def update_undertaking(data, check_passed=True):
         parsers.update_obj(undertaking.address, address)
     db.session.add(undertaking)
     UndertakingBusinessProfile.query.filter_by(undertaking=undertaking).delete()
+    if not business_profiles:
+        business_profiles = {"highLevelUses": []}
     for business_profile in business_profiles["highLevelUses"]:
-        business_profile_object = BusinessProfile.query.filter_by(
-            highleveluses=business_profile, domain=data["domain"]
-        ).first()
+        if isinstance(business_profile, dict):
+            business_profile_object = BusinessProfile.query.filter_by(
+                highleveluses=business_profile["code"], domain=data["domain"]
+            ).first()
+        else:
+            business_profile_object = BusinessProfile.query.filter_by(
+                highleveluses=business_profile, domain=data["domain"]
+            ).first()
         if (
             business_profile_object
             and business_profile_object not in undertaking.businessprofiles
@@ -203,6 +223,33 @@ def update_undertaking(data, check_passed=True):
     db.session.add(undertaking)
 
     return (undertaking, represent_changed)
+
+
+def update_undertakings(undertakings, check_function):
+    undertakings_count = 0
+    undertakings_for_call_bdr = []
+    for undertaking in undertakings:
+        undertaking_exists = Undertaking.query.filter_by(
+            external_id=undertaking["id"]
+        ).first()
+        if not undertaking["domain"] == ODS:
+            undertaking = patch_undertaking_old_gb_represent(
+                undertaking["id"], undertaking
+            )
+        check_passed = check_function(undertaking)
+        if undertaking_exists:
+            if undertaking_exists.domain == "FGAS":
+                if undertaking_exists.check_passed and not check_passed:
+                    message = f"Company {undertaking_exists.external_id} has failed the checks"
+                    current_app.logger.warning(message)
+        if (not undertaking["domain"] == "ODS") or check_passed or undertaking_exists:
+            (_, represent_changed) = update_undertaking(
+                undertaking, check_passed=check_passed
+            )
+            undertakings_count += 1
+            if check_passed or represent_changed:
+                undertakings_for_call_bdr.append(undertaking)
+    return undertakings_for_call_bdr, undertakings_count
 
 
 def remove_undertaking(data, domain):

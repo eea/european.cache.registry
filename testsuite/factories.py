@@ -289,7 +289,7 @@ class CountryCodesConversionFactory(SQLAlchemyModelFactory):
         sqlalchemy_session = models.db.session
 
 
-class LicenceDetailsConverstionFactory(SQLAlchemyModelFactory):
+class LicenceDetailsConversionFactory(SQLAlchemyModelFactory):
     __tablename__ = "licence_details_conversion"
 
     template_detailed_use_code = "substance"
@@ -298,5 +298,5 @@ class LicenceDetailsConverstionFactory(SQLAlchemyModelFactory):
     lic_type = "Export"
 
     class Meta:
-        model = models.LicenceDetailsConverstion
+        model = models.LicenceDetailsConversion
         sqlalchemy_session = models.db.session

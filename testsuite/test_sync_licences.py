@@ -2,10 +2,10 @@
 
 from . import factories
 
-from cache_registry.sync.licences import (
+from cache_registry.sync.licences_aggregation import (
+    aggregate_licence_to_substance,
     get_or_create_delivery,
     get_or_create_substance,
-    aggregate_licence_to_substance,
 )
 
 
@@ -42,7 +42,7 @@ def test_get_or_create_substance(client):
         ec_substance_name="Substance (virgin)", corrected_name="Substance (virgin)"
     )
 
-    factories.LicenceDetailsConverstionFactory(
+    factories.LicenceDetailsConversionFactory(
         template_detailed_use_code="code.for.use",
         lic_use_kind="kind",
         lic_use_desc="desc",

@@ -4,7 +4,7 @@ import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-from cache_registry.models import loaddata
+from cache_registry.sync.utils import loaddata
 
 revision = "0019"
 down_revision = "0018"

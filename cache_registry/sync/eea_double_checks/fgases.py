@@ -1,26 +1,33 @@
 from flask import current_app
 
+from cache_registry.models import Type
 from instance.settings import (
     COMPANIES_EXCEPTED_FROM_CHECKS,
     FGAS,
     NOT_OBLIGED_TO_REPORT_FGAS_TYPES,
 )
-from cache_registry.models import Type
 
 
 def eea_double_check_fgases(data):
     ok = True
 
-    if not data["businessProfile"]:
-        businessprofile = ""
-        ok = False
-    else:
-        businessprofile = data["businessProfile"]["highLevelUses"]
+    try:
+        if not data["businessProfile"]:
+            high_level_uses_set = set()
+        else:
+            high_level_uses_set = set(data["businessProfile"]["highLevelUses"])
+    except TypeError:
+        high_level_uses_set = set(
+            [
+                highleveluse["code"]
+                for highleveluse in data["businessProfile"]["highLevelUses"]
+            ]
+        )
 
     identifier = f"""
         Organisation ID: {data['id']}
         Organisation status: {data['status']}
-        Organisation highLevelUses: {businessprofile}
+        Organisation highLevelUses: {high_level_uses_set}
         Organisation types: {data['types']}
         Organisation contact persons: {data['contactPersons']}
         Organisation domain: {data['domain']}
@@ -49,7 +56,9 @@ def eea_double_check_fgases(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
-    if not all(("status" in data, data["status"] in ["VALID", "REVISION", "REPORTING_ONLY"])):
+    if not all(
+        ("status" in data, data["status"] in ["VALID", "REVISION", "REPORTING_ONLY"])
+    ):
         message = "Organisation status differs from VALID or REVISION."
         current_app.logger.warning(message + identifier)
         ok = False
@@ -58,7 +67,7 @@ def eea_double_check_fgases(data):
         if not all(
             [
                 high_level_use.startswith("fgas.")
-                for high_level_use in data["businessProfile"]["highLevelUses"]
+                for high_level_use in high_level_uses_set
             ]
         ):
             message = "Organisation highLevelUses elements don't start with 'fgas.'"
@@ -66,7 +75,6 @@ def eea_double_check_fgases(data):
             ok = False
     else:
         message = "Organisation has no highLevelUses"
-        data["businessProfile"] = {"highLevelUses": []}
         current_app.logger.warning(message + identifier)
         ok = False
 
@@ -87,18 +95,4 @@ def eea_double_check_fgases(data):
         current_app.logger.warning(message + identifier)
         ok = False
 
-    new_types = ["RECLAIMER_HFCS"]
-    for type in data["types"]:
-        if type in new_types:
-            message = f"NEW TYPE USED for {data['id']}"
-            current_app.logger.warning(message + identifier)
-    new_high_level_uses = [
-        "fgas.prod-imp-exp.hfcs.exporter",
-        "fgas.prod-imp-exp.hfcs.customs-procedure-release",
-        "fgas.prod-imp-exp.hfcs.customs-others",
-    ]
-    for high_level_use in data["businessProfile"]["highLevelUses"]:
-        if high_level_use in new_high_level_uses:
-            message = f"NEW HIGH LEVEL USED for {data['id']}"
-            current_app.logger.warning(message + identifier)
     return ok

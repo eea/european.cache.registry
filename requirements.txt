@@ -8,6 +8,7 @@ Flask-Script==2.0.6
 itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.2
+pandas==3.0.0
 psycopg2-binary==2.9.10
 python-Levenshtein==0.27.1
 raven==6.10.0

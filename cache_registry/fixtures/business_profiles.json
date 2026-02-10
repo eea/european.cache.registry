@@ -4,7 +4,9 @@
         "fields":{
             "id": 1,
             "domain": "FGAS",
-            "highleveluses": "fgas.importer.of.other.products.and.equipment"
+            "highleveluses": "fgas.importer.of.other.products.and.equipment",
+            "code": "fgas.importer.of.other.products.and.equipment",
+            "short_code": ""
         }
     },
     {
@@ -12,7 +14,9 @@
         "fields":{
             "id": 2,
             "domain": "FGAS",
-            "highleveluses": "fgas.mdis"
+            "highleveluses": "fgas.mdis",
+            "code": "fgas.mdis",
+            "short_code": ""
         }
     },
     {
@@ -20,7 +24,9 @@
         "fields":{
             "id": 3,
             "domain": "FGAS",
-            "highleveluses": "fgas.semiconductor.manufacture"
+            "highleveluses": "fgas.semiconductor.manufacture",
+            "code": "fgas.semiconductor.manufacture",
+            "short_code": ""
         }
     },
     {
@@ -28,7 +34,9 @@
         "fields":{
             "id": 4,
             "domain": "FGAS",
-            "highleveluses": "fgas.military.use"
+            "highleveluses": "fgas.military.use",
+            "code": "fgas.military.use",
+            "short_code": ""
         }
     },
     {
@@ -36,7 +44,9 @@
         "fields":{
             "id": 5,
             "domain": "FGAS",
-            "highleveluses": "fgas.export"
+            "highleveluses": "fgas.export",
+            "code": "fgas.export",
+            "short_code": ""
         }
     },
     {
@@ -44,7 +54,9 @@
         "fields":{
             "id": 6,
             "domain": "FGAS",
-            "highleveluses": "fgas.imports.for.destruction"
+            "highleveluses": "fgas.imports.for.destruction",
+            "code": "fgas.imports.for.destruction",
+            "short_code": ""
         }
     },
     {
@@ -52,7 +64,9 @@
         "fields":{
             "id": 7,
             "domain": "FGAS",
-            "highleveluses": "fgas.feedstock.use"
+            "highleveluses": "fgas.feedstock.use",
+            "code": "fgas.feedstock.use",
+            "short_code": ""
         }
     },
     {
@@ -60,7 +74,9 @@
         "fields":{
             "id": 8,
             "domain": "FGAS",
-            "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
+            "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs",
+            "code": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs",
+            "short_code": ""
         }
     },
     {
@@ -68,7 +84,9 @@
         "fields":{
             "id": 9,
             "domain": "ODS",
-            "highleveluses": "import.of.products.or.equipment.for.laboratory.or.analytical.use"
+            "highleveluses": "import.of.products.or.equipment.for.laboratory.or.analytical.use",
+            "code": "import.of.products.or.equipment.for.laboratory.or.analytical.use",
+            "short_code": "IPEL"
         }
     },
     {
@@ -76,7 +94,9 @@
         "fields":{
             "id": 10,
             "domain": "ODS",
-            "highleveluses": "import.of.hcfc.for.repackaging.and.re-export"
+            "highleveluses": "import.of.hcfc.for.repackaging.and.re-export",
+            "code": "import.of.hcfc.for.repackaging.and.re-export",
+            "short_code": "IHCF"
         }
     },
     {
@@ -84,7 +104,9 @@
         "fields":{
             "id": 11,
             "domain": "ODS",
-            "highleveluses": "export.of.hcfc.re-export.after.re-packaging"
+            "highleveluses": "export.of.hcfc.re-export.after.re-packaging",
+            "code": "export.of.hcfc.re-export.after.re-packaging",
+            "short_code": "EHCF"
         }
     },
     {
@@ -92,7 +114,9 @@
         "fields":{
             "id": 12,
             "domain": "ODS",
-            "highleveluses": "import.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts"
+            "highleveluses": "import.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts",
+            "code": "import.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts",
+            "short_code": "IPEA"
         }
     },
     {
@@ -100,7 +124,9 @@
         "fields":{
             "id": 13,
             "domain": "ODS",
-            "highleveluses": "export.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts"
+            "highleveluses": "export.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts",
+            "code": "export.of.products.or.equipment.containing.halon.for.critical.use.on.aircrafts",
+            "short_code": "EPEA"
         }
     },
     {
@@ -108,7 +134,9 @@
         "fields":{
             "id": 14,
             "domain": "ODS",
-            "highleveluses": "import.of.products.or.equipment.for.destruction"
+            "highleveluses": "import.of.products.or.equipment.for.destruction",
+            "code": "import.of.products.or.equipment.for.destruction",
+            "short_code": "IPED"
         }
     },
     {
@@ -116,7 +144,9 @@
         "fields":{
             "id": 15,
             "domain": "ODS",
-            "highleveluses": "import.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts"
+            "highleveluses": "import.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts",
+            "code": "import.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts",
+            "short_code": "IPEO"
         }
     },
     {
@@ -124,7 +154,9 @@
         "fields":{
             "id": 16,
             "domain": "ODS",
-            "highleveluses": "export.of.products.or.equipment.covered.by.an.exemption.decision"
+            "highleveluses": "export.of.products.or.equipment.covered.by.an.exemption.decision",
+            "code": "export.of.products.or.equipment.covered.by.an.exemption.decision",
+            "short_code": "EPEX"
         }
     },
     {
@@ -132,7 +164,9 @@
         "fields":{
             "id": 17,
             "domain": "ODS",
-            "highleveluses": "export.of.halon.for.critical.use"
+            "highleveluses": "export.of.halon.for.critical.use",
+            "code": "export.of.halon.for.critical.use",
+            "short_code": "ECUH"
         }
     },
     {
@@ -140,7 +174,9 @@
         "fields":{
             "id": 18,
             "domain": "ODS",
-            "highleveluses": "import.of.substance.for.destruction"
+            "highleveluses": "import.of.substance.for.destruction",
+            "code": "import.of.substance.for.destruction",
+            "short_code": "IDST"
         }
     },
     {
@@ -148,7 +184,9 @@
         "fields":{
             "id": 19,
             "domain": "ODS",
-            "highleveluses": "import.of.substance.for.feedstock.use"
+            "highleveluses": "import.of.substance.for.feedstock.use",
+            "code": "import.of.substance.for.feedstock.use",
+            "short_code": "IFDS"
         }
     },
     {
@@ -156,7 +194,9 @@
         "fields":{
             "id": 20,
             "domain": "ODS",
-            "highleveluses": "import.of.halon.for.critical.use"
+            "highleveluses": "import.of.halon.for.critical.use",
+            "code": "import.of.halon.for.critical.use",
+            "short_code": "ICUH"
         }
     },
     {
@@ -164,7 +204,9 @@
         "fields":{
             "id": 21,
             "domain": "ODS",
-            "highleveluses": "import.of.halon.for.critical.use"
+            "highleveluses": "import.of.halon.for.critical.use",
+            "code": "import.of.halon.for.critical.use",
+            "short_code": "ICUH"
         }
     },
     {
@@ -172,7 +214,9 @@
         "fields":{
             "id": 22,
             "domain": "ODS",
-            "highleveluses": "export.of.products.or.equipment.for.laboratory.or.analytical.use"
+            "highleveluses": "export.of.products.or.equipment.for.laboratory.or.analytical.use",
+            "code": "export.of.products.or.equipment.for.laboratory.or.analytical.use",
+            "short_code": "EPEL"
         }
     },
     {
@@ -180,7 +224,9 @@
         "fields":{
             "id": 23,
             "domain": "ODS",
-            "highleveluses": "export.of.substance.for.process.agent.use"
+            "highleveluses": "export.of.substance.for.process.agent.use",
+            "code": "export.of.substance.for.process.agent.use",
+            "short_code": "EPRA"
         }
     },
     {
@@ -188,7 +234,9 @@
         "fields":{
             "id": 24,
             "domain": "ODS",
-            "highleveluses": "export.of.substance.for.feedstock.use"
+            "highleveluses": "export.of.substance.for.feedstock.use",
+            "code": "export.of.substance.for.feedstock.use",
+            "short_code": "EFDS"
         }
     },
     {
@@ -196,7 +244,9 @@
         "fields":{
             "id": 25,
             "domain": "ODS",
-            "highleveluses": "import.or.production.of.substance.for.laboratory.or.analytical.use"
+            "highleveluses": "import.or.production.of.substance.for.laboratory.or.analytical.use",
+            "code": "import.or.production.of.substance.for.laboratory.or.analytical.use",
+            "short_code": "ILAB"
         }
     },
     {
@@ -204,7 +254,9 @@
         "fields":{
             "id": 26,
             "domain": "ODS",
-            "highleveluses": "import.of.methyl.bromide.for.repackaging.and.re-export"
+            "highleveluses": "import.of.methyl.bromide.for.repackaging.and.re-export",
+            "code": "import.of.methyl.bromide.for.repackaging.and.re-export",
+            "short_code": "IQPS"
         }
     },
     {
@@ -212,7 +264,9 @@
         "fields":{
             "id": 27,
             "domain": "ODS",
-            "highleveluses": "export.of.methyl.bromide.for.quarantine.and.pre-shipment.use"
+            "highleveluses": "export.of.methyl.bromide.for.quarantine.and.pre-shipment.use",
+            "code": "export.of.methyl.bromide.for.quarantine.and.pre-shipment.use",
+            "short_code": "EQPS"
         }
     },
     {
@@ -220,7 +274,9 @@
         "fields":{
             "id": 28,
             "domain": "ODS",
-            "highleveluses": "export.of.substance.for.laboratory.or.analytical.use"
+            "highleveluses": "export.of.substance.for.laboratory.or.analytical.use",
+            "code": "export.of.substance.for.laboratory.or.analytical.use",
+            "short_code": "ELAB"
         }
     },
     {
@@ -228,7 +284,9 @@
         "fields":{
             "id": 29,
             "domain": "ODS",
-            "highleveluses": "import.of.products.or.equipment.covered.by.an.exemption.decision"
+            "highleveluses": "import.of.products.or.equipment.covered.by.an.exemption.decision",
+            "code": "import.of.products.or.equipment.covered.by.an.exemption.decision",
+            "short_code": "IPEX"
         }
     },
     {
@@ -236,7 +294,9 @@
         "fields":{
             "id": 30,
             "domain": "ODS",
-            "highleveluses": "import.of.methyl.bromide.for.emergency.use"
+            "highleveluses": "import.of.methyl.bromide.for.emergency.use",
+            "code": "import.of.methyl.bromide.for.emergency.use",
+            "short_code": "IEMG"
         }
     },
     {
@@ -244,7 +304,9 @@
         "fields":{
             "id": 31,
             "domain": "ODS",
-            "highleveluses": "export.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts"
+            "highleveluses": "export.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts",
+            "code": "export.of.products.or.equipment.containing.halon.for.critical.uses.on.units.other.than.aircrafts",
+            "short_code": "EPEO"
         }
     },
     {
@@ -252,7 +314,9 @@
         "fields":{
             "id": 32,
             "domain": "ODS",
-            "highleveluses": "export.of.metered.dose.inhalers"
+            "highleveluses": "export.of.metered.dose.inhalers",
+            "code": "export.of.metered.dose.inhalers",
+            "short_code": "EPEM"
         }
     },
     {
@@ -260,7 +324,9 @@
         "fields":{
             "id": 33,
             "domain": "ODS",
-            "highleveluses": "import.of.substance.for.process.agent.use"
+            "highleveluses": "import.of.substance.for.process.agent.use",
+            "code": "import.of.substance.for.process.agent.use",
+            "short_code": "IPRA"
         }
     },
     {
@@ -268,7 +334,9 @@
         "fields":{
             "id": 34,
             "domain": "ODS",
-            "highleveluses": "export.of.hcfc.produced.and.repackaged.inside.the.eu"
+            "highleveluses": "export.of.hcfc.produced.and.repackaged.inside.the.eu",
+            "code": "export.of.hcfc.produced.and.repackaged.inside.the.eu",
+            "short_code": "EHCP"
         }
     },
     {
@@ -276,7 +344,9 @@
         "fields":{
             "id": 35,
             "domain": "ODS",
-            "highleveluses": "export.of.hcfc.other"
+            "highleveluses": "export.of.hcfc.other",
+            "code": "export.of.hcfc.other",
+            "short_code": "EHCO"
         }
     },
     {
@@ -284,7 +354,9 @@
         "fields": {
             "id": 36,
             "domain": "FGAS",
-            "highleveluses": "fgas.prod-imp-exp.hfcs.exporter"
+            "highleveluses": "fgas.prod-imp-exp.hfcs.exporter",
+            "code": "fgas.prod-imp-exp.hfcs.exporter",
+            "short_code": ""
         }
     },
     {
@@ -292,7 +364,9 @@
         "fields": {
             "id": 37,
             "domain": "FGAS",
-            "highleveluses": "fgas.prod-imp-exp.hfcs.customs-procedure-release"
+            "highleveluses": "fgas.prod-imp-exp.hfcs.customs-procedure-release",
+            "code": "fgas.prod-imp-exp.hfcs.customs-procedure-release",
+            "short_code": ""
         }
     },
     {
@@ -300,7 +374,19 @@
         "fields": {
             "id": 38,
             "domain": "FGAS",
-            "highleveluses": "fgas.prod-imp-exp.hfcs.customs-others"
+            "highleveluses": "fgas.prod-imp-exp.hfcs.customs-others",
+            "code": "fgas.prod-imp-exp.hfcs.customs-others",
+            "short_code": ""
+        }
+    },
+    {
+        "model":"BusinessProfile",
+        "fields":{
+            "id": 39,
+            "domain": "ODS",
+            "highleveluses": "import.or.production.of.substance.for.laboratory.or.analytical.use",
+            "code": "import.or.production.of.substance.for.laboratory.or.analytical.use",
+            "short_code": "PLAB"
         }
     }
 ]

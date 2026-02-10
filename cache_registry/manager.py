@@ -14,12 +14,11 @@ from cache_registry.models import (
     Undertaking,
     User,
     db,
-    loaddata,
 )
 from cache_registry.sync.bdr import call_bdr
-from cache_registry.sync.fgases import eea_double_check_fgases
-from cache_registry.sync.ods import eea_double_check_ods
-
+from cache_registry.sync.eea_double_checks.fgases import eea_double_check_fgases
+from cache_registry.sync.eea_double_checks.ods import eea_double_check_ods
+from cache_registry.sync.utils import loaddata
 
 utils_manager = AppGroup("utils")
 
@@ -45,7 +44,12 @@ def check_passed():
     for undertaking in undertakings:
         highleveluses = []
         for businessprofile in undertaking.businessprofiles:
-            highleveluses.append(businessprofile.highleveluses)
+            highleveluses.append(
+                {
+                    "code": businessprofile.code,
+                    "shortCode": businessprofile.short_code,
+                }
+            )
         types = []
         for type in undertaking.types:
             types.append(type.type)
@@ -81,7 +85,6 @@ def check_passed():
             },
             "euLegalRepresentativeCompany": undertaking.represent,
             "domain": undertaking.domain,
-            "@type": undertaking.undertaking_type,
             "eoriNumber": eori,
         }
         check_passed = undertaking.check_passed

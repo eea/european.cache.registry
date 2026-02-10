@@ -5,7 +5,7 @@ from sqlalchemy.dialects import mysql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
-from cache_registry.models import loaddata
+from cache_registry.sync.utils import loaddata
 
 revision = "0018"
 down_revision = "0017"

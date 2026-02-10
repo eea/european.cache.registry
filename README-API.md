@@ -522,9 +522,13 @@ Returns the list of all verified undertakings in the system, as fetched from dom
           "number": "nrstreet--7953",
           "street": "street--7953"
         },
-        "businessprofile": {
-          "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
-        },
+        "businessprofile": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs",
+        "businessprofiless": [
+            {
+              "code": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs",
+              "short_code": "IRHE"
+            },
+        ],
         "oldcompany_verified": true,
         "oldcompany_account": "fgas22331",
         "oldcompany_extid": 4,
@@ -642,9 +646,13 @@ Returns a list of all undertakings in the system (verified or not), as fetched f
           "number": "nrstreet--7953",
           "street": "street--7953"
         },
-        "businessprofile": {
-          "highleveluses": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs"
-        },
+        "businessprofile": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs",
+        "businessprofiless": [
+            {
+              "code": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs",
+              "short_code": "IRHE"
+            },
+        ],
         "collection_id": null,
         "oldcompany_account": "fgas22331",
         "oldcompany_extid": 4,
@@ -701,9 +709,13 @@ Returns an undertakings details from the system, as fetched from domain registry
       "phone": "+3212310085",
       "oldcompany_account": "fgas22331",
       "oldcompany_extid": 4,
-      "businessprofile": {
-        "highleveluses": ""
-      },
+      "businessprofile": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs",
+      "businessprofiless": [
+            {
+              "code": "fgas.importer.of.refrigeration.ac..and.heatpump.equipment.containing.hfcs",
+              "short_code": "IRHE"
+            },
+      ],
       "representative": {
         "name": "EULEGALNAME44",
         "contact_last_name": "lname--9853",

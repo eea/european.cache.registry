@@ -44,16 +44,18 @@ def test_export_companies(client):
     assert len(rows) == 2
     assert rows[0][0].value == "company_id"
     assert rows[1][0].value == undertaking.external_id
-    assert rows[0][1].value == "name"
-    assert rows[1][1].value == undertaking.name
-    assert rows[0][2].value == "domain"
-    assert rows[1][2].value == undertaking.domain
-    assert rows[0][3].value == "status"
-    assert rows[1][3].value == undertaking.status
-    assert rows[0][4].value == "undertaking_type"
-    assert rows[1][4].value == undertaking.undertaking_type
-    assert rows[0][5].value == "website"
-    assert rows[1][5].value == undertaking.website
+    assert rows[0][1].value == "registration_id"
+    assert rows[1][1].value == undertaking.registration_id
+    assert rows[0][2].value == "name"
+    assert rows[1][2].value == undertaking.name
+    assert rows[0][3].value == "domain"
+    assert rows[1][3].value == undertaking.domain
+    assert rows[0][4].value == "status"
+    assert rows[1][4].value == undertaking.status
+    assert rows[0][5].value == "undertaking_type"
+    assert rows[1][5].value == undertaking.undertaking_type
+    assert rows[0][6].value == "website"
+    assert rows[1][6].value == undertaking.website
     os.remove(fn)
 
 
@@ -73,16 +75,18 @@ def test_export_companies_domain_filter(client):
     assert len(rows) == 2
     assert rows[0][0].value == "company_id"
     assert rows[1][0].value == undertaking.external_id
-    assert rows[0][1].value == "name"
-    assert rows[1][1].value == undertaking.name
-    assert rows[0][2].value == "domain"
-    assert rows[1][2].value == undertaking.domain
-    assert rows[0][3].value == "status"
-    assert rows[1][3].value == undertaking.status
-    assert rows[0][4].value == "undertaking_type"
-    assert rows[1][4].value == undertaking.undertaking_type
-    assert rows[0][5].value == "website"
-    assert rows[1][5].value == undertaking.website
+    assert rows[0][1].value == "registration_id"
+    assert rows[1][1].value == undertaking.registration_id
+    assert rows[0][2].value == "name"
+    assert rows[1][2].value == undertaking.name
+    assert rows[0][3].value == "domain"
+    assert rows[1][3].value == undertaking.domain
+    assert rows[0][4].value == "status"
+    assert rows[1][4].value == undertaking.status
+    assert rows[0][5].value == "undertaking_type"
+    assert rows[1][5].value == undertaking.undertaking_type
+    assert rows[0][6].value == "website"
+    assert rows[1][6].value == undertaking.website
     os.remove(fn)
 
 
