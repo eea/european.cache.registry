@@ -1,6 +1,14 @@
 Changelog
 =========
 
+3.0.0 - (2026-02-10)
+--------------------
+* Add multi year licences syncronization
+* Add certex syncronization
+* Update ODS syncronization structure
+* Add import for Combined Nomenclature, Substances, Detailed Uses
+  [dianaboiangiu]
+
 2.5.5 - (2026-02-02)
 --------------------
 * Allow companies with FGAS REPORTING_ONLY status to report
