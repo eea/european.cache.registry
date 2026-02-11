@@ -35,6 +35,11 @@ Overview
 * [`/undertaking/[domain]/[company_id]/deliveries/[year]/licences`](#undertakingdomainpkdeliveriesyearlicences---get) - all licences for one undertaking for a certain year
 * [`/undertaking/[domain]/[company_id]/deliveries/[year]/substances`](#undertakingdomainpkdeliveriesyearsubstances---get) - all substances for one undertaking for a certain year
 
+
+**Multi Year Licences calls**
+
+* [`/undertaking/[domain]/[company_id]/multi_year_licences/[year]/aggregated`](#undertakingdomaincompany_idmulti_year_licencesyearaggregated---post) - all multi year licences + aggregated data for one undertaking delivered in a year
+
 **Stocks calls**
 
 * [`/stocks`](#stocks---get) - all stocks in the database
@@ -975,6 +980,80 @@ Provies a list with all the substances for one undertaking for a certain year
         "delivery_id": 2
       }
     ]
+
+
+Multi Year Licences calls
+==============
+
+/undertaking/[domain]/[company_id]/multi_year_licences/[year]/aggregated/ - POST
+-------------------------------------------------------------------------
+
+This url is used to retrive a list of multi year licences available for the given undertaking in the given
+year. Certex information as well as aggregated data will be included in the response.
+
+Response example:
+
+[
+    {
+        "licence_id": 12345,
+        "long_licence_number": "NUMBER12345",
+        "status": "VALID",
+        "status_date": null,
+        "validity_start_date": "01/06/2025",
+        "validity_end_date": "31/06/2028",
+        "licence_type": "IDST",
+        "substance_mixture": "SUBSTANCE",
+        "date_created": "01/01/2026",
+        "date_updated": null,
+        "update_date": "01/01/2025",
+        "eu_only_representative_id": null,
+        "registration_id": "xoedfoj32",
+        "external_id": 12345,
+        "company_name": "NMORGANIZATION--12345",
+        "cn_codes": [
+            {
+                "code": "12345678",
+                "description": "Substance description"
+            }
+        ],
+        "certex_information": [
+            {
+                "year": 2025,
+                "combined_nomenclature_code": "12345678",
+                "customs_procedure": 11,
+                "aggregated_reserved_ods_net_mass": "0",
+                "aggregated_consumed_ods_net_mass": "23.0000"
+            }
+        ],
+        "aggregated_data": [
+            {
+                "year": 2025,
+                "organization_country_name": "BA",
+                "substance": "Substance",
+                "lic_use_kind": "free circulation import",
+                "lic_use_desc": "destruction",
+                "lic_type": "import",
+                "aggregated_reserved_ods_net_mass": "0",
+                "aggregated_consumed_ods_net_mass": "23.0000",
+                "has_certex_data": true,
+                "created_from_certex": false
+            }
+        ],
+        "substances": [
+            {
+                "name": "Substance",
+                "chemical_name": "Substance chemical name"
+            }
+        ],
+        "detailed_uses": [
+            {
+                "short_code": "ABCD",
+                "code": "type.of.detail.use"
+            }
+        ]
+    },
+]
+
 
 Stocks calls
 ============

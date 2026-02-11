@@ -7,7 +7,6 @@ from flask import current_app
 from cache_registry.models import (
     CombinedNomenclature,
     CNQuantity,
-    DetailedUse,
     MultiYearLicence,
     MultiYearLicenceAggregated,
     db,
@@ -121,6 +120,11 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
             cn_quantity.customs_procedure
         )
         licence_object = cn_quantity.multi_year_licence
+        if licence_object.licence_type in ["ILAB", "ELAB"]:
+            current_app.logger.warning(
+                f"Licence {licence_object.long_licence_number} has licence type {licence_object.licence_type} which is not compatible with certex data aggregation."
+            )
+            continue
         substances = get_substances_from_cn_code(
             licence_object.id,
             cn_quantity.combined_nomenclature,
@@ -151,7 +155,6 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                 multi_year_licence_id=licence_object.id,
                 undertaking_id=licence_object.undertaking_id,
                 organization_country_name=licence_object.undertaking.country_code,
-                s_orig_country_name=licence_object.undertaking.country_code_orig,
                 year=year,
                 substance=substance.chemical_name,
                 lic_use_desc=detailed_use_data[0],
@@ -166,7 +169,6 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                     multi_year_licence_id=licence_object.id,
                     undertaking_id=licence_object.undertaking_id,
                     organization_country_name=licence_object.undertaking.country_code,
-                    s_orig_country_name=licence_object.undertaking.country_code_orig,
                     year=year,
                     substance=substance.chemical_name,
                     lic_use_desc=detailed_use_data[0],
@@ -178,7 +180,6 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                         multi_year_licence_id=licence_object.id,
                         undertaking_id=licence_object.undertaking_id,
                         organization_country_name=licence_object.undertaking.country_code,
-                        s_orig_country_name=licence_object.undertaking.country_code_orig,
                         year=year,
                         substance=substance.chemical_name,
                         lic_use_kind=lic_use_kind,

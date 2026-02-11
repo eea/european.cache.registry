@@ -147,6 +147,13 @@ def parse_detailed_uses(licence_object, licence_data):
                 """
             )
             continue
+        if detailed_use_obj.obsolete:
+            current_app.logger.warning(
+                f"""Detailed Use with short code {detailed_use['shortCode']}
+                is marked as obsolete in the database.
+                """
+            )
+            continue
         if detailed_use_obj not in licence_object.detailed_uses:
             licence_object.detailed_uses.append(detailed_use_obj)
     db.session.add(licence_object)
@@ -215,7 +222,6 @@ def generate_multi_year_licence_aggregated(licence_object, year):
                 multi_year_licence_id=licence_object.id,
                 undertaking_id=licence_object.undertaking_id,
                 organization_country_name=licence_object.undertaking.country_code,
-                s_orig_country_name=licence_object.undertaking.country_code_orig,
                 year=year,
                 substance=substance.chemical_name,
                 lic_use_desc=detailed_use_data[0],
@@ -226,7 +232,6 @@ def generate_multi_year_licence_aggregated(licence_object, year):
                     multi_year_licence_id=licence_object.id,
                     undertaking_id=licence_object.undertaking_id,
                     organization_country_name=licence_object.undertaking.country_code,
-                    s_orig_country_name=licence_object.undertaking.country_code_orig,
                     year=year,
                     substance=substance.chemical_name,
                     lic_use_kind=None,
@@ -311,4 +316,8 @@ def call_multi_year_licences(
 
     # generate MultiYearLicenceAggregated entries for each licence object
     for licence_object in licence_objects:
+        # the ILAB/ELAB licences don't have information regarding substances and cn_codes
+        # which are necessary for the aggregation, so those are skipped.
+        if licence_object.licence_type in ["ILAB", "ELAB"]:
+            continue
         generate_multi_year_licence_aggregated(licence_object, year)

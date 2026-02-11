@@ -47,8 +47,13 @@ def get_lic_use_desc_and_lic_type_from_detailed_uses(licence_object):
         if not (detail_use.lic_use_desc, detail_use.lic_type) in detailes_uses_data:
             detailes_uses_data.append((detail_use.lic_use_desc, detail_use.lic_type))
     if not detailes_uses_data:
+        if licence_object.licence_type in ["EHCF", "EHCP", "EHCO"]:
+            return [("", "export")]
+        if licence_object.licence_type in ["IHCF"]:
+            return [("", "import")]
         detailed_use = DetailedUse.query.filter_by(
             licence_type=licence_object.licence_type,
+            obsolete=False,
         ).first()
         if detailed_use:
             detailes_uses_data.append(

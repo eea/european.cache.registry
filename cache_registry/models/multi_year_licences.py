@@ -113,6 +113,7 @@ class DetailedUse(SerializableModel, db.Model):
     lic_type = Column(String(50))
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
+    obsolete = Column(Boolean, default=False)
 
 
 class SubstanceNomenclature(SerializableModel, db.Model):

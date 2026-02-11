@@ -13,22 +13,28 @@ def import_combined_nomenclature():
     df = pandas.read_excel(file_path)
 
     for _, row in df.iterrows():
+        if row["Added from Use list"] == "Yes":
+            continue
+        if not row["Detailed Use short code"] == "NaN":
+            continue
         detailed_use = DetailedUse.query.filter_by(
-            short_code=row["short_code"],
-            code=row["code"],
+            short_code=row["Detailed Use short code"],
+            code=row["Detailed use code"],
         ).first()
         if not detailed_use:
             detailed_use = DetailedUse(
-                licence_type=row["licence_type"],
-                short_code=row["short_code"],
-                code=row["code"],
-                lic_use_desc=row["lic_use_desc"],
-                lic_type=row["lic_type"],
+                licence_type=row["Lic Type code"],
+                short_code=row["Detailed Use short code"],
+                code=row["Detailed use code"],
+                lic_use_desc=row["Lic Use Desc"],
+                lic_type=row["Lic Type"],
+                obsolete=row["Obsolete (from Use list)"] == "Yes",
             )
             db.session.add(detailed_use)
             db.session.commit()
         else:
-            detailed_use.licence_type = row["licence_type"]
-            detailed_use.lic_use_desc = row["lic_use_desc"]
-            detailed_use.lic_type = row["lic_type"]
+            detailed_use.licence_type = row["Lic Type code"]
+            detailed_use.lic_use_desc = row["Lic Use Desc"]
+            detailed_use.lic_type = row["Lic Type"]
+            detailed_use.obsolete = row["Obsolete (from Use list)"] == "Yes"
             db.session.commit()

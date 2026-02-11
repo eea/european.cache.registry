@@ -67,7 +67,11 @@ from .user import (
     UserCompaniesIncludeEcasView,
     UserCompaniesAuditorsView,
 )
-from .multi_year_licences import MultiYearLicenceReturnsViewset
+from .multi_year_licences import (
+    MultiYearLicenceListView,
+    MultiYearLicenceYearListView,
+    MultiYearLicenceReturnsViewset,
+)
 
 api = Blueprint("api", __name__)
 api_manager = AppGroup("api")
@@ -225,6 +229,25 @@ register_url(
     url="/licences/aggregated",
     view=SubstanceListView,
     view_name="all_substances_per_undertaking",
+)
+
+multi_year_licences_prefix = "/undertaking/<domain>/<pk>"
+multi_year_licences_name = "multi_year_licences"
+
+register_url(
+    prefix=multi_year_licences_prefix,
+    name=multi_year_licences_name,
+    url="/multi_year_licences/<year>/aggregated/",
+    view=MultiYearLicenceYearListView,
+    view_name="current_multi_year_licences_per_undertaking",
+)
+
+register_url(
+    prefix=multi_year_licences_prefix,
+    name=multi_year_licences_name,
+    url="/multi_year_licences/aggregated/",
+    view=MultiYearLicenceListView,
+    view_name="all_multi_year_licences_per_undertaking",
 )
 
 register_url(
