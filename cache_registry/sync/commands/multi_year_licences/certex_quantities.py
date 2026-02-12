@@ -1,5 +1,4 @@
 import click
-import decimal
 
 from sqlalchemy import func
 from flask import current_app
@@ -57,8 +56,8 @@ def aggregate_quantities_under_cn_codes(data):
                 if cn_code not in aggregated_data[entry["licenceNumber"]]:
                     aggregated_data[entry["licenceNumber"]][cn_code] = {
                         customs_procedure_number: {
-                            "reserved_ods_net_mass": decimal.Decimal(0.0),
-                            "consumed_ods_net_mass": decimal.Decimal(0.0),
+                            "reserved_ods_net_mass": 0.0,
+                            "consumed_ods_net_mass": 0.0,
                         }
                     }
                 else:
@@ -69,17 +68,11 @@ def aggregate_quantities_under_cn_codes(data):
                         aggregated_data[entry["licenceNumber"]][cn_code][
                             customs_procedure_number
                         ] = {
-                            "reserved_ods_net_mass": decimal.Decimal(0.0),
-                            "consumed_ods_net_mass": decimal.Decimal(0.0),
+                            "reserved_ods_net_mass": 0.0,
+                            "consumed_ods_net_mass": 0.0,
                         }
-                reserved_ods_net_mass = decimal.Decimal(
-                    quantity.get("reservedOdsNetMass", decimal.Decimal(0.0))
-                    or decimal.Decimal(0.0)
-                )
-                consumed_ods_net_mass = decimal.Decimal(
-                    quantity.get("consumedOdsNetMass", decimal.Decimal(0.0))
-                    or decimal.Decimal(0.0)
-                )
+                reserved_ods_net_mass = quantity.get("reservedOdsNetMass", 0.0) or 0.0
+                consumed_ods_net_mass = quantity.get("consumedOdsNetMass", 0.0) or 0.0
 
                 aggregated_data[entry["licenceNumber"]][cn_code][
                     customs_procedure_number

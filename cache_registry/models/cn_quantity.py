@@ -26,12 +26,8 @@ class CNQuantity(SerializableModel, db.Model):
     combined_nomenclature_id = Column(ForeignKey("combined_nomenclature.id"))
     customs_procedure = Column(Integer)  # used to determine lic_use_kind
     year = Column(Integer)  # year
-    aggregated_reserved_ods_net_mass = Column(
-        Float(precision=7, asdecimal=True), default=0.0
-    )
-    aggregated_consumed_ods_net_mass = Column(
-        Float(precision=7, asdecimal=True), default=0.0
-    )
+    aggregated_reserved_ods_net_mass = Column(Float(precision=7), default=0.0)
+    aggregated_consumed_ods_net_mass = Column(Float(precision=7), default=0.0)
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
 

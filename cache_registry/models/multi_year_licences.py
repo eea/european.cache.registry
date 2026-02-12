@@ -82,12 +82,8 @@ class MultiYearLicenceAggregated(SerializableModel, db.Model):
     lic_use_kind = Column(String(100))
     lic_use_desc = Column(String(100))
     lic_type = Column(String(50))
-    aggregated_reserved_ods_net_mass = Column(
-        Float(precision=7, asdecimal=True), default=0.0
-    )
-    aggregated_consumed_ods_net_mass = Column(
-        Float(precision=7, asdecimal=True), default=0.0
-    )
+    aggregated_reserved_ods_net_mass = Column(Float(precision=7), default=0.0)
+    aggregated_consumed_ods_net_mass = Column(Float(precision=7), default=0.0)
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
     created_from_certex = Column(Boolean, default=False)

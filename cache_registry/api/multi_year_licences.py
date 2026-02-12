@@ -4,7 +4,7 @@ import datetime
 from flask import request
 
 from cache_registry.api.views import ListView, ApiView
-from cache_registry.models import MultiYearLicence, Undertaking, CNQuantity
+from cache_registry.models import MultiYearLicence, Undertaking, CNQuantity, Substance
 
 
 class MultiYearLicenceSerializerMixin:
@@ -81,6 +81,84 @@ class MultiYearLicenceSerializerMixin:
         )
         return data
 
+
+class MultiYearLicenceIncludingSingleYearLicenceSerializerMixin:
+
+    @classmethod
+    def serialize_single_year_licence(cls, obj, **kwargs):
+        data = ApiView.serialize(obj)
+        _strip_fields = ("date_created", "date_updated", "delivery_id")
+        for field in _strip_fields:
+            data.pop(field)
+        data["company_id"] = obj.deliverylicence.undertaking.external_id
+        data["use_kind"] = data.pop("lic_use_kind")
+        data["use_desc"] = data.pop("lic_use_desc")
+        data["type"] = data.pop("lic_type")
+        data["quantity"] = data["quantity"]
+        data["is_multi_year_licence"] = False
+        if data["use_desc"] != "laboratory uses":
+            data["quantity"] = int(data["quantity"])
+        return data
+
+    @classmethod
+    def serialize_multi_year_licence(cls, obj, **kwargs):
+        data = {}
+        try:
+            year = int(kwargs.get("year"))
+        except (ValueError, TypeError):
+            year = None
+        if kwargs.get("year"):
+            aggregated_info_objects = obj.aggregated_info.filter_by(
+                year=kwargs.get("year")
+            ).all()
+        else:
+            aggregated_info_objects = obj.aggregated_info.all()
+        if not aggregated_info_objects:
+            data.update(
+                {
+                    "year": year,
+                    "substance": "",
+                    "s_orig_country_name": "",
+                    "quantity": 0,
+                    "organization_country_name": "",
+                    "company_id": obj.undertaking.external_id,
+                    "use_kind": "",
+                    "use_desc": "",
+                    "type": obj.licence_type,
+                    "long_licence_number": obj.long_licence_number,
+                    "has_certex_data": False,
+                    "is_multi_year_licence": True,
+                }
+            )
+        for aggregated_info in aggregated_info_objects:
+            data.update(
+                {
+                    "year": aggregated_info.year,
+                    "substance": aggregated_info.substance,
+                    "s_orig_country_name": "",
+                    "quantity": aggregated_info.aggregated_consumed_ods_net_mass,
+                    "organization_country_name": aggregated_info.organization_country_name,
+                    "company_id": obj.undertaking.external_id,
+                    "use_kind": aggregated_info.lic_use_kind,
+                    "use_desc": aggregated_info.lic_use_desc,
+                    "type": aggregated_info.lic_type,
+                    "licence_type": obj.licence_type,
+                    "long_licence_number": obj.long_licence_number,
+                    "has_certex_data": aggregated_info.has_certex_data,
+                    "is_multi_year_licence": True,
+                }
+            )
+        return data
+
+    @classmethod
+    def serialize(cls, obj, **kwargs):
+        if isinstance(obj, MultiYearLicence):
+            return cls.serialize_multi_year_licence(obj, **kwargs)
+        elif isinstance(obj, Substance):
+            return cls.serialize_single_year_licence(obj, **kwargs)
+        return ApiView.serialize(obj)
+
+
 class MultiYearLicenceReturnsViewset(MultiYearLicenceSerializerMixin, ListView):
     model = MultiYearLicence
 
@@ -118,20 +196,23 @@ class MultiYearLicenceReturnsViewset(MultiYearLicenceSerializerMixin, ListView):
         return multi_year_licences
 
 
-class MultiYearLicenceListView(MultiYearLicenceSerializerMixin, ApiView):
+class MultiYearLicenceListView(
+    MultiYearLicenceIncludingSingleYearLicenceSerializerMixin, ApiView
+):
     model = MultiYearLicence
 
     def get_queryset(self, domain, pk, **kwargs):
         undertaking = Undertaking.query.filter_by(
             domain=domain, external_id=pk
         ).first_or_404()
-        return MultiYearLicence.query.filter_by(
-                undertaking_id=undertaking.id, status="VALID"
+        multi_year_licences = MultiYearLicence.query.filter_by(
+            undertaking_id=undertaking.id, status="VALID"
         )
+        return multi_year_licences
 
     def patch_multi_year_licences(self, **kwargs):
         data = []
-        #TODO: implement when clarifying the use case for this endpoint
+        # TODO: implement when clarifying the use case for this endpoint
         return data
 
     def post(self, **kwargs):
@@ -143,7 +224,9 @@ class MultiYearLicenceListView(MultiYearLicenceSerializerMixin, ApiView):
         return super(MultiYearLicenceListView, self).dispatch_request(**kwargs)
 
 
-class MultiYearLicenceYearListView(MultiYearLicenceSerializerMixin, ApiView):
+class MultiYearLicenceYearListView(
+    MultiYearLicenceIncludingSingleYearLicenceSerializerMixin, ApiView
+):
     model = MultiYearLicence
 
     def get_queryset(self, domain, pk, year, **kwargs):
@@ -151,7 +234,7 @@ class MultiYearLicenceYearListView(MultiYearLicenceSerializerMixin, ApiView):
             domain=domain, external_id=pk
         ).first_or_404()
         multi_year_licences = MultiYearLicence.query.filter_by(
-                undertaking_id=undertaking.id, status="VALID"
+            undertaking_id=undertaking.id, status="VALID"
         )
         year = int(year)
         if year == 2025:
@@ -166,19 +249,21 @@ class MultiYearLicenceYearListView(MultiYearLicenceSerializerMixin, ApiView):
                 MultiYearLicence.validity_end_date >= start_date,
                 MultiYearLicence.validity_start_date <= end_date,
             )
-        return multi_year_licences
-
+        single_year_licences = []
+        delivery = undertaking.deliveries.filter_by(year=year).first()
+        if delivery.substances.count() > 0:
+            single_year_licences = delivery.substances.all()
+        return multi_year_licences.all() + single_year_licences
 
     def patch_multi_year_licences(self, **kwargs):
         data = []
-        #TODO: implement when clarifying the use case for this endpoint
+        # TODO: implement when clarifying the use case for this endpoint
         return data
 
     def post(self, **kwargs):
-        data = [self.serialize(u) for u in self.get_queryset(**kwargs)]
+        data = [self.serialize(u, **kwargs) for u in self.get_queryset(**kwargs)]
         data.extend(self.patch_multi_year_licences(**kwargs))
         return data
 
     def dispatch_request(self, **kwargs):
         return super(MultiYearLicenceYearListView, self).dispatch_request(**kwargs)
-
