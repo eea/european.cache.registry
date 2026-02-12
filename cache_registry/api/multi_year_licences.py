@@ -251,7 +251,7 @@ class MultiYearLicenceYearListView(
             )
         single_year_licences = []
         delivery = undertaking.deliveries.filter_by(year=year).first()
-        if delivery.substances.count() > 0:
+        if delivery and delivery.substances.count() > 0:
             single_year_licences = delivery.substances.all()
         return multi_year_licences.all() + single_year_licences
 
