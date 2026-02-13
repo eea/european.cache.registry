@@ -114,9 +114,27 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
         )
         licence_object = cn_quantity.multi_year_licence
         if licence_object.licence_type in ["ILAB", "ELAB"]:
-            current_app.logger.warning(
-                f"Licence {licence_object.long_licence_number} has licence type {licence_object.licence_type} which is not compatible with certex data aggregation."
-            )
+            multi_year_licence_aggregated = MultiYearLicenceAggregated.query.filter_by(
+                undertaking_id=licence_object.undertaking_id,
+                licence_type=licence_object.licence_type,
+                organization_country_name=licence_object.undertaking.country_code,
+                year=year,
+            ).first()
+            if not multi_year_licence_aggregated:
+                multi_year_licence_aggregated = MultiYearLicenceAggregated(
+                    undertaking_id=licence_object.undertaking_id,
+                    organization_country_name=licence_object.undertaking.country_code,
+                    year=year,
+                    substance=None,
+                    lic_use_kind=None,
+                    lic_use_desc=None,
+                    lic_type=None,
+                    licence_type=licence_object.licence_type,
+                    aggregated_reserved_ods_net_mass=0.0,
+                    aggregated_consumed_ods_net_mass=0.0,
+                )
+                db.session.add(multi_year_licence_aggregated)
+                db.session.commit()
             continue
         substances = get_substances_from_cn_code(
             licence_object.id,
@@ -145,7 +163,6 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
         for substance in substances:
             created = False
             multi_year_licence_aggregated = MultiYearLicenceAggregated.query.filter_by(
-                multi_year_licence_id=licence_object.id,
                 undertaking_id=licence_object.undertaking_id,
                 organization_country_name=licence_object.undertaking.country_code,
                 year=year,
@@ -153,24 +170,24 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                 lic_use_desc=detailed_use_data[0],
                 lic_type=detailed_use_data[1],
                 lic_use_kind=lic_use_kind,
+                licence_type=licence_object.licence_type,
             ).first()
             if not multi_year_licence_aggregated:
                 # first try to retrieve an existing entry without lic_use_kind. It might be
                 # created from multi year licence data and not have lic_use_kind filled in,
                 # as that information is not available there.
                 multi_year_licence_aggregated = MultiYearLicenceAggregated.query.filter_by(
-                    multi_year_licence_id=licence_object.id,
                     undertaking_id=licence_object.undertaking_id,
                     organization_country_name=licence_object.undertaking.country_code,
                     year=year,
                     substance=substance.chemical_name,
                     lic_use_desc=detailed_use_data[0],
                     lic_type=detailed_use_data[1],
+                    licence_type=licence_object.licence_type,
                 ).first()
 
                 if not multi_year_licence_aggregated:
                     multi_year_licence_aggregated = MultiYearLicenceAggregated(
-                        multi_year_licence_id=licence_object.id,
                         undertaking_id=licence_object.undertaking_id,
                         organization_country_name=licence_object.undertaking.country_code,
                         year=year,
@@ -178,6 +195,7 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                         lic_use_kind=lic_use_kind,
                         lic_use_desc=detailed_use_data[0],
                         lic_type=detailed_use_data[1],
+                        licence_type=licence_object.licence_type,
                         aggregated_reserved_ods_net_mass=cn_quantity.aggregated_reserved_ods_net_mass,
                         aggregated_consumed_ods_net_mass=cn_quantity.aggregated_consumed_ods_net_mass,
                         created_from_certex=True,
@@ -277,7 +295,7 @@ def call_certex_quantities(
                     combined_nomenclature_id=cn_code_obj.id,
                     customs_procedure=customs_procedure_number,
                     undertaking_id=licence_object.undertaking_id,
-                    year=2025,
+                    year=year,
                 ).first()
             if cn_quantity_obj:
                 cn_quantity_obj.aggregated_reserved_ods_net_mass += quantities[
@@ -293,7 +311,7 @@ def call_certex_quantities(
                     combined_nomenclature_id=cn_code_obj.id,
                     undertaking_id=licence_object.undertaking_id,
                     customs_procedure=customs_procedure_number,
-                    year=2025,
+                    year=year,
                     aggregated_reserved_ods_net_mass=quantities[
                         "reserved_ods_net_mass"
                     ],

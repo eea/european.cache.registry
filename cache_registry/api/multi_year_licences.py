@@ -4,85 +4,120 @@ import datetime
 from flask import request
 
 from cache_registry.api.views import ListView, ApiView
-from cache_registry.models import MultiYearLicence, Undertaking, CNQuantity, Substance
+from cache_registry.models import (
+    MultiYearLicence,
+    Undertaking,
+    CNQuantity,
+    Substance,
+    MultiYearLicenceAggregated,
+)
 
 
-class MultiYearLicenceSerializerMixin:
+class MultiYearLicenceReturnsViewset(ListView):
+    model = MultiYearLicence
+
     @classmethod
     def serialize(cls, obj, **kwargs):
         year = request.args.get("year")
-        data = ApiView.serialize(obj)
-        _strip_fields = ("undertaking_id",)
-        for field in _strip_fields:
-            data.pop(field)
-
-        cn_quantities = CNQuantity.query.filter_by(multi_year_licence_id=obj.id)
-        if year:
-            cn_quantities = cn_quantities.filter_by(year=int(year))
-        cn_quantities = cn_quantities.all()
-
-        data.update(
-            {
-                "registration_id": obj.undertaking.registration_id,
-                "external_id": obj.undertaking.external_id,
-                "company_name": obj.undertaking.name,
-                "cn_codes": [
-                    {"code": cn.code, "description": cn.description}
-                    for cn in obj.cn_codes
-                ],
-                "certex_information": [
-                    {
-                        "year": cn_quantity.year,
-                        "combined_nomenclature_code": cn_quantity.combined_nomenclature.code,
-                        "customs_procedure": cn_quantity.customs_procedure,
-                        "aggregated_reserved_ods_net_mass": str(
-                            cn_quantity.aggregated_reserved_ods_net_mass
-                        ),
-                        "aggregated_consumed_ods_net_mass": str(
-                            cn_quantity.aggregated_consumed_ods_net_mass
-                        ),
-                    }
-                    for cn_quantity in cn_quantities
-                ],
-                "aggregated_data": [
-                    {
-                        "year": agg.year,
-                        "organization_country_name": agg.organization_country_name,
-                        "substance": agg.substance,
-                        "lic_use_kind": agg.lic_use_kind,
-                        "lic_use_desc": agg.lic_use_desc,
-                        "lic_type": agg.lic_type,
-                        "aggregated_reserved_ods_net_mass": str(
-                            agg.aggregated_reserved_ods_net_mass
-                        ),
-                        "aggregated_consumed_ods_net_mass": str(
-                            agg.aggregated_consumed_ods_net_mass
-                        ),
-                        "has_certex_data": agg.has_certex_data,
-                        "created_from_certex": agg.created_from_certex,
-                    }
-                    for agg in obj.aggregated_info
-                ],
-                "substances": [
-                    {
-                        "name": substance.name,
-                        "chemical_name": substance.chemical_name,
-                    }
-                    for substance in obj.substances
-                ],
-                "detailed_uses": [
-                    {
-                        "short_code": detailed_use.short_code,
-                        "code": detailed_use.code,
-                    }
-                    for detailed_use in obj.detailed_uses
-                ],
-            }
+        company_data = {"multi_year_licences": [], "aggregated_data": []}
+        multi_year_licences = (
+            obj.multi_year_licences.filter_by(year=int(year))
+            if year
+            else obj.multi_year_licences
         )
-        return data
+        for multi_year_licence in multi_year_licences:
+            cn_quantities = CNQuantity.query.filter_by(
+                multi_year_licence_id=multi_year_licence.id
+            )
+            if year:
+                cn_quantities = cn_quantities.filter_by(year=int(year))
+            cn_quantities = cn_quantities.all()
+            company_data["multi_year_licences"].append(
+                {
+                    "registration_id": multi_year_licence.undertaking.registration_id,
+                    "external_id": multi_year_licence.undertaking.external_id,
+                    "company_name": multi_year_licence.undertaking.name,
+                    "cn_codes": [
+                        {"code": cn.code, "description": cn.description}
+                        for cn in multi_year_licence.cn_codes
+                    ],
+                    "certex_information": [
+                        {
+                            "year": cn_quantity.year,
+                            "combined_nomenclature_code": cn_quantity.combined_nomenclature.code,
+                            "customs_procedure": cn_quantity.customs_procedure,
+                            "aggregated_reserved_ods_net_mass": str(
+                                cn_quantity.aggregated_reserved_ods_net_mass
+                            ),
+                            "aggregated_consumed_ods_net_mass": str(
+                                cn_quantity.aggregated_consumed_ods_net_mass
+                            ),
+                        }
+                        for cn_quantity in cn_quantities
+                    ],
+                    "substances": [
+                        {
+                            "name": substance.name,
+                            "chemical_name": substance.chemical_name,
+                        }
+                        for substance in multi_year_licence.substances
+                    ],
+                    "detailed_uses": [
+                        {
+                            "short_code": detailed_use.short_code,
+                            "code": detailed_use.code,
+                        }
+                        for detailed_use in multi_year_licence.detailed_uses
+                    ],
+                }
+            )
+        multi_year_licences_aggregated = (
+            obj.multi_year_licences_aggregated.filter_by(year=int(year))
+            if year
+            else obj.multi_year_licences_aggregated
+        )
+        for multi_year_licence_aggregated in multi_year_licences_aggregated:
+            company_data["aggregated_data"].append(
+                {
+                    "year": multi_year_licence_aggregated.year,
+                    "organization_country_name": multi_year_licence_aggregated.organization_country_name,
+                    "substance": multi_year_licence_aggregated.substance,
+                    "lic_use_kind": multi_year_licence_aggregated.lic_use_kind,
+                    "lic_use_desc": multi_year_licence_aggregated.lic_use_desc,
+                    "lic_type": multi_year_licence_aggregated.lic_type,
+                    "license_type": multi_year_licence_aggregated.licence_type,
+                    "aggregated_reserved_ods_net_mass": str(
+                        multi_year_licence_aggregated.aggregated_reserved_ods_net_mass
+                    ),
+                    "aggregated_consumed_ods_net_mass": str(
+                        multi_year_licence_aggregated.aggregated_consumed_ods_net_mass
+                    ),
+                    "has_certex_data": multi_year_licence_aggregated.has_certex_data,
+                    "created_from_certex": multi_year_licence_aggregated.created_from_certex,
+                }
+            )
+        return {obj.external_id: company_data}
+
+    def get_queryset(self, **kwargs):
+        external_id = request.args.get("external_id")
+        year = request.args.get("year")
+        try:
+            external_id = int(external_id) if external_id else None
+            year = int(year) if year else None
+        except ValueError:
+            return []
+        undertakings = Undertaking.query.filter(
+            Undertaking.domain == "ODS",
+            Undertaking.multi_year_licences.any(
+                MultiYearLicence.year == year if year else True
+            ),
+        )
+        if external_id:
+            undertakings = undertakings.filter_by(external_id=external_id)
+        return undertakings.all()
 
 
-class MultiYearLicenceIncludingSingleYearLicenceSerializerMixin:
+class MultiYearLicenceAggregatedSerializerMixin:
 
     @classmethod
     def serialize_single_year_licence(cls, obj, **kwargs):
@@ -101,103 +136,37 @@ class MultiYearLicenceIncludingSingleYearLicenceSerializerMixin:
         return data
 
     @classmethod
-    def serialize_multi_year_licence(cls, obj, **kwargs):
+    def serialize_multi_year_licence_aggregated(cls, obj, **kwargs):
         data = {}
-        try:
-            year = int(kwargs.get("year"))
-        except (ValueError, TypeError):
-            year = None
-        if kwargs.get("year"):
-            aggregated_info_objects = obj.aggregated_info.filter_by(
-                year=kwargs.get("year")
-            ).all()
-        else:
-            aggregated_info_objects = obj.aggregated_info.all()
-        if not aggregated_info_objects:
-            data.update(
-                {
-                    "year": year,
-                    "substance": "",
-                    "s_orig_country_name": "",
-                    "quantity": 0,
-                    "organization_country_name": "",
-                    "company_id": obj.undertaking.external_id,
-                    "use_kind": "",
-                    "use_desc": "",
-                    "type": obj.licence_type,
-                    "long_licence_number": obj.long_licence_number,
-                    "has_certex_data": False,
-                    "is_multi_year_licence": True,
-                }
-            )
-        for aggregated_info in aggregated_info_objects:
-            data.update(
-                {
-                    "year": aggregated_info.year,
-                    "substance": aggregated_info.substance,
-                    "s_orig_country_name": "",
-                    "quantity": aggregated_info.aggregated_consumed_ods_net_mass,
-                    "organization_country_name": aggregated_info.organization_country_name,
-                    "company_id": obj.undertaking.external_id,
-                    "use_kind": aggregated_info.lic_use_kind,
-                    "use_desc": aggregated_info.lic_use_desc,
-                    "type": aggregated_info.lic_type,
-                    "licence_type": obj.licence_type,
-                    "long_licence_number": obj.long_licence_number,
-                    "has_certex_data": aggregated_info.has_certex_data,
-                    "is_multi_year_licence": True,
-                }
-            )
+        data.update(
+            {
+                "year": obj.year,
+                "substance": obj.substance,
+                "s_orig_country_name": "",
+                "quantity": obj.aggregated_consumed_ods_net_mass,
+                "organization_country_name": obj.organization_country_name,
+                "company_id": obj.undertaking.external_id,
+                "use_kind": obj.lic_use_kind,
+                "use_desc": obj.lic_use_desc,
+                "type": obj.lic_type,
+                "licence_type": obj.licence_type,
+                "has_certex_data": obj.has_certex_data,
+                "is_multi_year_licence": True,
+            }
+        )
         return data
 
     @classmethod
     def serialize(cls, obj, **kwargs):
-        if isinstance(obj, MultiYearLicence):
-            return cls.serialize_multi_year_licence(obj, **kwargs)
+        if isinstance(obj, MultiYearLicenceAggregated):
+            return cls.serialize_multi_year_licence_aggregated(obj, **kwargs)
         elif isinstance(obj, Substance):
             return cls.serialize_single_year_licence(obj, **kwargs)
         return ApiView.serialize(obj)
 
 
-class MultiYearLicenceReturnsViewset(MultiYearLicenceSerializerMixin, ListView):
-    model = MultiYearLicence
-
-    def get_queryset(self, **kwargs):
-        external_id = request.args.get("external_id")
-        year = request.args.get("year")
-        try:
-            external_id = int(external_id) if external_id else None
-            year = int(year) if year else None
-        except ValueError:
-            return []
-
-        multi_year_licences = MultiYearLicence.query
-
-        if external_id:
-            undertaking = Undertaking.query.filter_by(
-                external_id=external_id, domain="ODS"
-            ).first_or_404()
-            multi_year_licences = MultiYearLicence.query.filter_by(
-                undertaking_id=undertaking.id, status="VALID"
-            )
-        if year:
-            if year == 2025:
-                multi_year_licences = multi_year_licences.filter(
-                    MultiYearLicence.validity_end_date >= "2025-03-03",
-                    MultiYearLicence.validity_start_date <= "2025-12-31",
-                )
-            else:
-                start_date = datetime.date(year, 1, 1)
-                end_date = datetime.date(year, 12, 31)
-                multi_year_licences = multi_year_licences.filter(
-                    MultiYearLicence.validity_end_date >= start_date,
-                    MultiYearLicence.validity_start_date <= end_date,
-                )
-        return multi_year_licences
-
-
-class MultiYearLicenceListView(
-    MultiYearLicenceIncludingSingleYearLicenceSerializerMixin, ApiView
+class MultiYearLicenceAggregatedListView(
+    MultiYearLicenceAggregatedSerializerMixin, ApiView
 ):
     model = MultiYearLicence
 
@@ -205,10 +174,14 @@ class MultiYearLicenceListView(
         undertaking = Undertaking.query.filter_by(
             domain=domain, external_id=pk
         ).first_or_404()
-        multi_year_licences = MultiYearLicence.query.filter_by(
-            undertaking_id=undertaking.id, status="VALID"
+        multi_year_licences_aggregated = MultiYearLicenceAggregated.query.filter_by(
+            undertaking_id=undertaking.id
         )
-        return multi_year_licences
+        single_year_licences = []
+        deliveries = undertaking.deliveries.all()
+        for delivery in deliveries:
+            single_year_licences.extend(delivery.substances.all())
+        return multi_year_licences_aggregated.all() + single_year_licences
 
     def patch_multi_year_licences(self, **kwargs):
         data = []
@@ -221,39 +194,28 @@ class MultiYearLicenceListView(
         return data
 
     def dispatch_request(self, **kwargs):
-        return super(MultiYearLicenceListView, self).dispatch_request(**kwargs)
+        return super(MultiYearLicenceAggregatedListView, self).dispatch_request(
+            **kwargs
+        )
 
 
-class MultiYearLicenceYearListView(
-    MultiYearLicenceIncludingSingleYearLicenceSerializerMixin, ApiView
+class MultiYearLicenceAggregatedYearListView(
+    MultiYearLicenceAggregatedSerializerMixin, ApiView
 ):
-    model = MultiYearLicence
+    model = MultiYearLicenceAggregated
 
     def get_queryset(self, domain, pk, year, **kwargs):
         undertaking = Undertaking.query.filter_by(
             domain=domain, external_id=pk
         ).first_or_404()
-        multi_year_licences = MultiYearLicence.query.filter_by(
-            undertaking_id=undertaking.id, status="VALID"
+        multi_year_licences_aggregated = MultiYearLicenceAggregated.query.filter_by(
+            undertaking_id=undertaking.id, year=year
         )
-        year = int(year)
-        if year == 2025:
-            multi_year_licences = multi_year_licences.filter(
-                MultiYearLicence.validity_end_date >= "2025-03-03",
-                MultiYearLicence.validity_start_date <= "2025-12-31",
-            )
-        else:
-            start_date = datetime.date(year, 1, 1)
-            end_date = datetime.date(year, 12, 31)
-            multi_year_licences = multi_year_licences.filter(
-                MultiYearLicence.validity_end_date >= start_date,
-                MultiYearLicence.validity_start_date <= end_date,
-            )
         single_year_licences = []
         delivery = undertaking.deliveries.filter_by(year=year).first()
         if delivery and delivery.substances.count() > 0:
             single_year_licences = delivery.substances.all()
-        return multi_year_licences.all() + single_year_licences
+        return multi_year_licences_aggregated.all() + single_year_licences
 
     def patch_multi_year_licences(self, **kwargs):
         data = []
@@ -266,4 +228,6 @@ class MultiYearLicenceYearListView(
         return data
 
     def dispatch_request(self, **kwargs):
-        return super(MultiYearLicenceYearListView, self).dispatch_request(**kwargs)
+        return super(MultiYearLicenceAggregatedYearListView, self).dispatch_request(
+            **kwargs
+        )

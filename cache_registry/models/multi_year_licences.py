@@ -64,15 +64,11 @@ class MultiYearLicence(SerializableModel, db.Model):
 class MultiYearLicenceAggregated(SerializableModel, db.Model):
     __tablename__ = "multi_year_licence_aggregated"
     """
-    Aggregated information about the MultiYearLicence. For each entry in the MultiYearLicence,
-    for each year that the licence is valid, there is an entry in this table with the aggregated
-    reserved and consumed ODS net mass.
+    Aggregated information about the MultiYearLicence.
     """
 
     id = Column(Integer, primary_key=True)
-    multi_year_licence_id = Column(ForeignKey("multi_year_licence.id"))
     undertaking_id = Column(ForeignKey("undertaking.id"), nullable=True, default=None)
-
     s_orig_country_name = Column(String(100))  # still not sure how to get this value
     organization_country_name = Column(
         String(4)
@@ -82,6 +78,7 @@ class MultiYearLicenceAggregated(SerializableModel, db.Model):
     lic_use_kind = Column(String(100))
     lic_use_desc = Column(String(100))
     lic_type = Column(String(50))
+    licence_type = Column(String(10))
     aggregated_reserved_ods_net_mass = Column(Float(precision=7), default=0.0)
     aggregated_consumed_ods_net_mass = Column(Float(precision=7), default=0.0)
     date_created = Column(Date, default=date.today)
@@ -93,9 +90,6 @@ class MultiYearLicenceAggregated(SerializableModel, db.Model):
         "Undertaking",
         backref=db.backref("multi_year_licences_aggregated", lazy="dynamic"),
     )  # organisation
-    multi_year_licence = relationship(
-        "MultiYearLicence", backref=db.backref("aggregated_info", lazy="dynamic")
-    )
 
 
 class DetailedUse(SerializableModel, db.Model):

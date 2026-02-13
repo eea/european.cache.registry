@@ -68,8 +68,8 @@ from .user import (
     UserCompaniesAuditorsView,
 )
 from .multi_year_licences import (
-    MultiYearLicenceListView,
-    MultiYearLicenceYearListView,
+    MultiYearLicenceAggregatedListView,
+    MultiYearLicenceAggregatedYearListView,
     MultiYearLicenceReturnsViewset,
 )
 
@@ -238,7 +238,7 @@ register_url(
     prefix=multi_year_licences_prefix,
     name=multi_year_licences_name,
     url="/multi_year_licences/<year>/aggregated/",
-    view=MultiYearLicenceYearListView,
+    view=MultiYearLicenceAggregatedYearListView,
     view_name="current_multi_year_licences_per_undertaking",
 )
 
@@ -246,7 +246,7 @@ register_url(
     prefix=multi_year_licences_prefix,
     name=multi_year_licences_name,
     url="/multi_year_licences/aggregated/",
-    view=MultiYearLicenceListView,
+    view=MultiYearLicenceAggregatedListView,
     view_name="all_multi_year_licences_per_undertaking",
 )
 

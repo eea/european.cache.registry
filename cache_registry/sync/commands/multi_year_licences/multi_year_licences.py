@@ -41,7 +41,7 @@ def get_multi_year_licences(
     return get_response_offset(url, params)
 
 
-def aggregate_multi_year_licences_to_undertakings(data):
+def aggregate_multi_year_licences_to_undertakings(data, year):
     """
     Receive the following structure:
     [
@@ -84,6 +84,28 @@ def aggregate_multi_year_licences_to_undertakings(data):
                 current_app.logger.error(message)
             continue
 
+        # check for 2025 if licence is valid between 03.03.2025 and 31.12.2025, as the API might
+        # return licences that were valid in 2025 until 03 March but not after that date
+        if year == "2025":
+            if (
+                not (
+                    licence["validityStartDate"] <= "2025-12-31"
+                    and licence["validityEndDate"] >= "2025-03-03"
+                )
+                and licence["validityStartDate"] >= "2025-03-03"
+            ):
+                current_app.logger.warning(
+                    f"""Undertaking with registration ID {licence['registrationNumId']} not valid in 2025
+                        Validity start date: {licence['validityStartDate']}, Validity end date: {licence['validityEndDate']}
+                        """
+                )
+                continue
+        if licence["status"] not in ["VALID", "EXPIRED"]:
+            current_app.logger.warning(
+                f"""Licence with registration ID {licence['registrationNumId']} has status {licence['status']}
+                """
+            )
+            continue
         if undertaking_obj.registration_id not in undertakings:
             undertakings[undertaking_obj.registration_id] = {
                 "licences": [],
@@ -219,8 +241,8 @@ def generate_multi_year_licence_aggregated(licence_object, year):
                 continue
             detailed_use_data = detailed_uses_data[0]
             multi_year_licence_aggregated = MultiYearLicenceAggregated.query.filter_by(
-                multi_year_licence_id=licence_object.id,
                 undertaking_id=licence_object.undertaking_id,
+                licence_type=licence_object.licence_type,
                 organization_country_name=licence_object.undertaking.country_code,
                 year=year,
                 substance=substance.chemical_name,
@@ -229,7 +251,6 @@ def generate_multi_year_licence_aggregated(licence_object, year):
             ).first()
             if not multi_year_licence_aggregated:
                 multi_year_licence_aggregated = MultiYearLicenceAggregated(
-                    multi_year_licence_id=licence_object.id,
                     undertaking_id=licence_object.undertaking_id,
                     organization_country_name=licence_object.undertaking.country_code,
                     year=year,
@@ -237,6 +258,7 @@ def generate_multi_year_licence_aggregated(licence_object, year):
                     lic_use_kind=None,
                     lic_use_desc=detailed_use_data[0],
                     lic_type=detailed_use_data[1],
+                    licence_type=licence_object.licence_type,
                     aggregated_reserved_ods_net_mass=0.0,  # this will be updated with the Certex data in the next step
                     aggregated_consumed_ods_net_mass=0.0,  # this will be updated with the Certex data in the next step
                 )
@@ -296,7 +318,9 @@ def call_multi_year_licences(
     )
 
     # aggregate multi year licences under undertakings
-    undertakings_with_licences = aggregate_multi_year_licences_to_undertakings(data)
+    undertakings_with_licences = aggregate_multi_year_licences_to_undertakings(
+        data, year
+    )
     licence_objects = []
 
     # create/update MultiYearLicence entries for each licence and collect them in a list to be
@@ -317,7 +341,29 @@ def call_multi_year_licences(
     # generate MultiYearLicenceAggregated entries for each licence object
     for licence_object in licence_objects:
         # the ILAB/ELAB licences don't have information regarding substances and cn_codes
-        # which are necessary for the aggregation, so those are skipped.
+        # which are necessary for the aggregation, so only one MultiYearLicenceAggregated entry
+        # will be created for each ILAB/ELAB licence, with only the licence_type filled.
         if licence_object.licence_type in ["ILAB", "ELAB"]:
+            multi_year_licence_aggregated = MultiYearLicenceAggregated.query.filter_by(
+                undertaking_id=licence_object.undertaking_id,
+                licence_type=licence_object.licence_type,
+                organization_country_name=licence_object.undertaking.country_code,
+                year=year,
+            ).first()
+            if not multi_year_licence_aggregated:
+                multi_year_licence_aggregated = MultiYearLicenceAggregated(
+                    undertaking_id=licence_object.undertaking_id,
+                    organization_country_name=licence_object.undertaking.country_code,
+                    year=year,
+                    substance=None,
+                    lic_use_kind=None,
+                    lic_use_desc=None,
+                    lic_type=None,
+                    licence_type=licence_object.licence_type,
+                    aggregated_reserved_ods_net_mass=0.0,
+                    aggregated_consumed_ods_net_mass=0.0,
+                )
+                db.session.add(multi_year_licence_aggregated)
+                db.session.commit()
             continue
         generate_multi_year_licence_aggregated(licence_object, year)
