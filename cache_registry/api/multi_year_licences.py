@@ -34,6 +34,13 @@ class MultiYearLicenceReturnsViewset(ListView):
             cn_quantities = cn_quantities.all()
             company_data["multi_year_licences"].append(
                 {
+                    "licence_id": multi_year_licence.licence_id,
+                    "long_licence_number": multi_year_licence.long_licence_number,
+                    "status": multi_year_licence.status,
+                    "status_date": str(multi_year_licence.status_date),
+                    "validity_start_date": str(multi_year_licence.validity_start_date),
+                    "validity_end_date": str(multi_year_licence.validity_end_date),
+                    "update_date": str(multi_year_licence.update_date),
                     "registration_id": multi_year_licence.undertaking.registration_id,
                     "external_id": multi_year_licence.undertaking.external_id,
                     "company_name": multi_year_licence.undertaking.name,
