@@ -2,6 +2,7 @@
 import datetime
 
 from flask import request
+from sqlalchemy import and_
 
 from cache_registry.api.views import ListView, ApiView
 from cache_registry.models import (
@@ -21,7 +22,11 @@ class MultiYearLicenceReturnsViewset(ListView):
         year = request.args.get("year")
         company_data = {"multi_year_licences": [], "aggregated_data": []}
         multi_year_licences = (
-            obj.multi_year_licences.filter_by(year=int(year))
+            obj.multi_year_licences.filter(
+                MultiYearLicence.validity_start_date
+                <= datetime.date(int(year), 12, 31),
+                MultiYearLicence.validity_end_date >= datetime.date(int(year), 1, 1),
+            )
             if year
             else obj.multi_year_licences
         )
@@ -115,10 +120,17 @@ class MultiYearLicenceReturnsViewset(ListView):
             return []
         undertakings = Undertaking.query.filter(
             Undertaking.domain == "ODS",
-            Undertaking.multi_year_licences.any(
-                MultiYearLicence.year == year if year else True
-            ),
         )
+        if year:
+            undertakings = undertakings.filter(
+                Undertaking.multi_year_licences.any(
+                    and_(
+                        MultiYearLicence.validity_start_date
+                        <= datetime.date(year, 12, 31),
+                        MultiYearLicence.validity_end_date >= datetime.date(year, 1, 1),
+                    )
+                )
+            )
         if external_id:
             undertakings = undertakings.filter_by(external_id=external_id)
         return undertakings.all()
