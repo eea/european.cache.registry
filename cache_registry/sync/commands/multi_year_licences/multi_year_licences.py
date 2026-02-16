@@ -22,22 +22,12 @@ from cache_registry.sync.commands.multi_year_licences.utils import (
 
 def get_multi_year_licences(
     year,
-    registration_id=None,
-    long_licence_number=None,
-    licence_id=None,
-    offset=0,
     page_size=200,
 ):
     """Get latest multiyearlicences data from the ODS API"""
-
+    offset = 0
     url = get_absolute_url("API_URL_ODS", "/latest/licences/multiyear/")
     params = {"year": year, "offset": offset, "pageSize": page_size}
-    if registration_id:
-        params["registrationId"] = registration_id
-    if long_licence_number:
-        params["longLicenceNumber"] = long_licence_number
-    if licence_id:
-        params["licenceId"] = licence_id
     return get_response_offset(url, params)
 
 
@@ -274,47 +264,23 @@ def generate_multi_year_licence_aggregated(licence_object, year):
     help="The year during which license were considered 'Valid' at any time",
     required=True,
 )
-@click.option(
-    "-r",
-    "--registration_id",
-    "registration_id",
-    help="Undertaking registration ID number for filtering",
-)
-@click.option(
-    "-ln",
-    "--long_licence_number",
-    "long_licence_number",
-    help="Licence number for filtering",
-)
-@click.option("-l", "--licence_id", "licence_id", help="Licence ID for filtering")
-@click.option(
-    "-o", "--offset", "offset", help="Offset of rows from the start", default=0
-)
 @click.option("-p", "--page_size", "page_size", help="Page size", default=200)
 def multi_year_licences(
     year,
-    registration_id=None,
-    long_licence_number=None,
-    licence_id=None,
-    offset=0,
     page_size=200,
 ):
     return call_multi_year_licences(
-        year, registration_id, long_licence_number, licence_id, offset, page_size
+        year, page_size
     )
 
 
 def call_multi_year_licences(
     year,
-    registration_id=None,
-    long_licence_number=None,
-    licence_id=None,
-    offset=0,
     page_size=200,
 ):
     # get multi year licences data from the ODS API
     data = get_multi_year_licences(
-        year, registration_id, long_licence_number, licence_id, offset, page_size
+        year, page_size
     )
 
     # aggregate multi year licences under undertakings

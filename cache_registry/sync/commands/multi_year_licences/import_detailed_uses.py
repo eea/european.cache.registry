@@ -13,7 +13,7 @@ def import_combined_nomenclature():
     df = pandas.read_excel(file_path)
 
     for _, row in df.iterrows():
-        if row["Added from Use list"] == "Yes":
+        if row["No reporting obligation"] == "Yes":
             continue
         if not row["Detailed Use short code"] == "NaN":
             continue
@@ -28,7 +28,7 @@ def import_combined_nomenclature():
                 code=row["Detailed use code"],
                 lic_use_desc=row["Lic Use Desc"],
                 lic_type=row["Lic Type"],
-                obsolete=row["Obsolete (from Use list)"] == "Yes",
+                obsolete=row["Obsolete"] == "Yes",
             )
             db.session.add(detailed_use)
             db.session.commit()
@@ -36,5 +36,5 @@ def import_combined_nomenclature():
             detailed_use.licence_type = row["Lic Type code"]
             detailed_use.lic_use_desc = row["Lic Use Desc"]
             detailed_use.lic_type = row["Lic Type"]
-            detailed_use.obsolete = row["Obsolete (from Use list)"] == "Yes"
+            detailed_use.obsolete = row["Obsolete"] == "Yes"
             db.session.commit()

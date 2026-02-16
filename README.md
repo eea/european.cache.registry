@@ -118,29 +118,12 @@ the ports directive (e.g. "5000:5000" instead of "5000").
 
 ## Syncronise with FGAS/ODS Portal
 
-* Fetch the latest data from a test server:
+* #### [Syncronize companies](docs/ods_fgas_sync.md)
+* #### [Syncronise single year licences](docs/single_year_licences.md)
+* #### [Syncronise multi year licences](docs/multi_year_licences.md)
+* #### [Syncronise auditors]
 
-        python -m flask sync fgases [-d 30]
-        python -m flask sync ods [-d 30]
-
-
-* In order to sync from a long time ago, it is advised to use pagination. To use pagination, you must give -p parameter, containing the
-* number of companies that are brought in one request.
-
-        python -m flask sync fgases [-d 30] [-p 100]
-        python -m flask sync ods [-d 30] [-p 100]
-
-* Fetch a specific company by providing the external id:
-
-        python -m flask sync fgases [-i 12345]
-        python -m flask sync ods [-i 12345]
-
-
-* In order to sync BDR collections title with the cache server's corresponding undertakings name:
-
-        python -m flask sync sync_collections_title
-
-* For syncing bdr without SSL verification, set the following switch in settings:
+For syncing bdr without SSL verification, set the following switch in settings:
 
         HTTPS_VERIFY = False
 
@@ -157,19 +140,9 @@ be patched.
 For patching the company data, set `PATCH_AUDITORS` to a dictionary
 containing values to be updated. Use the auditor uid as a key.
 
-## Syncronise with Licence Portal
 
-* The licences for ODS are now taken from DG Clima and exposed:
-        python -m flask sync licences 2017 2017-1
-        python -m flask sync licences 2017 2017-1
 
-* The first parameter [2017], represents the year from which those deliveries are taken.
-* The second parameter [2017-1], represents the name of the delivery.
-
-* The licences are taken for each company. When a new delivery arrives, all old deliveries of the company are moved to
-the history object that contains that delivery and for that company.
-
-### Matching
+## Matching
 
 * Modify the fuzzy matching algorithm percent value (how much should old and new be alike):
 

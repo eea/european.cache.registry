@@ -21,7 +21,7 @@ from cache_registry.sync.commands.multi_year_licences.utils import (
 
 
 def get_certex_quantities(
-    from_date, to_date, registration_id=None, offset=0, page_size=200
+    from_date, to_date, page_size=200
 ):
     """Get certex quantities from specific API url"""
 
@@ -29,11 +29,8 @@ def get_certex_quantities(
     params = {
         "fromDate": from_date,
         "toDate": to_date,
-        "offset": offset,
         "pageSize": page_size,
     }
-    if registration_id:
-        params["registrationId"] = registration_id
     return get_response_offset(url, params)
 
 
@@ -222,21 +219,12 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
     "-fd", "--from_date", "from_date", help="Start date for filtering (DDMMYYYY)"
 )
 @click.option("-td", "--to_date", "to_date", help="End date for filtering (DDMMYYYY)")
-@click.option(
-    "-r",
-    "--registration_id",
-    "registration_id",
-    help="Undertaking registration ID number for filtering",
-)
-@click.option(
-    "-o", "--offset", "offset", help="Offset of rows from the start", default=0
-)
 @click.option("-p", "--page_size", "page_size", help="Page size", default=200)
 def certex_quantities(
-    year, from_date, to_date, registration_id=None, offset=0, page_size=200
+    year, from_date, to_date, page_size=200
 ):
     return call_certex_quantities(
-        year, from_date, to_date, registration_id, offset, page_size
+        year, from_date, to_date, page_size
     )
 
 
@@ -244,8 +232,6 @@ def call_certex_quantities(
     year,
     from_date,
     to_date,
-    registration_id=None,
-    offset=0,
     page_size=200,
 ):
     if not from_date or not to_date:
@@ -261,7 +247,7 @@ def call_certex_quantities(
     db.session.commit()
 
     # get certex quantities data from the API
-    data = get_certex_quantities(from_date, to_date, registration_id, offset, page_size)
+    data = get_certex_quantities(from_date, to_date, page_size)
 
     # aggregate quantities under CN codes for each licence
     aggregated_data = aggregate_quantities_under_cn_codes(data)
