@@ -1,6 +1,7 @@
 # coding=utf-8
 import datetime
 
+from flask import current_app
 from flask import request
 from sqlalchemy import and_
 
@@ -204,7 +205,13 @@ class MultiYearLicenceAggregatedListView(
 
     def patch_multi_year_licences(self, **kwargs):
         data = []
-        # TODO: implement when clarifying the use case for this endpoint
+        pk = int(kwargs["pk"])
+        patch = current_app.config.get("PATCH_MULTI_YEAR_LICENCES", [])
+        for element in patch:
+            if element.get("company_id") == pk:
+                if element["use_desc"] != "laboratory uses":
+                    element["quantity"] = int(element["quantity"])
+                data.append(element)
         return data
 
     def post(self, **kwargs):
@@ -238,7 +245,14 @@ class MultiYearLicenceAggregatedYearListView(
 
     def patch_multi_year_licences(self, **kwargs):
         data = []
-        # TODO: implement when clarifying the use case for this endpoint
+        year = int(kwargs["year"])
+        pk = int(kwargs["pk"])
+        patch = current_app.config.get("PATCH_MULTI_YEAR_LICENCES", [])
+        for element in patch:
+            if element.get("year") == year and element.get("company_id") == pk:
+                if element["use_desc"] != "laboratory uses":
+                    element["quantity"] = int(element["quantity"])
+                data.append(element)
         return data
 
     def post(self, **kwargs):

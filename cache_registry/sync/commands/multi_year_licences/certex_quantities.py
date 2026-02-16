@@ -255,8 +255,9 @@ def call_certex_quantities(
 
     # for each licence and CN code, create or update CNQuantity entries in the database
     for licence_number, cn_codes_data in aggregated_data.items():
-        licence_object = MultiYearLicence.query.filter_by(
-            long_licence_number=licence_number, status="VALID"
+        licence_object = MultiYearLicence.query.filter(
+            MultiYearLicence.long_licence_number == licence_number,
+            MultiYearLicence.status.in_(["VALID", "EXPIRED"]),
         ).first()
         if not licence_object:
             current_app.logger.warning(

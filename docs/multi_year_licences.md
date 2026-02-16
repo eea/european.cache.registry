@@ -34,3 +34,8 @@ This information is fetched from 2 separate endpoints using 2 different commands
   can receive a --from_data and --to_date parameters. This will restrict the period between which the information is pulled and aggregated for a year. Those parameters are not however mandatory, as on receiving the mandatory year parameter, the information is pulled from 01.01.[year] to 31.12.[year] (with an exception for 2025).
     
        python -m flask sync certex_quantities -y [--year 2025] -fd [--from_date 01012025] -td [--to_date 31122025] -o [--offset 200] -p [--page_size 200]
+
+
+For patching licences, set `PATCH_MULTI_YEAR_LICENCES` to a list of licences to be added to
+a licences/aggregated endpoint. Only the data for the company_id and the given year will
+be patched.
