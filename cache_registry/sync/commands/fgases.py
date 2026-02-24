@@ -25,15 +25,22 @@ from cache_registry.sync.utils import get_last_update, log_changes
 @click.option(
     "-r", "--registration_id", "registration_id", help="Registration id of a company"
 )
-def fgases(days=7, updated_since=None, page_size=200, id=None, registration_id=None):
-    return call_fgases(days, updated_since, page_size, id, registration_id)
+@click.option(
+    "--fetch_last_day_only",
+    "fetch_last_day_only",
+    is_flag=True,
+    help="Fetch only the last day of data, ignoring the days parameter",
+)
+def fgases(days=7, updated_since=None, page_size=200, id=None, registration_id=None, fetch_last_day_only=False):
+    return call_fgases(days, updated_since, page_size, id, registration_id, fetch_last_day_only)
 
 
 def call_fgases(
-    days=3, updated_since=None, page_size=200, id=None, registration_id=None
+    days=3, updated_since=None, page_size=200, id=None,
+    registration_id=None, fetch_last_day_only=True
 ):
     if not id and not registration_id:
-        last_update = get_last_update(days, updated_since, domain=FGAS)
+        last_update = get_last_update(days, updated_since, domain=FGAS, fetch_last_day_only=fetch_last_day_only)
     else:
         last_update = None
         identifier = id if id else registration_id
