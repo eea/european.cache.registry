@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.1 - (2026-02-24)
+--------------------
+* Temporarly fix fgases sync
+  [dianaboiangiu]
+
 3.0.0 - (2026-02-10)
 --------------------
 * Add multi year licences syncronization
