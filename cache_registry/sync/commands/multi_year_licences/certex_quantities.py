@@ -47,11 +47,12 @@ def aggregate_quantities_under_cn_codes(data):
             # and reserved/consumed masses as values
             aggregated_data[entry["licenceNumber"]] = {}
         for mrn in entry.get("mrns", []):
+            s_orig_country_name = mrn['internationalPartnerCountry'][-1]
             for quantity in mrn.get("quantities", []):
                 cn_code = quantity["cnCode"]
-                customs_procedure_number = quantity.get("customsProcedure")
-                if cn_code not in aggregated_data[entry["licenceNumber"]]:
-                    aggregated_data[entry["licenceNumber"]][cn_code] = {
+                customs_procedure_number = quantity.get('customsProcedure')[-1]
+                if (cn_code,s_orig_country_name) not in aggregated_data[entry["licenceNumber"]]:
+                    aggregated_data[entry["licenceNumber"]][(cn_code, s_orig_country_name)] = {
                         customs_procedure_number: {
                             "reserved_ods_net_mass": 0.0,
                             "consumed_ods_net_mass": 0.0,
@@ -60,9 +61,9 @@ def aggregate_quantities_under_cn_codes(data):
                 else:
                     if (
                         customs_procedure_number
-                        not in aggregated_data[entry["licenceNumber"]][cn_code]
+                        not in aggregated_data[entry["licenceNumber"]][(cn_code, s_orig_country_name)]
                     ):
-                        aggregated_data[entry["licenceNumber"]][cn_code][
+                        aggregated_data[entry["licenceNumber"]][(cn_code, s_orig_country_name)][
                             customs_procedure_number
                         ] = {
                             "reserved_ods_net_mass": 0.0,
@@ -71,10 +72,10 @@ def aggregate_quantities_under_cn_codes(data):
                 reserved_ods_net_mass = quantity.get("reservedOdsNetMass", 0.0) or 0.0
                 consumed_ods_net_mass = quantity.get("consumedOdsNetMass", 0.0) or 0.0
 
-                aggregated_data[entry["licenceNumber"]][cn_code][
+                aggregated_data[entry["licenceNumber"]][(cn_code, s_orig_country_name)][
                     customs_procedure_number
                 ]["reserved_ods_net_mass"] += reserved_ods_net_mass
-                aggregated_data[entry["licenceNumber"]][cn_code][
+                aggregated_data[entry["licenceNumber"]][(cn_code, s_orig_country_name)][
                     customs_procedure_number
                 ]["consumed_ods_net_mass"] += consumed_ods_net_mass
     return aggregated_data
@@ -163,6 +164,7 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                 undertaking_id=licence_object.undertaking_id,
                 organization_country_name=licence_object.undertaking.country_code,
                 year=year,
+                s_orig_country_name=cn_quantity.s_orig_country_name,
                 substance=substance.chemical_name,
                 lic_use_desc=detailed_use_data[0],
                 lic_type=detailed_use_data[1],
@@ -177,6 +179,7 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                     undertaking_id=licence_object.undertaking_id,
                     organization_country_name=licence_object.undertaking.country_code,
                     year=year,
+                    s_orig_country_name=cn_quantity.s_orig_country_name,
                     substance=substance.chemical_name,
                     lic_use_desc=detailed_use_data[0],
                     lic_type=detailed_use_data[1],
@@ -188,6 +191,7 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                         undertaking_id=licence_object.undertaking_id,
                         organization_country_name=licence_object.undertaking.country_code,
                         year=year,
+                        s_orig_country_name=cn_quantity.s_orig_country_name,
                         substance=substance.chemical_name,
                         lic_use_kind=lic_use_kind,
                         lic_use_desc=detailed_use_data[0],
@@ -264,7 +268,7 @@ def call_certex_quantities(
                 f"Licence with number {licence_number} not found in the application or not valid."
             )
             continue
-        for cn_code, quantities_under_customs_procedure in cn_codes_data.items():
+        for (cn_code, s_orig_country_name), quantities_under_customs_procedure in cn_codes_data.items():
             cn_code_obj = CombinedNomenclature.query.filter(
                 func.replace(CombinedNomenclature.code, " ", "") == cn_code
             ).first()
@@ -280,6 +284,7 @@ def call_certex_quantities(
                 cn_quantity_obj = CNQuantity.query.filter_by(
                     multi_year_licence_id=licence_object.id,
                     combined_nomenclature_id=cn_code_obj.id,
+                    s_orig_country_name=s_orig_country_name,
                     customs_procedure=customs_procedure_number,
                     undertaking_id=licence_object.undertaking_id,
                     year=year,
@@ -297,6 +302,7 @@ def call_certex_quantities(
                     multi_year_licence_id=licence_object.id,
                     combined_nomenclature_id=cn_code_obj.id,
                     undertaking_id=licence_object.undertaking_id,
+                    s_orig_country_name=s_orig_country_name,
                     customs_procedure=customs_procedure_number,
                     year=year,
                     aggregated_reserved_ods_net_mass=quantities[

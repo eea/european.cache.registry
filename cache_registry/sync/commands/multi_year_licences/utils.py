@@ -6,15 +6,15 @@ from cache_registry.models import (
 )
 
 CUSTOMS_PROCEDURE_NUMBER_TO_LIC_USE_KIND_CONVERSION = {
-    40: "free circulation import",
-    42: "VAT-exempt free circulation",
+    40: "free circulation",
+    42: "free circulation",
     51: "inward processing",
-    53: "temporary admission",
-    61: "end-use / outward processing",
+    53: "transit",
+    61: "re-import",
     71: "warehousing",
     78: "free zones",
-    10: "export",
-    31: "re-export and transit",
+    10: "permanent export",
+    31: "re-export",
 }
 
 

@@ -59,6 +59,7 @@ class MultiYearLicenceReturnsViewset(ListView):
                             "year": cn_quantity.year,
                             "combined_nomenclature_code": cn_quantity.combined_nomenclature.code,
                             "customs_procedure": cn_quantity.customs_procedure,
+                            "s_orig_country_name": cn_quantity.s_orig_country_name,
                             "aggregated_reserved_ods_net_mass": str(
                                 cn_quantity.aggregated_reserved_ods_net_mass
                             ),
