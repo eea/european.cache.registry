@@ -179,13 +179,13 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                     undertaking_id=licence_object.undertaking_id,
                     organization_country_name=licence_object.undertaking.country_code,
                     year=year,
-                    s_orig_country_name=cn_quantity.s_orig_country_name,
                     substance=substance.chemical_name,
                     lic_use_desc=detailed_use_data[0],
                     lic_type=detailed_use_data[1],
                     licence_type=licence_object.licence_type,
+                    lic_use_kind=None,
+                    s_orig_country_name=None,
                 ).first()
-
                 if not multi_year_licence_aggregated:
                     multi_year_licence_aggregated = MultiYearLicenceAggregated(
                         undertaking_id=licence_object.undertaking_id,
@@ -203,8 +203,11 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                         has_certex_data=True,
                     )
                     created = True
+                    db.session.add(multi_year_licence_aggregated)
+                    db.session.commit()
                 else:
                     multi_year_licence_aggregated.lic_use_kind = lic_use_kind
+                    multi_year_licence_aggregated.s_orig_country_name = cn_quantity.s_orig_country_name
             if not created:
                 multi_year_licence_aggregated.aggregated_reserved_ods_net_mass += (
                     cn_quantity.aggregated_reserved_ods_net_mass
@@ -213,8 +216,8 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
                     cn_quantity.aggregated_consumed_ods_net_mass
                 )
                 multi_year_licence_aggregated.has_certex_data = True
-            db.session.add(multi_year_licence_aggregated)
-    db.session.commit()
+                db.session.add(multi_year_licence_aggregated)
+                db.session.commit()
 
 
 @sync_manager.command("certex_quantities")

@@ -163,7 +163,7 @@ class MultiYearLicenceAggregatedSerializerMixin:
             {
                 "year": obj.year,
                 "substance": obj.substance,
-                "s_orig_country_name": "",
+                "s_orig_country_name": obj.s_orig_country_name,
                 "quantity": obj.aggregated_consumed_ods_net_mass,
                 "organization_country_name": obj.organization_country_name,
                 "company_id": obj.undertaking.external_id,
