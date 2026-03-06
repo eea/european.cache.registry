@@ -92,13 +92,12 @@ def get_response_offset(url, params):
 
     response_data = response.json()
     aggregated_response = response_data.get("rows", [])
-
-    keep_fetching = response_data.get("rowCount", 0) > params.get(
-        "offset", 0
-    ) + params.get("pageSize", 100)
+    keep_fetching = response_data.get("rowCount", 0) > params.get("offset", 0) + int(
+        params.get("pageSize", 100)
+    )
 
     while keep_fetching:
-        params["offset"] = params.get("offset", 0) + params.get("pageSize", 100)
+        params["offset"] = params.get("offset", 0) + int(params.get("pageSize", 100))
         response = requests.get(url, params=params, headers=headers, verify=ssl_verify)
         if response.status_code != 200:
             raise InvalidResponse()
@@ -106,7 +105,7 @@ def get_response_offset(url, params):
         aggregated_response += response_data.get("rows", [])
         keep_fetching = response_data.get("rowCount", 0) > params.get(
             "offset", 0
-        ) + params.get("pageSize", 100)
+        ) + int(params.get("pageSize", 100))
 
     return aggregated_response
 
@@ -201,7 +200,9 @@ def get_fixture_objects(file):
         return json.loads(f.read())
 
 
-def get_last_update(days, updated_since, domain=FGAS, model_name=Undertaking, fetch_last_day_only=False):
+def get_last_update(
+    days, updated_since, domain=FGAS, model_name=Undertaking, fetch_last_day_only=False
+):
     if fetch_last_day_only:
         return datetime.now()
     if updated_since:

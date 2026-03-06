@@ -94,20 +94,19 @@ class MultiYearLicenceReturnsViewset(ListView):
             company_data["aggregated_data"].append(
                 {
                     "year": multi_year_licence_aggregated.year,
-                    "organization_country_name": multi_year_licence_aggregated.organization_country_name,
                     "substance": multi_year_licence_aggregated.substance,
-                    "lic_use_kind": multi_year_licence_aggregated.lic_use_kind,
-                    "lic_use_desc": multi_year_licence_aggregated.lic_use_desc,
-                    "lic_type": multi_year_licence_aggregated.lic_type,
+                    "s_orig_country_name": multi_year_licence_aggregated.s_orig_country_name,
+                    "organization_country_name": multi_year_licence_aggregated.organization_country_name,
+                    "company_id": multi_year_licence_aggregated.undertaking.external_id,
+                    "use_kind": multi_year_licence_aggregated.lic_use_kind,
+                    "use_desc": multi_year_licence_aggregated.lic_use_desc,
+                    "type": multi_year_licence_aggregated.lic_type,
                     "license_type": multi_year_licence_aggregated.licence_type,
-                    "aggregated_reserved_ods_net_mass": str(
-                        multi_year_licence_aggregated.aggregated_reserved_ods_net_mass
-                    ),
-                    "aggregated_consumed_ods_net_mass": str(
-                        multi_year_licence_aggregated.aggregated_consumed_ods_net_mass
-                    ),
                     "has_certex_data": multi_year_licence_aggregated.has_certex_data,
                     "created_from_certex": multi_year_licence_aggregated.created_from_certex,
+                    "is_multi_year_licence": True,
+                    "quantity": str(multi_year_licence_aggregated.quantity),
+                    "reserved": multi_year_licence_aggregated.reserved,
                 }
             )
         return {obj.external_id: company_data}
@@ -164,7 +163,6 @@ class MultiYearLicenceAggregatedSerializerMixin:
                 "year": obj.year,
                 "substance": obj.substance,
                 "s_orig_country_name": obj.s_orig_country_name,
-                "quantity": obj.aggregated_consumed_ods_net_mass,
                 "organization_country_name": obj.organization_country_name,
                 "company_id": obj.undertaking.external_id,
                 "use_kind": obj.lic_use_kind,
@@ -173,6 +171,8 @@ class MultiYearLicenceAggregatedSerializerMixin:
                 "licence_type": obj.licence_type,
                 "has_certex_data": obj.has_certex_data,
                 "is_multi_year_licence": True,
+                "quantity": obj.quantity,
+                "reserved": obj.reserved,
             }
         )
         return data

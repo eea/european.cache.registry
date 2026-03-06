@@ -8,14 +8,13 @@ from cache_registry.sync import sync_manager
 
 
 @sync_manager.command("import_detailed_uses")
-def import_combined_nomenclature():
+def import_detailed_uses():
     file_path = "cache_registry/fixtures/multi_year_licenses/detailed_uses.xlsx"
-    df = pandas.read_excel(file_path)
-
+    df = pandas.read_excel(file_path, keep_default_na=False)
     for _, row in df.iterrows():
         if row["No reporting obligation"] == "Yes":
             continue
-        if not row["Detailed Use short code"] == "NaN":
+        if row["Detailed Use short code"] == "":
             continue
         detailed_use = DetailedUse.query.filter_by(
             short_code=row["Detailed Use short code"],

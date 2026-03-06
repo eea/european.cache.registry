@@ -25,7 +25,9 @@ class CNQuantity(SerializableModel, db.Model):
     undertaking_id = Column(ForeignKey("undertaking.id"))
     combined_nomenclature_id = Column(ForeignKey("combined_nomenclature.id"))
     customs_procedure = Column(Integer)  # used to determine lic_use_kind
-    s_orig_country_name = Column(db.String(255))  # used to determine the country of origin of the product
+    s_orig_country_name = Column(
+        db.String(255)
+    )  # used to determine the country of origin of the product
     year = Column(Integer)  # year
     aggregated_reserved_ods_net_mass = Column(Float(precision=7), default=0.0)
     aggregated_consumed_ods_net_mass = Column(Float(precision=7), default=0.0)

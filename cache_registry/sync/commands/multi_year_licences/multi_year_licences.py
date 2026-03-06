@@ -249,8 +249,8 @@ def generate_multi_year_licence_aggregated(licence_object, year):
                     lic_use_desc=detailed_use_data[0],
                     lic_type=detailed_use_data[1],
                     licence_type=licence_object.licence_type,
-                    aggregated_reserved_ods_net_mass=0.0,  # this will be updated with the Certex data in the next step
-                    aggregated_consumed_ods_net_mass=0.0,  # this will be updated with the Certex data in the next step
+                    quantity=0.0,  # this will be updated with the Certex data in the next step
+                    reserved=None,  # this will be updated with the Certex data in the next step
                 )
                 db.session.add(multi_year_licence_aggregated)
                 db.session.commit()
@@ -269,9 +269,7 @@ def multi_year_licences(
     year,
     page_size=200,
 ):
-    return call_multi_year_licences(
-        year, page_size
-    )
+    return call_multi_year_licences(year, page_size)
 
 
 def call_multi_year_licences(
@@ -279,9 +277,7 @@ def call_multi_year_licences(
     page_size=200,
 ):
     # get multi year licences data from the ODS API
-    data = get_multi_year_licences(
-        year, page_size
-    )
+    data = get_multi_year_licences(year, page_size)
 
     # aggregate multi year licences under undertakings
     undertakings_with_licences = aggregate_multi_year_licences_to_undertakings(
@@ -326,8 +322,8 @@ def call_multi_year_licences(
                     lic_use_desc=None,
                     lic_type=None,
                     licence_type=licence_object.licence_type,
-                    aggregated_reserved_ods_net_mass=0.0,
-                    aggregated_consumed_ods_net_mass=0.0,
+                    quantity=0.0,
+                    reserved=None,
                 )
                 db.session.add(multi_year_licence_aggregated)
                 db.session.commit()
