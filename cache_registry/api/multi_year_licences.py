@@ -153,6 +153,12 @@ class MultiYearLicenceAggregatedSerializerMixin:
         data["is_multi_year_licence"] = False
         if data["use_desc"] != "laboratory uses":
             data["quantity"] = int(data["quantity"])
+        # the following fields are added only to preserve the same
+        # structure as multi-year licences but they will be null/false
+        # for single-year licences
+        data["licence_type"] = ""
+        data["has_certex_data"] = False
+        data["reserved"] = False
         return data
 
     @classmethod

@@ -191,7 +191,7 @@ def aggregate_certex_quantities_into_multi_year_licences_aggregated(
     # Aggregate CNQuantity data into MultiYearLicenceAggregated
     for cn_quantity in cn_quantity_objects:
         lic_use_kind = CUSTOMS_PROCEDURE_NUMBER_TO_LIC_USE_KIND_CONVERSION.get(
-            cn_quantity.customs_procedure
+            str(cn_quantity.customs_procedure)
         )
         licence_object = cn_quantity.multi_year_licence
         if licence_object.licence_type in ["ILAB", "ELAB"]:

@@ -200,11 +200,7 @@ def get_fixture_objects(file):
         return json.loads(f.read())
 
 
-def get_last_update(
-    days, updated_since, domain=FGAS, model_name=Undertaking, fetch_last_day_only=False
-):
-    if fetch_last_day_only:
-        return datetime.now()
+def get_last_update(days, updated_since, domain=FGAS, model_name=Undertaking):
     if updated_since:
         try:
             last_update = datetime.strptime(updated_since, "%d/%m/%Y")
