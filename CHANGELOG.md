@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.2 - (2026-03-16)
+--------------------
+* Include internationalPartnerCountry/customsProcedure to multi year licenses aggregation
+  [dianaboiangiu]
+
 3.0.1 - (2026-02-24)
 --------------------
 * Temporarly fix fgases sync
