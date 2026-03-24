@@ -49,12 +49,22 @@ def aggregate_quantities_under_cn_codes(data):
                 current_app.logger.warning(
                     f"MRN {mrn['mrn']} for licence {entry['licenceNumber']} has multiple international partner countries: {mrn['internationalPartnerCountry']}. Using the last one in the list."
                 )
+            if len(mrn.get("internationalPartnerCountry", [])) == 0:
+                current_app.logger.warning(
+                    f"MRN {mrn['mrn']} for licence {entry['licenceNumber']} has no international partner country."
+                )
+                continue
             s_orig_country_name = mrn["internationalPartnerCountry"][-1]
             for quantity in mrn.get("quantities", []):
                 if len(quantity.get("customsProcedure", [])) > 1:
                     current_app.logger.warning(
                         f"Quantity with CN code {quantity['cnCode']} for licence {entry['licenceNumber']} and MRN {mrn['mrn']} has multiple customs procedures: {quantity.get('customsProcedure', [])}. Using the last one in the list."
                     )
+                if not quantity.get("customsProcedure", []):
+                    current_app.logger.warning(
+                        f"Quantity with CN code {quantity['cnCode']} for licence {entry['licenceNumber']} and MRN {mrn['mrn']} has no customs procedure."
+                    )
+                    continue
                 cn_code = quantity["cnCode"]
                 customs_procedure_number = quantity.get("customsProcedure")[-1]
                 if (cn_code, s_orig_country_name) not in aggregated_data[
