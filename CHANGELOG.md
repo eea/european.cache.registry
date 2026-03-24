@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.3 - (2026-03-24)
+--------------------
+* Wrap-up Multi Year Licenses changes
+  [dianaboiangiu]
+
 3.0.2 - (2026-03-16)
 --------------------
 * Include internationalPartnerCountry/customsProcedure to multi year licenses aggregation
