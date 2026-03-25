@@ -114,6 +114,7 @@ class SubstanceNomenclature(SerializableModel, db.Model):
     id = Column(Integer, primary_key=True)
     chemical_name = Column(String(100))  # chemicalName
     name = Column(String(255))  # name
+    corrected_name = Column(String(255))
     date_created = Column(Date, default=date.today)
     date_updated = Column(Date, onupdate=date.today)
 

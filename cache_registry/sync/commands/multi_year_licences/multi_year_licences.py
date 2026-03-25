@@ -235,7 +235,7 @@ def generate_multi_year_licence_aggregated(licence_object, year):
                 licence_type=licence_object.licence_type,
                 organization_country_name=licence_object.undertaking.country_code,
                 year=year,
-                substance=substance.chemical_name,
+                substance=substance.corrected_name,
                 lic_use_desc=detailed_use_data[0],
                 lic_type=detailed_use_data[1],
             ).first()
@@ -244,7 +244,7 @@ def generate_multi_year_licence_aggregated(licence_object, year):
                     undertaking_id=licence_object.undertaking_id,
                     organization_country_name=licence_object.undertaking.country_code,
                     year=year,
-                    substance=substance.chemical_name,
+                    substance=substance.corrected_name,
                     lic_use_kind=None,
                     lic_use_desc=detailed_use_data[0],
                     lic_type=detailed_use_data[1],

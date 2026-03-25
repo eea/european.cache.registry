@@ -32,6 +32,7 @@ def import_combined_nomenclature():
             substance_nomenclature = SubstanceNomenclature(
                 chemical_name=row["substance"],
                 name=row["name"],
+                corrected_name=row["corrected_name"],
             )
             db.session.add(substance_nomenclature)
             db.session.commit()
