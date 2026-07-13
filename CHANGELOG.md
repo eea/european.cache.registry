@@ -1,6 +1,12 @@
 Changelog
 =========
 
+3.0.5 - (2026-03-13)
+--------------------
+* Fix sentry
+* Extend timeout for gunicorn
+  [dianaboiangiu]
+
 3.0.4 - (2026-03-25)
 --------------------
 * Add corrected_name to substance nomenclature
