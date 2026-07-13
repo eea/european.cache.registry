@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import sentry_sdk
 from cache_registry.app import create_app, create_cli_commands
 
 app = create_app()
@@ -24,5 +25,4 @@ if __name__ == "__main__":
             raise
         else:
             if not (isinstance(e, SystemExit) and e.code == 0):
-                sentry = app.extensions["sentry"]
-                sentry.captureException()
+                sentry_sdk.capture_exception(e)

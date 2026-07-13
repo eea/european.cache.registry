@@ -26,7 +26,7 @@ if [ -z "$1" ]; then
   echo "Serving on port '$PORT'"
   exec gunicorn manage:app \
                 --name european.cache.registry \
-                --timeout 120 \
+                --timeout 300 \
                 --bind 0.0.0.0:$PORT \
                 --access-logfile - \
                 --error-logfile -

@@ -1,5 +1,6 @@
 import json
 import requests
+import sentry_sdk
 
 from datetime import datetime
 
@@ -33,8 +34,8 @@ def do_bdr_request(url, params=None, method="get"):
         error_message = f"BDR was unreachable - {datetime.now()}"
         current_app.logger.warning(error_message)
         print(error_message)
-        if "sentry" in current_app.extensions:
-            current_app.extensions["sentry"].captureMessage(error_message)
+        if sentry_sdk.Hub.current.client is not None:
+            sentry_sdk.capture_message(error_message)
 
     return response
 
@@ -167,7 +168,6 @@ def update_bdr_col_name(undertaking):
     if error_message:
         current_app.logger.warning(error_message)
         print(error_message)
-        if "sentry" in current_app.extensions:
-            current_app.extensions["sentry"].captureMessage(error_message)
-
+        if sentry_sdk.Hub.current.client is not None:
+            sentry_sdk.capture_message(error_message)
     return not error_message

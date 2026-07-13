@@ -1,5 +1,6 @@
 import logging
 import sys
+import sentry_sdk
 
 import flask
 from flask_migrate import Migrate
@@ -37,8 +38,7 @@ def init_config(app):
             raise
         else:
             if not (isinstance(e, SystemExit) and e.code == 0):
-                sentry = app.extensions["sentry"]
-                sentry.captureException()
+                sentry_sdk.capture_exception(e)
 
 
 def create_app(config={}):
@@ -57,9 +57,11 @@ def create_app(config={}):
     admin.init_app(app)
     create_logger(app)
     if app.config.get("SENTRY_DSN"):
-        from raven.contrib.flask import Sentry
-
-        Sentry(app, dsn=app.config.get("SENTRY_DSN"), logging=True, level=logging.ERROR)
+        import sentry_sdk
+        sentry_sdk.init(
+            dsn=app.config.get("SENTRY_DSN"),
+            send_default_pii=True,
+        )
 
     if app.config.get("DEBUG") and "testsuite" not in sys.argv:
         app.after_request(sql_debug)

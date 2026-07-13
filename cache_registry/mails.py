@@ -1,4 +1,5 @@
 import smtplib
+import sentry_sdk
 
 from flask_mail import Mail, Message
 from flask import current_app as app, render_template
@@ -28,8 +29,8 @@ def send_match_mail(match, **kwargs):
             "Please set this value or disable mails sending."
         )
         app.logger.warning(message)
-        if "sentry" in app.extensions:
-            app.extensions["sentry"].captureMessage(message)
+        if sentry_sdk.Hub.current.client is not None:
+            sentry_sdk.capture_message(message)
         return
     if match:
         template = "mails/match_notification.html"
@@ -68,8 +69,8 @@ def send_wrong_match_mail(user, company_id, domain):
             "match email alert. Please set this value and try again."
         )
         app.logger.warning(message)
-        if "sentry" in app.extensions:
-            app.extensions["sentry"].captureMessage(message)
+        if sentry_sdk.Hub.current.client is not None:
+            sentry_sdk.capture_message(message)
         return False
 
     company = Undertaking.query.filter_by(external_id=company_id, domain=domain).first()
