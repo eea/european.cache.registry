@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.7 - (2026-11-12)
+--------------------
+* Fix error on w3lib
+  [dianaboiangiu]
+
 3.0.6 - (2026-11-12)
 --------------------
 * Add patch that completely overrides the licences data
