@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.6 - (2026-11-12)
+--------------------
+* Add patch that completely overrides the licences data
+  [dianaboiangiu]
+
 3.0.5 - (2026-03-13)
 --------------------
 * Fix sentry
