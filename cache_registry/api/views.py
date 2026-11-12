@@ -73,3 +73,23 @@ class DetailView(ApiView):
 
     def get(self, pk, **kwargs):
         return self.serialize(self.get_object(pk, **kwargs))
+
+
+def remove_overridden_licences(data, override_setting, pk, year=None):
+    """Drop the cached licences that are fully replaced by patch data.
+
+    The override setting is a list of {"company_id": .., "year": ..} entries;
+    an entry without year overrides all the years of that company.
+    """
+    overrides = [
+        element
+        for element in current_app.config.get(override_setting, [])
+        if element.get("company_id") == pk
+        and (year is None or element.get("year") in (None, year))
+    ]
+    if not overrides:
+        return data
+    if any(element.get("year") is None for element in overrides):
+        return []
+    years = {element["year"] for element in overrides}
+    return [licence for licence in data if licence.get("year") not in years]

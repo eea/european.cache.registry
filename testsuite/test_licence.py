@@ -182,3 +182,42 @@ def test_licences_of_one_delivery_list_view(client):
     assert data[1]["licence_id"] in licences_ids
     assert data[2]["licence_id"] in licences_ids
     assert data[3]["licence_id"] in licences_ids
+
+
+def test_substance_year_list_view_override(app, client):
+    undertaking = factories.UndertakingFactory(domain=ODS)
+    deliverylicence = factories.DeliveryLicenceFactory(
+        undertaking=undertaking, year=2019
+    )
+    factories.SubstanceFactory(
+        deliverylicence=deliverylicence, substance="Substance name 1", quantity=0.2
+    )
+    patched_licence = {
+        "company_id": undertaking.external_id,
+        "year": 2019,
+        "substance": "Patched substance",
+        "use_desc": "laboratory uses",
+        "quantity": 0.5,
+    }
+    app.config["PATCH_LICENCES"] = [patched_licence]
+    app.config["OVERRIDE_LICENCES"] = [
+        {"company_id": undertaking.external_id, "year": 2019}
+    ]
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+    try:
+        resp = client.post(
+            url_for(
+                "api.licence-current_substances_per_undertaking",
+                domain=ODS,
+                pk=undertaking.external_id,
+                year=2019,
+            ),
+            json.dumps(dict()),
+            headers=headers,
+        )
+    finally:
+        app.config.pop("PATCH_LICENCES")
+        app.config.pop("OVERRIDE_LICENCES")
+
+    assert resp.json["licences"] == [patched_licence]

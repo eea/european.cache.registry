@@ -39,3 +39,10 @@ This information is fetched from 2 separate endpoints using 2 different commands
 For patching licences, set `PATCH_MULTI_YEAR_LICENCES` to a list of licences to be added to
 a licences/aggregated endpoint. Only the data for the company_id and the given year will
 be patched.
+
+To completely replace the cached licences of a company with the `PATCH_MULTI_YEAR_LICENCES`
+data, set `OVERRIDE_MULTI_YEAR_LICENCES` to a list of `{"company_id": ..., "year": ...}`
+entries. The cached licences (single and multi-year) matching an entry are dropped and only
+the patched ones are returned. Omit `year` to override all the years of that company.
+
+       OVERRIDE_MULTI_YEAR_LICENCES = [{"company_id": 23, "year": 2025}, {"company_id": 24}]

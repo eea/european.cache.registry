@@ -137,6 +137,13 @@ For patching licences, set `PATCH_LICENCES` to a list of licences to be added to
 a licences/aggregated endpoint. Only the data for the company_id and the given year will
 be patched.
 
+To completely replace the cached licences of a company with the `PATCH_LICENCES` data,
+set `OVERRIDE_LICENCES` to a list of `{"company_id": ..., "year": ...}` entries. The cached
+licences matching an entry are dropped and only the patched ones are returned. Omit `year`
+to override all the years of that company.
+
+        OVERRIDE_LICENCES = [{"company_id": 23, "year": 2025}, {"company_id": 24}]
+
 For patching the company data, set `PATCH_AUDITORS` to a dictionary
 containing values to be updated. Use the auditor uid as a key.
 

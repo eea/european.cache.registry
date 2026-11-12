@@ -5,7 +5,7 @@ import json
 from flask import current_app
 from flask import request
 
-from cache_registry.api.views import ListView, ApiView
+from cache_registry.api.views import ListView, ApiView, remove_overridden_licences
 from cache_registry.models import (
     Licence,
     ProcessAgentUse,
@@ -67,6 +67,9 @@ class SubstanceYearListView(ApiView):
 
     def post(self, **kwargs):
         data = [self.serialize(u) for u in self.get_queryset(**kwargs)]
+        data = remove_overridden_licences(
+            data, "OVERRIDE_LICENCES", int(kwargs["pk"]), int(kwargs["year"])
+        )
         data.extend(self.patch_licences(**kwargs))
         return {"licences": data}
 
@@ -118,6 +121,7 @@ class SubstanceListView(ApiView):
 
     def post(self, **kwargs):
         data = [self.serialize(u) for u in self.get_queryset(**kwargs)]
+        data = remove_overridden_licences(data, "OVERRIDE_LICENCES", int(kwargs["pk"]))
         data.extend(self.patch_licences(**kwargs))
         return {"licences": data}
 

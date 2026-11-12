@@ -5,7 +5,7 @@ from flask import current_app
 from flask import request
 from sqlalchemy import and_
 
-from cache_registry.api.views import ListView, ApiView
+from cache_registry.api.views import ListView, ApiView, remove_overridden_licences
 from cache_registry.models import (
     MultiYearLicence,
     Undertaking,
@@ -223,6 +223,9 @@ class MultiYearLicenceAggregatedListView(
 
     def post(self, **kwargs):
         data = [self.serialize(u) for u in self.get_queryset(**kwargs)]
+        data = remove_overridden_licences(
+            data, "OVERRIDE_MULTI_YEAR_LICENCES", int(kwargs["pk"])
+        )
         data.extend(self.patch_multi_year_licences(**kwargs))
         return data
 
@@ -264,6 +267,12 @@ class MultiYearLicenceAggregatedYearListView(
 
     def post(self, **kwargs):
         data = [self.serialize(u, **kwargs) for u in self.get_queryset(**kwargs)]
+        data = remove_overridden_licences(
+            data,
+            "OVERRIDE_MULTI_YEAR_LICENCES",
+            int(kwargs["pk"]),
+            int(kwargs["year"]),
+        )
         data.extend(self.patch_multi_year_licences(**kwargs))
         return data
 
