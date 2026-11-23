@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.10 - (2026-11-23)
+---------------------
+* Move Patches to database
+  [dianaboiangiu]
+
 3.0.9 - (2026-11-23)
 --------------------
 * Fix sync ods and fgas
