@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.8 - (2026-11-23)
+--------------------
+*  Add taxud code
+  [dianaboiangiu]
+
 3.0.7 - (2026-11-12)
 --------------------
 * Fix error on w3lib
