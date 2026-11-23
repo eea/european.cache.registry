@@ -1,5 +1,6 @@
 from flask import current_app
 
+from cache_registry.models.patches import get_patch
 from cache_registry.models import db, User
 
 
@@ -21,7 +22,7 @@ def get_auth(user, password):
 def patch_users(external_id, users, patch_dict="PATCH_USERS", object_type="company"):
     """Patch the list of contact persons"""
     external_id = str(external_id)
-    patch = current_app.config.get(patch_dict, {})
+    patch = get_patch(patch_dict, {})
     if external_id in patch:
         print(f"Patching {object_type} users: {external_id}")
         users.extend(patch[external_id])

@@ -1,8 +1,8 @@
 import click
 
 from copy import deepcopy
-from flask import current_app
 
+from cache_registry.models.patches import get_patch
 from cache_registry.models import db, Address, Auditor
 from cache_registry.sync import parsers, sync_manager
 from cache_registry.sync.auth import cleanup_unused_users, patch_users
@@ -36,7 +36,7 @@ def add_updates_log(auditor, data):
 
 
 def patch_auditor(auditor_uid, data):
-    patch = current_app.config.get("PATCH_AUDITORS", {})
+    patch = get_patch("PATCH_AUDITORS", {})
     if auditor_uid in patch:
         print(f"Patching auditor: {auditor_uid}")
         data.update(patch[auditor_uid])

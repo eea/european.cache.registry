@@ -5,6 +5,8 @@ from flask import request
 from flask import Response
 from flask.views import MethodView
 
+from cache_registry.models.patches import get_patch
+
 
 class ApiView(MethodView):
     model = None
@@ -83,7 +85,7 @@ def remove_overridden_licences(data, override_setting, pk, year=None):
     """
     overrides = [
         element
-        for element in current_app.config.get(override_setting, [])
+        for element in get_patch(override_setting, [])
         if element.get("company_id") == pk
         and (year is None or element.get("year") in (None, year))
     ]

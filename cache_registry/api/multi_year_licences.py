@@ -1,11 +1,11 @@
 # coding=utf-8
 import datetime
 
-from flask import current_app
 from flask import request
 from sqlalchemy import and_
 
 from cache_registry.api.views import ListView, ApiView, remove_overridden_licences
+from cache_registry.models.patches import get_patch
 from cache_registry.models import (
     MultiYearLicence,
     Undertaking,
@@ -213,7 +213,7 @@ class MultiYearLicenceAggregatedListView(
     def patch_multi_year_licences(self, **kwargs):
         data = []
         pk = int(kwargs["pk"])
-        patch = current_app.config.get("PATCH_MULTI_YEAR_LICENCES", [])
+        patch = get_patch("PATCH_MULTI_YEAR_LICENCES", [])
         for element in patch:
             if element.get("company_id") == pk:
                 if element["use_desc"] != "laboratory uses":
@@ -257,7 +257,7 @@ class MultiYearLicenceAggregatedYearListView(
         data = []
         year = int(kwargs["year"])
         pk = int(kwargs["pk"])
-        patch = current_app.config.get("PATCH_MULTI_YEAR_LICENCES", [])
+        patch = get_patch("PATCH_MULTI_YEAR_LICENCES", [])
         for element in patch:
             if element.get("year") == year and element.get("company_id") == pk:
                 if element["use_desc"] != "laboratory uses":

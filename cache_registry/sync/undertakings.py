@@ -1,5 +1,6 @@
 from flask import current_app
 
+from cache_registry.models.patches import get_patch
 from cache_registry.models import (
     Address,
     BusinessProfile,
@@ -24,7 +25,7 @@ from instance.settings import FGAS, ODS
 
 def patch_undertaking(external_id, data):
     external_id = str(external_id)
-    patch = current_app.config.get("PATCH_COMPANIES", {})
+    patch = get_patch("PATCH_COMPANIES", {})
     if external_id in patch:
         print(f"Patching undertaking: {external_id}")
         data.update(patch[external_id])
@@ -33,7 +34,7 @@ def patch_undertaking(external_id, data):
 
 def patch_undertaking_old_gb_represent(external_id, data):
     external_id = str(external_id)
-    patch = current_app.config.get("PATCH_GB_OLD_REPR", {})
+    patch = get_patch("PATCH_GB_OLD_REPR", {})
     if external_id in patch:
         represent = data.get("euLegalRepresentativeCompany")
         if not represent:

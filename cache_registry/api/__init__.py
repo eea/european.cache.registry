@@ -45,6 +45,7 @@ from .old_company import (
     OldCompanySetValid,
     OldCompanySetInvalid,
 )
+from .patches import PatchSettingsExport, PatchSettingsImport
 from .stocks import (
     StockListing,
     StocksUndertakingListView,
@@ -307,6 +308,25 @@ register_url(
     url="/import",
     view=LoadStocksJson,
     view_name="import_stocks",
+)
+
+# Patch settings (formerly only in instance/extra/localsettings.py)
+patches_prefix = "/patches"
+patches_name = "patches"
+register_url(
+    prefix=patches_prefix,
+    name=patches_name,
+    url="",
+    view=PatchSettingsExport,
+    view_name="export",
+)
+
+register_url(
+    prefix=patches_prefix,
+    name=patches_name,
+    url="/import",
+    view=PatchSettingsImport,
+    view_name="import",
 )
 # User
 

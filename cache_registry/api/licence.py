@@ -2,10 +2,10 @@
 from functools import reduce
 import json
 
-from flask import current_app
 from flask import request
 
 from cache_registry.api.views import ListView, ApiView, remove_overridden_licences
+from cache_registry.models.patches import get_patch
 from cache_registry.models import (
     Licence,
     ProcessAgentUse,
@@ -57,7 +57,7 @@ class SubstanceYearListView(ApiView):
         data = []
         year = int(kwargs["year"])
         pk = int(kwargs["pk"])
-        patch = current_app.config.get("PATCH_LICENCES", [])
+        patch = get_patch("PATCH_LICENCES", [])
         for element in patch:
             if element.get("year") == year and element.get("company_id") == pk:
                 if element["use_desc"] != "laboratory uses":
@@ -111,7 +111,7 @@ class SubstanceListView(ApiView):
     def patch_licences(self, **kwargs):
         data = []
         pk = int(kwargs["pk"])
-        patch = current_app.config.get("PATCH_LICENCES", [])
+        patch = get_patch("PATCH_LICENCES", [])
         for element in patch:
             if element.get("company_id") == pk:
                 if element["use_desc"] != "laboratory uses":

@@ -47,6 +47,11 @@ Overview
 * [`/stocks/years/[years]`](#stocksyears2019---get) - all stocks for one selected year
 * `/stocks/import` - import new stocks
 
+**Patch settings calls**
+
+* [`/patches`](#patches---get) - export the patch settings in use as a JSON file
+* [`/patches/import`](#patchesimport---post) - upload patch settings from a JSON file
+
 **User calls:**
 
 * [`/user/list`](#userlist) - all users
@@ -1129,6 +1134,40 @@ Response example:
       "12345": {
         "2019":
       }
+    }
+
+Patch settings calls
+====================
+
+The `PATCH_*` and `OVERRIDE_*` settings (`PATCH_USERS`, `PATCH_COMPANIES`,
+`PATCH_GB_OLD_REPR`, `PATCH_AUDITORS`, `PATCH_AUDITOR_USERS`, `PATCH_LICENCES`,
+`PATCH_MULTI_YEAR_LICENCES`, `OVERRIDE_LICENCES`, `OVERRIDE_MULTI_YEAR_LICENCES`)
+can be stored in the database instead of `instance/extra/localsettings.py`. A value
+stored in the database takes precedence; for the settings that are not in the
+database, the value from `localsettings.py` is used.
+
+/patches - GET
+--------------
+
+Downloads `patches.json` with the value in use for every setting:
+
+    curl -H "Authorization: $API_TOKEN" -o patches.json https://<host>/patches
+
+/patches/import - POST
+----------------------
+
+Uploads a JSON file (same format as the export) as the `file` form field. Only
+the settings present in the file are changed; a setting set to `null` is removed
+from the database, so the value from `localsettings.py` is used again. The file is
+validated first (known setting names, dict/list types) and nothing is saved if it
+is invalid.
+
+    curl -H "Authorization: $API_TOKEN" -F file=@patches.json https://<host>/patches/import
+
+    {
+      "status": "success",
+      "updated": ["PATCH_COMPANIES"],
+      "removed": []
     }
 
 User calls

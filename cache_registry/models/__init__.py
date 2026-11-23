@@ -11,3 +11,4 @@ from .process_agent_uses import *
 from .stocks import *
 from .undertakings import *
 from .users import *
+from .patches import *
