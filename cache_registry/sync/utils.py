@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from logging.handlers import RotatingFileHandler
 
 from flask import current_app
+import sqlalchemy as sa
 from sqlalchemy import desc
 
 from cache_registry.models import *
@@ -174,12 +175,18 @@ def update_ms_accreditation_issuing_countries(obj, ms_accreditation):
 
 
 def loaddata(fixture, session=None):
-    if not session:
-        session = db.session
     if not os.path.isfile(fixture):
         print("Please provide a fixture file name")
-    else:
-        objects = get_fixture_objects(fixture)
+        return
+    objects = get_fixture_objects(fixture)
+    if session:
+        # Called from a migration: the tables may have been created in the
+        # migration's still-open transaction and may not have all the columns
+        # of the current models yet, so work on the migration's connection
+        # and only with the columns that exist at that point.
+        _loaddata_in_migration(objects, session)
+        return
+    session = db.session
     session.commit()
     for object in objects:
         database_object = (
@@ -193,6 +200,32 @@ def loaddata(fixture, session=None):
                 setattr(database_object, key, value)
             session.add(database_object)
             session.commit()
+
+
+def _loaddata_in_migration(objects, session):
+    connection = session.connection()
+    tables = {}
+    for object in objects:
+        tablename = eval(object["model"]).__tablename__
+        if tablename not in tables:
+            tables[tablename] = sa.Table(
+                tablename, sa.MetaData(), autoload_with=connection
+            )
+        table = tables[tablename]
+        fields = {
+            key: value
+            for key, value in object["fields"].items()
+            if key in table.columns
+        }
+        exists = connection.execute(
+            sa.select(table.c.id).where(table.c.id == fields["id"])
+        ).first()
+        if exists:
+            connection.execute(
+                table.update().where(table.c.id == fields["id"]).values(**fields)
+            )
+        else:
+            connection.execute(table.insert().values(**fields))
 
 
 def get_fixture_objects(file):

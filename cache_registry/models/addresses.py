@@ -18,6 +18,7 @@ class Country(SerializableModel, db.Model):
     code = Column(String(10))
     name = Column(String(255))
     type = Column(String(64))
+    taxud_code = Column(String(64))
 
 
 class Address(SerializableModel, db.Model):

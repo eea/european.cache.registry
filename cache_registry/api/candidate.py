@@ -26,6 +26,7 @@ class CandidateList(ApiView):
                 "date_updated": str(company.date_updated),
                 "status": company.status,
                 "country": company.address.country.name,
+                "country_taxud_code": company.address.country.taxud_code,
             }
             data.append({"undertaking": company_data, "links": links_data})
         return data

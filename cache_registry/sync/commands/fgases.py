@@ -39,7 +39,7 @@ def fgases(
     registration_id=None,
     fetch_last_day_only=False,
 ):
-    return call_fgases(days, updated_since, page_size, id, registration_id)
+    return call_fgases(days, updated_since, page_size, id, registration_id, fetch_last_day_only)
 
 
 def call_fgases(
@@ -48,7 +48,7 @@ def call_fgases(
     page_size=200,
     id=None,
     registration_id=None,
-    fetch_last_day_only=True,
+    fetch_last_day_only=False,
 ):
     if not id and not registration_id:
         last_update = get_last_update(days, updated_since, domain=FGAS, fetch_last_day_only=fetch_last_day_only)

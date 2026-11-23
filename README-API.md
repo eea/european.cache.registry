@@ -137,7 +137,8 @@ Returns the list of auditors
             "country": {
                 "code": "PL",
                 "name": "Poland",
-                "type": "EU_TYPE"
+                "type": "EU_TYPE",
+                "taxud_code": null
             }
         },
         "users": [
@@ -229,7 +230,8 @@ Returns the auditor
             "country": {
                 "code": "PL",
                 "name": "Poland",
-                "type": "EU_TYPE"
+                "type": "EU_TYPE",
+                "taxud_code": null
             }
         },
         "users": [
@@ -324,7 +326,8 @@ Returns the auditor if:
                   "country": {
                       "code": "PL",
                       "name": "Poland",
-                      "type": "EU_TYPE"
+                      "type": "EU_TYPE",
+                      "taxud_code": null
                   }
               },
               "users": [
@@ -487,7 +490,8 @@ Returns the list of all verified undertakings in the system, as fetched from dom
             "country": {
               "code": "IE",
               "type": "EU_TYPE",
-              "name": "Ireland"
+              "name": "Ireland",
+              "taxud_code": null
             },
             "zipcode": "zipcode--7954",
             "number": "nrstreet--7954",
@@ -506,7 +510,8 @@ Returns the list of all verified undertakings in the system, as fetched from dom
             "country": {
               "code": "IE",
               "type": "EU_TYPE",
-              "name": "Ireland"
+              "name": "Ireland",
+              "taxud_code": null
             },
             "zipcode": "zipcode--7954",
             "number": "nrstreet--7954",
@@ -521,7 +526,8 @@ Returns the list of all verified undertakings in the system, as fetched from dom
           "country": {
             "code": "CN",
             "type": "NONEU_TYPE",
-            "name": "China (excluding Hong Kong and Macao)"
+            "name": "China (excluding Hong Kong and Macao)",
+            "taxud_code": null
           },
           "zipcode": "zipcode--7953",
           "number": "nrstreet--7953",
@@ -561,7 +567,8 @@ Returns the list of all verified undertakings in the system, as fetched from dom
             "country": {
                 "code": "BG",
                 "type": "EU_TYPE",
-                "name": "Bulgaria"
+                "name": "Bulgaria",
+                "taxud_code": null
             },
             "zipcode": "cp19855",
             "number": "1",
@@ -612,7 +619,8 @@ Returns a list of all undertakings in the system (verified or not), as fetched f
             "country": {
               "code": "IE",
               "type": "EU_TYPE",
-              "name": "Ireland"
+              "name": "Ireland",
+              "taxud_code": null
             },
             "zipcode": "zipcode--7954",
             "number": "nrstreet--7954",
@@ -630,7 +638,8 @@ Returns a list of all undertakings in the system (verified or not), as fetched f
             "country": {
               "code": "IE",
               "type": "EU_TYPE",
-              "name": "Ireland"
+              "name": "Ireland",
+              "taxud_code": null
             },
             "zipcode": "zipcode--7954",
             "number": "nrstreet--7954",
@@ -645,7 +654,8 @@ Returns a list of all undertakings in the system (verified or not), as fetched f
           "country": {
             "code": "CN",
             "type": "NONEU_TYPE",
-            "name": "China (excluding Hong Kong and Macao)"
+            "name": "China (excluding Hong Kong and Macao)",
+            "taxud_code": null
           },
           "zipcode": "zipcode--7953",
           "number": "nrstreet--7953",
@@ -732,7 +742,8 @@ Returns an undertakings details from the system, as fetched from domain registry
           "country": {
             "code": "IE",
             "type": "EU_TYPE",
-            "name": "Ireland"
+            "name": "Ireland",
+            "taxud_code": null
           },
           "zipcode": "zipcode--7954",
           "number": "nrstreet--7954",
@@ -752,7 +763,8 @@ Returns an undertakings details from the system, as fetched from domain registry
             "country": {
               "code": "IE",
               "type": "EU_TYPE",
-              "name": "Ireland"
+              "name": "Ireland",
+              "taxud_code": null
             },
             "zipcode": "zipcode--7954",
             "number": "nrstreet--7954",
@@ -812,7 +824,8 @@ Returns an undertakings details from the system, as fetched from domain registry
         "country": {
           "code": "CN",
           "type": "NONEU_TYPE",
-          "name": "China (excluding Hong Kong and Macao)"
+          "name": "China (excluding Hong Kong and Macao)",
+          "taxud_code": null
         },
         "zipcode": "zipcode--7953",
         "number": "nrstreet--7953",
@@ -842,6 +855,7 @@ This url is used to retrive details of a certain company and the contact persons
         "postal_code": "cp567",
         "city": "Darmstadt",
         "country": "Germany",
+        "country_taxud_code": null,
         "eori_code": "NREORI324",
         "contact_persons": [
           {
@@ -1165,7 +1179,8 @@ Returns the list of undertakings for a user given by its unique username.
             "country": {
               "code": "IE",
               "type": "EU_TYPE",
-              "name": "Ireland"
+              "name": "Ireland",
+              "taxud_code": null
             },
             "zipcode": "zipcode--7954",
             "number": "nrstreet--7954",
@@ -1207,7 +1222,8 @@ The values given are checked against both the username and ecas_id field, to ens
             "country": {
               "code": "IE",
               "type": "EU_TYPE",
-              "name": "Ireland"
+              "name": "Ireland",
+              "taxud_code": null
             },
             "zipcode": "zipcode--7954",
             "number": "nrstreet--7954",
@@ -1252,7 +1268,8 @@ The values given are checked against both the username and ecas_id field, to ens
                             "country": {
                             "code": "IE",
                             "type": "EU_TYPE",
-                            "name": "Ireland"
+                            "name": "Ireland",
+                            "taxud_code": null
                             },
                             "zipcode": "zipcode--7954",
                             "number": "nrstreet--7954",
@@ -1284,7 +1301,8 @@ The values given are checked against both the username and ecas_id field, to ens
                             "country": {
                             "code": "IE",
                             "type": "EU_TYPE",
-                            "name": "Ireland"
+                            "name": "Ireland",
+                            "taxud_code": null
                             },
                             "zipcode": "zipcode--7954",
                             "number": "nrstreet--7954",

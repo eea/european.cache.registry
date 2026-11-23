@@ -38,6 +38,11 @@ class UserCompaniesView(DetailView):
                     if not company.represent
                     else company.represent.address.country.code
                 ),
+                "representative_country_taxud_code": (
+                    None
+                    if not company.represent
+                    else company.represent.address.country.taxud_code
+                ),
                 "represent_history": [
                     EuLegalRepresentativeCompanyDetail.serialize(representative_hist)
                     for representative_hist in company.represent_history
@@ -89,6 +94,11 @@ class UserCompaniesIncludeEcasView(ApiView):
                     if not company.represent
                     else company.represent.address.country.code
                 ),
+                "representative_country_taxud_code": (
+                    None
+                    if not company.represent
+                    else company.represent.address.country.taxud_code
+                ),
                 "represent_history": [
                     EuLegalRepresentativeCompanyDetail.serialize(representative_hist)
                     for representative_hist in company.represent_history
@@ -119,6 +129,11 @@ class UserCompaniesAuditorsView(UserCompaniesIncludeEcasView):
                     None
                     if not company.represent
                     else company.represent.address.country.code
+                ),
+                "representative_country_taxud_code": (
+                    None
+                    if not company.represent
+                    else company.represent.address.country.taxud_code
                 ),
                 "represent_history": [
                     EuLegalRepresentativeCompanyDetail.serialize(representative_hist)

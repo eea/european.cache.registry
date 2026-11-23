@@ -504,7 +504,7 @@ def test_undertaking_detail_short_view(client):
     )
 
     resp_data = resp.json
-    assert len(resp_data) == 8
+    assert len(resp_data) == 9
     data = resp_data
     assert data["company_id"] == undertaking.external_id
     assert data["company_name"] == undertaking.name
@@ -515,6 +515,7 @@ def test_undertaking_detail_short_view(client):
     assert data["postal_code"] == undertaking.address.zipcode
     assert data["city"] == undertaking.address.city
     assert data["country"] == undertaking.address.country.name
+    assert data["country_taxud_code"] == undertaking.address.country.taxud_code
     assert data["eori_code"] == undertaking.vat
 
 

@@ -44,6 +44,7 @@ class CountryFactory(SQLAlchemyModelFactory):
     code = "c"
     name = "n"
     type = "t"
+    taxud_code = "tc"
 
 
 class AddressFactory(SQLAlchemyModelFactory):

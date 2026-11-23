@@ -10,7 +10,8 @@
             "country" : {
                 "code" : "CN",
                 "name" : "China (excluding Hong Kong and Macao)",
-                "type" : "EU_TYPE"
+                "type" : "EU_TYPE",
+                "taxudCode" : "CN"
             }
         },
         "website" : null,

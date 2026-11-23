@@ -27,10 +27,15 @@ def parse_date(date_value):
 
 
 def parse_country(country):
+    # taxudCode is sent by the ODS sync, but not (yet) by the FGAS one
+    country["taxud_code"] = country.pop("taxudCode", None)
     ctr = models.Country.query.filter_by(code=country["code"]).first()
     if not ctr:
         ctr = models.Country(**country)
         models.db.session.add(ctr)
+    elif country["taxud_code"]:
+        # Don't wipe a code received from ODS when FGAS doesn't send one
+        ctr.taxud_code = country["taxud_code"]
     return ctr
 
 

@@ -18,14 +18,21 @@ from .factories import (
 
 from cache_registry.manager import check_integrity, check_passed
 from cache_registry.match import flush, manual, unverify, verify
-from cache_registry.models import Auditor, OldCompany, OldCompanyLink, Undertaking, db
+from cache_registry.models import (
+    Auditor,
+    Country,
+    OldCompany,
+    OldCompanyLink,
+    Undertaking,
+    db,
+)
 from cache_registry.sync.commands.auditors import update_auditor
 from cache_registry.sync.undertakings import update_undertakings
 from cache_registry.sync.commands.fgases_debug_noneu import print_all_undertakings
 from cache_registry.sync.utils import get_last_update
 from cache_registry.sync.eea_double_checks.fgases import eea_double_check_fgases
 from cache_registry.sync.eea_double_checks.ods import eea_double_check_ods
-from cache_registry.sync.parsers import parse_company, parse_date
+from cache_registry.sync.parsers import parse_company, parse_country, parse_date
 
 from instance.settings import FGAS
 
@@ -76,6 +83,24 @@ def test_update_undertakings_ods(client):
         (_, undertakings_count) = update_undertakings(data, eea_double_check_ods)
         assert undertakings_count == len(data)
         assert Undertaking.query.ods().count() == len(data)
+        assert Country.query.filter_by(code="CN").first().taxud_code == "CN"
+
+
+def test_parse_country_taxud_code(client):
+    country = parse_country(
+        dict(code="XX", name="Test", type="EU_TYPE", taxudCode="XT")
+    )
+    db.session.commit()
+    assert country.taxud_code == "XT"
+
+    # FGAS doesn't send taxudCode yet; the existing value must be kept
+    country = parse_country(dict(code="XX", name="Test", type="EU_TYPE"))
+    assert country.taxud_code == "XT"
+
+    country = parse_country(
+        dict(code="XX", name="Test", type="EU_TYPE", taxudCode="XU")
+    )
+    assert country.taxud_code == "XU"
 
 
 def test_update_undertaking_represent_history(client):
