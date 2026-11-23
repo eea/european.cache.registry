@@ -47,8 +47,15 @@ def get_response(url, params):
     if response.status_code != 200:
         raise InvalidResponse()
 
+    response_json = response.json()
+    if isinstance(response_json, dict) and "rows" in response_json:
+        # The API switched to offset pagination ({pageSize, offset, rowCount,
+        # rows}) instead of returning a bare list.
+        params.pop("pageNumber", None)
+        return get_response_offset(url, params)
+
     if not params.get("pageSize"):
-        return response.json()
+        return response_json
     try:
         no_of_pages = int(response.headers["numberOfPages"])
     except (ValueError, KeyError):

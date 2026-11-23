@@ -131,6 +131,9 @@ def update_undertaking(data, check_passed=True):
     if data["domain"] == ODS:
         represent = None
         data["vat"] = data.pop("eoriNumber")
+    elif "eoriNumber" in data:
+        # FGAS sends the EORI as eoriNumber (formerly eori)
+        data["eori_number"] = data.pop("eoriNumber") or data["eori_number"]
 
     data["check_passed"] = check_passed
 
