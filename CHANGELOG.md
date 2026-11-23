@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.9 - (2026-11-23)
+--------------------
+* Fix sync ods and fgas
+  [dianaboiangiu]
+
 3.0.8 - (2026-11-23)
 --------------------
 *  Add taxud code
